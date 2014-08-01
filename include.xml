@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension>
+	<set name="html5-backend" value="openfl-svg" />
+	<template path="templates" />
+	<haxedef name="openfl_svg" />
+</extension>

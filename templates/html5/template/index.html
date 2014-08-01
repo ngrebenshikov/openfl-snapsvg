@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="chrome=1, IE=edge">
+	<title>::APP_TITLE::</title>
+	<script type="text/javascript" src="snap.svg-min.js"></script>
+</head>
+<body style="padding: 0; margin: 0; background-color: #FFFFFF;">
+	
+	<!-- <div id="haxe:trace" style="position: absolute; z-index: 2147483647;::if !debug:: display: none;::end::"></div> -->
+	
+	::if (LIB_OPENFL)::
+
+	<div id="haxe:openfl" style="background-color: #::WIN_FLASHBACKGROUND::; width: ::if (WIN_WIDTH == 0)::100%::else::::WIN_WIDTH::px::end::; height: ::if (WIN_HEIGHT == 0)::100%::else::::WIN_HEIGHT::px::end::" data-framerate="::WIN_FPS::">
+        <svg id="haxe-openfl-svg" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+	<script>function winParameters () { return ::WIN_PARAMETERS::; }</script>
+	<script id="haxe:openfl:script" type="text/javascript" src="./::APP_FILE::.js"></script>
+	
+	::else::
+	
+	<script type="text/javascript" src="./::APP_FILE::.js"></script>
+	
+	::end::
+	
+</body>
+</html>

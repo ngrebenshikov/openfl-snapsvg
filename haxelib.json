@@ -1,0 +1,11 @@
+{
+  "name": "openfl-snapsvg",
+  "url": "",
+  "license": "MIT",
+  "tags": [ "html5", "svg", "snap.svg"],
+  "description": "",
+  "version": "0.0.1",
+  "releasenote": "Initial release",
+  "contributors": [ "grebenshikov.n" ],
+  "dependencies": {}
+}
