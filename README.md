@@ -1,7 +1,7 @@
 openfl-snapsvg
 ==============
 
-It's a very beggining of the HTML5 backend for OpenFL based on Snap.SVG
+It's a very beggining of the HTML5 backend for [OpenFL](http://www.openfl.org) based on [Snap.SVG](http://snapsvg.io)
 
 Getting Started
 ==================
