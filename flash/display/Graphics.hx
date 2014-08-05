@@ -1167,7 +1167,14 @@ class Graphics {
                                             case CORNER_BEVEL: "bevel";
                                             case _: "round";
                                         },
-                                    'stroke-miterlimit': lj.miter_limit
+                                    'stroke-miterlimit': lj.miter_limit,
+                                    'vector-effect': switch(lj.scale_mode) {
+                                            case SCALE_NONE: "non-scaling-stroke";
+                                            case SCALE_HORIZONTAL: "none";
+                                            case SCALE_VERTICAL: "none";
+                                            case SCALE_NORMAL: "none";
+                                            case _: "none";
+                                        }
                                 })
                         );
                     }
