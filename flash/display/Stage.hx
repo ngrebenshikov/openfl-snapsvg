@@ -445,7 +445,8 @@ class Stage extends DisplayObjectContainer {
 		}
 		
 		this.__renderAll ();
-		
+        var stage_rendered = new Event("STAGE_RENDERED");
+        this.__broadcast(stage_rendered);
 	}
 	
 	
