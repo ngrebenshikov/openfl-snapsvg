@@ -70,7 +70,7 @@ class Lib {
 		if (__scr == null) throw "Root element not found";
 		
 		__scr.style.setProperty ("overflow", "hidden", "");
-		__scr.style.setProperty ("position", "absolute", ""); // necessary for chrome ctx.isPointInPath
+		//__scr.style.setProperty ("position", "absolute", ""); // necessary for chrome ctx.isPointInPath
 		
 		if (__scr.style.getPropertyValue ("width") != "100%") {
 			
