@@ -198,18 +198,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private inline function getSurfaceTransform (gfx:Graphics):Matrix {
 		
 		var extent = gfx.__extentWithFilters;
-		var fm = __getFullMatrix ();
-		
-		/*
-		var tx = fm.tx;
-		var ty = fm.ty;
-		var nm = new Matrix();
-		nm.scale(1/_fullScaleX, 1/_fullScaleY);
-		fm = fm.mult(nm);
-		fm.tx = tx;
-		fm.ty = ty;
-		*/
-		
+		var fm = if (null == parent) __getFullMatrix () else
+        {
+            var m = __getFullMatrix();
+            m.concat(parent.__getFullMatrix().invert());
+            m;
+        }
+
 		fm.__translateTransformed (extent.topLeft);
 		return fm;
 		
@@ -347,6 +342,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private function __addToStage (newParent:DisplayObjectContainer, beforeSibling:DisplayObject = null):Void {
+        if (__isOnStage()) return;
+
         var gfx = __getGraphics();
         if (null == gfx) return;
 
@@ -357,61 +354,15 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			if (beforeSibling != null && beforeSibling.__getGraphics () != null) {
 				Lib.__appendSurface (snap, beforeSibling._bottommostSurface);
 			} else {
-				var stageChildren = [];
-				for (child in newParent.__children) {
-					if (child.stage != null) {
-						stageChildren.push (child);
-					}
-				}
-
-				if (stageChildren.length < 1) {
-					Lib.__appendSurface (snap, null, null, newParent._surface);
-
-				} else {
-
-					var nextSibling = stageChildren[stageChildren.length - 1];
-					var container;
-
-					while (Std.is (nextSibling, DisplayObjectContainer)) {
-
-						container = cast (nextSibling, DisplayObjectContainer);
-
-						if (container.numChildren > 0) {
-
-							nextSibling = container.__children[container.numChildren - 1];
-
-						} else {
-
-							break;
-
-						}
-
-					}
-
-					if (nextSibling.snap != snap) {
-
-						Lib.__appendSurface (snap, null, nextSibling._topmostSurface);
-
-					} else {
-
-						Lib.__appendSurface (snap);
-
-					}
-
-				}
-
+				Lib.__appendSurface (snap, null, null, newParent._surface);
 			}
 
 			Lib.__setSurfaceTransform (snap, getSurfaceTransform(gfx));
 
 		} else {
-
 			if (newParent.name == Stage.NAME) { // only stage is allowed to add to a parent with no context
-
 				Lib.__appendSurface (snap);
-
 			}
-
 		}
 
 		if (__isOnStage ()) {
@@ -705,13 +656,11 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private function __removeFromStage ():Void {
-		var gfx = __getGraphics ();
-		if (gfx != null && Lib.__isOnStage (gfx.__snap)) {
-			Lib.__removeSurface (gfx.__snap);
-			var evt = new Event (Event.REMOVED_FROM_STAGE, false, false);
-			dispatchEvent (evt);
-		}
-		
+        if (Lib.__isOnStage (snap)) {
+            Lib.__removeSurface (snap);
+            var evt = new Event (Event.REMOVED_FROM_STAGE, false, false);
+            dispatchEvent (evt);
+        }
 	}
 	
 	
@@ -751,36 +700,31 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		var fullAlpha:Float = (parent != null ? parent.__combinedAlpha : 1) * alpha;
 		
+		if (inMask != null) {
 //TODO: uncomment
-//		if (inMask != null) {
-//
 //			var m = getSurfaceTransform (gfx);
-//             Lib.__drawToSurface (gfx.__surface, inMask, m, fullAlpha, clipRect);
-//
-//		} else {
-//
-//			if (__testFlag (TRANSFORM_INVALID)) {
-//
-//				var m = getSurfaceTransform (gfx);
-// 				Lib.__setSurfaceTransform (gfx.__surface, m);
-//				__clearFlag (TRANSFORM_INVALID);
-//
-//
-//				this.__srUpdateDivs ();
-//				this.__updateParentNode();
-//			}
-//			Lib.__setSurfaceOpacity (gfx.__surface, fullAlpha);
-//
-//			/*if (clipRect != null) {
-//				var rect = new Rectangle();
-//				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
-//				rect.bottomRight = this.globalToLocal(this.parent.localToGlobal(clipRect.bottomRight));
-//				Lib.__setSurfaceClipping(gfx.__surface, rect);
-//			}*/
-//
-//		}
+//            Lib.__drawToSurface (gfx.__surface, inMask, m, fullAlpha, clipRect);
+		} else {
 
-		// this.__updateParentNode();
+			if (__testFlag (TRANSFORM_INVALID)) {
+
+				var m = getSurfaceTransform (gfx);
+				Lib.__setSurfaceTransform (snap, m);
+				__clearFlag (TRANSFORM_INVALID);
+
+				this.__srUpdateDivs ();
+			}
+			Lib.__setSurfaceOpacity (snap, fullAlpha);
+
+			/*if (clipRect != null) {
+				var rect = new Rectangle();
+				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
+				rect.bottomRight = this.globalToLocal(this.parent.localToGlobal(clipRect.bottomRight));
+				Lib.__setSurfaceClipping(gfx.__surface, rect);
+			}*/
+
+		}
+
 		// if (this.__scrollRect == null) {
 		// 	var pgfx = this.parent.__getGraphics();
 		// 	if (pgfx != null && pgfx.__surface.parentNode != gfx.__surface.parentNode) {

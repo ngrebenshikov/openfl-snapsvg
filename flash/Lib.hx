@@ -766,10 +766,8 @@ class Lib {
 	}
 	
 	
-	public static function __setSurfaceOpacity (surface:Element, alpha:Float):Void {
-		
-		surface.style.setProperty ("opacity", Std.string (alpha), "");
-		
+	public static function __setSurfaceOpacity (surface:SnapElement, alpha:Float):Void {
+		surface.attr({ opacity: Std.string (alpha) });
 	}
 	
 	
@@ -787,17 +785,11 @@ class Lib {
 	
 	
 	public static function __setSurfaceTransform (surface:SnapElement, matrix:Matrix):Void {
-		
-		if (matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1 && surface.attr ("data-openfl-anim") == null) {
-            surface.attr({
-                x: matrix.tx + "px",
-                y: matrix.ty + "px",
-                transform: null
-            });
+		if (matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1 && surface.attr ("data-openfl-anim") == null && matrix.tx == 0 && matrix.ty == 0) {
+            surface.attr({ transform: null });
 		} else {
             surface.attr({transform: matrix.toString()});
 		}
-		
 	}
 	
 	
