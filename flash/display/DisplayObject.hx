@@ -196,18 +196,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private inline function getSurfaceTransform (gfx:Graphics):Matrix {
-		
 		var extent = gfx.__extentWithFilters;
-		var fm = if (null == parent) __getFullMatrix () else
-        {
+		var fm = if (null == parent) __getFullMatrix () else {
             var m = __getFullMatrix();
             m.concat(parent.__getFullMatrix().invert());
             m;
         }
-
-		fm.__translateTransformed (extent.topLeft);
 		return fm;
-		
 	}
 	
 	
