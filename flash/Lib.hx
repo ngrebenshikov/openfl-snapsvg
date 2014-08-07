@@ -654,21 +654,12 @@ class Lib {
 	
 	
 	public static function __getStage ():Stage {
-
-        trace("__getStage");
-
 		if (mStage == null) {
-            trace("create stage");
-
 			var width = __getWidth ();
 			var height = __getHeight ();
-			
 			mStage = new Stage (width, height);
-			
 		}
-		
 		return mStage;
-		
 	}
 	
 	
@@ -1072,9 +1063,7 @@ class Lib {
     }
 
     private static function get_stageSnap ():SnapElement {
-        trace("get_stageSnap");
         if (mStageSnap == null) {
-            trace("create stageSnap");
             mStageSnap = snap.group();
             mStageSnap.attr({id : SNAP_IDENTIFIER + "-stage"});
         }
