@@ -1,6 +1,7 @@
 package flash.text;
 
 
+import snap.Snap;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
 import flash.display.Graphics;
@@ -621,7 +622,7 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	override public function __render (inMask:CanvasElement = null, clipRect:Rectangle = null):Void {
+	override public function __render (inMask:SnapElement = null, clipRect:Rectangle = null):Void {
 		
 		if (!__combinedVisible) return;
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
