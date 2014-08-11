@@ -1,6 +1,9 @@
 package flash.text;
 
 
+import js.html.Node;
+import js.html.Node;
+import snap.Snap;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
 import flash.display.Graphics;
@@ -17,7 +20,6 @@ import flash.Lib;
 import js.html.CanvasElement;
 import js.html.Element;
 import js.Browser;
-
 
 class TextField extends InteractiveObject {
 	
@@ -83,6 +85,7 @@ class TextField extends InteractiveObject {
 	private var mTextColour:Int;
 	private var mType:String;
 	private var mWidth:Float;
+    private var mTextSnap: SnapElement;
 	private var __graphics:Graphics;
 	private var __inputEnabled:Bool;
 	private var _defaultTextFormat:TextFormat;
@@ -96,7 +99,11 @@ class TextField extends InteractiveObject {
 		mHeight = 20;
 		mHTMLMode = false;
 		multiline = false;
-		__graphics = new Graphics ();
+        var graphicsSnap = Lib.snap.group().addClass("graphics");
+        snap.append(graphicsSnap);
+        __graphics = new Graphics(graphicsSnap);
+        mTextSnap = Lib.snap.text(0,0, "");
+        snap.append(mTextSnap);
 		mFace = mDefaultFont;
 		mAlign = TextFormatAlign.LEFT;
 		mParagraphs = new Paragraphs ();
@@ -241,7 +248,6 @@ class TextField extends InteractiveObject {
 		__graphics.clear ();
 		
 		if (background) {
-			
 			__graphics.beginFill (backgroundColor);
 			__graphics.drawRect (0, 0, width, height );
 			__graphics.endFill ();
@@ -384,7 +390,33 @@ class TextField extends InteractiveObject {
 	
 	
 	public function RebuildText () {
-		
+
+        trace("Adding text through snap.text: font-family:" + mFace + "; font-size: " + mTextHeight + "; color: " + "#" + StringTools.hex(mTextColour, 6));
+
+        var paras = mText.split ("\n");
+
+        mTextSnap.attr("text", paras );
+
+        mTextSnap.selectAll("tspan:nth-child(n)").forEach(
+            function(el:SnapElement) {
+              el.attr({
+                dy: "1.2em",
+                x: 0
+              });
+          }, null );
+
+        mTextSnap.attr("font-family", mFace);
+        mTextSnap.attr("font-size", mTextHeight);
+        mTextSnap.attr("fill", "#" + StringTools.hex(mTextColour, 6));
+
+        var rect = mTextSnap.getBBox();
+
+        width = rect.width;
+        height = rect.height;
+
+        return;
+
+        // building text in graphics
 		mParagraphs = [];
 		
 		if (!mHTMLMode) {
@@ -631,38 +663,38 @@ class TextField extends InteractiveObject {
 			//Lib.__setImageSmoothing (__graphics.__surface.getContext ("2d"), (gridFitType != GridFitType.PIXEL));
 			//
 		//}
-		
-		if (__graphics.__render (inMask, __filters, 1, 1)) {
+
+        if (__graphics.__render (inMask, __filters, 1, 1)) {
 			
 			handleGraphicsUpdated (__graphics);
 			
 		}
 //TODO: uncomment
-//		if (!mHTMLMode && inMask != null) {
-//
-//			var m = getSurfaceTransform (__graphics);
-//			Lib.__drawToSurface (__graphics.__surface, inMask, m, (parent != null ? parent.__combinedAlpha : 1) * alpha, clipRect, (gridFitType != GridFitType.PIXEL));
-//
-//		} else {
-//
-//			if (__testFlag (DisplayObject.TRANSFORM_INVALID)) {
-//
-//				var m = getSurfaceTransform (__graphics);
-//				Lib.__setSurfaceTransform (__graphics.__surface, m);
-//				__clearFlag (DisplayObject.TRANSFORM_INVALID);
-//
-//			}
-//
-//			Lib.__setSurfaceOpacity (__graphics.__surface, (parent != null ? parent.__combinedAlpha : 1) * alpha);
-//
-//			/*if (clipRect != null) {
-//				var rect = new Rectangle();
-//				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
-//				rect.bottomRight = this.globalToLocal(this.parent.localToGlobal(clipRect.bottomRight));
-//				Lib.__setSurfaceClipping(__graphics.__surface, rect);
-//			}*/
-//
-//		}
+		if (!mHTMLMode && inMask != null) {
+
+			var m = getSurfaceTransform (__graphics);
+			//Lib.__drawToSurface (__graphics.__surface, inMask, m, (parent != null ? parent.__combinedAlpha : 1) * alpha, clipRect, (gridFitType != GridFitType.PIXEL));
+
+		} else {
+
+			if (__testFlag (DisplayObject.TRANSFORM_INVALID)) {
+
+				var m = getSurfaceTransform (__graphics);
+				Lib.__setSurfaceTransform (snap, m);
+				__clearFlag (DisplayObject.TRANSFORM_INVALID);
+
+			}
+
+			Lib.__setSurfaceOpacity (snap, (parent != null ? parent.__combinedAlpha : 1) * alpha);
+
+			/*if (clipRect != null) {
+				var rect = new Rectangle();
+				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
+				rect.bottomRight = this.globalToLocal(this.parent.localToGlobal(clipRect.bottomRight));
+				Lib.__setSurfaceClipping(__graphics.__surface, rect);
+			}*/
+
+		}
 		
 	}
 	
