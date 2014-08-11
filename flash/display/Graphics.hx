@@ -852,22 +852,14 @@ class Graphics {
 
 
     private function __drawEllipse (x:Float, y:Float, rx:Float, ry:Float):Void {
-        var localLineJobs: LineJobs = [new LineJob (mCurrentLine.grad, mCurrentLine.point_idx0, mCurrentLine.point_idx1,
-            mCurrentLine.thickness, mCurrentLine.alpha, mCurrentLine.colour, mCurrentLine.pixel_hinting,
-            mCurrentLine.joints, mCurrentLine.caps, mCurrentLine.scale_mode, mCurrentLine.miter_limit)];
+        var localLineJobs: LineJobs = mCurrentLine.thickness != 0
+            ? [new LineJob (mCurrentLine.grad, mCurrentLine.point_idx0, mCurrentLine.point_idx1,
+                mCurrentLine.thickness, mCurrentLine.alpha, mCurrentLine.colour, mCurrentLine.pixel_hinting,
+                mCurrentLine.joints, mCurrentLine.caps, mCurrentLine.scale_mode, mCurrentLine.miter_limit)]
+            : [];
         var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, localLineJobs, null,
             SnapJob.getEllipseJob(x, y, rx, ry));
         addDrawable(drawable);
-        /*moveTo (x + rx, y);
-        curveTo (rx + x, -0.4142 * ry + y, 0.7071 * rx + x , -0.7071 * ry + y);
-        curveTo (0.4142 * rx + x , -ry + y, x, -ry + y);
-        curveTo ( -0.4142 * rx + x, -ry + y, -0.7071 * rx + x, -0.7071 * ry + y);
-        curveTo ( -rx + x, -0.4142 * ry + y, -rx + x, y);
-        curveTo ( -rx + x, 0.4142 * ry + y, -0.7071 * rx + x, 0.7071 * ry + y);
-        curveTo ( -0.4142 * rx + x, ry + y, x, ry + y);
-        curveTo (0.4142 * rx + x, ry + y, 0.7071 * rx + x, 0.7071 * ry + y);
-        curveTo (rx + x, 0.4142 * ry + y, rx + x, y);*/
-
     }
 
 
@@ -1047,30 +1039,34 @@ class Graphics {
 
 
     private function __addStrokeAttribute(element: SnapElement, lineJob: LineJob):Void {
-        element.attr({
-            stroke: if (lineJob.grad == null) createCanvasColor(lineJob.colour, lineJob.alpha) else "none",
-            'stroke-width': lineJob.thickness,
-            'stroke-linecap': switch(lineJob.caps) {
-                case END_ROUND: "round";
-                case END_SQUARE: "square";
-                case END_NONE: "butt";
-                case _: "round";
-            },
-            'stroke-linejoin': switch (lineJob.joints) {
-                case CORNER_ROUND: "round";
-                case CORNER_MITER: "miter";
-                case CORNER_BEVEL: "bevel";
-                case _: "round";
-            },
-            'stroke-miterlimit': lineJob.miter_limit,
-            'vector-effect': switch(lineJob.scale_mode) {
-                case SCALE_NONE: "non-scaling-stroke";
-                case SCALE_HORIZONTAL: "none";
-                case SCALE_VERTICAL: "none";
-                case SCALE_NORMAL: "none";
-                case _: "none";
-            }
-        });
+        if(lineJob != null){
+            element.attr({
+                stroke: if (lineJob.grad == null) createCanvasColor(lineJob.colour, lineJob.alpha) else "none",
+                'stroke-width': lineJob.thickness,
+                'stroke-linecap': switch(lineJob.caps) {
+                    case END_ROUND: "round";
+                    case END_SQUARE: "square";
+                    case END_NONE: "butt";
+                    case _: "round";
+                },
+                'stroke-linejoin': switch (lineJob.joints) {
+                    case CORNER_ROUND: "round";
+                    case CORNER_MITER: "miter";
+                    case CORNER_BEVEL: "bevel";
+                    case _: "round";
+                },
+                'stroke-miterlimit': lineJob.miter_limit,
+                'vector-effect': switch(lineJob.scale_mode) {
+                    case SCALE_NONE: "non-scaling-stroke";
+                    case SCALE_HORIZONTAL: "none";
+                    case SCALE_VERTICAL: "none";
+                    case SCALE_NORMAL: "none";
+                    case _: "none";
+                }
+            });
+        } else {
+            element.attr({ stroke: "none" });
+        }
     }
 
     private function __addFillAttribute(element: SnapElement, fillColour: Int, fillAlpha: Float, solidGradient: Grad, bitmap: Texture):Void {
@@ -1213,7 +1209,7 @@ class Graphics {
                         var ellipse: SnapElement = Lib.snap.ellipse(d.snapJob.ellipseData.x, d.snapJob.ellipseData.y,
                             d.snapJob.ellipseData.rx, d.snapJob.ellipseData.ry);
 
-                            __addStrokeAttribute(ellipse, d.lineJobs[0]);
+                            __addStrokeAttribute(ellipse, d.lineJobs.length == 1 ? d.lineJobs[0] : null);
                             __addFillAttribute(ellipse, fillColour, fillAlpha, g, bitmap);
 
                             __snap.append(ellipse);
