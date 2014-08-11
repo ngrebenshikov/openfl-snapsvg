@@ -267,7 +267,7 @@ class Graphics {
 
                 addLineSegment ();
 
-                var drawable = new Drawable (mPoints, mFillColour, mFillAlpha, mSolidGradient, mBitmap, mLineJobs, null);
+                var drawable = new Drawable (mPoints, mFillColour, mFillAlpha, mSolidGradient, mBitmap, mLineJobs, null, SnapJob.getPathJob());
                 addDrawable (drawable);
 
             }
@@ -401,10 +401,9 @@ class Graphics {
 
 
     public function drawCircle (x:Float, y:Float, rad:Float):Void {
-
         closePolygon (false);
         __drawEllipse (x, y, rad, rad);
-        closePolygon (false);
+        //closePolygon (false);
 
     }
 
@@ -415,7 +414,7 @@ class Graphics {
         rx /= 2;
         ry /= 2;
         __drawEllipse (x + rx, y + ry, rx, ry);
-        closePolygon (false);
+        //closePolygon (false);
 
     }
 
@@ -604,7 +603,7 @@ class Graphics {
 
 //}
 
-        addDrawable (new Drawable (null, null, null, null, null, null, new TileJob (sheet, tileData, flags)));
+        addDrawable (new Drawable (null, null, null, null, null, null, new TileJob (sheet, tileData, flags), null));
         __changed = true;
 
     }
@@ -853,8 +852,13 @@ class Graphics {
 
 
     private function __drawEllipse (x:Float, y:Float, rx:Float, ry:Float):Void {
-
-        moveTo (x + rx, y);
+        var localLineJobs: LineJobs = [new LineJob (mCurrentLine.grad, mCurrentLine.point_idx0, mCurrentLine.point_idx1,
+            mCurrentLine.thickness, mCurrentLine.alpha, mCurrentLine.colour, mCurrentLine.pixel_hinting,
+            mCurrentLine.joints, mCurrentLine.caps, mCurrentLine.scale_mode, mCurrentLine.miter_limit)];
+        var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, localLineJobs, null,
+            SnapJob.getEllipseJob(x, y, rx, ry));
+        addDrawable(drawable);
+        /*moveTo (x + rx, y);
         curveTo (rx + x, -0.4142 * ry + y, 0.7071 * rx + x , -0.7071 * ry + y);
         curveTo (0.4142 * rx + x , -ry + y, x, -ry + y);
         curveTo ( -0.4142 * rx + x, -ry + y, -0.7071 * rx + x, -0.7071 * ry + y);
@@ -862,7 +866,7 @@ class Graphics {
         curveTo ( -rx + x, 0.4142 * ry + y, -0.7071 * rx + x, 0.7071 * ry + y);
         curveTo ( -0.4142 * rx + x, ry + y, x, ry + y);
         curveTo (0.4142 * rx + x, ry + y, 0.7071 * rx + x, 0.7071 * ry + y);
-        curveTo (rx + x, 0.4142 * ry + y, rx + x, y);
+        curveTo (rx + x, 0.4142 * ry + y, rx + x, y);*/
 
     }
 
@@ -1042,6 +1046,67 @@ class Graphics {
     }
 
 
+    private function __addStrokeAttribute(element: SnapElement, lineJob: LineJob):Void {
+        element.attr({
+            stroke: if (lineJob.grad == null) createCanvasColor(lineJob.colour, lineJob.alpha) else "none",
+            'stroke-width': lineJob.thickness,
+            'stroke-linecap': switch(lineJob.caps) {
+                case END_ROUND: "round";
+                case END_SQUARE: "square";
+                case END_NONE: "butt";
+                case _: "round";
+            },
+            'stroke-linejoin': switch (lineJob.joints) {
+                case CORNER_ROUND: "round";
+                case CORNER_MITER: "miter";
+                case CORNER_BEVEL: "bevel";
+                case _: "round";
+            },
+            'stroke-miterlimit': lineJob.miter_limit,
+            'vector-effect': switch(lineJob.scale_mode) {
+                case SCALE_NONE: "non-scaling-stroke";
+                case SCALE_HORIZONTAL: "none";
+                case SCALE_VERTICAL: "none";
+                case SCALE_NORMAL: "none";
+                case _: "none";
+            }
+        });
+    }
+
+    private function __addFillAttribute(element: SnapElement, fillColour: Int, fillAlpha: Float, solidGradient: Grad, bitmap: Texture):Void {
+        if (solidGradient != null) {
+            element.attr({ fill: createCanvasGradient(solidGradient) });
+        } else if (bitmap != null && ((bitmap.flags & BMP_REPEAT) > 0)) {
+
+//TODO: uncomment
+//                        var m = bitmap.matrix;
+//
+//                        if (m != null) {
+//
+//                            ctx.transform (m.a, m.b, m.c, m.d, m.tx, m.ty);
+//
+//                        }
+//
+//                        if (bitmap.flags & BMP_SMOOTH == 0) {
+//
+//                            untyped ctx.mozImageSmoothingEnabled = false;
+//                            untyped ctx.webkitImageSmoothingEnabled = false;
+//
+//                        }
+
+            element.attr({
+                fill:  Lib.snap.image(bitmap.texture_buffer.toDataURL(), 0, 0, bitmap.texture_buffer.width, bitmap.texture_buffer.height)
+                    .pattern(0, 0, bitmap.texture_buffer.width, bitmap.texture_buffer.height)
+            });
+
+        } else {
+// Alpha value gets clamped in [0;1] range.
+            element.attr({ fill: createCanvasColor (fillColour, Math.min (1.0, Math.max (0.0, fillAlpha))) });
+        }
+
+    }
+
+
     public function __render (maskHandle:CanvasElement = null, filters:Array<BitmapFilter> = null, sx:Float = 1.0, sy:Float = 1.0, clip0:Point = null, clip1:Point = null, clip2:Point = null, clip3:Point = null) {
 
         if (!__changed) return false;
@@ -1131,103 +1196,64 @@ class Graphics {
         for (i in nextDrawIndex...len) {
 
             var d = mDrawList[(len - 1) - i];
+            //Fill data
+            var fillColour = d.fillColour;
+            var fillAlpha = d.fillAlpha;
+            var g = d.solidGradient;
+            var bitmap = d.bitmap;
 
             if (d.tileJob != null) {
 //
 //                __drawTiles (d.tileJob.sheet, d.tileJob.drawList, d.tileJob.flags);
 //
             } else {
-                var pathes:Array<SnapElement> = [];
-                var pathString: StringBuf = new StringBuf();
+                var snapElements:Array<SnapElement> = [];
+                switch(d.snapJob.jobType) {
+                    case SnapDrawable.NONE:
+                        //throw new Exception();
+                    case SnapDrawable.ELLIPSE:
+                        var ellipse: SnapElement = Lib.snap.ellipse(d.snapJob.ellipseData.x, d.snapJob.ellipseData.y,
+                            d.snapJob.ellipseData.rx, d.snapJob.ellipseData.ry);
 
-                // Create pathes
-                if (d.lineJobs.length > 0) {
-                    // Create pathes with stroke
-                    for (lj in d.lineJobs) {
-                        for (i in lj.point_idx0...lj.point_idx1 + 1) {
-                            pathString.add(getSvgPathStringFor(d.points[i]));
+                            __addStrokeAttribute(ellipse, d.lineJobs[0]);
+                            __addFillAttribute(ellipse, fillColour, fillAlpha, g, bitmap);
+
+                            __snap.append(ellipse);
+                    case SnapDrawable.PATH:
+                        // Create pathes
+                        var pathString: StringBuf = new StringBuf();
+                        if (d.lineJobs.length > 0) {
+                            // Create pathes with stroke
+                            for (lj in d.lineJobs) {
+                                for (i in lj.point_idx0...lj.point_idx1 + 1) {
+                                    pathString.add(getSvgPathStringFor(d.points[i]));
+                                }
+                                closeSvgPathString(pathString);
+
+                                //TODO: add gradient on line prev: ctx.strokeStyle = createCanvasGradient (ctx, lj.grad);
+                                var path: SnapElement = Lib.snap.path(pathString.toString());
+                                __addStrokeAttribute(path, lj);
+                                snapElements.push(path);
+                            }
+                        } else {
+                        //Create path without stroke
+                            Lambda.iter(d.points, function(p) { pathString.add(getSvgPathStringFor(p));});
+                            closeSvgPathString(pathString);
+                            snapElements.push(
+                                Lib.snap.path(pathString.toString())
+                                .attr({ stroke: "none" })
+                            );
                         }
-                        closeSvgPathString(pathString);
 
-                        //TODO: add gradient on line prev: ctx.strokeStyle = createCanvasGradient (ctx, lj.grad);
-                        pathes.push(
-                            Lib.snap.path(pathString.toString())
-                                .attr({
-                                    stroke: if (lj.grad == null) createCanvasColor(lj.colour, lj.alpha) else "none",
-                                    'stroke-width': lj.thickness,
-                                    'stroke-linecap': switch(lj.caps) {
-                                            case END_ROUND: "round";
-                                            case END_SQUARE: "square";
-                                            case END_NONE: "butt";
-                                            case _: "round";
-                                        },
-                                    'stroke-linejoin': switch (lj.joints) {
-                                            case CORNER_ROUND: "round";
-                                            case CORNER_MITER: "miter";
-                                            case CORNER_BEVEL: "bevel";
-                                            case _: "round";
-                                        },
-                                    'stroke-miterlimit': lj.miter_limit,
-                                    'vector-effect': switch(lj.scale_mode) {
-                                            case SCALE_NONE: "non-scaling-stroke";
-                                            case SCALE_HORIZONTAL: "none";
-                                            case SCALE_VERTICAL: "none";
-                                            case SCALE_NORMAL: "none";
-                                            case _: "none";
-                                        }
-                                })
-                        );
-                    }
-                } else {
-                    //Create path without stroke
-                    Lambda.iter(d.points, function(p) { pathString.add(getSvgPathStringFor(p));});
-                    closeSvgPathString(pathString);
-                    pathes.push(
-                        Lib.snap.path(pathString.toString())
-                            .attr({ stroke: "none" })
-                    );
-                }
-
-                // Fill pathes
-
-                var fillColour = d.fillColour;
-                var fillAlpha = d.fillAlpha;
-                var g = d.solidGradient;
-                var bitmap = d.bitmap;
-
-                Lambda.iter(pathes, function(path) {
-
-                    if (g != null) {
-                        path.attr({ fill: createCanvasGradient(g) });
-                    } else if (bitmap != null && ((bitmap.flags & BMP_REPEAT) > 0)) {
-
-//TODO: uncomment
-//                        var m = bitmap.matrix;
-//
-//                        if (m != null) {
-//
-//                            ctx.transform (m.a, m.b, m.c, m.d, m.tx, m.ty);
-//
-//                        }
-//
-//                        if (bitmap.flags & BMP_SMOOTH == 0) {
-//
-//                            untyped ctx.mozImageSmoothingEnabled = false;
-//                            untyped ctx.webkitImageSmoothingEnabled = false;
-//
-//                        }
-
-                        path.attr({
-                            fill:  Lib.snap.image(bitmap.texture_buffer.toDataURL(), 0, 0, bitmap.texture_buffer.width, bitmap.texture_buffer.height)
-                                    .pattern(0, 0, bitmap.texture_buffer.width, bitmap.texture_buffer.height)
+                        // Fill pathes
+                        Lambda.iter(snapElements, function(path) {
+                            __addFillAttribute(path, fillColour, fillAlpha, g, bitmap);
+                            __snap.append(path);
                         });
 
-                    } else {
-                        // Alpha value gets clamped in [0;1] range.
-                        path.attr({ fill: createCanvasColor (fillColour, Math.min (1.0, Math.max (0.0, fillAlpha))) });
-                    }
-                    __snap.append(path);
-                });
+                }
+
+
 
                 if (bitmap != null && ((bitmap.flags & BMP_REPEAT) == 0)) {
 //TODO: uncomment
@@ -1294,9 +1320,11 @@ class Drawable {
     public var points:GfxPoints;
     public var solidGradient:Grad;
     public var tileJob:TileJob;
+    public var snapJob: SnapJob;
 
 
-    public function new (inPoints:GfxPoints, inFillColour:Int, inFillAlpha:Float, inSolidGradient:Grad, inBitmap:Texture, inLineJobs:LineJobs, inTileJob:TileJob) {
+    public function new (inPoints:GfxPoints, inFillColour:Int, inFillAlpha:Float, inSolidGradient:Grad, inBitmap:Texture, inLineJobs:LineJobs, inTileJob:TileJob,
+                         inSnapJob: SnapJob) {
 
         points = inPoints;
         fillColour = inFillColour;
@@ -1305,6 +1333,7 @@ class Drawable {
         bitmap = inBitmap;
         lineJobs = inLineJobs;
         tileJob = inTileJob;
+        snapJob = inSnapJob;
 
     }
 
@@ -1460,4 +1489,47 @@ class TileJob {
     }
 
 
+}
+
+enum SnapDrawable {
+    NONE;
+    PATH;
+    ELLIPSE;
+}
+
+class EllipseSnapData {
+    public var x: Float;
+    public var y: Float;
+    public var rx: Float;
+    public var ry: Float;
+
+    public function new(x: Float, y: Float, rx: Float, ry: Float) {
+        this.x = x;
+        this.y = y;
+        this.rx = rx;
+        this.ry = ry;
+    }
+}
+
+class SnapJob {
+
+    public var jobType: SnapDrawable;
+    public var ellipseData: EllipseSnapData = null;
+
+    private function new() {
+        jobType = SnapDrawable.NONE;
+    }
+
+    public static function getEllipseJob(x: Float, y: Float, rx: Float, ry: Float): SnapJob {
+        var result: SnapJob = new SnapJob();
+        result.jobType = SnapDrawable.ELLIPSE;
+        result.ellipseData = new EllipseSnapData(x, y, rx, ry);
+        return result;
+    }
+
+    public static function getPathJob(): SnapJob {
+        var result: SnapJob = new SnapJob();
+        result.jobType = SnapDrawable.PATH;
+        return result;
+    }
 }
