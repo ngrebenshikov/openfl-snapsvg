@@ -629,7 +629,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function __isOnStage ():Bool {
+	public function __isOnStage ():Bool {
 		var gfx = __getGraphics ();
 		if (gfx != null && Lib.__isOnStage (gfx.__snap)) {
 			return true;
@@ -659,7 +659,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private function __render (inMask:CanvasElement = null, clipRect:Rectangle = null) {
+	private function __render (inMask:SnapElement = null, clipRect:Rectangle = null) {
 		
 		if (!__combinedVisible) return;
 		
@@ -711,6 +711,16 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			}
 			Lib.__setSurfaceOpacity (snap, fullAlpha);
 
+            if (null != mask && (null == snap.attr("mask") || "none" == snap.attr("mask")) ) {
+                if (null != mask.snap) {
+                    snap.attr({mask:mask.snap});
+                }
+            } else if (null == mask) {
+                if (null != snap.attr("mask") && "none" != snap.attr("mask")) {
+                    snap.node.attributes.getNamedItem("mask").nodeValue="none";
+                }
+            }
+        }
 			/*if (clipRect != null) {
 				var rect = new Rectangle();
 				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
@@ -718,7 +728,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 				Lib.__setSurfaceClipping(gfx.__surface, rect);
 			}*/
 
-		}
 
 		// if (this.__scrollRect == null) {
 		// 	var pgfx = this.parent.__getGraphics();
@@ -1001,23 +1010,27 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private function set_mask (inValue:DisplayObject):DisplayObject {
-		
 		if (__mask != null) {
-			
 			__mask.__maskingObj = null;
-			
+            Lib.freeSnap.append(__mask.snap);
+            //Remove mask tag from <defs>
+            var maskId = StringTools.replace(StringTools.replace(snap.attr('mask'), 'url(', ''), ')', '');
+            if (maskId.indexOf('#') != -1) {
+                maskId = maskId.substring(maskId.indexOf('#')+1, maskId.length-1);
+            }
+            Snap.select('#'+maskId).remove();
 		}
-		
+
 		__mask = inValue;
-		
+
 		if (__mask != null) {
-			
+            if (!__mask.__isOnStage()) {
+                Lib.current.addChild(__mask);
+            }
 			__mask.__maskingObj = this;
-			
 		}
 		
 		return __mask;
-		
 	}
 	
 	

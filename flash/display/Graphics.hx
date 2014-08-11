@@ -1042,7 +1042,7 @@ class Graphics {
     }
 
 
-    public function __render (maskHandle:CanvasElement = null, filters:Array<BitmapFilter> = null, sx:Float = 1.0, sy:Float = 1.0, clip0:Point = null, clip1:Point = null, clip2:Point = null, clip3:Point = null) {
+    public function __render (maskHandle:SnapElement = null, filters:Array<BitmapFilter> = null, sx:Float = 1.0, sy:Float = 1.0, clip0:Point = null, clip1:Point = null, clip2:Point = null, clip3:Point = null) {
 
         if (!__changed) return false;
 

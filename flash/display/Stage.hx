@@ -1,6 +1,7 @@
 package flash.display;
 
 
+import snap.Snap;
 import flash.display.Graphics;
 import flash.display.StageDisplayState;
 import flash.display.StageScaleMode;
@@ -271,7 +272,7 @@ class Stage extends DisplayObjectContainer {
 	}
 	
 	
-	override private function __isOnStage ():Bool {
+	override public function __isOnStage ():Bool {
 		
 		return true;
 		
@@ -401,9 +402,7 @@ class Stage extends DisplayObjectContainer {
 	}
 	
 	
-	public function __renderToCanvas (canvas:CanvasElement):Void {
-		
-		canvas.width = canvas.width;
+	public function __renderToCanvas (canvas:SnapElement):Void {
 		__render (canvas);
 		
 	}

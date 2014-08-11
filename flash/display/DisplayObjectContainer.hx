@@ -1,6 +1,7 @@
 package flash.display;
 
 
+import snap.Snap;
 import flash.errors.RangeError;
 import flash.events.Event;
 import flash.geom.Matrix;
@@ -536,7 +537,7 @@ class DisplayObjectContainer extends InteractiveObject {
 	}
 	
 	
-	override private function __render (inMask:CanvasElement = null, clipRect:Rectangle = null):Void {
+	override private function __render (inMask:SnapElement = null, clipRect:Rectangle = null):Void {
 		
 		if (!__visible) return;
 		
