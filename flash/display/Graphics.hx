@@ -403,7 +403,6 @@ class Graphics {
     public function drawCircle (x:Float, y:Float, rad:Float):Void {
         closePolygon (false);
         __drawEllipse (x, y, rad, rad);
-        //closePolygon (false);
 
     }
 
@@ -414,7 +413,6 @@ class Graphics {
         rx /= 2;
         ry /= 2;
         __drawEllipse (x + rx, y + ry, rx, ry);
-        //closePolygon (false);
 
     }
 
@@ -1205,9 +1203,8 @@ class Graphics {
                 switch(d.snapJob.jobType) {
                     case SnapDrawable.NONE:
                         //throw new Exception();
-                    case SnapDrawable.ELLIPSE:
-                        var ellipse: SnapElement = Lib.snap.ellipse(d.snapJob.ellipseData.x, d.snapJob.ellipseData.y,
-                            d.snapJob.ellipseData.rx, d.snapJob.ellipseData.ry);
+                    case SnapDrawable.ELLIPSE(x, y, rx, ry):
+                        var ellipse: SnapElement = Lib.snap.ellipse(x, y, rx, ry);
 
                             __addStrokeAttribute(ellipse, d.lineJobs.length == 1 ? d.lineJobs[0] : null);
                             __addFillAttribute(ellipse, fillColour, fillAlpha, g, bitmap);
@@ -1488,27 +1485,12 @@ class TileJob {
 enum SnapDrawable {
     NONE;
     PATH;
-    ELLIPSE;
-}
-
-class EllipseSnapData {
-    public var x: Float;
-    public var y: Float;
-    public var rx: Float;
-    public var ry: Float;
-
-    public function new(x: Float, y: Float, rx: Float, ry: Float) {
-        this.x = x;
-        this.y = y;
-        this.rx = rx;
-        this.ry = ry;
-    }
+    ELLIPSE(x: Float, y: Float, rx: Float, ry:Float);
 }
 
 class SnapJob {
 
     public var jobType: SnapDrawable;
-    public var ellipseData: EllipseSnapData = null;
 
     private function new() {
         jobType = SnapDrawable.NONE;
@@ -1516,8 +1498,7 @@ class SnapJob {
 
     public static function getEllipseJob(x: Float, y: Float, rx: Float, ry: Float): SnapJob {
         var result: SnapJob = new SnapJob();
-        result.jobType = SnapDrawable.ELLIPSE;
-        result.ellipseData = new EllipseSnapData(x, y, rx, ry);
+        result.jobType = SnapDrawable.ELLIPSE(x, y, rx, ry);
         return result;
     }
 
