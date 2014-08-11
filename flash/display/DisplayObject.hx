@@ -215,10 +215,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private inline function handleGraphicsUpdated (gfx:Graphics):Void {
-		
 		__invalidateBounds ();
-        //TODO: uncomment
-		//__applyFilters (gfx.__surface);
+		__applyFilters(snap);
 		__setFlag (TRANSFORM_INVALID);
 		
 	}
@@ -364,30 +362,25 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			this.__srUpdateDivs ();
 			var evt = new Event (Event.ADDED_TO_STAGE, false, false);
 			dispatchEvent (evt);
-
 		}
 	}
 	
 	
-	private inline function __applyFilters (surface:CanvasElement):Void {
-		
-		if (__filters != null) {
-			
+	private inline function __applyFilters (surface:SnapElement):Void {
+		if (__filters != null && __filters.length > 0) {
+            var filterBuf = new StringBuf();
 			for (filter in __filters) {
-				
-				filter.__applyFilter (surface);
-				
+                filterBuf.add(filter.__getSvg());
 			}
-			
-		} 
-		
+            surface.attr({ filter: Lib.snap.filter(filterBuf.toString()) });
+		} else {
+            surface.attr({ filter: 'none' });
+        }
 	}
 	
 	
 	private function __broadcast (event:Event):Void {
-		
 		__dispatchEvent (event);
-		
 	}
 	
 	
