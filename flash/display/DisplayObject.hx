@@ -1014,7 +1014,11 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__mask.__maskingObj = null;
             Lib.freeSnap.append(__mask.snap);
             //Remove mask tag from <defs>
-            Snap.select(StringTools.replace(StringTools.replace(snap.attr('mask'), 'url(', '#'), ')', '')).remove();
+            var maskId = StringTools.replace(StringTools.replace(snap.attr('mask'), 'url(', ''), ')', '');
+            if (maskId.indexOf('#') != -1) {
+                maskId = maskId.substring(maskId.indexOf('#')+1, maskId.length-1);
+            }
+            Snap.select('#'+maskId).remove();
 		}
 
 		__mask = inValue;
