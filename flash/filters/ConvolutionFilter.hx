@@ -1,9 +1,6 @@
 package flash.filters;
 
 
-import flash.utils.UInt;
-
-
 class ConvolutionFilter extends BitmapFilter {
 	
 	
@@ -26,11 +23,11 @@ class ConvolutionFilter extends BitmapFilter {
 		this.matrixY = matrixY;
 		this.matrix = matrix;
 		this.divisor = divisor;
+        this.bias = bias;
 		this.preserveAlpha = preserveAlpha;
 		this.clamp = clamp;
 		this.color = color;
 		this.alpha = alpha;
-		
 	}
 
     override public function clone ():BitmapFilter {
