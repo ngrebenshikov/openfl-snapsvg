@@ -33,6 +33,16 @@ class DisplacementMapFilter extends BitmapFilter {
 		this.alpha = alpha;
 		
 	}
+
+
+    override public function clone ():BitmapFilter {
+        return new DisplacementMapFilter (mapBitmap, mapPoint, componentX, componentY, scaleX, scaleY, mode, color, alpha);
+    }
+
+    override public function __getSvg(): String {
+        //TODO: implement
+        return null;
+    }
 	
 	
 }

@@ -1,9 +1,5 @@
 package flash.filters;
 
-
-import flash.utils.UInt;
-
-
 class BevelFilter extends BitmapFilter {
 	
 	
@@ -39,6 +35,24 @@ class BevelFilter extends BitmapFilter {
 		this.knockout = knockout;
 		
 	}
-	
-	
+
+    override public function clone ():BitmapFilter {
+
+        return new BevelFilter (distance, angle, highlightColor, highlightAlpha, shadowColor, shadowAlpha, blurX, blurY, strength, quality, type, knockout);
+
+    }
+
+    override public function __getSvg(): String {
+        var highlight = "rgba(" + ((highlightColor >> 16) & 0xFF) + "," + ((highlightColor >> 8) & 0xFF) + "," + (highlightColor & 0xFF) + "," + highlightAlpha + ")";
+        var x = - distance * Math.sin (2 * Math.PI * angle / 360.0);
+        var y = - distance * Math.cos (2 * Math.PI * angle / 360.0);
+
+        return '<feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+            <feSpecularLighting surfaceScale="3" specularConstant="1.75" specularExponent="20" lighting-color="' + highlight + '" in="blur" result="highlight">
+                <fePointLight x="' + x + '" y="' + y + '" z="' + distance + '"/>
+            </feSpecularLighting>
+            <feComposite in="highlight" in2="SourceAlpha" operator="in" result="highlight"/>
+            <feComposite in="SourceGraphic" in2="highlight" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="highlightText"/>';
+    }
+
 }

@@ -32,6 +32,21 @@ class ConvolutionFilter extends BitmapFilter {
 		this.alpha = alpha;
 		
 	}
-	
-	
+
+    override public function clone ():BitmapFilter {
+
+        return new ConvolutionFilter (matrixX, matrixY, matrix, divisor, bias, preserveAlpha, clamp, color, alpha);
+
+    }
+
+    override public function __getSvg(): String {
+        return '<feConvolveMatrix
+                order="' + matrixX + ',' + matrixY+ '"
+                kernelMatrix="' + matrix.join(',')+ '"
+                divisor="' + divisor + '"
+                bias="' + bias + '"
+                preserveAlpha="' + Std.string(preserveAlpha) + '"
+                />';
+    }
+
 }

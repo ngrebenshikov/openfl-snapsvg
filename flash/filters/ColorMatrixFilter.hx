@@ -30,7 +30,7 @@ class ColorMatrixFilter extends BitmapFilter {
 	}
 	
 	
-	public function __applyFilter (surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false):Void {
+	override public function __applyFilter (surface:CanvasElement, rect:Rectangle = null, refreshCache:Bool = false):Void {
 		
 		if (rect == null) rect = new Rectangle (0, 0, surface.width, surface.height);
 		var ctx:CanvasRenderingContext2D = surface.getContext ('2d');
@@ -57,6 +57,11 @@ class ColorMatrixFilter extends BitmapFilter {
 		ctx.putImageData (imagedata, rect.x, rect.y);
 		
 	}
+
+    override public function __getSvg(): String {
+        return '<feColorMatrix in="SourceGraphic" type="matrix" values="' + matrix.join(',') + '"/>"';
+    }
+
 	
 	
 }

@@ -1,6 +1,7 @@
 package flash.filters;
 
 
+import snap.Snap;
 import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -179,6 +180,8 @@ class BlurFilter extends BitmapFilter {
 		}
 		
 	}
-	
-	
+
+    override public function __getSvg(): String {
+        return Snap.filter_blur(blurX, blurY);
+    }
 }
