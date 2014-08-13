@@ -402,7 +402,7 @@ class Graphics {
 
     public function drawCircle (x:Float, y:Float, rad:Float):Void {
         closePolygon (false);
-        __drawEllipse (x, y, rad, rad);
+        __drawCircle (x, y, rad);
 
     }
 
@@ -860,6 +860,17 @@ class Graphics {
         addDrawable(drawable);
     }
 
+    private function __drawCircle (x:Float, y:Float, rad:Float):Void {
+        var localLineJobs: LineJobs = mCurrentLine.thickness != 0
+        ? [new LineJob (mCurrentLine.grad, mCurrentLine.point_idx0, mCurrentLine.point_idx1,
+        mCurrentLine.thickness, mCurrentLine.alpha, mCurrentLine.colour, mCurrentLine.pixel_hinting,
+        mCurrentLine.joints, mCurrentLine.caps, mCurrentLine.scale_mode, mCurrentLine.miter_limit)]
+        : [];
+        var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, localLineJobs, null,
+        SnapJob.getCircleJob(x, y, rad));
+        addDrawable(drawable);
+    }
+
 
     private function __drawTiles (sheet:Tilesheet, tileData:Array<Float>, flags:Int = 0):Void {
 
@@ -1210,6 +1221,13 @@ class Graphics {
                             __addFillAttribute(ellipse, fillColour, fillAlpha, g, bitmap);
 
                             __snap.append(ellipse);
+                    case SnapDrawable.CIRCLE(x, y, rad):
+                        var circle: SnapElement = Lib.snap.circle(x, y, rad);
+
+                        __addStrokeAttribute(circle, d.lineJobs.length == 1 ? d.lineJobs[0] : null);
+                        __addFillAttribute(circle, fillColour, fillAlpha, g, bitmap);
+
+                        __snap.append(circle);
                     case SnapDrawable.PATH:
                         // Create pathes
                         var pathString: StringBuf = new StringBuf();
@@ -1486,6 +1504,7 @@ enum SnapDrawable {
     NONE;
     PATH;
     ELLIPSE(x: Float, y: Float, rx: Float, ry:Float);
+    CIRCLE(x:Float, y:Float, rad:Float);
 }
 
 class SnapJob {
@@ -1496,15 +1515,21 @@ class SnapJob {
         jobType = SnapDrawable.NONE;
     }
 
+    public static function getPathJob(): SnapJob {
+        var result: SnapJob = new SnapJob();
+        result.jobType = SnapDrawable.PATH;
+        return result;
+    }
+
     public static function getEllipseJob(x: Float, y: Float, rx: Float, ry: Float): SnapJob {
         var result: SnapJob = new SnapJob();
         result.jobType = SnapDrawable.ELLIPSE(x, y, rx, ry);
         return result;
     }
 
-    public static function getPathJob(): SnapJob {
+    public static function getCircleJob(x:Float, y:Float, rad:Float): SnapJob {
         var result: SnapJob = new SnapJob();
-        result.jobType = SnapDrawable.PATH;
+        result.jobType = SnapDrawable.CIRCLE(x, y, rad);
         return result;
     }
 }
