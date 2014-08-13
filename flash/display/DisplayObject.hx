@@ -365,15 +365,41 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 	}
 	
-	
+
+    private inline function __getBlendModeSvg() {
+//        return if (null == blendMode) null else
+//            switch(blendMode) {
+//                case BlendMode.NORMAL: null;
+//                case BlendMode.MULTIPLY: '<feBlend mode="multiply" in2="BackgroundImage" in="SourceGraphic"/>';
+//                case BlendMode.SCREEN: '<feBlend mode="screen" in2="BackgroundImage" in="SourceGraphic"/>';
+//                case BlendMode.DARKEN: '<feBlend mode="darken" in2="BackgroundImage" in="SourceGraphic"/>';
+//                case BlendMode.LIGHTEN: '<feBlend mode="lighten" in2="BackgroundImage" in="SourceGraphic"/>';
+//                case BlendMode.ADD: null;
+//                case BlendMode.ALPHA: null;
+//                case BlendMode.DIFFERENCE: null;
+//                case BlendMode.ERASE: null;
+//                case BlendMode.HARDLIGHT: null;
+//                case BlendMode.INVERT: null;
+//                case BlendMode.LAYER: null;
+//                case BlendMode.OVERLAY: null;
+//                case BlendMode.SUBTRACT: null;
+//            };
+        return null;
+    }
+
 	private inline function __applyFilters (surface:SnapElement):Void {
+        var blendFilter = __getBlendModeSvg();
+        trace(blendFilter);
 		if (__filters != null && __filters.length > 0) {
             var filterBuf = new StringBuf();
+            if (null != blendFilter) filterBuf.add(blendFilter);
 			for (filter in __filters) {
                 filterBuf.add(filter.__getSvg());
 			}
             surface.attr({ filter: Lib.snap.filter(filterBuf.toString()) });
-		} else {
+		} else if (null != blendFilter){
+            surface.attr({ filter: Lib.snap.filter(blendFilter) });
+        } else {
             surface.attr({ filter: 'none' });
         }
 	}
