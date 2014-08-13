@@ -21,10 +21,7 @@ import flash.geom.Rectangle;
 import flash.geom.Transform;
 import flash.utils.Uuid;
 import flash.Lib;
-import js.html.CanvasElement;
 import js.html.DivElement;
-import js.html.Element;
-import js.Browser;
 
 
 class DisplayObject extends EventDispatcher implements IBitmapDrawable {
@@ -359,6 +356,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 
 		if (__isOnStage ()) {
+            stage.snapIdToDisplayObjects.set(cast(snap).id, this);
 			this.__srUpdateDivs ();
 			var evt = new Event (Event.ADDED_TO_STAGE, false, false);
 			dispatchEvent (evt);
@@ -389,7 +387,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 
 	private inline function __applyFilters (surface:SnapElement):Void {
         var blendFilter = __getBlendModeSvg();
-        trace(blendFilter);
 		if (__filters != null && __filters.length > 0) {
             var filterBuf = new StringBuf();
             if (null != blendFilter) filterBuf.add(blendFilter);
@@ -545,47 +542,25 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 	}
 	
-	
 	private function __getObjectUnderPoint (point:Point):DisplayObject {
-		
 		if (!visible) return null;
-		var gfx = __getGraphics ();
-		
-		if (gfx != null) {
-			
-			gfx.__render ();
-			
-			var extX = gfx.__extent.x;
-			var extY = gfx.__extent.y;
-			var local = globalToLocal (point);
-			
-			if (local.x - extX <= 0 || local.y - extY <= 0 || (local.x - extX) * scaleX > width || (local.y - extY) * scaleY > height) return null;
-			
-			//switch (stage.__pointInPathMode) {
-				//
-				//case USER_SPACE:
-					
-					if (gfx.__hitTest (local.x, local.y)) {
-						
-						return cast this;
-						
-					}
-				
-				//case DEVICE_SPACE:
-					//
-					//if (gfx.__hitTest(local.x * scaleX, local.y * scaleY)) {
-					//if (gfx.__hitTest(local.x, local.y)) {
-						//
-						//return cast this;
-						//
-					//}
-				//
-			//}
-			
-		}
+
+        var element = Snap.getElementByPoint(point.x, point.y);
+
+        while(null != element) {
+            if (stage.snapIdToDisplayObjects.exists(cast(element).id)) {
+                var obj: DisplayObject = stage.snapIdToDisplayObjects.get(cast(element).id);
+
+                // Check if this is not parent of obj
+                while (null != obj) {
+                    if (this == obj) return cast this;
+                    obj = obj.parent;
+                }
+            }
+            element = element.parent();
+        }
 		
 		return null;
-		
 	}
 	
 	
@@ -672,6 +647,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private function __removeFromStage ():Void {
         if (Lib.__isOnStage (snap)) {
             Lib.__removeSurface (snap);
+            stage.snapIdToDisplayObjects.remove(cast(snap).id);
             var evt = new Event (Event.REMOVED_FROM_STAGE, false, false);
             dispatchEvent (evt);
         }

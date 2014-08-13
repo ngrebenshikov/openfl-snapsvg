@@ -32,6 +32,7 @@ extern class Snap {
 	static public function select(query:String):SnapElement;
 	static public function selectAll(query:String):SnapSet;
 	static public function snapTo(values:Array<Float>, value:Float, ?tolerance:Float):Float;
+    static public function getElementByPoint(x: Float, y: Float): SnapElement;
 
 	// path utility methods
 	inline static public function path_bezierBBox(bez:Array<Float>):SnapBoundingBox {
