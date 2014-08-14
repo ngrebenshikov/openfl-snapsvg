@@ -980,23 +980,6 @@ class Graphics {
     }
 
 
-    public function __hitTest (inX:Float, inY:Float):Bool {
-
-//        if ((inX, inY)) {
-//
-//            return true;
-//
-//        } else if (mDrawList.length == 0 && __extent.width > 0 && __extent.height > 0) {
-//
-//            return true;
-//
-//        }
-//
-        return false;
-
-    }
-
-
     public inline function __invalidate ():Void {
 
         __changed = true;

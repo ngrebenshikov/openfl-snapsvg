@@ -1,6 +1,7 @@
 package flash.display;
 
 
+import haxe.ds.StringMap;
 import snap.Snap;
 import flash.display.Graphics;
 import flash.display.StageDisplayState;
@@ -87,7 +88,9 @@ class Stage extends DisplayObjectContainer {
 	private var _mouseY:Float;
 
     private var __graphics: Graphics;
-	
+
+    public var snapIdToDisplayObjects: StringMap<DisplayObject>;
+
 	public function new (width:Int, height:Int) {
 		
 		super();
@@ -113,8 +116,9 @@ class Stage extends DisplayObjectContainer {
 		__touchInfo = [];
 		__uIEventsQueue = untyped __new__("Array", UI_EVENTS_QUEUE_MAX);
 		__uIEventsQueueIndex = 0;
+        snapIdToDisplayObjects = new StringMap<DisplayObject>();
 
-		#if stage3d
+        #if stage3d
 		stage3Ds = new Vector ();
 		stage3Ds.push(new Stage3D ());
 		//alpha = 0;   // so that the stage itself does not preclude to see Stage3D OpenGLView
@@ -593,7 +597,7 @@ class Stage extends DisplayObjectContainer {
 		
 		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect ();
 		var point:Point = untyped new Point (event.clientX - rect.left, event.clientY - rect.top);
-		
+
 		if (__dragObject != null) {
 			
 			__drag (point);
@@ -605,7 +609,7 @@ class Stage extends DisplayObjectContainer {
 		// used in drag implementation
 		_mouseX = point.x;
 		_mouseY = point.y;
-		
+
 		var stack = new Array<InteractiveObject> ();
 		if (obj != null) obj.__getInteractiveObjectStack (stack);
 		
