@@ -507,64 +507,15 @@ class Graphics {
     public function drawRect (x:Float, y:Float, width:Float, height:Float):Void {
 
         closePolygon (false);
-
-        moveTo (x, y);
-        lineTo (x + width, y);
-        lineTo (x + width, y + height);
-        lineTo (x, y + height);
-        lineTo (x, y);
-
-        closePolygon (false);
+        __drawRect(x, y, width, height, 0, 0);
 
     }
 
 
     public function drawRoundRect (x:Float, y:Float, width:Float, height:Float, rx:Float, ry:Float = -1):Void {
 
-        if (ry == -1) {
-
-            ry = rx;
-
-        }
-
-        rx *= 0.5;
-        ry *= 0.5;
-
-        var w = width * 0.5;
-        x += w;
-
-        if (rx > w) rx = w;
-
-        var lw = w - rx;
-        var w_ = lw + rx * Math.sin (Math.PI / 4);
-        var cw_ = lw + rx * Math.tan (Math.PI / 8);
-
-        var h = height * 0.5;
-        y += h;
-
-        if (ry > h) ry = h;
-
-        var lh = h - ry;
-        var h_ = lh + ry * Math.sin (Math.PI / 4);
-        var ch_ = lh + ry * Math.tan (Math.PI / 8);
-
         closePolygon (false);
-
-        moveTo (x + w, y + lh);
-        curveTo (x + w, y + ch_, x + w_, y + h_);
-        curveTo (x + cw_, y + h, x + lw, y + h);
-        lineTo (x - lw, y + h);
-        curveTo (x - cw_, y + h, x - w_, y + h_);
-        curveTo (x - w, y + ch_, x - w, y + lh);
-        lineTo (x - w, y - lh);
-        curveTo (x - w, y - ch_, x - w_, y - h_);
-        curveTo (x - cw_, y - h, x - lw, y - h);
-        lineTo (x + lw, y - h);
-        curveTo (x + cw_, y - h, x + w_, y - h_);
-        curveTo (x + w, y - ch_, x + w, y - lh);
-        lineTo (x + w, y + lh);
-
-        closePolygon (false);
+        __drawRect(x, y, width, height, rx, ry == -1 ? rx : ry);
 
     }
 
@@ -848,26 +799,33 @@ class Graphics {
 
     }
 
-
-    private function __drawEllipse (x:Float, y:Float, rx:Float, ry:Float):Void {
-        var localLineJobs: LineJobs = mCurrentLine.thickness != 0
+    private function __getCurrentLineJobs(): LineJobs {
+        var result: LineJobs = mCurrentLine.thickness != 0
             ? [new LineJob (mCurrentLine.grad, mCurrentLine.point_idx0, mCurrentLine.point_idx1,
                 mCurrentLine.thickness, mCurrentLine.alpha, mCurrentLine.colour, mCurrentLine.pixel_hinting,
                 mCurrentLine.joints, mCurrentLine.caps, mCurrentLine.scale_mode, mCurrentLine.miter_limit)]
             : [];
-        var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, localLineJobs, null,
-            SnapJob.getEllipseJob(x, y, rx, ry));
+        return result;
+    }
+
+    private function __drawEllipse (x:Float, y:Float, rx:Float, ry:Float):Void {
+        __expandStandardExtent(rx * 2, ry * 2);
+        var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, __getCurrentLineJobs(),
+            null, SnapJob.getEllipseJob(x, y, rx, ry));
         addDrawable(drawable);
     }
 
     private function __drawCircle (x:Float, y:Float, rad:Float):Void {
-        var localLineJobs: LineJobs = mCurrentLine.thickness != 0
-        ? [new LineJob (mCurrentLine.grad, mCurrentLine.point_idx0, mCurrentLine.point_idx1,
-        mCurrentLine.thickness, mCurrentLine.alpha, mCurrentLine.colour, mCurrentLine.pixel_hinting,
-        mCurrentLine.joints, mCurrentLine.caps, mCurrentLine.scale_mode, mCurrentLine.miter_limit)]
-        : [];
-        var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, localLineJobs, null,
-        SnapJob.getCircleJob(x, y, rad));
+        __expandStandardExtent(rad * 2, rad * 2);
+        var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, __getCurrentLineJobs(),
+            null, SnapJob.getCircleJob(x, y, rad));
+        addDrawable(drawable);
+    }
+
+    private function __drawRect (x: Float, y: Float, width: Float, height: Float, rx: Float, ry: Float):Void {
+        __expandStandardExtent(width, height);
+        var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, __getCurrentLineJobs(),
+            null, SnapJob.getRectJob(x, y, width, height, rx, ry));
         addDrawable(drawable);
     }
 
@@ -1228,6 +1186,13 @@ class Graphics {
                         __addFillAttribute(circle, fillColour, fillAlpha, g, bitmap);
 
                         __snap.append(circle);
+                    case SnapDrawable.RECT(x, y, width, height, rx, ry):
+                        var rect: SnapElement = Lib.snap.rect(x, y, width, height, rx, ry);
+
+                        __addStrokeAttribute(rect, d.lineJobs.length == 1 ? d.lineJobs[0] : null);
+                        __addFillAttribute(rect, fillColour, fillAlpha, g, bitmap);
+
+                        __snap.append(rect);
                     case SnapDrawable.PATH:
                         // Create pathes
                         var pathString: StringBuf = new StringBuf();
@@ -1504,7 +1469,8 @@ enum SnapDrawable {
     NONE;
     PATH;
     ELLIPSE(x: Float, y: Float, rx: Float, ry:Float);
-    CIRCLE(x:Float, y:Float, rad:Float);
+    CIRCLE(x: Float, y: Float, rad: Float);
+    RECT(x: Float, y: Float, width: Float, height: Float, rx: Float, ry: Float);
 }
 
 class SnapJob {
@@ -1527,9 +1493,15 @@ class SnapJob {
         return result;
     }
 
-    public static function getCircleJob(x:Float, y:Float, rad:Float): SnapJob {
+    public static function getCircleJob(x: Float, y: Float, rad: Float): SnapJob {
         var result: SnapJob = new SnapJob();
         result.jobType = SnapDrawable.CIRCLE(x, y, rad);
+        return result;
+    }
+
+    public static function getRectJob(x: Float, y: Float, width: Float, height: Float, rx: Float, ry: Float): SnapJob {
+        var result: SnapJob = new SnapJob();
+        result.jobType = SnapDrawable.RECT(x, y, width, height, rx, ry);
         return result;
     }
 }
