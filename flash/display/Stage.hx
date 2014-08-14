@@ -597,7 +597,7 @@ class Stage extends DisplayObjectContainer {
 		
 		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect ();
 		var point:Point = untyped new Point (event.clientX - rect.left, event.clientY - rect.top);
-		
+
 		if (__dragObject != null) {
 			
 			__drag (point);
@@ -609,7 +609,7 @@ class Stage extends DisplayObjectContainer {
 		// used in drag implementation
 		_mouseX = point.x;
 		_mouseY = point.y;
-		
+
 		var stack = new Array<InteractiveObject> ();
 		if (obj != null) obj.__getInteractiveObjectStack (stack);
 		

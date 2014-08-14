@@ -142,65 +142,59 @@ class Lib {
 	private static function Run (tgt:DivElement, width:Int, height:Int):Lib {
 		
 		mMe = new Lib (tgt, width, height);
-		
-//		for (i in 0...tgt.attributes.length) {
-//
-//			var attr:Attr = cast tgt.attributes.item (i);
-//
-//			if (StringTools.startsWith (attr.name, VENDOR_HTML_TAG)) {
-//
-//				if (attr.name == VENDOR_HTML_TAG + "framerate") {
-//
-//					__getStage ().frameRate = Std.parseFloat (attr.value);
-//
-//				}
-//
-//			}
-//
-//		}
-//
-//		//if (Reflect.hasField(tgt, "on" + HTML_TOUCH_EVENT_TYPES[0])) {
-//
-//			for (type in HTML_TOUCH_EVENT_TYPES) {
-//
-//				tgt.addEventListener(type, __getStage ().__queueStageEvent, true);
-//
-//			}
-//
-//		//} else {
-//
-//			for (type in HTML_TOUCH_ALT_EVENT_TYPES) {
-//
-//				tgt.addEventListener(type, __getStage ().__queueStageEvent, true);
-//
-//			}
-//
-//		//}
-//
-//		for (type in HTML_DIV_EVENT_TYPES) {
-//
-//			tgt.addEventListener(type, __getStage ().__queueStageEvent, true);
-//
-//		}
-//
-//		if (Reflect.hasField (Browser.window, "on" + HTML_ACCELEROMETER_EVENT_TYPE)) {
-//
-//			Browser.window.addEventListener (HTML_ACCELEROMETER_EVENT_TYPE, __getStage ().__queueStageEvent, true);
-//
-//		}
-//
-//		if (Reflect.hasField (Browser.window, "on" + HTML_ORIENTATION_EVENT_TYPE)) {
-//
-//			Browser.window.addEventListener (HTML_ORIENTATION_EVENT_TYPE, __getStage ().__queueStageEvent, true);
-//
-//		}
-//
-//		for (type in HTML_WINDOW_EVENT_TYPES) {
-//
-//			Browser.window.addEventListener(type, __getStage ().__queueStageEvent, false);
-//
-//		}
-//
+
+		for (i in 0...tgt.attributes.length) {
+
+			var attr:Attr = cast tgt.attributes.item (i);
+
+			if (StringTools.startsWith (attr.name, VENDOR_HTML_TAG)) {
+
+				if (attr.name == VENDOR_HTML_TAG + "framerate") {
+
+					__getStage ().frameRate = Std.parseFloat (attr.value);
+
+				}
+
+			}
+
+		}
+
+        for (type in HTML_TOUCH_EVENT_TYPES) {
+
+            tgt.addEventListener(type, __getStage ().__queueStageEvent, true);
+
+        }
+
+        for (type in HTML_TOUCH_ALT_EVENT_TYPES) {
+
+            tgt.addEventListener(type, __getStage ().__queueStageEvent, true);
+
+        }
+
+		for (type in HTML_DIV_EVENT_TYPES) {
+
+			tgt.addEventListener(type, __getStage ().__queueStageEvent, true);
+
+		}
+
+		if (Reflect.hasField (Browser.window, "on" + HTML_ACCELEROMETER_EVENT_TYPE)) {
+
+			Browser.window.addEventListener (HTML_ACCELEROMETER_EVENT_TYPE, __getStage ().__queueStageEvent, true);
+
+		}
+
+		if (Reflect.hasField (Browser.window, "on" + HTML_ORIENTATION_EVENT_TYPE)) {
+
+			Browser.window.addEventListener (HTML_ORIENTATION_EVENT_TYPE, __getStage ().__queueStageEvent, true);
+
+		}
+
+		for (type in HTML_WINDOW_EVENT_TYPES) {
+
+			Browser.window.addEventListener(type, __getStage ().__queueStageEvent, false);
+
+		}
+
 		#if interop
 		// search document for data-bindings
 		untyped {
