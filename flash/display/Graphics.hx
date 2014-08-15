@@ -304,7 +304,6 @@ class Graphics {
 
     private function createCanvasGradient (g:Grad):SnapElement {
 
-        //TODO handle spreadMethod flags REPEAT and REFLECT(defaults to PAD behavior)
         var gradientString: StringBuf = new StringBuf();
 
         if ((g.flags & RADIAL) == 0) {
@@ -313,14 +312,24 @@ class Graphics {
             gradientString.add(Snap.format("R({x}, 0, 0, 819.2)", {x:g.focal * 819.2}));
         }
 
+        var points: Array<String> = [];
         for (point in g.points) {
-            gradientString.add(Snap.format("{color}:{pos}", {
+            points.push(Snap.format("{color}:{pos}", {
                     color: createCanvasColor(point.col, point.alpha),
                     pos: Std.int(point.ratio / 255 * 100)
                 }));
         }
+        gradientString.add(points.join('-'));
 
-        return Lib.snap.gradient(gradientString.toString());
+        var gradient: SnapElement = Lib.snap.gradient(gradientString.toString());
+        gradient.attr({
+            gradientTransform: 'matrix(' + g.matrix.a + ',' + g.matrix.b + ',' + g.matrix.c + ',' + g.matrix.d + ',' + g.matrix.tx + ',' + g.matrix.ty + ')',
+            spreadMethod: if (g.flags & SPREAD_REFLECT != 0) 'reflect'
+                            else if (g.flags & SPREAD_REPEAT != 0) 'repeat'
+                            else 'pad'
+        });
+
+        return gradient;
     }
 
 
@@ -1158,10 +1167,10 @@ class Graphics {
                     case SnapDrawable.ELLIPSE(x, y, rx, ry):
                         var ellipse: SnapElement = Lib.snap.ellipse(x, y, rx, ry);
 
-                            __addStrokeAttribute(ellipse, d.lineJobs.length == 1 ? d.lineJobs[0] : null);
-                            __addFillAttribute(ellipse, fillColour, fillAlpha, g, bitmap);
+                        __addStrokeAttribute(ellipse, d.lineJobs.length == 1 ? d.lineJobs[0] : null);
+                        __addFillAttribute(ellipse, fillColour, fillAlpha, g, bitmap);
 
-                            __snap.append(ellipse);
+                        __snap.append(ellipse);
                     case SnapDrawable.CIRCLE(x, y, rad):
                         var circle: SnapElement = Lib.snap.circle(x, y, rad);
 
