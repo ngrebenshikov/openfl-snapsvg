@@ -309,7 +309,7 @@ class Graphics {
         if ((g.flags & RADIAL) == 0) {
             gradientString.add("L(-819.2, 0, 819.2, 0)");
         } else {
-            gradientString.add(Snap.format("R({x}, 0, 0, 819.2)", {x:g.focal * 819.2}));
+            gradientString.add(Snap.format("R(0, 0, 819.2, {x}, 0)", {x:g.focal * 819.2}));
         }
 
         var points: Array<String> = [];
