@@ -233,7 +233,7 @@ extern class SnapElement {
     public function toggleClass(c:String, flag:Bool): SnapElement;
 	public function after(el:SnapElement):SnapElement;
 	public function animate(newAttrs:Dynamic, duration:Float, ?easing:String, ?callbackFunction:Dynamic):SnapElement;
-	public function append(el:SnapElement):SnapElement;
+	public function append(el:Dynamic):SnapElement;
 	public function asPX(attr:String, ?value:String):String;
 	public function attr(?p0:Dynamic, ?p1:Dynamic):Dynamic;
 	public function before(el:SnapElement):SnapElement;
