@@ -88,6 +88,7 @@ class TextField extends InteractiveObject {
 	private var __graphics:Graphics;
 	private var __inputEnabled:Bool;
 	private var _defaultTextFormat:TextFormat;
+    private var __textChanged:Bool;
 	
 	
 	public function new () {
@@ -128,7 +129,7 @@ class TextField extends InteractiveObject {
 		
 		mLineInfo = [];
 		defaultTextFormat = new TextFormat ();
-		
+
 		borderColor = 0x000000;
 		border = false;
 		backgroundColor = 0xffffff;
@@ -245,48 +246,85 @@ class TextField extends InteractiveObject {
 		
 		mLineInfo = [];
 
-		var wrap = mLimitRenderX = (wordWrap && !__inputEnabled) ? Std.int (mWidth) : 999999;
+        if (__textChanged) {
+            trace(mWidth);
+            var wrap = mLimitRenderX = (wordWrap && !__inputEnabled) ? Std.int (mWidth) : 999999;
 
-        trace(wrap);
-		var char_idx = 0;
-		for (paragraph in mParagraphs) {
-            char_idx = wrapParagraph(paragraph, wrap, char_idx, mSelStart, mSelEnd);
-		}
-
-        mTextSnap.selectAll("tspan").forEach(function (s) {
-            s.remove();
-        }, this);
-
-        var svgBuf: StringBuf = new StringBuf();
-        for (paragraph in mParagraphs) {
-            for (span in paragraph.spans) {
-                svgBuf.add('<tspan>');
-                svgBuf.add(span.text);
-                svgBuf.add('</tspan>');
+            var char_idx = 0;
+            for (paragraph in mParagraphs) {
+                char_idx = wrapParagraph(paragraph, wrap, char_idx, mSelStart, mSelEnd);
             }
+
+            mTextSnap.selectAll("tspan").forEach(function (s) {
+                s.remove();
+            }, this);
+
+            var svgBuf: StringBuf = new StringBuf();
+            var firstParagraph = true;
+            for (paragraph in mParagraphs) {
+                var firstSpan = true;
+                for (span in paragraph.spans) {
+                    svgBuf.add('<tspan ');
+                    if (null != span.rect) {
+                        svgBuf.add('textLength="' + span.rect.width+ 'px" ');
+                        if (firstSpan || span.startFromNewLine) {
+                            svgBuf.add('x="0" dy="' + span.rect.height+ 'px" ');
+                        }
+                    }
+                    if (null != span.format) {
+                        if (null != span.format.color) {
+                            svgBuf.add('color="#' + StringTools.hex(span.format.color,6) + '" ');
+                        }
+                        if (null != span.format.font) {
+                            svgBuf.add('font-family="' + span.format.font + '" ');
+                        }
+                        if (null != span.format.size) {
+                            svgBuf.add('font-size="' + span.format.size + 'px" ');
+                        }
+                        if (null != span.format.bold && span.format.bold) {
+                            svgBuf.add('font-weight="bold" ');
+                        }
+                        if (null != span.format.bold && span.format.italic) {
+                            svgBuf.add('font-style="italic" ');
+                        }
+                        if (null != span.format.underline && span.format.underline) {
+                            svgBuf.add('text-decoration="underline" ');
+                        }
+                        if (null != span.format.kerning) {
+                            svgBuf.add('kerning="' + span.format.kerning + 'px" ');
+                        }
+                        if (null != span.format.letterSpacing) {
+                            svgBuf.add('letter-spacing="' + span.format.letterSpacing + 'px" ');
+                        }
+                    }
+                    svgBuf.add('>');
+                    svgBuf.add(span.text);
+                    svgBuf.add('</tspan>');
+                    firstSpan = false;
+                }
+                firstParagraph = false;
+            }
+
+            mTextSnap.append(Snap.parse(svgBuf.toString()));
         }
-
-        mTextSnap.append(Snap.parse(svgBuf.toString()));
-
-        mTextSnap.selectAll("tspan:nth-child(n)").forEach(
-            function(el:SnapElement) {
-                el.attr({
-                    dy: "1.2em",
-                    x: 0
-                });
-            }, null );
 
         mTextSnap.attr("font-family", mFace);
         mTextSnap.attr("font-size", mTextHeight);
-        mTextSnap.attr("fill", "#" + StringTools.hex(mTextColour, 6));
+        mTextSnap.attr("color", "#" + StringTools.hex(mTextColour, 6));
 
 
         var rect = mTextSnap.getBBox();
-        mWidth = rect.width;
-        mHeight = rect.height;
-        if (mHeight < mTextHeight) {
-            mHeight = mTextHeight;
+        if (autoSize != TextFieldAutoSize.NONE) {
+            mHeight = rect.height+mTextHeight*0.4;
         }
+        if (mHeight < mTextHeight*1.4) {
+            mHeight = mTextHeight*1.4;
+        }
+
+        getClipRect().attr({
+            width: width,
+            height: height
+        });
 
         __graphics.clear ();
 
@@ -303,7 +341,19 @@ class TextField extends InteractiveObject {
 		}
 		
 	}
-	
+
+    private function getClipRect():SnapElement {
+        var url = mTextSnap.attr('clip-path');
+        trace(url);
+        if (null == url || 'none' == url) {
+            var rect = Lib.snap.rect(0,0,width,height,0,0);
+            mTextSnap.attr('clip-path', rect);
+            return rect;
+        } else {
+            var clipPath = Snap.select('#' + tools.Helper.getAnchorIdFromUrl(url));
+            return clipPath.select('rect');
+        }
+    }
 	
 	public function RebuildText () {
         if (null == mText || '' == mText) return;
@@ -312,42 +362,20 @@ class TextField extends InteractiveObject {
 
         var paras = mText.split ("\n");
 
-//        mTextSnap.attr("text", paras );
-
-//        mTextSnap.selectAll("tspan:nth-child(n)").forEach(
-//            function(el:SnapElement) {
-//              el.attr({
-//                dy: "1.2em",
-//                x: 0
-//              });
-//          }, null );
-//
-//        mTextSnap.attr("font-family", mFace);
-//        mTextSnap.attr("font-size", mTextHeight);
-//        mTextSnap.attr("fill", "#" + StringTools.hex(mTextColour, 6));
-
-//        var rect = mTextSnap.getBBox();
-//
-//        width = rect.width;
-//        height = rect.height;
-
-//        // building text in graphics
+        // building text in graphics
 		mParagraphs = [];
 		
 		if (!mHTMLMode) {
-
 			var font = FontInstance.CreateSolid (mFace, mTextHeight, mTextColour, 1.0);
 			var paras = mText.split ("\n");
 
-			for (paragraph in paras) {
-
-				mParagraphs.push ( cast { align: mAlign, spans: [ { font : font, text: paragraph + "\n" } ] } );
-
+            for (paragraph in paras) {
+				mParagraphs.push ( cast { align: mAlign, spans: [ { font : font, text: paragraph + "\n", format: defaultTextFormat, startFromNewLine: false } ] } );
 			}
-
 		}
-		
+        __textChanged = true;
 		Rebuild();
+        __textChanged = false;
 		
 	}
 	
@@ -538,7 +566,8 @@ class TextField extends InteractiveObject {
                 if ((tx + adv) > wrap) {
                     if (last_word_break > 0) {
                         var row_end = row.splice (last_word_break, row.length - last_word_break);
-                        newSpans.push(cast { font: font, text: row.slice(0, last_word_break).join('')});
+                        var head = row.slice(0, last_word_break);
+                        newSpans.push({ font: font, text: Lambda.fold(head, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(head)});
                         row = row_end;
                         tx -= last_word_break_width;
                         start_idx = last_word_char_idx;
@@ -552,7 +581,7 @@ class TextField extends InteractiveObject {
                             start_idx ++;
                         }
                     } else {
-                        newSpans.push(cast { font: font, text: row.join('')});
+                        newSpans.push( { font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row)});
                         row = [];
                         tx = 0;
                         start_idx = charIdx;
@@ -567,10 +596,13 @@ class TextField extends InteractiveObject {
             }
 
             if (row.length > 0) {
-                newSpans.push(cast { font: font, text: row.join('')});
+                newSpans.push( { font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row)});
             }
         }
-            return charIdx;
+
+        paragraph.spans = newSpans;
+
+        return charIdx;
     }
 
 	
@@ -1034,12 +1066,10 @@ class TextField extends InteractiveObject {
 	
 	
 	public function get_wordWrap ():Bool {
-		
 		return wordWrap;
-		
 	}
+
 	public function set_wordWrap (inWordWrap:Bool):Bool {
-		
 		wordWrap = inWordWrap;
 		RebuildText();
 		return wordWrap;
@@ -1155,73 +1185,44 @@ class FontInstance {
 		
 	}
 	
-	
-	
-	
 	// Getters & Setters
-	
-	
-	
-	
 	private function get_height ():Int {
-		
 		return mHeight;
-		
 	}
 	
 	
 }
 
-
-typedef SpanAttribs = {
-	
-	var face:String;
-	var height:Int;
-    var width: Int;
-	var colour:Int;
-	var align:TextFormatAlign;
-    var startFromNewLine: Bool;
-}
-
-
 typedef Span = {
-	
-	var font:FontInstance;
-	var text:String;
-    var attributes: SpanAttribs;
+	var font: FontInstance;
+	var text: String;
+    var format: TextFormat;
+    var startFromNewLine: Bool;
+    var rect: Rectangle;
 }
 
 
 typedef Paragraph = {
-	
 	var align:TextFormatAlign;
 	var spans: Array<Span>;
-	
 }
-
 
 typedef Paragraphs = Array<Paragraph>;
 
 
 typedef LineInfo = {
-	
 	var mY0:Int;
 	var mIndex:Int;
 	var mX:Array<Int>;
-	
 }
 
-
 typedef RowChar = {
-	
 	var x:Int;
 	var fh:Int;
 	var adv:Int;
 	var chr:Int;
 	var font:FontInstance;
 	var sel:Bool;
-	
 }
-
 
 typedef RowChars = Array<RowChar>;
