@@ -89,6 +89,7 @@ class TextField extends InteractiveObject {
 	private var __inputEnabled:Bool;
 	private var _defaultTextFormat:TextFormat;
     private var __textChanged:Bool;
+    private var __textFormats:Array<TextFormatInstance>;
 	
 	
 	public function new () {
@@ -136,7 +137,7 @@ class TextField extends InteractiveObject {
 		background = false;
 		gridFitType = GridFitType.PIXEL;
 		sharpness = 0;
-		
+        __textFormats = [];
 	}
 	
 	
@@ -250,6 +251,11 @@ class TextField extends InteractiveObject {
             trace(mWidth);
             var wrap = mLimitRenderX = (wordWrap && !__inputEnabled) ? Std.int (mWidth) : 999999;
 
+            if (null != __textFormats)
+                for(f in __textFormats) {
+                    applyTextFormat(f.format, f.begin, f.end);
+                }
+
             var char_idx = 0;
             for (paragraph in mParagraphs) {
                 char_idx = wrapParagraph(paragraph, wrap, char_idx, mSelStart, mSelEnd);
@@ -266,14 +272,16 @@ class TextField extends InteractiveObject {
                 for (span in paragraph.spans) {
                     svgBuf.add('<tspan ');
                     if (null != span.rect) {
-                        svgBuf.add('textLength="' + span.rect.width+ 'px" ');
+                        //Commented yet because WebKit doesn't support it correctly
+                        //TODO: make it working for webkit
+                        //svgBuf.add('textLength="' + span.rect.width+ 'px" ');
                         if (firstSpan || span.startFromNewLine) {
                             svgBuf.add('x="0" dy="' + span.rect.height+ 'px" ');
                         }
                     }
                     if (null != span.format) {
                         if (null != span.format.color) {
-                            svgBuf.add('color="#' + StringTools.hex(span.format.color,6) + '" ');
+                            svgBuf.add('fill="#' + StringTools.hex(span.format.color,6) + '" ');
                         }
                         if (null != span.format.font) {
                             svgBuf.add('font-family="' + span.format.font + '" ');
@@ -344,7 +352,6 @@ class TextField extends InteractiveObject {
 
     private function getClipRect():SnapElement {
         var url = mTextSnap.attr('clip-path');
-        trace(url);
         if (null == url || 'none' == url) {
             var rect = Lib.snap.rect(0,0,width,height,0,0);
             mTextSnap.attr('clip-path', rect);
@@ -514,12 +521,14 @@ class TextField extends InteractiveObject {
     private function getRowDimension(row:Array<RowChar>): flash.geom.Rectangle {
         var h = 0;
         var w = 0;
+        var str = '';
 
         for (chr in row) {
             if (chr.fh > h) {
                 h = chr.fh;
             }
             w += chr.adv;
+            str += String.fromCharCode(chr.chr);
         }
 
         if (w > mMaxWidth) {
@@ -527,6 +536,9 @@ class TextField extends InteractiveObject {
         }
 
         var full_height = Std.int (h * 1.2);
+
+        trace(str + ': ' + w);
+
         return new Rectangle(0,0,w,full_height);
     }
 
@@ -545,8 +557,17 @@ class TextField extends InteractiveObject {
         for (span in paragraph.spans) {
 
             var text = span.text;
-            var font = span.font;
+            var font = if (null != span.format)
+                FontInstance.CreateSolid(
+                    if (null != span.format.font) span.format.font else span.font.GetFace(),
+                    if (null != span.format.size) Std.int(span.format.size) else span.font.height,
+                    if (null != span.format.color) span.format.color else span.font.color,
+                    1.0)
+            else
+                span.font;
             var fh = font.height;
+
+            trace(fh);
 
             last_word_break = row.length;
             last_word_break_width = row_width;
@@ -556,6 +577,7 @@ class TextField extends InteractiveObject {
 
                 var g = text.charCodeAt(ch);
                 var adv = font.__getAdvance(g);
+                trace(adv);
 
                 if (g == 32) {
                     last_word_break = row.length;
@@ -590,13 +612,15 @@ class TextField extends InteractiveObject {
 
                 }
 
+
                 row.push ( { font: font, chr: g, x: tx, fh: fh, sel:(charIdx >= s0 && charIdx < s1), adv: adv } );
                 tx += adv;
                 charIdx++;
             }
 
             if (row.length > 0) {
-                newSpans.push( { font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row)});
+                newSpans.push( { font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: newSpans.length == 0, rect: getRowDimension(row)});
+                row = [];
             }
         }
 
@@ -615,50 +639,73 @@ class TextField extends InteractiveObject {
 	
 	
 	public function setTextFormat (inFmt:TextFormat, beginIndex:Int = 0, endIndex:Int = 0) {
-		
-		if (inFmt.font != null) {
-			
-			mFace = inFmt.font;
-			
-		}
-		
-		if (inFmt.size != null) {
-			
-			mTextHeight = Std.int (inFmt.size);
-			
-		}
-		
-		if (inFmt.align != null) {
-			
-			mAlign = inFmt.align;
-			
-		}
-		
-		if (inFmt.color != null) {
-			
-			mTextColour = inFmt.color;
-			
-		}
-		
+        if (beginIndex == 0 || endIndex == 0) {
+            if (inFmt.font != null) {
+                mFace = inFmt.font;
+            }
+
+            if (inFmt.size != null) {
+                mTextHeight = Std.int (inFmt.size);
+            }
+
+            if (inFmt.align != null) {
+                mAlign = inFmt.align;
+            }
+
+            if (inFmt.color != null) {
+                mTextColour = inFmt.color;
+            }
+        } else {
+            __textFormats.push({format:inFmt, begin:beginIndex, end:endIndex});
+        }
+
 		RebuildText ();
 		__invalidateBounds ();
 		
 		return getTextFormat ();
-		
 	}
-	
-	
+
+    private function applyTextFormat(format: TextFormat, beginIndex: Int, endIndex: Int) {
+        var font = FontInstance.CreateSolid (format.font, Std.int(format.size), format.color, 1.0);
+        var spanStartCharIndex: Int = 0;
+        for (paragraph in mParagraphs) {
+            var newSpans: Array<Span> = [];
+            for (span in paragraph.spans) {
+                var spanEndCharIndex = spanStartCharIndex + span.text.length - 1;
+                trace(span.text);
+                if (beginIndex <= spanEndCharIndex && beginIndex >= spanStartCharIndex) {
+                    trace(beginIndex);
+                    var parts = splitStringByInerval(span.text, beginIndex-spanStartCharIndex, Std.int(Math.min(endIndex-spanStartCharIndex, spanEndCharIndex - spanStartCharIndex)));
+                    trace(parts[0]);
+                    trace(parts[1]);
+                    trace(parts[2]);
+                    if (null != parts[0] && '' != parts[0]) newSpans.push({ font: span.font, text: parts[0], format: span.format, startFromNewLine: span.startFromNewLine, rect: null});
+                    if (null != parts[1] && '' != parts[1]) newSpans.push({ font: font, text: parts[1], format: format, startFromNewLine: false, rect: null});
+                    if (null != parts[2] && '' != parts[2]) newSpans.push({ font: span.font, text: parts[2], format: span.format, startFromNewLine: false, rect: null});
+                    if (endIndex > spanEndCharIndex) {
+                        beginIndex = spanEndCharIndex+1;
+                    }
+                } else {
+                    newSpans.push(span);
+                }
+                trace(Lambda.array(Lambda.map(newSpans, function(s) {return s.text;})));
+                spanStartCharIndex = spanEndCharIndex + 1;
+            }
+            paragraph.spans = newSpans;
+        }
+    }
+
+    private function splitStringByInerval(str: String, beginIndex: Int, endIndex: Int): Array<String> {
+        return [str.substring(0, beginIndex), str.substring(beginIndex, endIndex), str.substring(endIndex, str.length)];
+    }
+
 	override public function toString ():String {
-		
 		return "[TextField name=" + this.name + " id=" + ___id + "]";
-		
 	}
 	
 	
 	private override function __getGraphics ():Graphics {
-		
 		return __graphics;
-		
 	}
 	
 	
@@ -1091,6 +1138,7 @@ class FontInstance {
 	
 	
 	public var height (get_height, null):Int;
+    public var color (get_color, null):Int;
 	public var mTryFreeType:Bool;
 	
 	private static var mSolidFonts = new Map<String, FontInstance> ();
@@ -1189,8 +1237,11 @@ class FontInstance {
 	private function get_height ():Int {
 		return mHeight;
 	}
-	
-	
+
+    private function get_color ():Int {
+        return mColour;
+    }
+
 }
 
 typedef Span = {
@@ -1208,6 +1259,12 @@ typedef Paragraph = {
 }
 
 typedef Paragraphs = Array<Paragraph>;
+
+typedef TextFormatInstance = {
+    var format: TextFormat;
+    var begin: Int;
+    var end: Int;
+}
 
 
 typedef LineInfo = {
