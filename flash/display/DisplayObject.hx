@@ -704,7 +704,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 
 				this.__srUpdateDivs ();
 			}
-			Lib.__setSurfaceOpacity (snap, fullAlpha);
+			//Lib.__setSurfaceOpacity (snap, fullAlpha);
+            snap.attr({opacity:alpha});
 
             if (null != mask && (null == snap.attr("mask") || "none" == snap.attr("mask")) ) {
                 if (null != mask.snap) {
