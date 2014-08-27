@@ -105,6 +105,7 @@ class Graphics {
         if (snap == null) {
             __snap = Lib.snap.group();
             Lib.freeSnap.append(__snap);
+            __snap.addClass("graphics");
         } else {
             __snap = snap;
         }
@@ -1055,13 +1056,12 @@ class Graphics {
             });
 
         } else {
-// Alpha value gets clamped in [0;1] range.
+            // Alpha value gets clamped in [0;1] range.
             element.attr({ fill: createCanvasColor (fillColour, Math.min (1.0, Math.max (0.0, fillAlpha))) });
         }
 
     }
     public function __render (maskHandle:SnapElement = null, filters:Array<BitmapFilter> = null, sx:Float = 1.0, sy:Float = 1.0, clip0:Point = null, clip1:Point = null, clip2:Point = null, clip3:Point = null) {
-
         if (!__changed) return false;
 
         closePolygon (true);
@@ -1111,22 +1111,6 @@ class Graphics {
 //            ctx.lineTo (clip3.x * sx, clip3.y * sy);
 //            ctx.closePath ();
 //            ctx.clip ();
-//
-//        }
-
-//TODO: uncomment
-//        if (filters != null) {
-//
-//            for (filter in filters) {
-//
-//                if (Std.is (filter, DropShadowFilter)) {
-//
-//// shadow must be applied before we draw to the context
-//                    filter.__applyFilter (__surface, null, true);
-//
-//                }
-//
-//            }
 //
 //        }
 

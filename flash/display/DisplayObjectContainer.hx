@@ -39,25 +39,14 @@ class DisplayObjectContainer extends InteractiveObject {
 	
 	public function addChild (object:DisplayObject):DisplayObject {
 		
-		if (object == null) {
-			
-			throw "DisplayObjectContainer asked to add null child object";
-			
-		}
-		
-		if (object == this) {
-			
-			throw "Adding to self";
-			
-		}
+		if (object == null) { throw "DisplayObjectContainer asked to add null child object"; }
+		if (object == this) { throw "Adding to self"; }
 		
 		__addedChildren = true;
 		
 		if (object.parent == this) {
-			
 			setChildIndex (object, __children.length - 1);
 			return object;
-			
 		}
 		
 		#if debug
@@ -76,15 +65,12 @@ class DisplayObjectContainer extends InteractiveObject {
 		if (__isOnStage ()) object.__addToStage (this);
 		
 		if (__children == null) {
-			
 			__children = new Array <DisplayObject> ();
-			
 		}
 		
 		__children.push (object);
 		
 		return object;
-		
 	}
 	
 	
@@ -586,20 +572,12 @@ class DisplayObjectContainer extends InteractiveObject {
 		if (__children[c1] == null) throw "Null element at index " + c1 + " length " + __children.length;
 		if (__children[c2] == null) throw "Null element at index " + c2 + " length " + __children.length;
 
-		var gfx1 = __children[c1].__getGraphics ();
-		var gfx2 = __children[c2].__getGraphics ();
+        var surface1 = __children[c1].__scrollRect == null ? __children[c1].snap : __children[c1].__getSrWindow ();
+        var surface2 = __children[c2].__scrollRect == null ? __children[c2].snap : __children[c2].__getSrWindow ();
 
-		if (gfx1 != null && gfx2 != null) {
-
-			var surface1 = __children[c1].__scrollRect == null ? gfx1.__snap : __children[c1].__getSrWindow ();
-			var surface2 = __children[c2].__scrollRect == null ? gfx2.__snap : __children[c2].__getSrWindow ();
-
-			if (surface1 != null && surface2 != null) {
-				Lib.__swapSurface (surface1, surface2);
-			}
-
-		}
-		
+        if (surface1 != null && surface2 != null) {
+            Lib.__swapSurface (surface1, surface2);
+        }
 	}
 	
 	

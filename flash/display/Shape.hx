@@ -14,9 +14,9 @@ class Shape extends DisplayObject {
 	public function new () {
 		super ();
 
-        var graphicsSnap = Lib.snap.group().addClass("graphics");
-        snap.append(graphicsSnap);
-        __graphics = new Graphics(graphicsSnap);
+        __graphics = new Graphics();
+        snap.append(__graphics.__snap);
+
 	}
 	
 	override public function toString ():String {

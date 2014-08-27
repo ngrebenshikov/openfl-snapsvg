@@ -120,6 +120,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		__combinedVisible = visible;
 
         snap = Lib.snap.group();
+        Lib.__setSurfaceId (snap, ___id);
         Lib.freeSnap.append(snap);
 	}
 	
@@ -338,26 +339,22 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         if (null == gfx) return;
 
 		if (newParent.snap != null && newParent.name != Stage.NAME) {
-
-			Lib.__setSurfaceId (snap, ___id);
-
 			if (beforeSibling != null && beforeSibling.__getGraphics () != null) {
-				Lib.__appendSurface (snap, beforeSibling._bottommostSurface);
+				Lib.__appendSurface (snap, beforeSibling.snap);
 			} else {
-				Lib.__appendSurface (snap, null, null, newParent._surface);
+				Lib.__appendSurface (snap, null, null, newParent.snap);
 			}
 
 			Lib.__setSurfaceTransform (snap, getSurfaceTransform(gfx));
-
 		} else {
 			if (newParent.name == Stage.NAME) { // only stage is allowed to add to a parent with no context
-				Lib.__appendSurface (snap);
+				Lib.__appendSurface(snap);
 			}
 		}
 
 		if (__isOnStage ()) {
             stage.snapIdToDisplayObjects.set(cast(snap).id, this);
-			this.__srUpdateDivs ();
+			//this.__srUpdateDivs ();
 			var evt = new Event (Event.ADDED_TO_STAGE, false, false);
 			dispatchEvent (evt);
 		}
@@ -562,17 +559,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		return null;
 	}
-	
-	
-	private inline function __getSurface ():SnapElement {
-		var gfx = __getGraphics ();
-		var surface = null;
-		if (gfx != null) {
-			surface = gfx.__snap;
-		}
-		return surface;
-	}
-	
 	
 	private inline function __invalidateBounds ():Void {
 		
@@ -1078,34 +1064,24 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		__invalidateMatrix ();
 		
 		if (this.parent != null) {
-			
 			this.parent.__children.remove (this);
 			this.parent.__invalidateBounds ();
-			
 		}
 		
 		if (inValue != null) {
-			
 			inValue.__invalidateBounds ();
-			
 		}
 		
 		if (this.parent == null && inValue != null) {
-			
 			this.parent = inValue;
 			var evt = new Event (Event.ADDED, true, false);
 			dispatchEvent(evt);
-			
 		} else if (this.parent != null && inValue == null) {
-			
 			this.parent = inValue;
 			var evt = new Event (Event.REMOVED, true, false);
 			dispatchEvent (evt);
-			
 		} else {
-			
 			this.parent = inValue;
-			
 		}
 		
 		return inValue;
