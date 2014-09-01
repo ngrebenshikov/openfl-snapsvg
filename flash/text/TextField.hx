@@ -1,6 +1,10 @@
 package flash.text;
 
 
+import haxe.Timer;
+import js.html.svg.SVGElement;
+import js.html.svg.TextElement;
+import flash.events.MouseEvent;
 import flash.text.TextField.Paragraph;
 import snap.Snap;
 import flash.display.BitmapData;
@@ -90,8 +94,7 @@ class TextField extends InteractiveObject {
 	private var _defaultTextFormat:TextFormat;
     private var __textChanged:Bool;
     private var __textFormats:Array<TextFormatInstance>;
-	
-	
+
 	public function new () {
 		
 		super ();
@@ -138,6 +141,10 @@ class TextField extends InteractiveObject {
 		gridFitType = GridFitType.PIXEL;
 		sharpness = 0;
         __textFormats = [];
+
+        caretIndex = 0;
+
+        addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 	}
 	
 	
@@ -190,48 +197,38 @@ class TextField extends InteractiveObject {
 	
 	
 	public function getCharIndexAtPoint (inX:Float, inY:Float):Int {
-		
-		var li = getLineIndexAtPoint (inX, inY);
-		
-		if (li < 0) {
-			
-			return -1;
-			
-		}
-		
-		var line = mLineInfo[li];
-		var idx = line.mIndex;
-		
-		for (x in line.mX) {
-			
-			if (x > inX) return idx;
-			idx++;
-			
-		}
-		
-		return idx;
-		
+        var text: TextElement = cast(mTextSnap.node);
+        var svg: SVGElement = cast(mTextSnap).paper.node;
+        var point = svg.createSVGPoint();
+        point.x = inX;
+        point.y = inY;
+        return text.getCharNumAtPosition(point);
 	}
 	
 	
 	public function getLineIndexAtPoint (inX:Float, inY:Float):Int {
-		
 		if (mLineInfo.length < 1) return -1;
 		if (inY <= 0) return 0;
 		
 		for (l in 0...mLineInfo.length) {
-			
 			if (mLineInfo[l].mY0 > inY) {
-				
 				return l == 0 ? 0 : l - 1;
-				
 			}
-			
 		}
-		
 		return mLineInfo.length - 1;
-		
 	}
+
+    private function getLineIndexForCharIndex(charIdx: Int): Int {
+        if (mLineInfo.length < 1) return -1;
+
+        for (l in 0...mLineInfo.length) {
+            if (mLineInfo[l].mIndex > charIdx) {
+                return l == 0 ? 0 : l - 1;
+            }
+        }
+
+        return mLineInfo.length - 1;
+    }
 	
 	
 	public function getTextFormat (beginIndex:Int = 0, endIndex:Int = 0):TextFormat {
@@ -244,90 +241,97 @@ class TextField extends InteractiveObject {
 	private function Rebuild () {
 		
 		if (mHTMLMode) return;
-		
-		mLineInfo = [];
 
-        if (__textChanged) {
-            trace(mWidth);
-            var wrap = mLimitRenderX = (wordWrap && !__inputEnabled) ? Std.int (mWidth) : 999999;
+        mLineInfo = [];
 
-            if (null != __textFormats)
-                for(f in __textFormats) {
-                    applyTextFormat(f.format, f.begin, f.end);
-                }
+        var wrap = mLimitRenderX = (wordWrap && !__inputEnabled) ? Std.int (mWidth) : 999999;
 
-            var char_idx = 0;
-            for (paragraph in mParagraphs) {
-                char_idx = wrapParagraph(paragraph, wrap, char_idx, mSelStart, mSelEnd);
+        if (null != __textFormats)
+            for(f in __textFormats) {
+                applyTextFormat(f.format, f.begin, f.end);
             }
 
-            mTextSnap.selectAll("tspan").forEach(function (s) {
-                s.remove();
-            }, this);
-
-            var svgBuf: StringBuf = new StringBuf();
-            var firstParagraph = true;
-            for (paragraph in mParagraphs) {
-                var firstSpan = true;
-                for (span in paragraph.spans) {
-                    svgBuf.add('<tspan ');
-                    if (null != span.rect) {
-                        //Commented yet because WebKit doesn't support it correctly
-                        //TODO: make it working for webkit
-                        //svgBuf.add('textLength="' + span.rect.width+ 'px" ');
-                        if (firstSpan || span.startFromNewLine) {
-                            svgBuf.add('x="0" dy="' + span.rect.height+ 'px" ');
-                        }
-                    }
-                    if (null != span.format) {
-                        if (null != span.format.color) {
-                            svgBuf.add('fill="#' + StringTools.hex(span.format.color,6) + '" ');
-                        }
-                        if (null != span.format.font) {
-                            svgBuf.add('font-family="' + span.format.font + '" ');
-                        }
-                        if (null != span.format.size) {
-                            svgBuf.add('font-size="' + span.format.size + 'px" ');
-                        }
-                        if (null != span.format.bold && span.format.bold) {
-                            svgBuf.add('font-weight="bold" ');
-                        }
-                        if (null != span.format.bold && span.format.italic) {
-                            svgBuf.add('font-style="italic" ');
-                        }
-                        if (null != span.format.underline && span.format.underline) {
-                            svgBuf.add('text-decoration="underline" ');
-                        }
-                        if (null != span.format.kerning) {
-                            svgBuf.add('kerning="' + span.format.kerning + 'px" ');
-                        }
-                        if (null != span.format.letterSpacing) {
-                            svgBuf.add('letter-spacing="' + span.format.letterSpacing + 'px" ');
-                        }
-                    }
-                    svgBuf.add('>');
-                    svgBuf.add(span.text);
-                    svgBuf.add('</tspan>');
-                    firstSpan = false;
-                }
-                firstParagraph = false;
-            }
-
-            mTextSnap.append(Snap.parse(svgBuf.toString()));
+        var char_idx = 0;
+        for (paragraph in mParagraphs) {
+            char_idx = wrapParagraph(paragraph, wrap, char_idx, mSelStart, mSelEnd);
         }
 
-        mTextSnap.attr("font-family", mFace);
-        mTextSnap.attr("font-size", mTextHeight);
-        mTextSnap.attr("color", "#" + StringTools.hex(mTextColour, 6));
+        mTextSnap.selectAll("tspan").forEach(function (s) {
+            s.remove();
+        }, this);
 
+        var svgBuf: StringBuf = new StringBuf();
+        var firstParagraph = true;
+        for (paragraph in mParagraphs) {
+            var firstSpan = true;
+            for (span in paragraph.spans) {
+                svgBuf.add('<tspan ');
+                if (null != span.rect) {
+                    //Commented yet because WebKit doesn't support it correctly
+                    //TODO: make it working for webkit
+                    //svgBuf.add('textLength="' + span.rect.width+ 'px" ');
+                    if (firstSpan || span.startFromNewLine) {
+                        svgBuf.add('x="0" dy="' + span.rect.height+ 'px" ');
+                    }
+                }
+                if (null != span.format) {
+                    if (null != span.format.color) {
+                        svgBuf.add('fill="#' + StringTools.hex(span.format.color,6) + '" ');
+                    }
+                    if (null != span.format.font) {
+                        svgBuf.add('font-family="' + span.format.font + '" ');
+                    }
+                    if (null != span.format.size) {
+                        svgBuf.add('font-size="' + span.format.size + 'px" ');
+                    }
+                    if (null != span.format.bold && span.format.bold) {
+                        svgBuf.add('font-weight="bold" ');
+                    }
+                    if (null != span.format.bold && span.format.italic) {
+                        svgBuf.add('font-style="italic" ');
+                    }
+                    if (null != span.format.underline && span.format.underline) {
+                        svgBuf.add('text-decoration="underline" ');
+                    }
+                    if (null != span.format.kerning) {
+                        svgBuf.add('kerning="' + span.format.kerning + 'px" ');
+                    }
+                    if (null != span.format.letterSpacing) {
+                        svgBuf.add('letter-spacing="' + span.format.letterSpacing + 'px" ');
+                    }
+                }
+                svgBuf.add('>');
+                svgBuf.add(span.text);
+                svgBuf.add('</tspan>');
+                firstSpan = false;
+            }
+            firstParagraph = false;
+        }
+
+        mTextSnap.append(Snap.parse(svgBuf.toString()));
+
+        mTextSnap.attr({
+            "font-family": mFace,
+            "font-size": mTextHeight,
+            "fill": "#" + StringTools.hex(mTextColour, 6),
+            //"textLength": width + "px",
+            //"lengthAdjust": "spacingAndGlyphs",
+            //"kerning": "0",
+            //"letter-spacing": "0px",
+            //"word-spacing": "0px"
+            });
 
         var rect = mTextSnap.getBBox();
         if (autoSize != TextFieldAutoSize.NONE) {
+            mWidth = rect.width + mTextHeight;
             mHeight = rect.height+mTextHeight*0.4;
         }
         if (mHeight < mTextHeight*1.4) {
             mHeight = mTextHeight*1.4;
         }
+
+        mMaxWidth = rect.width;
+        mMaxHeight = rect.height;
 
         getClipRect().attr({
             width: width,
@@ -335,26 +339,40 @@ class TextField extends InteractiveObject {
         });
 
         __graphics.clear ();
+        drawBackgoundAndBorder();
+	}
 
+    private function drawBackgoundAndBorder() {
         if (background) {
             __graphics.beginFill (backgroundColor);
             __graphics.drawRect (0, 0, width, height );
             __graphics.endFill ();
         }
 
-		if (border) {
-			__graphics.endFill ();
-			__graphics.lineStyle (1, borderColor, 1, true);
-			__graphics.drawRect (.5, .5, width-.5, height-.5);
-		}
-		
-	}
+        if (border) {
+            __graphics.endFill ();
+            __graphics.lineStyle (1, borderColor, 1, true);
+            __graphics.drawRect (.5, .5, width-.5, height-.5);
+        }
+    }
+
+    private function getCaretRect(): Rectangle {
+        if (caretIndex < 0) return new Rectangle();
+        var textElement: TextElement = cast(mTextSnap.node);
+        if (text.length > 0) {
+            var extent = textElement.getExtentOfChar(if (caretIndex < text.length) caretIndex else caretIndex-1);
+            var x = Std.int(if (caretIndex < text.length) extent.x else extent.x+extent.width-1)+0.5;
+            return new Rectangle(x, extent.y, 1, extent.height);
+        } else {
+            return new Rectangle(0, 0, 1, mTextSnap.getBBox().height);
+        }
+    }
 
     private function getClipRect():SnapElement {
-        var url = mTextSnap.attr('clip-path');
+        var url = snap.attr('clip-path');
         if (null == url || 'none' == url) {
             var rect = Lib.snap.rect(0,0,width,height,0,0);
-            mTextSnap.attr('clip-path', rect);
+            snap.attr('clip-path', rect);
             return rect;
         } else {
             var clipPath = Snap.select('#' + tools.Helper.getAnchorIdFromUrl(url));
@@ -363,9 +381,9 @@ class TextField extends InteractiveObject {
     }
 	
 	public function RebuildText () {
-        if (null == mText || '' == mText) return;
+        if (null == mText) return;
 
-        trace("Adding text through snap.text: font-family:" + mFace + "; font-size: " + mTextHeight + "; color: " + "#" + StringTools.hex(mTextColour, 6));
+        trace("Adding text through snap.text: '" + mText + "' font-family:" + mFace + "; font-size: " + mTextHeight + "; color: " + "#" + StringTools.hex(mTextColour, 6));
 
         var paras = mText.split ("\n");
 
@@ -377,7 +395,7 @@ class TextField extends InteractiveObject {
 			var paras = mText.split ("\n");
 
             for (paragraph in paras) {
-				mParagraphs.push ( cast { align: mAlign, spans: [ { font : font, text: paragraph + "\n", format: defaultTextFormat, startFromNewLine: false } ] } );
+				mParagraphs.push ( cast { align: mAlign, spans: [ { font : font, text: paragraph, format: defaultTextFormat, startFromNewLine: false } ] } );
 			}
 		}
         __textChanged = true;
@@ -388,26 +406,18 @@ class TextField extends InteractiveObject {
 	
 	
 	private function RenderRow (inRow:Array<RowChar>, inY:Int, inCharIdx:Int, inAlign:TextFormatAlign, inInsert:Int = 0):Int {
-		
 		var h = 0;
 		var w = 0;
 		
 		for (chr in inRow) {
-			
 			if (chr.fh > h) {
-				
 				h = chr.fh;
-				
 			}
-			
 			w += chr.adv;
-			
 		}
 		
 		if (w > mMaxWidth) {
-			
 			mMaxWidth = w;
-			
 		}
 		
 		var full_height = Std.int (h * 1.2);
@@ -415,13 +425,10 @@ class TextField extends InteractiveObject {
 		var insert_x = 0;
 		
 		if (inInsert != null) {
-			
 			// TODO: check if this is necessary.
 			if (autoSize != TextFieldAutoSize.NONE) {
-				
 				scrollH = 0;
 				insert_x = inInsert;
-				
 			} else {
 				
 				insert_x = inInsert - scrollH;
@@ -461,7 +468,8 @@ class TextField extends InteractiveObject {
 		}
 		
 		var x_list = new Array<Int> ();
-		mLineInfo.push ( { mY0: inY, mIndex: inCharIdx - 1, mX: x_list } );
+        var width_list = new Array<Int>();
+		mLineInfo.push ( { mY0: inY, mIndex: inCharIdx - 1, mX: x_list, mHeight: full_height, mWidth: width_list } );
 		
 		var cache_sel_font:FontInstance = null;
 		var cache_normal_font:FontInstance = null;
@@ -479,40 +487,41 @@ class TextField extends InteractiveObject {
 			}
 			
 			x_list.push (x);
+            width_list.push(adv);
 			
-			if (x >= 0) {
-				
-				var font = chr.font;
-				
-				if (chr.sel) {
-					
-					__graphics.lineStyle ();
-					__graphics.beginFill (0x202060);
-					__graphics.drawRect (x, inY, adv, full_height);
-					__graphics.endFill ();
-					
-					if (cache_normal_font == chr.font) {
-						
-//						font = cache_sel_font;
-						
-					} else {
-						
-//						font = FontInstance.CreateSolid (chr.font.GetFace (), chr.fh, 0xffffff, 1.0);
-//						cache_sel_font = font;
-//						cache_normal_font = chr.font;
-						
-					}
-					
-				}
-				
-//				font.RenderChar (__graphics, chr.chr, x, Std.int(inY + (h - chr.fh)));
-				
-			}
+//			if (x >= 0) {
+//
+//				var font = chr.font;
+//
+//				if (chr.sel) {
+//
+//					__graphics.lineStyle ();
+//					__graphics.beginFill (0x202060);
+//					__graphics.drawRect (x, inY, adv, full_height);
+//					__graphics.endFill ();
+//
+//					if (cache_normal_font == chr.font) {
+//
+////						font = cache_sel_font;
+//
+//					} else {
+//
+////						font = FontInstance.CreateSolid (chr.font.GetFace (), chr.fh, 0xffffff, 1.0);
+////						cache_sel_font = font;
+////						cache_normal_font = chr.font;
+//
+//					}
+//
+//				}
+//
+////				font.RenderChar (__graphics, chr.chr, x, Std.int(inY + (h - chr.fh)));
+//
+//			}
 			
 			x += adv;
 			
 		}
-		
+
 		x += scrollH;
 		return full_height;
 		
@@ -537,9 +546,11 @@ class TextField extends InteractiveObject {
 
         var full_height = Std.int (h * 1.2);
 
-        trace(str + ': ' + w);
-
         return new Rectangle(0,0,w,full_height);
+    }
+
+    private function cacheRowSize(inRow:Array<RowChar>, inY:Int, inCharIdx:Int, inAlign:TextFormatAlign, inInsert:Int = 0) {
+         RenderRow(inRow, inY, inCharIdx, inAlign, inInsert);
     }
 
     private function wrapParagraph(paragraph: Paragraph, wrap: Int, charIdx: Int, s0: Int, s1: Int): Int {
@@ -567,8 +578,6 @@ class TextField extends InteractiveObject {
                 span.font;
             var fh = font.height;
 
-            trace(fh);
-
             last_word_break = row.length;
             last_word_break_width = row_width;
             last_word_char_idx = charIdx;
@@ -577,7 +586,6 @@ class TextField extends InteractiveObject {
 
                 var g = text.charCodeAt(ch);
                 var adv = font.__getAdvance(g);
-                trace(adv);
 
                 if (g == 32) {
                     last_word_break = row.length;
@@ -590,6 +598,7 @@ class TextField extends InteractiveObject {
                         var row_end = row.splice (last_word_break, row.length - last_word_break);
                         var head = row.slice(0, last_word_break);
                         newSpans.push({ font: font, text: Lambda.fold(head, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(head)});
+
                         row = row_end;
                         tx -= last_word_break_width;
                         start_idx = last_word_char_idx;
@@ -603,7 +612,7 @@ class TextField extends InteractiveObject {
                             start_idx ++;
                         }
                     } else {
-                        newSpans.push( { font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row)});
+                        newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row)});
                         row = [];
                         tx = 0;
                         start_idx = charIdx;
@@ -619,7 +628,7 @@ class TextField extends InteractiveObject {
             }
 
             if (row.length > 0) {
-                newSpans.push( { font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: newSpans.length == 0, rect: getRowDimension(row)});
+                newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: newSpans.length == 0, rect: getRowDimension(row)});
                 row = [];
             }
         }
@@ -742,7 +751,7 @@ class TextField extends InteractiveObject {
 		
 		if (!__combinedVisible) return;
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
-		
+
 		//if (__graphics.__surface != null) {
 			//
 			//Lib.__setImageSmoothing (__graphics.__surface.getContext ("2d"), (gridFitType != GridFitType.PIXEL));
@@ -782,13 +791,88 @@ class TextField extends InteractiveObject {
 		}
 		
 	}
-	
-	
-	
-	
-	// Getters & Setters
-	
-	
+
+    private var caretTimer: Timer;
+    private function onFocus(e: Dynamic) {
+        if (e.type == FocusEvent.FOCUS_IN) {
+            caretTimer = new Timer(500);
+            caretTimer.run = showCaret;
+        } else {
+            if (null != caretTimer) {
+                hideCaret();
+                caretTimer.stop();
+                caretTimer = null;
+            }
+
+        }
+    }
+
+    private function showCaret() {
+        if (__inputEnabled && stage.focus == this) {
+            var rect = getCaretRect();
+            if (rect.x <= mWidth) {
+                __graphics.clear();
+                __graphics.lineStyle(0.5, 0, 1, true);
+                __graphics.moveTo(rect.x,rect.y);
+                __graphics.lineTo(rect.x,rect.bottom);
+            }
+            drawBackgoundAndBorder();
+            caretTimer.run = hideCaret;
+        }
+    }
+
+    private function hideCaret() {
+        __graphics.clear();
+        drawBackgoundAndBorder();
+        caretTimer.run = showCaret;
+    }
+
+
+    private function onKeyDown(e: Dynamic) {
+        if (e.keyCode == Keyboard.LEFT && caretIndex > 0) {
+            caretIndex -= 1;
+        } else if (e.keyCode == Keyboard.RIGHT && caretIndex < text.length) {
+            caretIndex += 1;
+        } else if (e.keyCode == Keyboard.BACKSPACE && caretIndex > 0) {
+            if (text.length > 1) {
+                text = text.substring(0,caretIndex-1) + text.substring(caretIndex,text.length);
+                caretIndex -= 1;
+            } else {
+                text = '';
+                caretIndex = 0;
+            }
+        } else if (e.keyCode == Keyboard.DELETE && caretIndex < text.length) {
+            if (text.length > 1) {
+                text = text.substring(0,caretIndex) + text.substring(caretIndex+1,text.length);
+            } else {
+                text = '';
+                caretIndex = 0;
+            }
+        }
+        e.stopPropagation();
+    }
+
+    private function onKeyPress(e: Dynamic) {
+        if (null != e.charCode && 31 < e.charCode) {
+            text = text.substring(0,caretIndex) + String.fromCharCode(e.charCode) + text.substring(caretIndex,text.length);
+            caretIndex += 1;
+        }
+        e.stopPropagation();
+    }
+
+    private function onMouseDown(e: Dynamic) {
+        caretIndex = getCharIndexAtPoint(e.localX, e.localY);
+        var textElement: TextElement = cast(mTextSnap.node);
+        if (text.length > 0 && text.length > caretIndex) {
+            var extent = textElement.getExtentOfChar(caretIndex);
+            if (e.localX - extent.x > extent.width/2) {
+                caretIndex += 1;
+            }
+        }
+    }
+
+
+    // Getters & Setters
 	
 	
 	private function get_autoSize ():String {
@@ -1018,7 +1102,7 @@ class TextField extends InteractiveObject {
 	
 	public function set_text (inText:String):String {
 		
-		mText = Std.string (inText);
+		mText = Std.string(inText);
 		//mHTMLText = inText;
 		mHTMLMode = false;
 		RebuildText ();
@@ -1071,6 +1155,18 @@ class TextField extends InteractiveObject {
 //		}
 		
 		tabEnabled = (type == TextFieldType.INPUT);
+
+        if (__inputEnabled) {
+            addEventListener(FocusEvent.FOCUS_IN, onFocus);
+            addEventListener(FocusEvent.FOCUS_OUT, onFocus);
+            addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+            addEventListener(KeyboardEvent.KEY_PRESS, onKeyPress);
+        } else {
+            removeEventListener(FocusEvent.FOCUS_IN, onFocus);
+            removeEventListener(FocusEvent.FOCUS_OUT, onFocus);
+            removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+            removeEventListener(KeyboardEvent.KEY_PRESS, onKeyPress);
+        }
 		
 		Rebuild ();
 		
@@ -1232,7 +1328,7 @@ class FontInstance {
 		return mFont.__getAdvance (inChar, mHeight);
 		
 	}
-	
+
 	// Getters & Setters
 	private function get_height ():Int {
 		return mHeight;
@@ -1271,6 +1367,8 @@ typedef LineInfo = {
 	var mY0:Int;
 	var mIndex:Int;
 	var mX:Array<Int>;
+    var mWidth:Array<Int>;
+    var mHeight: Int;
 }
 
 typedef RowChar = {

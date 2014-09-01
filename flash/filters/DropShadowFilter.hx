@@ -69,10 +69,54 @@ class DropShadowFilter extends BitmapFilter {
 
     override public function __getSvg(): String {
         var blurRadius = Math.max (blurX, blurY);
-        return Snap.filter_shadow(
+            return if (inner)
+                "
+                    <!-- Shadow Offset -->
+                    <feOffset
+                    dx='" + distance * Math.sin (2 * Math.PI * angle / DEGREES_FULL_RADIUS) + "'
+                    dy='" + distance * Math.cos (2 * Math.PI * angle / DEGREES_FULL_RADIUS) + "'
+                    />
+
+                    <!-- Shadow Blur -->
+                    <feGaussianBlur
+                    stdDeviation='" + blurRadius * 0.5 + "'
+                    result='offset-blur'
+                    />
+
+                    <!-- Invert the drop shadow
+                    to create an inner shadow -->
+                    <feComposite
+                    operator='out'
+                    in='SourceGraphic'
+                    in2='offset-blur'
+                    result='inverse'
+                    />
+
+                    <!-- Color & Opacity -->
+                    <feFlood
+                    flood-color='" + "rgba(" + ((color >> 16) & 0xFF) + "," + ((color >> 8) & 0xFF) + "," + (color & 0xFF) + "," + alpha + ")" + "'
+                    flood-opacity='0.75'
+                    result='color'
+                    />
+
+                    <!-- Clip color inside shadow -->
+                    <feComposite
+                    operator='in'
+                    in='color'
+                    in2='inverse'
+                    result='shadow'
+                    />
+
+                    <!-- Put shadow over original object -->
+                    <feComposite
+                    operator='over'
+                    in='shadow'
+                    in2='SourceGraphic'
+                    />"
+        else Snap.filter_shadow(
             distance * Math.sin (2 * Math.PI * angle / DEGREES_FULL_RADIUS),
             distance * Math.cos (2 * Math.PI * angle / DEGREES_FULL_RADIUS),
-            blurRadius,
+            0.5 * blurRadius,
             "rgba(" + ((color >> 16) & 0xFF) + "," + ((color >> 8) & 0xFF) + "," + (color & 0xFF) + "," + alpha + ")");
     }
 

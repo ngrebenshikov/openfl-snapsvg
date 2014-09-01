@@ -237,39 +237,25 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	public function hitTestPoint (x:Float, y:Float, shapeFlag:Bool = false):Bool {
-		
 		var boundingBox = (shapeFlag == null ? true : !shapeFlag);
 		
 		if (!boundingBox) {
-			
 			return __getObjectUnderPoint (new Point (x, y)) != null;
-			
 		} else {
-			
 			var gfx = __getGraphics ();
-			
 			if (gfx != null) {
 				
 				var extX = gfx.__extent.x;
 				var extY = gfx.__extent.y;
 				var local = globalToLocal (new Point (x, y));
-				
 				if (local.x - extX < 0 || local.y - extY < 0 || (local.x - extX) * scaleX > width || (local.y - extY) * scaleY > height) {
-					
 					return false;
-					
 				} else {
-					
 					return true;
-					
 				}
-				
 			}
-			
 			return false;
-			
 		}
-		
 	}
 	
 	
@@ -547,16 +533,15 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         while(null != element) {
             if (stage.snapIdToDisplayObjects.exists(cast(element).id)) {
                 var obj: DisplayObject = stage.snapIdToDisplayObjects.get(cast(element).id);
-
+                var p = obj;
                 // Check if this is not parent of obj
-                while (null != obj) {
-                    if (this == obj) return cast this;
-                    obj = obj.parent;
+                while (null != p) {
+                    if (this == p) return cast obj;
+                    p = p.parent;
                 }
             }
             element = element.parent();
         }
-		
 		return null;
 	}
 	

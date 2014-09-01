@@ -338,7 +338,7 @@ class Stage extends DisplayObjectContainer {
 				__onMouse (cast evt, MouseEvent.DOUBLE_CLICK);
 			
 			case "keydown":
-				
+
 				var evt:js.html.KeyboardEvent = cast evt;
 				var keyCode = (evt.keyCode != null ? evt.keyCode : evt.which);
 				keyCode = Keyboard.__convertMozillaCode (keyCode);
@@ -352,7 +352,15 @@ class Stage extends DisplayObjectContainer {
 				keyCode = Keyboard.__convertMozillaCode (keyCode);
 				
 				__onKey (keyCode, false, evt.charCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.keyLocation);
-			
+
+            case "keypress":
+
+                var evt:js.html.KeyboardEvent = cast evt;
+                var keyCode = (evt.keyCode != null ? evt.keyCode : evt.which);
+                keyCode = Keyboard.__convertMozillaCode (keyCode);
+
+                __onKeyPress (keyCode, true, evt.charCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.keyLocation);
+
 			case "touchstart":
 				
 				var evt:js.html.TouchEvent = cast evt;
@@ -393,9 +401,7 @@ class Stage extends DisplayObjectContainer {
 	
 	
 	public function __queueStageEvent (evt:js.html.Event):Void {
-		
 		__uIEventsQueue[__uIEventsQueueIndex++] = evt;
-		
 	}
 	
 	
@@ -550,18 +556,30 @@ class Stage extends DisplayObjectContainer {
 			__focusObject.__getInteractiveObjectStack (stack);
 			
 		}
-		
-		if (stack.length > 0) {
-			
+
+        if (stack.length > 0) {
 			var obj = stack[0];
 			var evt = new KeyboardEvent (pressed ? KeyboardEvent.KEY_DOWN : KeyboardEvent.KEY_UP, true, false, inChar, code, keyLocation, ctrl, alt, shift);
 			obj.__fireEvent (evt);
-			
 		}
-		
 	}
-	
-	
+
+    private function __onKeyPress (code:Int, pressed:Bool, inChar:Int, ctrl:Bool, alt:Bool, shift:Bool, keyLocation:Int):Void {
+        var stack = new Array <InteractiveObject> ();
+
+        if (__focusObject == null) {
+            this.__getInteractiveObjectStack (stack);
+        } else {
+            __focusObject.__getInteractiveObjectStack (stack);
+        }
+
+        if (stack.length > 0) {
+            var obj = stack[0];
+            var evt = new KeyboardEvent (KeyboardEvent.KEY_PRESS, true, false, inChar, code, keyLocation, ctrl, alt, shift);
+            obj.__fireEvent (evt);
+        }
+    }
+
 	private function __onFocus (target:InteractiveObject):Void {
 		
 		// Don't do MOUSE_FOCUS_CHANGE or KEY_FOCUS_CHANGE events; doing those
@@ -587,7 +605,7 @@ class Stage extends DisplayObjectContainer {
 			
 			// Finally, store the updated focus object
 			__focusObject = target;
-			
+
 		}
 		
 	}
@@ -627,9 +645,7 @@ class Stage extends DisplayObjectContainer {
 			// MOUSE_DOWN brings focus to the clicked object, and takes it
 			// away from any currently focused object
 			if (type == MouseEvent.MOUSE_DOWN) {
-				
 				__onFocus (stack[stack.length - 1]);
-				
 			}
 			
 			obj.__fireEvent (evt);
