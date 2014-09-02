@@ -1,6 +1,7 @@
 package flash.display;
 
 
+import js.html.Element;
 import haxe.ds.StringMap;
 import snap.Snap;
 import flash.display.Graphics;
@@ -610,19 +611,34 @@ class Stage extends DisplayObjectContainer {
 		
 	}
 	
-	
+    private function __getObjectByElement(element: js.html.Element): DisplayObject {
+        if (!visible) return null;
+
+        while(null != element) {
+            var id = element.id;
+            if (null != id && '' != id && stage.snapIdToDisplayObjects.exists(id)) {
+                var obj: DisplayObject = stage.snapIdToDisplayObjects.get(id);
+                var p = obj;
+                // Check if this is not parent of obj
+                while (null != p) {
+                    if (this == p) return cast obj;
+                    p = p.parent;
+                }
+            }
+            element = element.parentElement;
+        }
+        return null;
+    }
+
 	private function __onMouse (event:js.html.MouseEvent, type:String) {
-		
 		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect ();
 		var point:Point = untyped new Point (event.clientX - rect.left, event.clientY - rect.top);
 
 		if (__dragObject != null) {
-			
 			__drag (point);
-			
 		}
-		
-		var obj = __getObjectUnderPoint (point);
+
+        var obj = __getObjectByElement(cast(event.target));
 		
 		// used in drag implementation
 		_mouseX = point.x;
@@ -676,8 +692,8 @@ class Stage extends DisplayObjectContainer {
 		
 		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect ();
 		var point : Point = untyped new Point (touch.pageX - rect.left, touch.pageY - rect.top);
-		var obj = __getObjectUnderPoint (point);
-		
+        var obj = __getObjectByElement(cast(event.target));
+
 		// used in drag implementation
 		_mouseX = point.x;
 		_mouseY = point.y;

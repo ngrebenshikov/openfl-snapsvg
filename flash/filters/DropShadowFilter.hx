@@ -68,18 +68,20 @@ class DropShadowFilter extends BitmapFilter {
 	}
 
     override public function __getSvg(): String {
+        var dx = Math.round(distance * Math.sin (2 * Math.PI * angle / DEGREES_FULL_RADIUS));
+        var dy = Math.round(distance * Math.cos (2 * Math.PI * angle / DEGREES_FULL_RADIUS));
         var blurRadius = Math.max (blurX, blurY);
             return if (inner)
                 "
                     <!-- Shadow Offset -->
                     <feOffset
-                    dx='" + distance * Math.sin (2 * Math.PI * angle / DEGREES_FULL_RADIUS) + "'
-                    dy='" + distance * Math.cos (2 * Math.PI * angle / DEGREES_FULL_RADIUS) + "'
+                    dx='" + dx + "'
+                    dy='" + dy + "'
                     />
 
                     <!-- Shadow Blur -->
                     <feGaussianBlur
-                    stdDeviation='" + blurRadius * 0.5 + "'
+                    stdDeviation='" + Math.round(blurRadius/2) + "'
                     result='offset-blur'
                     />
 
@@ -114,9 +116,9 @@ class DropShadowFilter extends BitmapFilter {
                     in2='SourceGraphic'
                     />"
         else Snap.filter_shadow(
-            distance * Math.sin (2 * Math.PI * angle / DEGREES_FULL_RADIUS),
-            distance * Math.cos (2 * Math.PI * angle / DEGREES_FULL_RADIUS),
-            0.5 * blurRadius,
+            dx,
+            dy,
+            Math.round(blurRadius/2),
             "rgba(" + ((color >> 16) & 0xFF) + "," + ((color >> 8) & 0xFF) + "," + (color & 0xFF) + "," + alpha + ")");
     }
 

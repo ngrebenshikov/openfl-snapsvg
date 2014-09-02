@@ -383,7 +383,7 @@ class TextField extends InteractiveObject {
 	public function RebuildText () {
         if (null == mText) return;
 
-        trace("Adding text through snap.text: '" + mText + "' font-family:" + mFace + "; font-size: " + mTextHeight + "; color: " + "#" + StringTools.hex(mTextColour, 6));
+        //trace("Adding text through snap.text: '" + mText + "' font-family:" + mFace + "; font-size: " + mTextHeight + "; color: " + "#" + StringTools.hex(mTextColour, 6));
 
         var paras = mText.split ("\n");
 
@@ -681,13 +681,8 @@ class TextField extends InteractiveObject {
             var newSpans: Array<Span> = [];
             for (span in paragraph.spans) {
                 var spanEndCharIndex = spanStartCharIndex + span.text.length - 1;
-                trace(span.text);
                 if (beginIndex <= spanEndCharIndex && beginIndex >= spanStartCharIndex) {
-                    trace(beginIndex);
                     var parts = splitStringByInerval(span.text, beginIndex-spanStartCharIndex, Std.int(Math.min(endIndex-spanStartCharIndex, spanEndCharIndex - spanStartCharIndex)));
-                    trace(parts[0]);
-                    trace(parts[1]);
-                    trace(parts[2]);
                     if (null != parts[0] && '' != parts[0]) newSpans.push({ font: span.font, text: parts[0], format: span.format, startFromNewLine: span.startFromNewLine, rect: null});
                     if (null != parts[1] && '' != parts[1]) newSpans.push({ font: font, text: parts[1], format: format, startFromNewLine: false, rect: null});
                     if (null != parts[2] && '' != parts[2]) newSpans.push({ font: span.font, text: parts[2], format: span.format, startFromNewLine: false, rect: null});
@@ -697,7 +692,6 @@ class TextField extends InteractiveObject {
                 } else {
                     newSpans.push(span);
                 }
-                trace(Lambda.array(Lambda.map(newSpans, function(s) {return s.text;})));
                 spanStartCharIndex = spanEndCharIndex + 1;
             }
             paragraph.spans = newSpans;
@@ -861,12 +855,14 @@ class TextField extends InteractiveObject {
     }
 
     private function onMouseDown(e: Dynamic) {
-        caretIndex = getCharIndexAtPoint(e.localX, e.localY);
-        var textElement: TextElement = cast(mTextSnap.node);
-        if (text.length > 0 && text.length > caretIndex) {
-            var extent = textElement.getExtentOfChar(caretIndex);
-            if (e.localX - extent.x > extent.width/2) {
-                caretIndex += 1;
+        if (__inputEnabled && stage.focus == this) {
+            caretIndex = getCharIndexAtPoint(e.localX, e.localY);
+            var textElement: TextElement = cast(mTextSnap.node);
+            if (text.length > 0 && text.length > caretIndex) {
+                var extent = textElement.getExtentOfChar(caretIndex);
+                if (e.localX - extent.x > extent.width/2) {
+                    caretIndex += 1;
+                }
             }
         }
     }

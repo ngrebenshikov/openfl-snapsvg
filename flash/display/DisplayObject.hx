@@ -276,10 +276,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private function setSurfaceVisible (inValue:Bool):Void {
-		var gfx = __getGraphics ();
-		if (gfx != null && gfx.__snap != null) {
-			Lib.__setSurfaceVisible (gfx.__snap, inValue);
-		}
+        if (null != snap) {
+            Lib.__setSurfaceVisible (snap, inValue);
+        }
 	}
 	
 	
@@ -339,7 +338,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 
 		if (__isOnStage ()) {
-            stage.snapIdToDisplayObjects.set(cast(snap).id, this);
+            stage.snapIdToDisplayObjects.set(___id, this);
 			//this.__srUpdateDivs ();
 			var evt = new Event (Event.ADDED_TO_STAGE, false, false);
 			dispatchEvent (evt);
@@ -531,8 +530,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         var element = Snap.getElementByPoint(point.x, point.y);
 
         while(null != element) {
-            if (stage.snapIdToDisplayObjects.exists(cast(element).id)) {
-                var obj: DisplayObject = stage.snapIdToDisplayObjects.get(cast(element).id);
+            var el:js.html.Element = cast(element.node);
+            if (null != el.id && '' != el.id && stage.snapIdToDisplayObjects.exists(el.id)) {
+                var obj: DisplayObject = stage.snapIdToDisplayObjects.get(el.id);
                 var p = obj;
                 // Check if this is not parent of obj
                 while (null != p) {
@@ -618,7 +618,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private function __removeFromStage ():Void {
         if (Lib.__isOnStage (snap)) {
             Lib.__removeSurface (snap);
-            stage.snapIdToDisplayObjects.remove(cast(snap).id);
+            stage.snapIdToDisplayObjects.remove(___id);
             var evt = new Event (Event.REMOVED_FROM_STAGE, false, false);
             dispatchEvent (evt);
         }

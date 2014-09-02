@@ -33,21 +33,21 @@ class Bitmap extends DisplayObject {
 		if (inBitmapData != null) {
 			
 			this.bitmapData = inBitmapData;
-			//bitmapData.__referenceCount++;
+			bitmapData.__referenceCount++;
 			
 			if (bitmapData.__referenceCount == 1) {
 
-                var canvas = bitmapData.handle();
-				__graphics =
-                    new Graphics (
-                        Lib.snap.image(
-                            (cast canvas).toDataUrl("image/png"),
-                            0, 0,
-                            canvas.width,
-                            canvas.height
-                        )
-                    );
-				
+//                var canvas = bitmapData.handle();
+//				__graphics =
+//                    new Graphics (
+//                        Lib.snap.image(
+//                            (cast canvas).toDataUrl("image/png"),
+//                            0, 0,
+//                            canvas.width,
+//                            canvas.height
+//                        )
+//                    );
+
 			}
 			
 		}
@@ -59,8 +59,9 @@ class Bitmap extends DisplayObject {
 		}
 		
 		if (__graphics == null) {
-			
-			__graphics = new Graphics ();
+
+            __graphics = new Graphics();
+            snap.append(__graphics.__snap);
 			
 		}
 		
@@ -169,27 +170,24 @@ class Bitmap extends DisplayObject {
 			__validateMatrix ();
 			
 		}
+        var imageDataLease = bitmapData.__getLease ();
+
+        if (imageDataLease != null && (__currentLease == null || imageDataLease.seed != __currentLease.seed || imageDataLease.time != __currentLease.time)) {
+
+            var srcCanvas: CanvasElement = bitmapData.handle ();
+
+            __graphics.clear ();
+            __graphics.__snap.append(Lib.snap.image(
+                            srcCanvas.toDataURL("image/png"),
+                            0, 0,
+                            srcCanvas.width,
+                            srcCanvas.height
+                        ));
+            __currentLease = imageDataLease.clone();
+
+            handleGraphicsUpdated (__graphics);
+        }
 //TODO: uncomment
-//		if (bitmapData.handle () != __graphics.__surface) {
-//
-//			var imageDataLease = bitmapData.__getLease ();
-//
-//			if (imageDataLease != null && (__currentLease == null || imageDataLease.seed != __currentLease.seed || imageDataLease.time != __currentLease.time)) {
-//
-//				var srcCanvas = bitmapData.handle ();
-//
-//				__graphics.__surface.width = srcCanvas.width;
-//				__graphics.__surface.height = srcCanvas.height;
-//				__graphics.clear ();
-//
-//				Lib.__drawToSurface(srcCanvas, __graphics.__surface);
-//				__currentLease = imageDataLease.clone();
-//
-//				handleGraphicsUpdated (__graphics);
-//
-//			}
-//
-//		}
 //
 //		if (inMask != null) {
 //
