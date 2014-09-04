@@ -433,13 +433,9 @@ class Stage extends DisplayObjectContainer {
 
 		// Dispatch all queued UI events before the main render loop.
 		for (i in 0...__uIEventsQueueIndex) {
-
 			if (__uIEventsQueue[i] != null) {
-
 				__processStageEvent (__uIEventsQueue[i]);
-
 			}
-
 		}
 
 		__uIEventsQueueIndex = 0;
@@ -448,15 +444,12 @@ class Stage extends DisplayObjectContainer {
 		this.__broadcast (event);
 
 		if (__invalid) {
-
 			var event = new Event (Event.RENDER);
 			this.__broadcast (event);
-
 		}
 		
 		this.__renderAll ();
-        var stageRenderedEvent = new Event(Event.STAGE_RENDERED);
-        this.__broadcast(stageRenderedEvent);
+        this.dispatchEvent(new Event(Event.STAGE_RENDERED));
 	}
 	
 	

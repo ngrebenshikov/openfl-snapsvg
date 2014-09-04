@@ -517,6 +517,7 @@ class Graphics {
 
     public function drawRect (x:Float, y:Float, width:Float, height:Float):Void {
 
+        trace('drawRect(' + x + ',' + y +')');
         closePolygon (false);
         __drawRect(x, y, width, height, 0, 0);
 
@@ -986,8 +987,8 @@ class Graphics {
         __extent.width = maxX - minX + _padding;
         __extent.height = maxY - minY + _padding;
 
+        __expandFilteredExtent(x,y);
         boundsDirty = true;
-
     }
 
 
@@ -1062,24 +1063,21 @@ class Graphics {
         }
         element.attr({'fill-rule': 'evenodd'});
     }
+
     public function __render (maskHandle:SnapElement = null, filters:Array<BitmapFilter> = null, sx:Float = 1.0, sy:Float = 1.0, clip0:Point = null, clip1:Point = null, clip2:Point = null, clip3:Point = null) {
+        trace('Graphics::__render');
         if (!__changed) return false;
+        trace('Graphics::__render changed');
 
         closePolygon (true);
         var padding = _padding;
 
         if (filters != null) {
-
             for (filter in filters) {
-
                 if (Reflect.hasField (filter, "blurX")) {
-
                     padding += (Math.max (Reflect.field (filter, "blurX"), Reflect.field (filter, "blurY")) * 4);
-
                 }
-
             }
-
         }
 
         __expandFilteredExtent ( - (padding * sx) / 2, - (padding * sy) / 2);
@@ -1088,32 +1086,10 @@ class Graphics {
 
             nextDrawIndex = 0;
             __clearCanvas ();
+            trace('clear');
             __clearNextCycle = false;
 
         }
-
-//TODO: uncomment
-//        if (__extentWithFilters.width - __extentWithFilters.x > __snap.attr("width") || __extentWithFilters.height - __extentWithFilters.y > __snap.attr("height")) {
-//
-//            __adjustSurface (sx, sy);
-//
-//        }
-
-//TODO: uncomment
-//        var ctx = getContext ();
-//        if (ctx == null) return false;
-//
-//        if (clip0 != null) {
-//
-//            ctx.beginPath ();
-//            ctx.moveTo (clip0.x * sx, clip0.y * sy);
-//            ctx.lineTo (clip1.x * sx, clip1.y * sy);
-//            ctx.lineTo (clip2.x * sx, clip2.y * sy);
-//            ctx.lineTo (clip3.x * sx, clip3.y * sy);
-//            ctx.closePath ();
-//            ctx.clip ();
-//
-//        }
 
         var len:Int = mDrawList.length;
 //TODO: uncomment
@@ -1131,6 +1107,7 @@ class Graphics {
 //
 //        }
 //
+    trace(mDrawList);
         for (i in nextDrawIndex...len) {
 
             var d = mDrawList[(len - 1) - i];
@@ -1164,6 +1141,7 @@ class Graphics {
 
                         __snap.append(circle);
                     case SnapDrawable.RECT(x, y, width, height, rx, ry):
+                        trace('rect');
                         var rect: SnapElement = Lib.snap.rect(x, y, width, height, rx, ry);
 
                         __addStrokeAttribute(rect, d.lineJobs.length == 1 ? d.lineJobs[0] : null);

@@ -1,6 +1,9 @@
 package flash.display;
 
 
+import js.html.Element;
+import flash.display.DisplayObject;
+import flash.display.DisplayObject;
 import snap.Snap;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
@@ -31,44 +34,21 @@ class Bitmap extends DisplayObject {
 		smoothing = inSmoothing;
 		
 		if (inBitmapData != null) {
-			
 			this.bitmapData = inBitmapData;
 			bitmapData.__referenceCount++;
-			
-			if (bitmapData.__referenceCount == 1) {
-
-//                var canvas = bitmapData.handle();
-//				__graphics =
-//                    new Graphics (
-//                        Lib.snap.image(
-//                            (cast canvas).toDataUrl("image/png"),
-//                            0, 0,
-//                            canvas.width,
-//                            canvas.height
-//                        )
-//                    );
-
-			}
-			
 		}
 		
 		if (pixelSnapping == null) {
-			
 			pixelSnapping = PixelSnapping.AUTO;
 			
 		}
 		
 		if (__graphics == null) {
-
             __graphics = new Graphics();
-            snap.append(__graphics.__snap);
-			
 		}
 		
 		if (bitmapData != null) {
-			
 			__render();
-			
 		}
 		
 	}
@@ -173,90 +153,67 @@ class Bitmap extends DisplayObject {
         var imageDataLease = bitmapData.__getLease ();
 
         if (imageDataLease != null && (__currentLease == null || imageDataLease.seed != __currentLease.seed || imageDataLease.time != __currentLease.time)) {
-
             var srcCanvas: CanvasElement = bitmapData.handle ();
-
-            __graphics.clear ();
-            __graphics.__snap.append(Lib.snap.image(
-                            srcCanvas.toDataURL("image/png"),
-                            0, 0,
-                            srcCanvas.width,
-                            srcCanvas.height
-                        ));
+            var child = snap.select('*');
+            if (null != child) {
+                child.remove();
+            }
+            snap.append(Lib.snap.image(
+                        srcCanvas.toDataURL("image/png"),
+                        0, 0,
+                        srcCanvas.width,
+                        srcCanvas.height
+                    ));
             __currentLease = imageDataLease.clone();
 
-            handleGraphicsUpdated (__graphics);
+            handleGraphicsUpdated (null);
         }
 //TODO: uncomment
-//
-//		if (inMask != null) {
+		if (inMask != null) {
 //
 //			__applyFilters (__graphics.__surface);
 //			var m = getBitmapSurfaceTransform (__graphics);
 //			Lib.__drawToSurface (__graphics.__surface, inMask, m, (parent != null ? parent.__combinedAlpha : 1) * alpha, clipRect, smoothing);
 //
-//		} else {
-//
-//			if (__testFlag (DisplayObject.TRANSFORM_INVALID)) {
-//
-//				var m = getBitmapSurfaceTransform (__graphics);
-//				Lib.__setSurfaceTransform (__graphics.__surface, m);
-//				__clearFlag (DisplayObject.TRANSFORM_INVALID);
-//
-//			}
-//
-//			if (!__init) {
-//
-//				Lib.__setSurfaceOpacity (__graphics.__surface, 0);
-//				__init = true;
-//
-//			} else {
-//
-//				Lib.__setSurfaceOpacity(__graphics.__surface, (parent != null ? parent.__combinedAlpha : 1) * alpha);
-//
-//			}
-//
-//		}
-		
-	}
-	
-	
-	
-	
+        } else {
+            if (__testFlag (DisplayObject.TRANSFORM_INVALID)) {
+                var m = getSurfaceTransform ();
+                __setTransform (m);
+                __clearFlag (DisplayObject.TRANSFORM_INVALID);
+            }
+            var el: Element = cast(snap.node);
+            el.setAttribute('opacity', Std.string(alpha));
+
+            var snapMask = el.getAttribute('mask');
+            if (null != mask && (null == snapMask || "none" == snapMask) ) {
+                if (null != mask.snap) {
+                    snap.attr({mask:mask.snap});
+                }
+            } else if (null == mask) {
+                if (null != snapMask && "none" != snapMask) {
+                    snap.node.attributes.getNamedItem("mask").nodeValue="none";
+                }
+            }
+        }
+        updateClipRect();
+    }
+
 	// Getters & Setters
-	
-	
-	
+
 	
 	private function set_bitmapData (inBitmapData:BitmapData):BitmapData {
-		
 		if (inBitmapData != bitmapData) {
-			
 			if (bitmapData != null) {
-				
 				bitmapData.__referenceCount--;
-
-//TODO: uncomment
-//				if (__graphics.__surface == bitmapData.handle ()) {
-//
-//					Lib.__setSurfaceOpacity (bitmapData.handle (), 0);
-//
-//				}
-				
 			}
-			
 			if (inBitmapData != null) {
-				
 				inBitmapData.__referenceCount++;
-				
 			}
-			
 		}
 		
 		__invalidateBounds ();
 		bitmapData = inBitmapData;
 		return inBitmapData;
-		
 	}
 	
 	

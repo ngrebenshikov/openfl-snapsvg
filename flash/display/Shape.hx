@@ -13,10 +13,7 @@ class Shape extends DisplayObject {
 	
 	public function new () {
 		super ();
-
-        __graphics = new Graphics();
-        snap.append(__graphics.__snap);
-
+        this.__graphics = new Graphics(snap);
 	}
 	
 	override public function toString ():String {
@@ -24,8 +21,10 @@ class Shape extends DisplayObject {
 	}
 	
 	
-	public override function __getGraphics ():Graphics {
-		return __graphics;
+	private override function __getGraphics ():Graphics {
+        trace('__getGraphics');
+        trace(null != this.__graphics);
+		return this.__graphics;
 	}
 	
 	
@@ -41,6 +40,6 @@ class Shape extends DisplayObject {
 	// Getters & Setters
 
 	private function get_graphics ():Graphics {
-		return __graphics;
+		return this.__graphics;
 	}
 }

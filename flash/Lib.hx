@@ -768,16 +768,6 @@ class Lib {
 		
 	}
 	
-	
-	public static function __setSurfaceTransform (surface:SnapElement, matrix:Matrix):Void {
-		if (matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1 && surface.attr ("data-openfl-anim") == null && matrix.tx == 0 && matrix.ty == 0) {
-            surface.attr({ transform: null });
-		} else {
-            surface.attr({transform: matrix.toString()});
-		}
-	}
-	
-	
 	public static function __setSurfaceZIndexAfter (surface1:Element, surface2:Element):Void {
 		
 		if (surface1 != null && surface2 != null) {

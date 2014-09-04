@@ -1,6 +1,8 @@
 package flash.display;
 
 
+import js.html.Element;
+import js.html.Node;
 import snap.Snap;
 import flash.accessibility.AccessibilityProperties;
 import flash.display.BitmapData;
@@ -89,6 +91,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private var _srAxes   : DivElement;
 
     public var snap: SnapElement;
+    private var __clipRect: SnapElement;
 
 	
 	public function new () {
@@ -193,8 +196,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	private inline function getSurfaceTransform (gfx:Graphics):Matrix {
-		var extent = gfx.__extentWithFilters;
+	private inline function getSurfaceTransform ():Matrix {
 		var fm = if (null == parent) __getFullMatrix () else {
             var m = __getFullMatrix();
             m.concat(parent.__getFullMatrix().invert());
@@ -213,10 +215,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private inline function handleGraphicsUpdated (gfx:Graphics):Void {
-		__invalidateBounds ();
 		__applyFilters(snap);
 		__setFlag (TRANSFORM_INVALID);
-		
+        __invalidateBounds ();
 	}
 	
 	
@@ -304,7 +305,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 				
 			} else {
 				
-				__boundsRect = gfx.__extent.clone ();
+				__boundsRect = gfx.__extentWithFilters.clone ();
 				__setDimensions ();
 				gfx.boundsDirty = false;
 				
@@ -315,9 +316,19 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 		
 	}
-	
-	
-	private function __addToStage (newParent:DisplayObjectContainer, beforeSibling:DisplayObject = null):Void {
+
+
+    private inline function __setTransform (matrix:Matrix):Void {
+        var el: Element = cast(snap.node);
+
+        if (matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1 && matrix.tx == 0 && matrix.ty == 0) {
+            el.removeAttribute('transform');
+        } else {
+            el.setAttribute('transform', matrix.toString());
+        }
+    }
+
+    private function __addToStage (newParent:DisplayObjectContainer, beforeSibling:DisplayObject = null):Void {
         if (__isOnStage()) return;
 
         var gfx = __getGraphics();
@@ -330,7 +341,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 				Lib.__appendSurface (snap, null, null, newParent.snap);
 			}
 
-			Lib.__setSurfaceTransform (snap, getSurfaceTransform(gfx));
+			__setTransform(getSurfaceTransform());
 		} else {
 			if (newParent.name == Stage.NAME) { // only stage is allowed to add to a parent with no context
 				Lib.__appendSurface(snap);
@@ -339,7 +350,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 
 		if (__isOnStage ()) {
             stage.snapIdToDisplayObjects.set(___id, this);
-			//this.__srUpdateDivs ();
 			var evt = new Event (Event.ADDED_TO_STAGE, false, false);
 			dispatchEvent (evt);
 		}
@@ -634,29 +644,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix();
 		
-		/*
-		var clip0:Point = null;
-		var clip1:Point = null;
-		var clip2:Point = null;
-		var clip3:Point = null;
-		if (clipRect != null) {
-			var topLeft = clipRect.topLeft;
-			var topRight = clipRect.topLeft.clone();
-			topRight.x += clipRect.width;
-			var bottomRight = clipRect.bottomRight;
-			var bottomLeft = clipRect.bottomRight.clone();
-			bottomLeft.x -= clipRect.width;
-			clip0 = this.globalToLocal(this.parent.localToGlobal(topLeft));
-			clip1 = this.globalToLocal(this.parent.localToGlobal(topRight));
-			clip2 = this.globalToLocal(this.parent.localToGlobal(bottomRight));
-			clip3 = this.globalToLocal(this.parent.localToGlobal(bottomLeft));
-		}
-		*/
-		
 		if (gfx.__render (inMask, __filters, 1, 1)) {
-
 			handleGraphicsUpdated (gfx);
-
 		}
 		
 		var fullAlpha:Float = (parent != null ? parent.__combinedAlpha : 1) * alpha;
@@ -669,59 +658,61 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 
 			if (__testFlag (TRANSFORM_INVALID)) {
 
-				var m = getSurfaceTransform (gfx);
-				Lib.__setSurfaceTransform (snap, m);
+				var m = getSurfaceTransform ();
+				__setTransform (m);
 				__clearFlag (TRANSFORM_INVALID);
-
-				this.__srUpdateDivs ();
 			}
-			//Lib.__setSurfaceOpacity (snap, fullAlpha);
-            snap.attr({opacity:alpha});
+            var el: Element = cast(snap.node);
+            el.setAttribute('opacity', Std.string(alpha));
 
-            if (null != mask && (null == snap.attr("mask") || "none" == snap.attr("mask")) ) {
+            trace(mask != null);
+            var snapMask = el.getAttribute('mask');
+            trace(snapMask);
+            if (null != mask && (null == snapMask || "none" == snapMask) ) {
                 if (null != mask.snap) {
                     snap.attr({mask:mask.snap});
                 }
             } else if (null == mask) {
-                if (null != snap.attr("mask") && "none" != snap.attr("mask")) {
-                    snap.node.attributes.getNamedItem("mask").nodeValue="none";
+                if (null != snapMask && "none" != snapMask) {
+                    el.setAttribute('mask', 'none');
                 }
             }
+            trace(el.getAttribute('mask'));
         }
-			/*if (clipRect != null) {
-				var rect = new Rectangle();
-				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
-				rect.bottomRight = this.globalToLocal(this.parent.localToGlobal(clipRect.bottomRight));
-				Lib.__setSurfaceClipping(gfx.__surface, rect);
-			}*/
-
-
-		// if (this.__scrollRect == null) {
-		// 	var pgfx = this.parent.__getGraphics();
-		// 	if (pgfx != null && pgfx.__surface.parentNode != gfx.__surface.parentNode) {
-		// 		pgfx.__surface.parentNode.appendChild(gfx.__surface);
-		// 	}
-		// }
-		
+        updateClipRect();
 	}
-	
-	
+
+    private inline function updateClipRect() {
+        var rect: Element = cast(getClipRect().node);
+        rect.setAttribute('width', Std.string(width));
+        rect.setAttribute('height', Std.string(height));
+    }
+
+    private inline function getClipRect():SnapElement {
+        if (null == __clipRect) {
+            var url = snap.attr('clip-path');
+            if (null == url || 'none' == url) {
+                var rect = Lib.snap.rect(0,0,width,height,0,0);
+                snap.attr('clip-path', rect);
+                __clipRect = rect;
+            } else {
+                var clipPath = Snap.select('#' + tools.Helper.getAnchorIdFromUrl(url));
+                __clipRect = clipPath.select('rect');
+            }
+        }
+        return __clipRect;
+    }
+
 	private inline function __setDimensions ():Void {
-		
 		if (scale9Grid != null) {
-			
 			__boundsRect.width *= __scaleX;
 			__boundsRect.height *= __scaleY;
 			__width = __boundsRect.width;
 			__height = __boundsRect.height;
-			
 		} else {
-			
 			__width = __boundsRect.width * __scaleX;
 			__height = __boundsRect.height * __scaleY;
-			
 		}
-		
 	}
 	
 	
@@ -767,44 +758,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		return (___renderFlags & mask) != 0;
 		
 	}
-	
-	
-	private function __unifyChildrenWithDOM (lastMoveObj:DisplayObject = null) {
-
-//TODO: uncomment
-// 		var gfx = __getGraphics ();
-//
-//		if (gfx != null && lastMoveObj != null && this != lastMoveObj) {
-//
-//			var ogfx = lastMoveObj.__getGraphics ();
-//			if (ogfx != null) {
-//				Lib.__setSurfaceZIndexAfter (
-//					(this.__scrollRect == null ? gfx.__surface : this._srWindow),
-//					(
-//						lastMoveObj.__scrollRect == null
-//							? ogfx.__surface
-//							: (
-//								lastMoveObj == this.parent
-//									? ogfx.__surface
-//									: lastMoveObj._srWindow
-//							)
-//					)
-//				);
-//			}
-//
-//		}
-//
-//		if (gfx == null) {
-//
-//			return lastMoveObj;
-//
-//		} else {
-//
-//			return this;
-//		}
-		return this;
-	}
-	
 	
 	private function __validateMatrix ():Void {
 		
@@ -857,14 +810,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 		
 	}
-	
-	
-	
+
 	
 	// Getters & Setters
-	
-	
-	
 	
 	private function get__bottommostSurface ():SnapElement {
         return snap;
@@ -918,7 +866,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__filters = new Array<BitmapFilter> ();
 			for (filter in filters) __filters.push (filter.clone ());
 			invalidateGraphics ();
-			
 		}
 		
 		return filters;
@@ -961,7 +908,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__scaleY = inValue / h;
 			__invalidateMatrix (true);
 			__invalidateBounds ();
-			
 		}
 		
 		return inValue;
@@ -977,15 +923,21 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private function set_mask (inValue:DisplayObject):DisplayObject {
+        trace('set_mask:' + Std.string(inValue != null));
+
 		if (__mask != null) {
 			__mask.__maskingObj = null;
             Lib.freeSnap.append(__mask.snap);
+
             //Remove mask tag from <defs>
             var maskId = StringTools.replace(StringTools.replace(snap.attr('mask'), 'url(', ''), ')', '');
             if (maskId.indexOf('#') != -1) {
                 maskId = maskId.substring(maskId.indexOf('#')+1, maskId.length-1);
             }
-            Snap.select('#'+maskId).remove();
+            var maskSnap = Snap.select('#'+maskId);
+            if (null != maskSnap) {
+                maskSnap.remove();
+            }
 		}
 
 		__mask = inValue;
@@ -996,7 +948,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
             }
 			__mask.__maskingObj = this;
 		}
-		
+
 		return __mask;
 	}
 	
@@ -1082,61 +1034,44 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private function set_rotation (inValue:Float):Float {
-		
 		if (__rotation != inValue) {
-			
 			__rotation = inValue;
 			__invalidateMatrix (true);
 			__invalidateBounds ();
-			
 		}
 		
 		return inValue;
-		
 	}
 	
 	
 	private function get_scaleX ():Float {
-		
 		return __scaleX;
-		
 	}
 	
 	
 	private function set_scaleX (inValue:Float):Float {
-		
 		if (__scaleX != inValue) {
-			
 			__scaleX = inValue;
 			__invalidateMatrix (true);
 			__invalidateBounds ();
-			
 		}
 		
 		return inValue;
-		
 	}
 	
 	
 	private function get_scaleY ():Float {
-		
 		return __scaleY;
-		
 	}
 	
 	
 	private function set_scaleY (inValue:Float):Float {
-		
 		if (__scaleY != inValue) {
-			
 			__scaleY = inValue;
 			__invalidateMatrix (true);
 			__invalidateBounds ();
-			
 		}
-		
 		return inValue;
-		
 	}
 	
 	
@@ -1151,7 +1086,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private function set_scrollRect (inValue:Rectangle):Rectangle {
 		
 		__scrollRect = inValue;
-		this.__srUpdateDivs ();
 		return inValue;
 		
 	}

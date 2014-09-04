@@ -322,16 +322,11 @@ class DisplayObjectContainer extends InteractiveObject {
 		}
 		
 		if (c1 != -1 && c2 != -1) {
-			
 			swap = __children[c1];
 			__children[c1] = __children[c2];
 			__children[c2] = swap;
 			swap = null;
 			__swapSurface (c1, c2);
-			
-			child1.__unifyChildrenWithDOM (); // possibly no longer necessary?
-			child2.__unifyChildrenWithDOM (); // possibly no longer necessary?
-			
 		}
 		
 	}
@@ -559,12 +554,8 @@ class DisplayObjectContainer extends InteractiveObject {
 		}
 		
 		if (__addedChildren) {
-			
-			__unifyChildrenWithDOM ();
 			__addedChildren = false;
-			
 		}
-		
 	}
 	
 	
@@ -572,8 +563,8 @@ class DisplayObjectContainer extends InteractiveObject {
 		if (__children[c1] == null) throw "Null element at index " + c1 + " length " + __children.length;
 		if (__children[c2] == null) throw "Null element at index " + c2 + " length " + __children.length;
 
-        var surface1 = __children[c1].__scrollRect == null ? __children[c1].snap : __children[c1].__getSrWindow ();
-        var surface2 = __children[c2].__scrollRect == null ? __children[c2].snap : __children[c2].__getSrWindow ();
+        var surface1 = __children[c1].snap;
+        var surface2 = __children[c2].snap;
 
         if (surface1 != null && surface2 != null) {
             Lib.__swapSurface (surface1, surface2);
@@ -581,33 +572,7 @@ class DisplayObjectContainer extends InteractiveObject {
 	}
 	
 	
-	override private function __unifyChildrenWithDOM (lastMoveObj:DisplayObject = null):DisplayObject {
-		
-		var obj = super.__unifyChildrenWithDOM (lastMoveObj);
-		
-		for (child in __children) {
-			
-			obj = child.__unifyChildrenWithDOM (obj);
-
-			if (child.scrollRect != null) {
-				
-				obj = child;
-				
-			}
-			
-		}
-		
-		return obj;
-		
-	}
-	
-	
-	
-	
 	// Getters & Setters
-	
-	
-	
 	
 	override private function set_filters (filters:Array<Dynamic>):Array<Dynamic> {
 		
@@ -658,11 +623,8 @@ class DisplayObjectContainer extends InteractiveObject {
 	
 
 	override private function set_scrollRect (inValue:Rectangle):Rectangle {
-		
 		inValue = super.set_scrollRect (inValue);
-		this.__unifyChildrenWithDOM ();
 		return inValue;
-		
 	}
 	
 		

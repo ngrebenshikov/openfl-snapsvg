@@ -1,6 +1,7 @@
 package flash.text;
 
 
+import js.html.ClientRect;
 import haxe.Timer;
 import js.html.svg.SVGElement;
 import js.html.svg.TextElement;
@@ -115,13 +116,13 @@ class TextField extends InteractiveObject {
 		mSelEnd = -1;
 		scrollH = 0;
 		scrollV = 1;
-		
+
 		mType = TextFieldType.DYNAMIC;
 		autoSize = TextFieldAutoSize.NONE;
 		mTextHeight = 12;
 		mMaxHeight = mTextHeight;
-		mHTMLText = " ";
-		mText = " ";
+		mHTMLText = "";
+		mText = "";
 		mTextColour = 0x000000;
 		tabEnabled = false;
 		mTryFreeType = true;
@@ -308,20 +309,62 @@ class TextField extends InteractiveObject {
             firstParagraph = false;
         }
 
+        var textElement: js.html.svg.TextElement = cast(mTextSnap.node);
         mTextSnap.append(Snap.parse(svgBuf.toString()));
 
-        mTextSnap.attr({
-            "font-family": mFace,
-            "font-size": mTextHeight,
-            "fill": "#" + StringTools.hex(mTextColour, 6),
+        textElement.setAttribute("font-family", Std.string(mFace));
+        textElement.setAttribute("font-size", Std.string(mTextHeight)+'px');
+        textElement.setAttribute("fill", "#" + StringTools.hex(mTextColour, 6));
+
             //"textLength": width + "px",
             //"lengthAdjust": "spacingAndGlyphs",
             //"kerning": "0",
             //"letter-spacing": "0px",
             //"word-spacing": "0px"
-            });
 
-        var rect = mTextSnap.getBBox();
+        var rect = if (null != mText && mText.length > 0) {
+
+            var r: ClientRect = textElement.getBoundingClientRect();
+            new Rectangle(r.left, r.top, r.width, r.height);
+
+//#1
+//            var r: Rectangle;
+//            try {
+//                var leftTop: js.html.svg.Rect =  textElement.getExtentOfChar(0);
+//                var rightBottom: js.html.svg.Rect = textElement.getExtentOfChar(mText.length-1);
+//                r = new Rectangle(leftTop.x, leftTop.y, rightBottom.x + rightBottom.width, rightBottom.y + rightBottom.height);
+//            } catch (e: Dynamic) {
+//                r = new Rectangle();
+//            }
+//            r;
+
+//#2
+//            var minX = 1000.0*1000*1000;
+//            var maxX = -minX;
+//            var minY = -maxX;
+//            var maxY = -minY;
+//
+//            var spans:SnapSet = mTextSnap.selectAll('tspan');
+//            spans.forEach(function(s) {
+//                var span: js.html.svg.TSpanElement = cast(s.node);
+//                try {
+//                    var leftTop: js.html.svg.Rect =  textElement.getExtentOfChar(0);
+//                    var rightBottom: js.html.svg.Rect = textElement.getExtentOfChar(span.textContent.length-1);
+//
+//                    if (leftTop.x < minX) minX = leftTop.x;
+//                    if (leftTop.y < minY) minY = leftTop.y;
+//                    if (rightBottom.x + rightBottom.width > maxX) maxX = rightBottom.x + rightBottom.width;
+//                    if (rightBottom.y + rightBottom.height > maxY) maxY = rightBottom.y + rightBottom.height;
+//                } catch(e: Dynamic) {
+//                    trace(e);
+//                    trace(span.textContent);
+//                    trace(span.textContent.length);
+//                }
+//            }, this);
+//            new Rectangle(minX, minY, maxX, maxY);
+        } else new Rectangle();
+
+        //rect = mTextSnap.getBBox();
         if (autoSize != TextFieldAutoSize.NONE) {
             mWidth = rect.width + mTextHeight;
             mHeight = rect.height+mTextHeight*0.4;
@@ -333,10 +376,7 @@ class TextField extends InteractiveObject {
         mMaxWidth = rect.width;
         mMaxHeight = rect.height;
 
-        getClipRect().attr({
-            width: width,
-            height: height
-        });
+        updateClipRect();
 
         __graphics.clear ();
         drawBackgoundAndBorder();
@@ -368,18 +408,6 @@ class TextField extends InteractiveObject {
         }
     }
 
-    private function getClipRect():SnapElement {
-        var url = snap.attr('clip-path');
-        if (null == url || 'none' == url) {
-            var rect = Lib.snap.rect(0,0,width,height,0,0);
-            snap.attr('clip-path', rect);
-            return rect;
-        } else {
-            var clipPath = Snap.select('#' + tools.Helper.getAnchorIdFromUrl(url));
-            return clipPath.select('rect');
-        }
-    }
-	
 	public function RebuildText () {
         if (null == mText) return;
 
@@ -760,15 +788,15 @@ class TextField extends InteractiveObject {
 //TODO: uncomment
 		if (!mHTMLMode && inMask != null) {
 
-			var m = getSurfaceTransform (__graphics);
+			var m = getSurfaceTransform ();
 			//Lib.__drawToSurface (__graphics.__surface, inMask, m, (parent != null ? parent.__combinedAlpha : 1) * alpha, clipRect, (gridFitType != GridFitType.PIXEL));
 
 		} else {
 
 			if (__testFlag (DisplayObject.TRANSFORM_INVALID)) {
 
-				var m = getSurfaceTransform (__graphics);
-				Lib.__setSurfaceTransform (snap, m);
+				var m = getSurfaceTransform ();
+				__setTransform (m);
 				__clearFlag (DisplayObject.TRANSFORM_INVALID);
 
 			}
