@@ -516,19 +516,13 @@ class Graphics {
 
 
     public function drawRect (x:Float, y:Float, width:Float, height:Float):Void {
-
-        trace('drawRect(' + x + ',' + y +')');
         closePolygon (false);
         __drawRect(x, y, width, height, 0, 0);
-
     }
 
-
     public function drawRoundRect (x:Float, y:Float, width:Float, height:Float, rx:Float, ry:Float = -1):Void {
-
         closePolygon (false);
         __drawRect(x, y, width, height, rx, ry == -1 ? rx : ry);
-
     }
 
 
@@ -1065,9 +1059,7 @@ class Graphics {
     }
 
     public function __render (maskHandle:SnapElement = null, filters:Array<BitmapFilter> = null, sx:Float = 1.0, sy:Float = 1.0, clip0:Point = null, clip1:Point = null, clip2:Point = null, clip3:Point = null) {
-        trace('Graphics::__render');
         if (!__changed) return false;
-        trace('Graphics::__render changed');
 
         closePolygon (true);
         var padding = _padding;
@@ -1086,7 +1078,6 @@ class Graphics {
 
             nextDrawIndex = 0;
             __clearCanvas ();
-            trace('clear');
             __clearNextCycle = false;
 
         }
@@ -1141,7 +1132,6 @@ class Graphics {
 
                         __snap.append(circle);
                     case SnapDrawable.RECT(x, y, width, height, rx, ry):
-                        trace('rect');
                         var rect: SnapElement = Lib.snap.rect(x, y, width, height, rx, ry);
 
                         __addStrokeAttribute(rect, d.lineJobs.length == 1 ? d.lineJobs[0] : null);

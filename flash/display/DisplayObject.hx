@@ -605,11 +605,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	public function __isOnStage ():Bool {
-		var gfx = __getGraphics ();
-		if (gfx != null && Lib.__isOnStage (gfx.__snap)) {
-			return true;
-		}
-        return false;
+        return Lib.__isOnStage (snap);
 	}
 	
 	
@@ -665,11 +661,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
             var el: Element = cast(snap.node);
             el.setAttribute('opacity', Std.string(alpha));
 
-            trace(mask != null);
             var snapMask = el.getAttribute('mask');
-            trace(snapMask);
             if (null != mask && (null == snapMask || "none" == snapMask) ) {
                 if (null != mask.snap) {
+                    if (!mask.__isOnStage()) {
+                        trace('add child');
+                        Lib.current.addChild(mask);
+                    }
                     snap.attr({mask:mask.snap});
                 }
             } else if (null == mask) {
@@ -677,7 +675,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
                     el.setAttribute('mask', 'none');
                 }
             }
-            trace(el.getAttribute('mask'));
         }
         updateClipRect();
 	}
@@ -943,9 +940,10 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		__mask = inValue;
 
 		if (__mask != null) {
-            if (!__mask.__isOnStage()) {
-                Lib.current.addChild(__mask);
-            }
+//            if (!__mask.__isOnStage()) {
+//                trace('add child');
+//                Lib.current.addChild(__mask);
+//            }
 			__mask.__maskingObj = this;
 		}
 
@@ -1126,23 +1124,16 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private function get_visible ():Bool {
-		
 		return __visible;
-		
 	}
 	
 	
 	private function set_visible (inValue:Bool):Bool {
-		
 		if (__visible != inValue) {
-			
 			__visible = inValue;
 			setSurfaceVisible (inValue);
-			
 		}
-		
 		return __visible;
-		
 	}
 	
 	

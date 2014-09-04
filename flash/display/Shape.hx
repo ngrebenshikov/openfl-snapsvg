@@ -22,8 +22,6 @@ class Shape extends DisplayObject {
 	
 	
 	private override function __getGraphics ():Graphics {
-        trace('__getGraphics');
-        trace(null != this.__graphics);
 		return this.__graphics;
 	}
 	
