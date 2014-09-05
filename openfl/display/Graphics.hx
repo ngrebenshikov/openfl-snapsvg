@@ -526,41 +526,38 @@ class Graphics {
     }
 
 
-/** @private */
+    /** @private */
     public function drawTiles (sheet:Tilesheet, tileData:Array<Float>, smooth:Bool = false, flags:Int = 0):Void {
 
-// Checking each tile for extents did not include rotation or scale, and could overflow the maximum canvas
-// size of some mobile browsers. Always use the full stage size for drawTiles instead?
+        // Checking each tile for extents did not include rotation or scale, and could overflow the maximum canvas
+        // size of some mobile browsers. Always use the full stage size for drawTiles instead?
 
         __expandStandardExtent (Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
 
-//var useScale = (flags & TILE_SCALE) > 0;
-//var useRotation = (flags & TILE_ROTATION) > 0;
-//var useTransform = (flags & TILE_TRANS_2x2) > 0;
-//var useRGB = (flags & TILE_RGB) > 0;
-//var useAlpha = (flags & TILE_ALPHA) > 0;
+        var useScale = (flags & TILE_SCALE) > 0;
+        var useRotation = (flags & TILE_ROTATION) > 0;
+        var useTransform = (flags & TILE_TRANS_2x2) > 0;
+        var useRGB = (flags & TILE_RGB) > 0;
+        var useAlpha = (flags & TILE_ALPHA) > 0;
 
-//if (useTransform) { useScale = false; useRotation = false; }
+        if (useTransform) { useScale = false; useRotation = false; }
 
-//var index = 0;
-//var numValues = 3;
+        var index = 0;
+        var numValues = 3;
 
-//if (useScale) numValues ++;
-//if (useRotation) numValues ++;
-//if (useTransform) numValues += 4;
-//if (useRGB) numValues += 3;
-//if (useAlpha) numValues ++;
+        if (useScale) numValues ++;
+        if (useRotation) numValues ++;
+        if (useTransform) numValues += 4;
+        if (useRGB) numValues += 3;
+        if (useAlpha) numValues ++;
 
-//while (index < tileData.length) {
-
-//__expandStandardExtent(tileData[index] + sheet.__bitmap.width, tileData[index + 1] + sheet.__bitmap.height);
-//index += numValues;
-
-//}
+        while (index < tileData.length) {
+            __expandStandardExtent(tileData[index] + sheet.__bitmap.width, tileData[index + 1] + sheet.__bitmap.height);
+            index += numValues;
+        }
 
         addDrawable (new Drawable (null, null, null, null, null, null, new TileJob (sheet, tileData, flags), null));
         __changed = true;
-
     }
 
 
@@ -761,8 +758,9 @@ class Graphics {
 
 
     public inline function __clearCanvas ():Void {
-        if (__snap != null) {
-            __snap.selectAll("*").forEach(function(e:SnapElement) { e.remove(); }, null);
+        var node = __snap.node;
+        while(null != node.firstChild) {
+            node.removeChild(node.firstChild);
         }
     }
 
@@ -836,98 +834,186 @@ class Graphics {
     }
 
 
+    private function __drawTilesAsSingleImage (sheet:Tilesheet, tileData:Array<Float>, flags:Int = 0):Void {
+
+        var useScale = (flags & TILE_SCALE) > 0;
+        var useRotation = (flags & TILE_ROTATION) > 0;
+        var useTransform = (flags & TILE_TRANS_2x2) > 0;
+        var useRGB = (flags & TILE_RGB) > 0;
+        var useAlpha = (flags & TILE_ALPHA) > 0;
+
+        if (useTransform) { useScale = false; useRotation = false; }
+
+        var scaleIndex = 0;
+        var rotationIndex = 0;
+        var rgbIndex = 0;
+        var alphaIndex = 0;
+        var transformIndex = 0;
+
+        var numValues = 3;
+
+        if (useScale) { scaleIndex = numValues; numValues ++; }
+        if (useRotation) { rotationIndex = numValues; numValues ++; }
+        if (useTransform) { transformIndex = numValues; numValues += 4; }
+        if (useRGB) { rgbIndex = numValues; numValues += 3; }
+        if (useAlpha) { alphaIndex = numValues; numValues ++; }
+
+        var totalCount = tileData.length;
+        var itemCount = Std.int(totalCount / numValues);
+        var index = 0;
+
+        var rect = null;
+        var center = null;
+        var previousTileID = -1;
+
+        var surface = sheet.__bitmap.handle ();
+        var canvas: CanvasElement = cast Browser.document.createElement ('canvas');
+        canvas.width = Std.int(__extent.width);
+        canvas.height = Std.int(__extent.height);
+        var ctx:CanvasRenderingContext2D = canvas.getContext2d();
+
+        while (index < totalCount) {
+
+            var tileID = Std.int (tileData[index + 2]);
+
+            if (tileID != previousTileID) {
+
+                rect = sheet.__tileRects[tileID];
+                center = sheet.__centerPoints[tileID];
+
+                previousTileID = tileID;
+
+            }
+
+            if (rect != null && center != null) {
+
+                ctx.save ();
+                ctx.translate (tileData[index], tileData[index + 1]);
+
+                if (useRotation) {
+
+                    ctx.rotate (tileData[index + rotationIndex]);
+
+                }
+
+                var scale = 1.0;
+
+                if (useScale) {
+
+                    scale = tileData[index + scaleIndex];
+
+                }
+
+                if (useTransform) {
+
+                    ctx.transform (tileData[index + transformIndex], tileData[index + transformIndex + 1], tileData[index + transformIndex + 2], tileData[index + transformIndex + 3], 0, 0);
+
+                }
+
+                if (useAlpha) {
+
+                    ctx.globalAlpha = tileData[index + alphaIndex];
+
+                }
+
+                ctx.drawImage (surface, rect.x, rect.y, rect.width, rect.height, -center.x * scale, -center.y * scale, rect.width * scale, rect.height * scale);
+                ctx.restore ();
+
+            }
+
+            index += numValues;
+
+        }
+        __clearCanvas();
+        __snap.append(Lib.snap.image(canvas.toDataURL('image/png'), 0, 0, canvas.width, canvas.height));
+    }
+
     private function __drawTiles (sheet:Tilesheet, tileData:Array<Float>, flags:Int = 0):Void {
 
-//        var useScale = (flags & TILE_SCALE) > 0;
-//        var useRotation = (flags & TILE_ROTATION) > 0;
-//        var useTransform = (flags & TILE_TRANS_2x2) > 0;
-//        var useRGB = (flags & TILE_RGB) > 0;
-//        var useAlpha = (flags & TILE_ALPHA) > 0;
-//
-//        if (useTransform) { useScale = false; useRotation = false; }
-//
-//        var scaleIndex = 0;
-//        var rotationIndex = 0;
-//        var rgbIndex = 0;
-//        var alphaIndex = 0;
-//        var transformIndex = 0;
-//
-//        var numValues = 3;
-//
-//        if (useScale) { scaleIndex = numValues; numValues ++; }
-//        if (useRotation) { rotationIndex = numValues; numValues ++; }
-//        if (useTransform) { transformIndex = numValues; numValues += 4; }
-//        if (useRGB) { rgbIndex = numValues; numValues += 3; }
-//        if (useAlpha) { alphaIndex = numValues; numValues ++; }
-//
-//        var totalCount = tileData.length;
-//        var itemCount = Std.int(totalCount / numValues);
-//        var index = 0;
-//
-//        var rect = null;
-//        var center = null;
-//        var previousTileID = -1;
-//
-//        var surface = sheet.__bitmap.handle ();
-//        var ctx = getContext ();
-//
-//        if (ctx != null) {
-//
-//            while (index < totalCount) {
-//
-//                var tileID = Std.int (tileData[index + 2]);
-//
-//                if (tileID != previousTileID) {
-//
-//                    rect = sheet.__tileRects[tileID];
-//                    center = sheet.__centerPoints[tileID];
-//
-//                    previousTileID = tileID;
-//
-//                }
-//
-//                if (rect != null && center != null) {
-//
-//                    ctx.save ();
-//                    ctx.translate (tileData[index], tileData[index + 1]);
-//
-//                    if (useRotation) {
-//
-//                        ctx.rotate (tileData[index + rotationIndex]);
-//
-//                    }
-//
-//                    var scale = 1.0;
-//
-//                    if (useScale) {
-//
-//                        scale = tileData[index + scaleIndex];
-//
-//                    }
-//
-//                    if (useTransform) {
-//
-//                        ctx.transform (tileData[index + transformIndex], tileData[index + transformIndex + 1], tileData[index + transformIndex + 2], tileData[index + transformIndex + 3], 0, 0);
-//
-//                    }
-//
-//                    if (useAlpha) {
-//
-//                        ctx.globalAlpha = tileData[index + alphaIndex];
-//
-//                    }
-//
-//                    ctx.drawImage (surface, rect.x, rect.y, rect.width, rect.height, -center.x * scale, -center.y * scale, rect.width * scale, rect.height * scale);
-//                    ctx.restore ();
-//
-//                }
-//
-//                index += numValues;
-//
-//            }
-//
-//        }
+        __clearCanvas();
+        var useScale = (flags & TILE_SCALE) > 0;
+        var useRotation = (flags & TILE_ROTATION) > 0;
+        var useTransform = (flags & TILE_TRANS_2x2) > 0;
+        var useRGB = (flags & TILE_RGB) > 0;
+        var useAlpha = (flags & TILE_ALPHA) > 0;
 
+        if (useTransform) { useScale = false; useRotation = false; }
+
+        var scaleIndex = 0;
+        var rotationIndex = 0;
+        var rgbIndex = 0;
+        var alphaIndex = 0;
+        var transformIndex = 0;
+
+        var numValues = 3;
+
+        if (useScale) { scaleIndex = numValues; numValues ++; }
+        if (useRotation) { rotationIndex = numValues; numValues ++; }
+        if (useTransform) { transformIndex = numValues; numValues += 4; }
+        if (useRGB) { rgbIndex = numValues; numValues += 3; }
+        if (useAlpha) { alphaIndex = numValues; numValues ++; }
+
+        var totalCount = tileData.length;
+        var itemCount = Std.int(totalCount / numValues);
+        var index = 0;
+
+        var rect = null;
+        var center = null;
+        var previousTileID = -1;
+
+        var canvas: CanvasElement = cast Browser.document.createElement ('canvas');
+        var ctx:CanvasRenderingContext2D = canvas.getContext2d();
+        var surface = sheet.__bitmap.handle ();
+        var imageDataUrl: String = '';
+
+        while (index < totalCount) {
+
+            var tileID = Std.int (tileData[index + 2]);
+
+            if (tileID != previousTileID) {
+                rect = sheet.__tileRects[tileID];
+                center = sheet.__centerPoints[tileID];
+                previousTileID = tileID;
+                canvas.width = Std.int(rect.width);
+                canvas.height = Std.int(rect.height);
+                ctx.drawImage (surface, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
+                imageDataUrl = canvas.toDataURL('image/png');
+            }
+
+
+            if (rect != null && center != null) {
+
+                var image = Lib.snap.image(imageDataUrl, 0, 0, rect.width, rect.height);
+                var el: Element = cast(image.node);
+
+                var matrix = new Matrix();
+
+                if (useRotation) {
+                    matrix.rotate(tileData[index + rotationIndex]);
+                }
+
+                if (useScale) {
+                    matrix.scale(tileData[index + scaleIndex], tileData[index + scaleIndex]);
+                }
+
+                if (useTransform) {
+                    matrix = new Matrix(tileData[index + transformIndex], tileData[index + transformIndex + 1], tileData[index + transformIndex + 2], tileData[index + transformIndex + 3], 0, 0);
+                }
+
+                matrix.translate (tileData[index], tileData[index + 1]);
+
+                if (useAlpha) {
+                    el.setAttribute('opacity', Std.string(tileData[index + alphaIndex]));
+                }
+
+                el.setAttribute('transform', matrix.toString());
+
+                __snap.append(image);
+            }
+
+            index += numValues;
+
+        }
     }
 
 
@@ -1098,7 +1184,6 @@ class Graphics {
 //
 //        }
 //
-    trace(mDrawList);
         for (i in nextDrawIndex...len) {
 
             var d = mDrawList[(len - 1) - i];
@@ -1109,9 +1194,7 @@ class Graphics {
             var bitmap = d.bitmap;
 
             if (d.tileJob != null) {
-//
-//                __drawTiles (d.tileJob.sheet, d.tileJob.drawList, d.tileJob.flags);
-//
+                __drawTiles (d.tileJob.sheet, d.tileJob.drawList, d.tileJob.flags);
             } else {
                 var snapElements:Array<SnapElement> = [];
                 switch(d.snapJob.jobType) {

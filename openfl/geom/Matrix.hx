@@ -11,8 +11,8 @@ class Matrix {
 	public var b:Float;
 	public var c:Float;
 	public var d:Float;
-	public var tx (default, set_tx):Float;
-	public var ty (default, set_ty):Float;
+	public var tx:Float;
+	public var ty:Float;
 	
 	public var _sx:Float;
 	public var _sy:Float;
@@ -330,29 +330,5 @@ class Matrix {
 		cleanValues ();
 		
 	}
-	
-	
-	
-	
-	// Getters & Setters
-	
-	
-	
-	
-	private function set_tx (inValue:Float):Float {
-		
-		tx = inValue;// * _sx;
-		return tx;
-		
-	}
-	
-	
-	private function set_ty (inValue:Float):Float {
-		
-		ty = inValue;// * _sy;
-		return ty;
-		
-	}
-	
-	
+
 }
