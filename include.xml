@@ -3,4 +3,5 @@
     <set name="html5-backend" value="openfl-snapsvg" />
 	<template path="templates" />
 	<haxedef name="openfl_snapsvg" />
+	<haxedef name="openfl_html5" />
 </extension>

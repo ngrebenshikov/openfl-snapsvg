@@ -1,6 +1,7 @@
 package openfl.display;
 
 
+import js.html.Image;
 import openfl.display.BlendMode;
 import openfl.display.IBitmapDrawable;
 import openfl.display.Loader;
@@ -49,6 +50,9 @@ class BitmapData implements IBitmapDrawable {
 	private var __transparentFiller:CanvasElement;
 	private var ___id:String;
 	private var ___textureBuffer:CanvasElement;
+
+    public var __sourceCanvas: CanvasElement;
+    public var __sourceImage: Image;
 	
 	
 	public function new (width:Int, height:Int, transparent:Bool = true, inFillColor:Int = 0xFFFFFFFF) {
@@ -62,6 +66,8 @@ class BitmapData implements IBitmapDrawable {
 		___textureBuffer = cast Browser.document.createElement ('canvas');
 		___textureBuffer.width = width;
 		___textureBuffer.height = height;
+        __sourceCanvas = ___textureBuffer;
+
 		___id = Uuid.uuid ();
         //TODO: uncomment
 		//Lib.__setSurfaceId (___textureBuffer, ___id);

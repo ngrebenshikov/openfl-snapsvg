@@ -2,5 +2,5 @@
 -js ::OUTPUT_FILE::
 -cp ::OUTPUT_DIR::/haxe
 -D html5
--D html
+--macro allowPackage("flash")
 --remap flash:openfl
