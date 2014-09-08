@@ -637,7 +637,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		var gfx = __getGraphics ();
 		if (gfx == null) return;
-		
+
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix();
 		
 		if (gfx.__render (inMask, __filters, 1, 1)) {

@@ -285,6 +285,7 @@ extern class SnapElement {
 	public function untouchmove(handler:Event->Void):SnapElement;
 	public function untouchend(handler:Event->Void):SnapElement;
 	public function untouchcancel(handler:Event->Void):SnapElement;
+    public function use():SnapElement;
     public var node: Node;
     public var type: String;
 }
