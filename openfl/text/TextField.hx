@@ -88,7 +88,8 @@ class TextField extends InteractiveObject {
 	private var mText:String;
 	private var mTextColour:Int;
 	private var mType:String;
-	private var mWidth:Float;
+    private var mWidth:Float;
+    private var mUserWidth:Float;
     private var mTextSnap: SnapElement;
 	private var __graphics:Graphics;
 	private var __inputEnabled:Bool;
@@ -245,7 +246,7 @@ class TextField extends InteractiveObject {
 
         mLineInfo = [];
 
-        var wrap = mLimitRenderX = (wordWrap && !__inputEnabled) ? Std.int (mWidth) : 999999;
+        var wrap = mLimitRenderX = (wordWrap && !__inputEnabled) ? Std.int (mUserWidth) : 999999;
 
         if (null != __textFormats)
             for(f in __textFormats) {
@@ -323,50 +324,12 @@ class TextField extends InteractiveObject {
             //"word-spacing": "0px"
 
         var rect = if (null != mText && mText.length > 0) {
-
             var r: ClientRect = textElement.getBoundingClientRect();
             new Rectangle(r.left, r.top, r.width, r.height);
-
-//#1
-//            var r: Rectangle;
-//            try {
-//                var leftTop: js.html.svg.Rect =  textElement.getExtentOfChar(0);
-//                var rightBottom: js.html.svg.Rect = textElement.getExtentOfChar(mText.length-1);
-//                r = new Rectangle(leftTop.x, leftTop.y, rightBottom.x + rightBottom.width, rightBottom.y + rightBottom.height);
-//            } catch (e: Dynamic) {
-//                r = new Rectangle();
-//            }
-//            r;
-
-//#2
-//            var minX = 1000.0*1000*1000;
-//            var maxX = -minX;
-//            var minY = -maxX;
-//            var maxY = -minY;
-//
-//            var spans:SnapSet = mTextSnap.selectAll('tspan');
-//            spans.forEach(function(s) {
-//                var span: js.html.svg.TSpanElement = cast(s.node);
-//                try {
-//                    var leftTop: js.html.svg.Rect =  textElement.getExtentOfChar(0);
-//                    var rightBottom: js.html.svg.Rect = textElement.getExtentOfChar(span.textContent.length-1);
-//
-//                    if (leftTop.x < minX) minX = leftTop.x;
-//                    if (leftTop.y < minY) minY = leftTop.y;
-//                    if (rightBottom.x + rightBottom.width > maxX) maxX = rightBottom.x + rightBottom.width;
-//                    if (rightBottom.y + rightBottom.height > maxY) maxY = rightBottom.y + rightBottom.height;
-//                } catch(e: Dynamic) {
-//                    trace(e);
-//                    trace(span.textContent);
-//                    trace(span.textContent.length);
-//                }
-//            }, this);
-//            new Rectangle(minX, minY, maxX, maxY);
         } else new Rectangle();
 
-        //rect = mTextSnap.getBBox();
         if (autoSize != TextFieldAutoSize.NONE) {
-            mWidth = rect.width + mTextHeight;
+            mWidth = rect.width;
             mHeight = rect.height+mTextHeight*0.4;
         }
         if (mHeight < mTextHeight*1.4) {
@@ -384,8 +347,9 @@ class TextField extends InteractiveObject {
 
     private function drawBackgoundAndBorder() {
         if (background) {
+            __graphics.lineStyle(0);
             __graphics.beginFill (backgroundColor);
-            __graphics.drawRect (0, 0, width, height );
+            __graphics.drawRect (0, 0, width-.5, height-.5 );
             __graphics.endFill ();
         }
 
@@ -397,14 +361,13 @@ class TextField extends InteractiveObject {
     }
 
     private function getCaretRect(): Rectangle {
-        if (caretIndex < 0) return new Rectangle();
         var textElement: TextElement = cast(mTextSnap.node);
-        if (text.length > 0) {
+        if (text.length > 0 && caretIndex >= 0) {
             var extent = textElement.getExtentOfChar(if (caretIndex < text.length) caretIndex else caretIndex-1);
             var x = Std.int(if (caretIndex < text.length) extent.x else extent.x+extent.width-1)+0.5;
             return new Rectangle(x, extent.y, 1, extent.height);
         } else {
-            return new Rectangle(0, 0, 1, mTextSnap.getBBox().height);
+            return new Rectangle(0, 0, 1, mTextHeight*1.4);
         }
     }
 
@@ -774,12 +737,6 @@ class TextField extends InteractiveObject {
 		if (!__combinedVisible) return;
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
 
-		//if (__graphics.__surface != null) {
-			//
-			//Lib.__setImageSmoothing (__graphics.__surface.getContext ("2d"), (gridFitType != GridFitType.PIXEL));
-			//
-		//}
-
         if (__graphics.__render (inMask, __filters, 1, 1)) {
 			
 			handleGraphicsUpdated (__graphics);
@@ -792,24 +749,12 @@ class TextField extends InteractiveObject {
 			//Lib.__drawToSurface (__graphics.__surface, inMask, m, (parent != null ? parent.__combinedAlpha : 1) * alpha, clipRect, (gridFitType != GridFitType.PIXEL));
 
 		} else {
-
 			if (__testFlag (DisplayObject.TRANSFORM_INVALID)) {
-
 				var m = getSurfaceTransform ();
 				__setTransform (m);
 				__clearFlag (DisplayObject.TRANSFORM_INVALID);
-
 			}
-
 			Lib.__setSurfaceOpacity (snap, (parent != null ? parent.__combinedAlpha : 1) * alpha);
-
-			/*if (clipRect != null) {
-				var rect = new Rectangle();
-				rect.topLeft = this.globalToLocal(this.parent.localToGlobal(clipRect.topLeft));
-				rect.bottomRight = this.globalToLocal(this.parent.localToGlobal(clipRect.bottomRight));
-				Lib.__setSurfaceClipping(__graphics.__surface, rect);
-			}*/
-
 		}
 		
 	}
@@ -832,13 +777,14 @@ class TextField extends InteractiveObject {
     private function showCaret() {
         if (__inputEnabled && stage.focus == this) {
             var rect = getCaretRect();
+            __graphics.clear();
+            drawBackgoundAndBorder();
             if (rect.x <= mWidth) {
-                __graphics.clear();
                 __graphics.lineStyle(0.5, 0, 1, true);
                 __graphics.moveTo(rect.x,rect.y);
                 __graphics.lineTo(rect.x,rect.bottom);
+                __graphics.flush();
             }
-            drawBackgoundAndBorder();
             caretTimer.run = hideCaret;
         }
     }
@@ -877,7 +823,7 @@ class TextField extends InteractiveObject {
     private function onKeyPress(e: Dynamic) {
         if (null != e.charCode && 31 < e.charCode) {
             text = text.substring(0,caretIndex) + String.fromCharCode(e.charCode) + text.substring(caretIndex,text.length);
-            caretIndex += 1;
+            caretIndex += if (caretIndex < 0) 2 else 1;
         }
         e.stopPropagation();
     }
@@ -887,10 +833,12 @@ class TextField extends InteractiveObject {
             caretIndex = getCharIndexAtPoint(e.localX, e.localY);
             var textElement: TextElement = cast(mTextSnap.node);
             if (text.length > 0 && text.length > caretIndex) {
-                var extent = textElement.getExtentOfChar(caretIndex);
-                if (e.localX - extent.x > extent.width/2) {
-                    caretIndex += 1;
-                }
+                try {
+                    var extent = textElement.getExtentOfChar(caretIndex);
+                    if (e.localX - extent.x > extent.width/2) {
+                        caretIndex += 1;
+                    }
+                } catch(e: Dynamic) {}
             }
         }
     }
@@ -979,7 +927,7 @@ class TextField extends InteractiveObject {
 	
 	private override function get_height ():Float {
 		
-		return Math.max (mHeight,getBounds (this.stage).height);
+		return Math.max (mHeight,getBounds(this.stage).height);
 		
 	}
 	
@@ -1222,7 +1170,7 @@ class TextField extends InteractiveObject {
 		
 		if (inValue != mWidth) {
 			
-			mWidth = inValue;
+			mUserWidth = mWidth = inValue;
 			RebuildText ();
 			
 		}
