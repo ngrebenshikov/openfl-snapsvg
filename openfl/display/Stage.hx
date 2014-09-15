@@ -344,7 +344,7 @@ class Stage extends DisplayObjectContainer {
 				var keyCode = (evt.keyCode != null ? evt.keyCode : evt.which);
 				keyCode = Keyboard.__convertMozillaCode (keyCode);
 				
-				__onKey (keyCode, true, evt.charCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.keyLocation);
+				__onKey (keyCode, true, evt.charCode, evt.ctrlKey || evt.metaKey, evt.altKey, evt.shiftKey, evt.keyLocation);
 			
 			case "keyup":
 				
@@ -352,7 +352,7 @@ class Stage extends DisplayObjectContainer {
 				var keyCode = (evt.keyCode != null ? evt.keyCode : evt.which);
 				keyCode = Keyboard.__convertMozillaCode (keyCode);
 				
-				__onKey (keyCode, false, evt.charCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.keyLocation);
+				__onKey (keyCode, false, evt.charCode, evt.ctrlKey || evt.metaKey, evt.altKey, evt.shiftKey, evt.keyLocation);
 
             case "keypress":
 
@@ -360,7 +360,7 @@ class Stage extends DisplayObjectContainer {
                 var keyCode = (evt.keyCode != null ? evt.keyCode : evt.which);
                 keyCode = Keyboard.__convertMozillaCode (keyCode);
 
-                __onKeyPress (keyCode, true, evt.charCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.keyLocation);
+                __onKeyPress (keyCode, true, evt.charCode, evt.ctrlKey || evt.metaKey, evt.altKey, evt.shiftKey, evt.keyLocation);
 
 			case "touchstart":
 				
