@@ -259,7 +259,7 @@ extern class SnapElement {
 	public function mouseover(handler:Event->Void):SnapElement;
 	public function mouseup(handler:Event->Void):SnapElement;
 	public function parent():SnapElement;
-	public function pattern(x:Float, y:Float, width:Float, height:Float):SnapElement;
+	public function pattern(x:Float, y:Float, width:String, height:String):SnapElement;
 	public function prepend(el:SnapElement):SnapElement;
 	public function remove():SnapElement;
 	public function removeData(?key:String):SnapElement;

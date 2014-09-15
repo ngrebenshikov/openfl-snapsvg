@@ -813,21 +813,21 @@ class Graphics {
     }
 
     private function __drawEllipse (x:Float, y:Float, rx:Float, ry:Float):Void {
-        __expandStandardExtent(rx * 2, ry * 2);
+        __expandStandardExtent(x + rx, y + ry, mCurrentLine.thickness);
         var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, __getCurrentLineJobs(),
             null, SnapJob.getEllipseJob(x, y, rx, ry));
         addDrawable(drawable);
     }
 
     private function __drawCircle (x:Float, y:Float, rad:Float):Void {
-        __expandStandardExtent(rad * 2, rad * 2);
+        __expandStandardExtent(x + rad, y + rad, mCurrentLine.thickness);
         var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, __getCurrentLineJobs(),
             null, SnapJob.getCircleJob(x, y, rad));
         addDrawable(drawable);
     }
 
     private function __drawRect (x: Float, y: Float, width: Float, height: Float, rx: Float, ry: Float):Void {
-        __expandStandardExtent(width, height);
+        __expandStandardExtent(x + width, y + height, mCurrentLine.thickness);
         var drawable: Drawable = new Drawable (null, mFillColour, mFillAlpha, mSolidGradient, mBitmap, __getCurrentLineJobs(),
             null, SnapJob.getRectJob(x, y, width, height, rx, ry));
         addDrawable(drawable);
@@ -1133,8 +1133,8 @@ class Graphics {
 //                        }
 
             element.attr({
-                fill:  Lib.snap.image(bitmap.texture_buffer.toDataURL(), 0, 0, bitmap.texture_buffer.width, bitmap.texture_buffer.height)
-                    .pattern(0, 0, bitmap.texture_buffer.width, bitmap.texture_buffer.height)
+                fill:  Lib.snap.image(bitmap.texture_buffer.toDataURL(), 0, 0, 1, 1)
+                    .pattern(0, 0, "100%", "100%").attr({patternContentUnits: "objectBoundingBox", patternUnits : "objectBoundingBox"})
             });
 
         } else {
