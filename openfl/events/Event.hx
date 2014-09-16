@@ -34,6 +34,7 @@ class Event {
 	public static var TAB_INDEX_CHANGE = "tabIndexChange";
 	public static var UNLOAD = "unload";
 	public static var SOUND_COMPLETE = "soundComplete";
+    public static var PASTE = "paste";
 	
 	public var bubbles (default, null):Bool;
 	public var cancelable (default, null):Bool;

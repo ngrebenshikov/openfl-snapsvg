@@ -151,6 +151,7 @@ class TextField extends InteractiveObject {
 
         addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
         stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+        addEventListener(Event.PASTE, onPaste);
 	}
 	
 	
@@ -237,10 +238,22 @@ class TextField extends InteractiveObject {
     }
 	
 	
-	public function getTextFormat (beginIndex:Int = 0, endIndex:Int = 0):TextFormat {
-		
-		return new TextFormat (mFace, mTextHeight, mTextColour);
-		
+	public function getTextFormat (beginIndex:Int = -1, endIndex:Int = -1):TextFormat {
+        var format = new TextFormat (mFace, mTextHeight, mTextColour);
+        if (beginIndex > 0 && beginIndex < text.length) {
+
+            if (null != __textFormats) {
+                var formats = Lambda.array(Lambda.map(__textFormats, function(f) { return f; }));
+                formats.reverse();
+                for(f in formats) {
+                    if (beginIndex >= f.begin && beginIndex <= f.end) {
+                        format = f.format;
+                        break;
+                    }
+                }
+            }
+        }
+		return format;
 	}
 	
 	
@@ -761,7 +774,7 @@ class TextField extends InteractiveObject {
 		}
 
         var el: js.html.svg.TextElement = cast(mTextSnap.node);
-        if (selectionBeginIndex > 0) {
+        if (selectionBeginIndex >= 0) {
             el.selectSubString(selectionBeginIndex, selectionEndIndex - selectionBeginIndex+1);
         } else {
             el.selectSubString(0, 0);
@@ -772,7 +785,7 @@ class TextField extends InteractiveObject {
     private var caretTimer: Timer;
     private function onFocus(e: Dynamic) {
         if (e.type == FocusEvent.FOCUS_IN) {
-            caretTimer = new Timer(500);
+            caretTimer = new Timer(400);
             caretTimer.run = showCaret;
         } else {
             if (null != caretTimer) {
@@ -821,16 +834,18 @@ class TextField extends InteractiveObject {
             if (isSelected()) {
                 removeSelectedText();
             } else {
-                removeText(caretIndex,caretIndex);
+                removeText(caretIndex-1,caretIndex-1);
             }
             clearSelection();
         } else if (evt.keyCode == Keyboard.DELETE && caretIndex < text.length) {
             if (isSelected()) {
                 removeSelectedText();
             } else {
-                removeText(caretIndex+1, caretIndex+1);
+                removeText(caretIndex, caretIndex);
             }
             clearSelection();
+        } else if ((evt.keyCode == Keyboard.V && evt.ctrlKey) || (!evt.ctrlKey && evt.shiftKey && evt.keyCode == Keyboard.INSERT)) {
+            onPaste(null);
         }
 
         if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
@@ -855,10 +870,11 @@ class TextField extends InteractiveObject {
         } else {
             clearSelection();
         }
+        untyped console.log(selectionBeginIndex + ' - ' + selectionEndIndex);
     }
 
     private function isSelected() {
-        return selectionBeginIndex >=0 || selectionEndIndex >= 0;
+        return selectionBeginIndex >=0 && selectionEndIndex >= 0 && selectionEndIndex >= selectionBeginIndex;
     }
 
     private function clearSelection() {
@@ -872,9 +888,42 @@ class TextField extends InteractiveObject {
         }
     }
 
+    private function insertText(s: String, index: Int) {
+        text = text.substring(0,index) + s + text.substring(index,text.length);
+        if (null != __textFormats) for(f in __textFormats) {
+            if (index < f.begin) {
+                f.begin += s.length;
+            } else if (index >= f.begin && index <= f.end) {
+                f.end += s.length;
+            }
+        }
+    }
+
     private function removeText(beginIndex: Int, endIndex: Int) {
+        var length = endIndex - beginIndex + 1;
+
+        untyped console.log('remove ' + beginIndex + ' - ' + endIndex);
+
+        if (null != __textFormats) for(f in __textFormats) {
+            untyped console.log('format before' + f.begin + ' - ' + f.end);
+            if (f.begin > endIndex) {
+                f.begin -= length;
+                f.end -= length;
+            } else if (f.end < beginIndex) {
+                //Do nothing
+            } else if (f.begin <= beginIndex && f.end >= endIndex) {
+                f.end -= length;
+            } else if (f.begin > beginIndex && f.end >= endIndex) {
+                f.begin -= f.begin - beginIndex + 1;
+                f.end -= length;
+            } else if (f.begin <= beginIndex && f.end < endIndex) {
+                f.end -= f.end - beginIndex + 1;
+            }
+            untyped console.log('format after' + f.begin + ' - ' + f.end);
+        }
+
         if (text.length > 1) {
-            text = text.substring(0,beginIndex-1) + text.substring(endIndex,text.length);
+            text = text.substr(0,beginIndex) + text.substr(endIndex+1,text.length-endIndex);
             caretIndex = beginIndex;
         } else {
             text = '';
@@ -885,7 +934,7 @@ class TextField extends InteractiveObject {
 
     private function onKeyPress(e: Dynamic) {
         if (null != e.charCode && 31 < e.charCode && !e.ctrlKey && !e.altKey && !e.controlKey && !e.commandKey) {
-            text = text.substring(0,caretIndex) + String.fromCharCode(e.charCode) + text.substring(caretIndex,text.length);
+            insertText(String.fromCharCode(e.charCode), caretIndex);
             caretIndex += if (caretIndex < 0) 2 else 1;
         }
         e.stopPropagation();
@@ -928,6 +977,10 @@ class TextField extends InteractiveObject {
             selectionBeginIndex = index;
             selectionEndIndex = caretIndex-1;
         }
+    }
+
+    private function onPaste(e: Dynamic) {
+        //TODO: implement
     }
 
 

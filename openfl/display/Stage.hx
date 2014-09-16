@@ -1,6 +1,7 @@
 package openfl.display;
 
 
+import js.html.DataTransferItem;
 import js.html.Element;
 import haxe.ds.StringMap;
 import snap.Snap;
@@ -362,6 +363,16 @@ class Stage extends DisplayObjectContainer {
 
                 __onKeyPress (keyCode, true, evt.charCode, evt.ctrlKey || evt.metaKey, evt.altKey, evt.shiftKey, evt.keyLocation);
 
+            case "paste":
+                var windowClipboardData = untyped window.clipboardData;
+                var eventClipboardData = untyped evt.clipboardData;
+                var clipboardData: Dynamic = if (null != windowClipboardData) windowClipboardData else eventClipboardData;
+                if (null != clipboardData) {
+//                    untyped console.log(clipboardData.types.length);
+//                    untyped console.log(clipboardData.getData('text/plain'));
+                    __onPaste();
+                }
+
 			case "touchstart":
 				
 				var evt:js.html.TouchEvent = cast evt;
@@ -572,6 +583,23 @@ class Stage extends DisplayObjectContainer {
             var evt = new KeyboardEvent (KeyboardEvent.KEY_PRESS, true, false, inChar, code, keyLocation, ctrl, alt, shift);
             obj.__fireEvent (evt);
         }
+    }
+
+    private function __onPaste() {
+        var stack = new Array <InteractiveObject> ();
+
+        if (__focusObject == null) {
+            this.__getInteractiveObjectStack (stack);
+        } else {
+            __focusObject.__getInteractiveObjectStack (stack);
+        }
+
+        if (stack.length > 0) {
+            var obj = stack[0];
+            var evt = new Event(Event.PASTE);
+            obj.__fireEvent (evt);
+        }
+
     }
 
 	private function __onFocus (target:InteractiveObject):Void {
