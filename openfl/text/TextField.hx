@@ -289,7 +289,9 @@ class TextField extends InteractiveObject {
                     //Commented yet because WebKit doesn't support it correctly
                     //TODO: make it working for webkit
                     //svgBuf.add('textLength="' + span.rect.width+ 'px" ');
-                    if (firstSpan || span.startFromNewLine) {
+                    if (firstSpan) {
+                        svgBuf.add('x="0" dy="' + paragraph.firstLineHeight+ 'px" ');
+                    } else if (span.startFromNewLine) {
                         svgBuf.add('x="0" dy="' + span.rect.height+ 'px" ');
                     }
                 }
@@ -606,7 +608,6 @@ class TextField extends InteractiveObject {
                         var row_end = row.splice (last_word_break, row.length - last_word_break);
                         var head = row.slice(0, last_word_break);
                         newSpans.push({ font: font, text: Lambda.fold(head, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(head)});
-
                         row = row_end;
                         tx -= last_word_break_width;
                         start_idx = last_word_char_idx;
@@ -639,6 +640,12 @@ class TextField extends InteractiveObject {
                 newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: newSpans.length == 0, rect: getRowDimension(row)});
                 row = [];
             }
+        }
+
+        paragraph.firstLineHeight = 0.0;
+        for (s in newSpans) {
+            if (s.startFromNewLine && paragraph.firstLineHeight > 0.0) break;
+            if (s.rect.height > paragraph.firstLineHeight) paragraph.firstLineHeight = s.rect.height;
         }
 
         paragraph.spans = newSpans;
@@ -706,7 +713,7 @@ class TextField extends InteractiveObject {
     }
 
     private function splitStringByInerval(str: String, beginIndex: Int, endIndex: Int): Array<String> {
-        return [str.substring(0, beginIndex), str.substring(beginIndex, endIndex), str.substring(endIndex, str.length)];
+        return [str.substr(0, beginIndex), str.substr(beginIndex, endIndex-beginIndex+1), str.substr(endIndex+1, str.length - endIndex)];
     }
 
 	override public function toString ():String {
@@ -774,10 +781,12 @@ class TextField extends InteractiveObject {
 		}
 
         var el: js.html.svg.TextElement = cast(mTextSnap.node);
-        if (selectionBeginIndex >= 0) {
-            el.selectSubString(selectionBeginIndex, selectionEndIndex - selectionBeginIndex+1);
-        } else {
-            el.selectSubString(0, 0);
+        if (el.textContent.length > 0) {
+            if (selectionBeginIndex >= 0) {
+                el.selectSubString(selectionBeginIndex, selectionEndIndex - selectionBeginIndex+1);
+            } else {
+                el.selectSubString(0, 0);
+            }
         }
 		
 	}
@@ -870,7 +879,6 @@ class TextField extends InteractiveObject {
         } else {
             clearSelection();
         }
-        untyped console.log(selectionBeginIndex + ' - ' + selectionEndIndex);
     }
 
     private function isSelected() {
@@ -902,10 +910,7 @@ class TextField extends InteractiveObject {
     private function removeText(beginIndex: Int, endIndex: Int) {
         var length = endIndex - beginIndex + 1;
 
-        untyped console.log('remove ' + beginIndex + ' - ' + endIndex);
-
         if (null != __textFormats) for(f in __textFormats) {
-            untyped console.log('format before' + f.begin + ' - ' + f.end);
             if (f.begin > endIndex) {
                 f.begin -= length;
                 f.end -= length;
@@ -919,7 +924,6 @@ class TextField extends InteractiveObject {
             } else if (f.begin <= beginIndex && f.end < endIndex) {
                 f.end -= f.end - beginIndex + 1;
             }
-            untyped console.log('format after' + f.begin + ' - ' + f.end);
         }
 
         if (text.length > 1) {
@@ -1464,6 +1468,7 @@ typedef Span = {
 typedef Paragraph = {
 	var align:TextFormatAlign;
 	var spans: Array<Span>;
+    var firstLineHeight: Float;
 }
 
 typedef Paragraphs = Array<Paragraph>;
