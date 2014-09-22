@@ -1115,7 +1115,6 @@ class Graphics {
         if (solidGradient != null) {
             element.attr({ fill: createCanvasGradient(solidGradient) });
         } else if (bitmap != null && ((bitmap.flags & BMP_REPEAT) > 0)) {
-
 //TODO: uncomment
 //                        var m = bitmap.matrix;
 //
@@ -1131,12 +1130,23 @@ class Graphics {
 //                            untyped ctx.webkitImageSmoothingEnabled = false;
 //
 //                        }
-
+            var bBox: Dynamic = element.getBBox();
+            element.attr({
+                fill: Lib.snap.image(bitmap.texture_buffer.toDataURL(), 0, 0, bitmap.texture_buffer.width, bitmap.texture_buffer.height)
+                    .pattern(bBox.x, bBox.y, bitmap.texture_buffer.width, bitmap.texture_buffer.height).attr({
+                        patternContentUnits: "userSpaceOnUse",
+                        patternUnits : "userSpaceOnUse",
+                        viewBox : "0 0 " + Std.string(bitmap.texture_buffer.width) + " " + Std.string(bitmap.texture_buffer.height)
+                })
+            });
+        } else if (bitmap != null && ((bitmap.flags & BMP_REPEAT) == 0)) {
             element.attr({
                 fill:  Lib.snap.image(bitmap.texture_buffer.toDataURL(), 0, 0, 1, 1)
-                    .pattern(0, 0, "100%", "100%").attr({patternContentUnits: "objectBoundingBox", patternUnits : "objectBoundingBox"})
+                    .pattern(0, 0, "100%", "100%").attr({
+                        patternContentUnits: "objectBoundingBox",
+                        patternUnits : "objectBoundingBox"
+                })
             });
-
         } else {
             // Alpha value gets clamped in [0;1] range.
             element.attr({ fill: createCanvasColor (fillColour, Math.min (1.0, Math.max (0.0, fillAlpha)))});
@@ -1256,7 +1266,8 @@ class Graphics {
 
 
 
-                if (bitmap != null && ((bitmap.flags & BMP_REPEAT) == 0)) {
+                //What is this?
+                /*if (bitmap != null && ((bitmap.flags & BMP_REPEAT) == 0)) {
 //TODO: uncomment
 //
 //                    ctx.clip ();
@@ -1279,7 +1290,7 @@ class Graphics {
 //                    ctx.drawImage (img, 0, 0);
 
                     __snap.append(Lib.snap.image(bitmap.texture_buffer.toDataURL(), 0, 0, bitmap.texture_buffer.width, bitmap.texture_buffer.height));
-                }
+                }*/
 
             }
 
