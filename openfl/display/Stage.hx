@@ -1,6 +1,11 @@
 package openfl.display;
 
 
+import StringTools;
+import openfl.events.PasteEvent;
+import haxe.Timer;
+import js.html.DOMWindow;
+import js.html.Document;
 import js.html.DataTransferItem;
 import js.html.Element;
 import haxe.ds.StringMap;
@@ -283,12 +288,22 @@ class Stage extends DisplayObjectContainer {
 		return true;
 		
 	}
-	
-	
-	public function __processStageEvent (evt:js.html.Event):Void {
-		
+
+
+    private function getTextFromPasteElement() {
+        var document: Document = untyped window.document;
+        var curFocus = document.activeElement;
+        var input = document.getElementById('openfl-snapsvg-input');
+        return if (null == input.innerText || '' == input.innerText) StringTools.trim(input.innerHTML) else input.innerText;
+    }
+
+    public function __processStageEvent (evt:js.html.Event):Void {
+
+        var document: Document = untyped window.document;
+        var curFocus = document.activeElement;
+
 		evt.stopPropagation ();
-		
+
 		switch (evt.type) {
 			
 			case "resize":
@@ -296,23 +311,16 @@ class Stage extends DisplayObjectContainer {
 				__onResize(Lib.__getWidth (), Lib.__getHeight ());
 			
 			case "focus":
-				
 				__onFocus (this);
-				
 				if (!__focusObjectActivated) {
-					
 					__focusObjectActivated = true;
 					dispatchEvent (new Event (Event.ACTIVATE));
-					
 				}
 			
 			case "blur":
-				
 				if (__focusObjectActivated) {
-					
 					__focusObjectActivated = false;
 					dispatchEvent (new Event (Event.DEACTIVATE));
-					
 				}
 			
 			case "mousemove":
@@ -367,11 +375,7 @@ class Stage extends DisplayObjectContainer {
                 var windowClipboardData = untyped window.clipboardData;
                 var eventClipboardData = untyped evt.clipboardData;
                 var clipboardData: Dynamic = if (null != windowClipboardData) windowClipboardData else eventClipboardData;
-                if (null != clipboardData) {
-//                    untyped console.log(clipboardData.types.length);
-//                    untyped console.log(clipboardData.getData('text/plain'));
-                    __onPaste();
-                }
+                __onPaste(if (null != clipboardData && clipboardData.types.length > 0) clipboardData.getData('text/plain') else getTextFromPasteElement());
 
 			case "touchstart":
 				
@@ -408,11 +412,46 @@ class Stage extends DisplayObjectContainer {
 			default:
 			
 		}
-		
 	}
 	
-	
+    private function stopPropagationOfEvent(e: Dynamic) {
+        e.stopPropagation();
+    }
+
 	public function __queueStageEvent (evt:js.html.Event):Void {
+        var target: Element = cast evt.target;
+
+        if (evt.type == 'keydown') {
+            var e: KeyboardEvent = cast evt;
+            if (e.keyCode == Keyboard.V && (e.ctrlKey || e.commandKey || e.controlKey || cast(e).metaKey)) {
+                var document: Document = untyped window.document;
+                var curFocus = document.activeElement;
+                var input = document.getElementById('openfl-snapsvg-input');
+                input.innerText = '';
+                e.stopImmediatePropagation();
+
+                input.addEventListener('focusin', stopPropagationOfEvent);
+                input.addEventListener('focusout', stopPropagationOfEvent);
+                input.addEventListener('beforedeactivate', stopPropagationOfEvent);
+
+                curFocus.blur();
+                input.focus();
+                var t = new Timer(30);
+                t.run = function() {
+                    input.blur();
+                    curFocus.focus();
+
+                    input.addEventListener('focusin', stopPropagationOfEvent);
+                    input.addEventListener('focusout', stopPropagationOfEvent);
+                    input.addEventListener('beforedeactivate', stopPropagationOfEvent);
+
+                    t.stop();
+                }
+            }
+        }
+
+        if (target.id == 'openfl-snapsvg-input' && evt.type != 'paste') return;
+
 		__uIEventsQueue[__uIEventsQueueIndex++] = evt;
 	}
 	
@@ -585,7 +624,7 @@ class Stage extends DisplayObjectContainer {
         }
     }
 
-    private function __onPaste() {
+    private function __onPaste(text: String) {
         var stack = new Array <InteractiveObject> ();
 
         if (__focusObject == null) {
@@ -596,10 +635,9 @@ class Stage extends DisplayObjectContainer {
 
         if (stack.length > 0) {
             var obj = stack[0];
-            var evt = new Event(Event.PASTE);
+            var evt = new PasteEvent(text);
             obj.__fireEvent (evt);
         }
-
     }
 
 	private function __onFocus (target:InteractiveObject):Void {

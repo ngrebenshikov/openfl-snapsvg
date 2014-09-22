@@ -1,6 +1,7 @@
 package openfl.text;
 
 
+import js.html.Document;
 import js.html.ClientRect;
 import haxe.Timer;
 import js.html.svg.SVGElement;
@@ -58,9 +59,13 @@ class TextField extends InteractiveObject {
 	public var restrict:String;
 	public var scrollH:Int;
 	public var scrollV:Int;
+
 	public var selectable:Bool;
 	public var selectionBeginIndex:Int;
 	public var selectionEndIndex:Int;
+    private var svgSelectionBeginIndex: Int;
+    private var svgSelectionEndIndex: Int;
+
 	public var sharpness:Float;
 	public var text (get_text, set_text):String;
 	public var textColor (get_textColor, set_textColor):Int;
@@ -115,8 +120,8 @@ class TextField extends InteractiveObject {
 		mFace = mDefaultFont;
 		mAlign = TextFormatAlign.LEFT;
 		mParagraphs = new Paragraphs ();
-		mSelStart = selectionBeginIndex = -1;
-		mSelEnd = selectionEndIndex = -1;
+		svgSelectionBeginIndex = selectionBeginIndex = -1;
+		svgSelectionEndIndex = selectionEndIndex = -1;
 		scrollH = 0;
 		scrollV = 1;
 
@@ -329,8 +334,13 @@ class TextField extends InteractiveObject {
             firstParagraph = false;
         }
 
+        //untyped console.log(svgBuf.toString());
+
         var textElement: js.html.svg.TextElement = cast(mTextSnap.node);
         mTextSnap.append(Snap.parse(svgBuf.toString()));
+
+        //var document: Document = untyped window.document;
+        //document.appendChild(document.createElement('div'));
 
         textElement.setAttribute("font-family", Std.string(mFace));
         textElement.setAttribute("font-size", Std.string(mTextHeight)+'px');
@@ -409,7 +419,7 @@ class TextField extends InteractiveObject {
 			}
 		}
         __textChanged = true;
-		Rebuild();
+        Rebuild();
         __textChanged = false;
 		
 	}
@@ -782,10 +792,14 @@ class TextField extends InteractiveObject {
 
         var el: js.html.svg.TextElement = cast(mTextSnap.node);
         if (el.textContent.length > 0) {
-            if (selectionBeginIndex >= 0) {
-                el.selectSubString(selectionBeginIndex, selectionEndIndex - selectionBeginIndex+1);
-            } else {
-                el.selectSubString(0, 0);
+            if (selectionBeginIndex != svgSelectionBeginIndex || selectionEndIndex != svgSelectionEndIndex) {
+                if (selectionBeginIndex >= 0) {
+                    el.selectSubString(selectionBeginIndex, selectionEndIndex - selectionBeginIndex+1);
+                } else {
+                    el.selectSubString(0, 0);
+                }
+                svgSelectionBeginIndex = selectionBeginIndex;
+                svgSelectionEndIndex = selectionEndIndex;
             }
         }
 		
@@ -853,8 +867,6 @@ class TextField extends InteractiveObject {
                 removeText(caretIndex, caretIndex);
             }
             clearSelection();
-        } else if ((evt.keyCode == Keyboard.V && evt.ctrlKey) || (!evt.ctrlKey && evt.shiftKey && evt.keyCode == Keyboard.INSERT)) {
-            onPaste(null);
         }
 
         if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
@@ -897,14 +909,15 @@ class TextField extends InteractiveObject {
     }
 
     private function insertText(s: String, index: Int) {
-        text = text.substring(0,index) + s + text.substring(index,text.length);
         if (null != __textFormats) for(f in __textFormats) {
             if (index < f.begin) {
                 f.begin += s.length;
+                f.end += s.length;
             } else if (index >= f.begin && index <= f.end) {
                 f.end += s.length;
             }
         }
+        text = text.substring(0,index) + s + text.substring(index,text.length);
     }
 
     private function removeText(beginIndex: Int, endIndex: Int) {
@@ -975,16 +988,17 @@ class TextField extends InteractiveObject {
     private function onMouseMove(e: Dynamic) {
         var index: Int = getCharIndexAtPoint(e.localX, e.localY);
         if (index > caretIndex) {
-            selectionBeginIndex = caretIndex;
-            selectionEndIndex = index-1;
+            svgSelectionBeginIndex = selectionBeginIndex = caretIndex;
+            svgSelectionEndIndex = selectionEndIndex = index-1;
         } else if (index < selectionBeginIndex && index < selectionEndIndex) {
-            selectionBeginIndex = index;
-            selectionEndIndex = caretIndex-1;
+            svgSelectionBeginIndex = selectionBeginIndex = index;
+            svgSelectionEndIndex = selectionEndIndex = caretIndex-1;
         }
     }
 
     private function onPaste(e: Dynamic) {
-        //TODO: implement
+        insertText(e.text, caretIndex);
+        caretIndex += e.text.length + (if (caretIndex < 0) 1 else 0);
     }
 
 
