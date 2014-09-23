@@ -421,7 +421,6 @@ class TextField extends InteractiveObject {
         __textChanged = true;
         Rebuild();
         __textChanged = false;
-		
 	}
 	
 	
@@ -1233,6 +1232,10 @@ class TextField extends InteractiveObject {
 	public function set_text (inText:String):String {
 		
 		mText = Std.string(inText);
+        if (!multiline) {
+            mText = StringTools.replace(mText, '\n', '');
+            trace(mText);
+        }
 		//mHTMLText = inText;
 		mHTMLMode = false;
 		RebuildText ();
