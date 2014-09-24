@@ -115,6 +115,8 @@ class TextField extends InteractiveObject {
         var graphicsSnap = Lib.snap.group().addClass("graphics");
         snap.append(graphicsSnap);
         __graphics = new Graphics(graphicsSnap);
+        __graphics.displayObject = this;
+
         mTextSnap = Lib.snap.text(0,0, "");
         snap.append(mTextSnap);
 		mFace = mDefaultFont;
@@ -667,6 +669,7 @@ class TextField extends InteractiveObject {
 	public function setSelection (beginIndex:Int, endIndex:Int) {
         selectionBeginIndex = beginIndex;
         selectionEndIndex = endIndex;
+        renderNextWake();
 	}
 	
 	
@@ -831,6 +834,7 @@ class TextField extends InteractiveObject {
                 __graphics.flush();
             }
             caretTimer.run = hideCaret;
+            renderNextWake();
         }
     }
 
@@ -838,6 +842,7 @@ class TextField extends InteractiveObject {
         __graphics.clear();
         drawBackgoundAndBorder();
         caretTimer.run = showCaret;
+        renderNextWake();
     }
 
 
@@ -1234,7 +1239,6 @@ class TextField extends InteractiveObject {
 		mText = Std.string(inText);
         if (!multiline) {
             mText = StringTools.replace(mText, '\n', '');
-            trace(mText);
         }
 		//mHTMLText = inText;
 		mHTMLMode = false;

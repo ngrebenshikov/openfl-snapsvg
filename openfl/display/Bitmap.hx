@@ -45,7 +45,8 @@ class Bitmap extends DisplayObject {
 		
 		if (__graphics == null) {
             __graphics = new Graphics();
-		}
+            __graphics.displayObject = this;
+        }
 		
 		if (bitmapData != null) {
 			__render();

@@ -1,6 +1,7 @@
 package openfl.display;
 
 
+import haxe.ds.ObjectMap;
 import snap.Snap;
 import openfl.errors.RangeError;
 import openfl.events.Event;
@@ -27,7 +28,8 @@ class DisplayObjectContainer extends InteractiveObject {
 	public function new () {
 		
 		__children = new Array<DisplayObject> ();
-		mouseChildren = true;
+        renderList = new ObjectMap<DisplayObject, Bool>();
+        mouseChildren = true;
 		tabChildren = true;
 		
 		super ();
@@ -69,6 +71,8 @@ class DisplayObjectContainer extends InteractiveObject {
 		}
 		
 		__children.push (object);
+
+        addToRenderList(object);
 		
 		return object;
 	}
@@ -102,7 +106,7 @@ class DisplayObjectContainer extends InteractiveObject {
 			object.parent = this;
 			
 		}
-		
+		addToRenderList(object);
 		return object;
 		
 	}
@@ -532,26 +536,18 @@ class DisplayObjectContainer extends InteractiveObject {
 		
 		__combinedAlpha = (parent != null ? parent.__combinedAlpha * alpha : alpha);
 		
-		for (child in __children) {
-			
+		for (child in renderList.keys()) {
 			if (child.__visible) {
-				
 				if (clipRect != null) {
-					
 					if (child._matrixInvalid || child._matrixChainInvalid) {
-						
 						//child.invalidateGraphics ();
 						child.__validateMatrix ();
-						
 					}
-					
 				}
-				
 				child.__render (inMask, clipRect);
-				
 			}
-			
 		}
+        renderList = new ObjectMap<DisplayObject, Bool>();
 		
 		if (__addedChildren) {
 			__addedChildren = false;
@@ -574,20 +570,20 @@ class DisplayObjectContainer extends InteractiveObject {
 	
 	// Getters & Setters
 	
-	override private function set_filters (filters:Array<Dynamic>):Array<Dynamic> {
-		
-		super.set_filters (filters);
-		
-		// TODO: check if we need to merge filters with children.
-		for (child in __children) {
-			
-			child.filters = filters;
-			
-		}
-		
-		return filters;
-		
-	}
+//	override private function set_filters (filters:Array<Dynamic>):Array<Dynamic> {
+//
+//		super.set_filters (filters);
+//
+//		// TODO: check if we need to merge filters with children.
+//		for (child in __children) {
+//
+//			child.filters = filters;
+//
+//		}
+//
+//		return filters;
+//
+//	}
 	
 	
 	override private function set___combinedVisible (inVal:Bool):Bool {
@@ -615,7 +611,6 @@ class DisplayObjectContainer extends InteractiveObject {
 	
 	
 	override private function set_visible (inVal:Bool):Bool {
-		
 		__combinedVisible = parent != null ? parent.__combinedVisible && inVal : inVal;
 		return super.set_visible (inVal);
 		
@@ -627,5 +622,11 @@ class DisplayObjectContainer extends InteractiveObject {
 		return inValue;
 	}
 	
-		
+    private var renderList: haxe.ds.ObjectMap<DisplayObject, Bool>;
+    public function addToRenderList(o: DisplayObject) {
+        if (!renderList.exists(o)) {
+            renderList.set(o, true);
+            renderNextWake();
+        }
+    }
 }

@@ -14,7 +14,9 @@ class Shape extends DisplayObject {
 	public function new () {
 		super ();
         this.__graphics = new Graphics(snap);
-	}
+        this.__graphics.displayObject = this;
+
+    }
 	
 	override public function toString ():String {
 		return "[Shape name=" + this.name + " id=" + ___id + "]";

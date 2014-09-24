@@ -93,9 +93,12 @@ class Graphics {
     private var mSolidGradient:Grad;
     private var nextDrawIndex:Int;
 
-    private var __changed:Bool;
+    private var __changedData: Bool;
+    public var __changed(get, set):Bool;
     private var __clearNextCycle:Bool;
     private var _padding:Float;
+
+    public var displayObject: DisplayObject;
 
 
     public function new (snap: SnapElement = null) {
@@ -407,7 +410,7 @@ class Graphics {
             mCurrentLine.point_idx1 = pid;
 
         }
-
+        __changed = true;
     }
 
 
@@ -511,7 +514,7 @@ class Graphics {
             }
 
         }
-
+        __changed = true;
     }
 
 
@@ -694,6 +697,7 @@ class Graphics {
         }
 
         if (!mFilling) closePolygon (false);
+        __changed = true;
 
     }
 
@@ -716,7 +720,7 @@ class Graphics {
             mPoints.push (new GfxPoint (mPenX, mPenY, 0.0, 0.0, MOVE));
 
         }
-
+        __changed = true;
     }
 
 
@@ -1318,7 +1322,19 @@ class Graphics {
         pathString.add("Z");
     }
 
+    private function get___changed(): Bool {
+        return __changedData;
+    }
 
+    private function set___changed(v: Bool): Bool {
+        if (v != __changedData) {
+            __changedData = v;
+            if (null != displayObject) {
+                displayObject.renderNextWake();
+            }
+        }
+        return __changedData;
+    }
 }
 
 

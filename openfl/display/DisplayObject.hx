@@ -39,8 +39,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private static inline var ALL_RENDER_FLAGS:Int = GRAPHICS_INVALID | TRANSFORM_INVALID | BOUNDS_INVALID;
 	
 	public var accessibilityProperties:AccessibilityProperties;
-	public var alpha:Float;
-	public var blendMode:BlendMode;
+	public var alpha(default, set_alpha):Float;
+	public var blendMode(default, set_blendMode):BlendMode;
 	public var cacheAsBitmap:Bool;
 	public var filters (get_filters, set_filters):Array<Dynamic>;
 	public var height (get_height, set_height):Float;
@@ -93,7 +93,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
     public var snap: SnapElement;
     private var __clipRect: SnapElement;
 
-	
 	public function new () {
 		
 		super (null);
@@ -131,21 +130,15 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	public override function dispatchEvent (event:Event):Bool {
 		
 		var result = __dispatchEvent (event);
-		
 		if (event.__getIsCancelled ()) {
-			
 			return true;
-			
 		}
 		
 		if (event.bubbles && parent != null) {
-			
 			parent.dispatchEvent (event);
-			
 		}
 		
 		return result;
-		
 	}
 	
 	
@@ -231,12 +224,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			return currentBounds.intersects (targetBounds);
 			
 		}
-		
 		return false;
-		
 	}
-	
-	
+
 	public function hitTestPoint (x:Float, y:Float, shapeFlag:Bool = false):Bool {
 		var boundingBox = (shapeFlag == null ? true : !shapeFlag);
 		
@@ -261,18 +251,15 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private inline function invalidateGraphics ():Void {
-		
 		var gfx = __getGraphics ();
 		if (gfx != null) gfx.__invalidate ();
-		
+		renderNextWake();
 	}
 	
 	
 	public function localToGlobal (point:Point):Point {
-		
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
 		return __getFullMatrix ().transformPoint (point);
-		
 	}
 	
 	
@@ -280,41 +267,30 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         if (null != snap) {
             Lib.__setSurfaceVisible (snap, inValue);
         }
+        renderNextWake();
 	}
 	
 	
 	override public function toString ():String {
-		
 		return "[DisplayObject name=" + this.name + " id=" + ___id + "]";
-		
 	}
 	
 	
 	private function validateBounds ():Void {
-		
 		if (_boundsInvalid) {
-			
 			var gfx = __getGraphics ();
-			
 			if (gfx == null) {
-				
 				__boundsRect.x = x;
 				__boundsRect.y = y;
 				__boundsRect.width = 0;
 				__boundsRect.height = 0;
-				
 			} else {
-				
 				__boundsRect = gfx.__extentWithFilters.clone ();
 				__setDimensions ();
 				gfx.boundsDirty = false;
-				
 			}
-			
 			__clearFlag (BOUNDS_INVALID);
-			
 		}
-		
 	}
 
 
@@ -353,6 +329,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			var evt = new Event (Event.ADDED_TO_STAGE, false, false);
 			dispatchEvent (evt);
 		}
+        renderNextWake();
 	}
 	
 
@@ -407,18 +384,14 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	@:noCompletion public function __contains (child:DisplayObject):Bool {
-		
 		return false;
-		
 	}
 	
 	
 	private function __dispatchEvent (event:Event):Bool {
 		
 		if (event.target == null) {
-			
 			event.target = this;
-			
 		}
 		
 		event.currentTarget = this;
@@ -578,10 +551,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			parent.__setFlag (BOUNDS_INVALID);
 			
 		}
-		
+        renderNextWake();
 	}
-	
-	
+
 	public function __invalidateMatrix (local:Bool = false):Void {
 		
 		/**
@@ -600,15 +572,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__setFlag (MATRIX_CHAIN_INVALID); // a parent has an invalid matrix
 			
 		}
-		
+        renderNextWake();
 	}
-	
-	
+
 	public function __isOnStage ():Bool {
         return Lib.__isOnStage (snap);
 	}
-	
-	
+
 	public function __matrixOverridden ():Void {
 		
 		__x = transform.matrix.tx;
@@ -619,8 +589,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		__invalidateBounds ();
 		
 	}
-	
-	
+
 	private function __removeFromStage ():Void {
         if (Lib.__isOnStage (snap)) {
             Lib.__removeSurface (snap);
@@ -628,15 +597,19 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
             var evt = new Event (Event.REMOVED_FROM_STAGE, false, false);
             dispatchEvent (evt);
         }
+        renderNextWake();
 	}
-	
-	
+
 	private function __render (inMask:SnapElement = null, clipRect:Rectangle = null) {
 		
 		if (!__combinedVisible) return;
 		
 		var gfx = __getGraphics ();
 		if (gfx == null) return;
+
+        if (null != mask) {
+            mask.__render(inMask, clipRect);
+        }
 
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix();
 		
@@ -665,7 +638,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
             if (null != mask && (null == snapMask || "none" == snapMask) ) {
                 if (null != mask.snap) {
                     if (!mask.__isOnStage()) {
-                        trace('add child');
                         Lib.current.addChild(mask);
                     }
                     snap.attr({mask:mask.snap});
@@ -688,7 +660,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
     private inline function getClipRect():SnapElement {
         if (null == __clipRect) {
             var url = snap.attr('clip-path');
-            if (null == url || 'none' == url) {
+            if (null == url || '' == url || 'none' == url) {
                 var rect = Lib.snap.rect(0,0,width,height,0,0);
                 snap.attr('clip-path', rect);
                 __clipRect = rect;
@@ -711,15 +683,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__height = __boundsRect.height * __scaleY;
 		}
 	}
-	
-	
+
 	private inline function __setFlag (mask:Int):Void {
 		
 		___renderFlags |= mask;
 		
 	}
-	
-	
+
 	private inline function __setFlagToValue (mask:Int, value:Bool):Void {
 		
 		if (value) {
@@ -733,23 +703,20 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 		
 	}
-	
-	
+
 	public inline function __setFullMatrix (inValue:Matrix):Matrix {
 		
 		return transform.__setFullMatrix (inValue);
 		
 	}
-	
-	
+
 	private inline function __setMatrix (inValue:Matrix):Matrix {
 		
 		transform.__setMatrix (inValue);
 		return inValue;
 		
 	}
-	
-	
+
 	private inline function __testFlag (mask:Int):Bool {
 		
 		return (___renderFlags & mask) != 0;
@@ -808,14 +775,12 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 	}
 
-	
 	// Getters & Setters
 	
 	private function get__bottommostSurface ():SnapElement {
         return snap;
 	}
-	
-	
+
 	private function get_filters ():Array<BitmapFilter> {
 		
 		if (__filters == null) return [];
@@ -830,8 +795,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		return result;
 		
 	}
-	
-	
+
 	private inline function get__boundsInvalid ():Bool {
 		
 		var gfx = __getGraphics ();
@@ -847,8 +811,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		}
 		
 	}
-	
-	
+
 	private function set_filters (filters:Array<Dynamic>):Array<Dynamic> {
 		
 		var oldFilterCount = (__filters == null) ? 0 : __filters.length;
@@ -868,8 +831,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		return filters;
 		
 	}
-	
-	
+
 	private function get_height ():Float {
 		
 		if (_boundsInvalid) {
@@ -881,8 +843,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		return __height;
 		
 	}
-	
-	
+
 	private function set_height (inValue:Float):Float {
 		
 		if (_boundsInvalid) validateBounds ();
@@ -906,22 +867,20 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__invalidateMatrix (true);
 			__invalidateBounds ();
 		}
-		
+
+        renderNextWake();
+
 		return inValue;
 		
 	}
-	
-	
+
 	private function get_mask ():DisplayObject {
 		
 		return __mask;
 		
 	}
-	
-	
-	private function set_mask (inValue:DisplayObject):DisplayObject {
-        trace('set_mask:' + Std.string(inValue != null));
 
+	private function set_mask (inValue:DisplayObject):DisplayObject {
 		if (__mask != null) {
 			__mask.__maskingObj = null;
             Lib.freeSnap.append(__mask.snap);
@@ -940,44 +899,35 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		__mask = inValue;
 
 		if (__mask != null) {
-//            if (!__mask.__isOnStage()) {
-//                trace('add child');
-//                Lib.current.addChild(__mask);
-//            }
 			__mask.__maskingObj = this;
 		}
-
+        renderNextWake();
 		return __mask;
 	}
-	
-	
+
 	private inline function get__matrixChainInvalid ():Bool {
 		
 		return __testFlag (MATRIX_CHAIN_INVALID);
 		
 	}
-	
-	
+
 	private inline function get__matrixInvalid():Bool {
 		
 		return __testFlag (MATRIX_INVALID);
 		
 	}
-	
-	
+
 	private function get_mouseX ():Float {
 		
 		return globalToLocal (new Point (stage.mouseX, 0)).x;
 		
 	}
-	
-	
+
 	private function get_mouseY ():Float {
 		
 		return globalToLocal (new Point (0, stage.mouseY)).y;
 		
 	}
-	
 	
 	private function set___combinedVisible (inValue:Bool):Bool {
 		
@@ -985,7 +935,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			
 			__combinedVisible = inValue;
 			setSurfaceVisible (inValue);
-			
+			renderNextWake();
 		}
 		
 		return __combinedVisible;
@@ -993,6 +943,18 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
+    private function set_alpha(inValue: Float): Float {
+        this.alpha = inValue;
+        renderNextWake();
+        return inValue;
+    }
+
+    private function set_blendMode(inValue: BlendMode): BlendMode {
+        this.blendMode = inValue;
+        renderNextWake();
+        return inValue;
+    }
+
 	private function set_parent (inValue:DisplayObjectContainer):DisplayObjectContainer {
 		
 		if (inValue == this.parent) return inValue;
@@ -1082,8 +1044,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private function set_scrollRect (inValue:Rectangle):Rectangle {
-		
 		__scrollRect = inValue;
+        renderNextWake();
 		return inValue;
 		
 	}
@@ -1133,7 +1095,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__visible = inValue;
 			setSurfaceVisible (inValue);
 		}
-		return __visible;
+        renderNextWake();
+        return __visible;
 	}
 	
 	
@@ -1228,7 +1191,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__invalidateBounds ();
 			
 		}
-		
+		renderNextWake();
 		return inValue;
 		
 	}
@@ -1296,6 +1259,12 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 //		}
 		
 	}
-	
-	
+
+    public function renderNextWake() {
+        if (null != parent) {
+            parent.addToRenderList(this);
+        } else if (null != __maskingObj) {
+            __maskingObj.renderNextWake();
+        }
+    }
 }

@@ -136,6 +136,7 @@ class Stage extends DisplayObjectContainer {
         var graphicsSnap = Lib.snap.group().addClass("graphics");
         snap.append(graphicsSnap);
         __graphics = new Graphics(graphicsSnap);
+        __graphics.displayObject = this;
 	}
 	
 	
@@ -472,7 +473,6 @@ class Stage extends DisplayObjectContainer {
 	private function __stageRender (?_) {
 		
 		if (!__stageActive) {
-
 			__onResize (__windowWidth, __windowHeight);
 			var event = new Event (Event.ACTIVATE);
 			event.target = this;
@@ -487,17 +487,13 @@ class Stage extends DisplayObjectContainer {
 				__processStageEvent (__uIEventsQueue[i]);
 			}
 		}
-
 		__uIEventsQueueIndex = 0;
 
-		var event = new Event (Event.ENTER_FRAME);
-		this.__broadcast (event);
+        this.dispatchEvent(new Event(Event.ENTER_FRAME));
 
 		if (__invalid) {
-			var event = new Event (Event.RENDER);
-			this.__broadcast (event);
+            this.dispatchEvent(new Event(Event.RENDER));
 		}
-		
 		this.__renderAll ();
         this.dispatchEvent(new Event(Event.STAGE_RENDERED));
 	}

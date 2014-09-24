@@ -31,7 +31,9 @@ class Sprite extends DisplayObjectContainer {
         var graphicsSnap = Lib.snap.group().addClass("graphics");
         snap.append(graphicsSnap);
 		__graphics = new Graphics(graphicsSnap);
-		buttonMode = false;
+        __graphics.displayObject = this;
+
+        buttonMode = false;
 		
 	}
 	
