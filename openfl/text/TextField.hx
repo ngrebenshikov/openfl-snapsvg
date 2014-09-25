@@ -1,6 +1,7 @@
 package openfl.text;
 
 
+import flash.geom.Rectangle;
 import js.html.Document;
 import js.html.ClientRect;
 import haxe.Timer;
@@ -291,7 +292,7 @@ class TextField extends InteractiveObject {
         for (paragraph in mParagraphs) {
             var firstSpan = true;
             for (span in paragraph.spans) {
-                svgBuf.add('<tspan ');
+                svgBuf.add('<tspan xml:space="preserve" height="' + span.rect.height + 'px" ');
                 if (null != span.rect) {
                     //Commented yet because WebKit doesn't support it correctly
                     //TODO: make it working for webkit
@@ -336,13 +337,8 @@ class TextField extends InteractiveObject {
             firstParagraph = false;
         }
 
-        //untyped console.log(svgBuf.toString());
-
         var textElement: js.html.svg.TextElement = cast(mTextSnap.node);
         mTextSnap.append(Snap.parse(svgBuf.toString()));
-
-        //var document: Document = untyped window.document;
-        //document.appendChild(document.createElement('div'));
 
         textElement.setAttribute("font-family", Std.string(mFace));
         textElement.setAttribute("font-size", Std.string(mTextHeight)+'px');
@@ -393,11 +389,15 @@ class TextField extends InteractiveObject {
 
     private function getCaretRect(): Rectangle {
         var textElement: TextElement = cast(mTextSnap.node);
-        if (text.length > 0 && caretIndex >= 0) {
-            var extent = textElement.getExtentOfChar(if (caretIndex < text.length) caretIndex else caretIndex-1);
-            var x = Std.int(if (caretIndex < text.length) extent.x else extent.x+extent.width-1)+0.5;
-            return new Rectangle(x, extent.y, 1, extent.height);
-        } else {
+        try {
+            if (text.length > 0 && caretIndex >= 0) {
+                var extent = textElement.getExtentOfChar(if (caretIndex < text.length) caretIndex else caretIndex-1);
+                var x = Std.int(if (caretIndex < text.length) extent.x else extent.x+extent.width-1)+0.5;
+                return new Rectangle(x, extent.y, 1, extent.height);
+            } else {
+                return new Rectangle(0, 0, 1, mTextHeight*1.4);
+            }
+        } catch(e: Dynamic) {
             return new Rectangle(0, 0, 1, mTextHeight*1.4);
         }
     }
@@ -415,9 +415,8 @@ class TextField extends InteractiveObject {
 		if (!mHTMLMode) {
 			var font = FontInstance.CreateSolid (mFace, mTextHeight, mTextColour, 1.0);
 			var paras = mText.split ("\n");
-
             for (paragraph in paras) {
-				mParagraphs.push ( cast { align: mAlign, spans: [ { font : font, text: paragraph, format: defaultTextFormat, startFromNewLine: false } ] } );
+				mParagraphs.push ( cast { align: mAlign, spans: [ { font : font, text: paragraph + if (mText.length > 0) "\n" else '', format: defaultTextFormat, startFromNewLine: false } ] } );
 			}
 		}
         __textChanged = true;
@@ -589,7 +588,7 @@ class TextField extends InteractiveObject {
         for (span in paragraph.spans) {
 
             var text = span.text;
-            var font = if (null != span.format)
+            var font: FontInstance = if (null != span.format)
                 FontInstance.CreateSolid(
                     if (null != span.format.font) span.format.font else span.font.GetFace(),
                     if (null != span.format.size) Std.int(span.format.size) else span.font.height,
@@ -603,12 +602,16 @@ class TextField extends InteractiveObject {
             last_word_break_width = row_width;
             last_word_char_idx = charIdx;
 
-            for (ch in 0...text.length) {
+//            if (text.length <= 0) {
+//                newSpans.push({ font: font, text: '&nbsp;', format: span.format, startFromNewLine: true, rect: new Rectangle(0,0,0,Math.floor(font.height*1.2))});
+//            }
 
+            var prevG = 0;
+            for (ch in 0...text.length) {
                 var g = text.charCodeAt(ch);
                 var adv = font.__getAdvance(g);
 
-                if (g == 32) {
+                if (g == 32 && prevG != 32) {
                     last_word_break = row.length;
                     last_word_break_width = tx;
                     last_word_char_idx = charIdx;
@@ -626,17 +629,11 @@ class TextField extends InteractiveObject {
                         last_word_break = 0;
                         last_word_break_width = 0;
                         last_word_char_idx = 0;
-
-                        if (row_end.length > 0 && row_end[0].chr == 32) {
-                            row_end.shift ();
-                            start_idx ++;
-                        }
                     } else {
                         newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row)});
                         row = [];
                         tx = 0;
                         start_idx = charIdx;
-
                     }
 
                 }
@@ -645,10 +642,11 @@ class TextField extends InteractiveObject {
                 row.push ( { font: font, chr: g, x: tx, fh: fh, sel:(charIdx >= s0 && charIdx < s1), adv: adv } );
                 tx += adv;
                 charIdx++;
+                prevG = g;
             }
 
             if (row.length > 0) {
-                newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: newSpans.length == 0, rect: getRowDimension(row)});
+                newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row)});
                 row = [];
             }
         }
@@ -664,8 +662,95 @@ class TextField extends InteractiveObject {
         return charIdx;
     }
 
-	
-	
+    private function moveCaretToPrevLine() {
+        moveCaretToLine(getLineByCaretIndex(caretIndex)-1);
+    }
+
+    private function moveCaretToNextLine() {
+        moveCaretToLine(getLineByCaretIndex(caretIndex)+1);
+    }
+
+    private function moveCaretToLine(lineIndex) {
+
+        if (lineIndex < 0 || lineIndex > getLineByCaretIndex(999999999)) return;
+
+        var pos = getPositionInLine(caretIndex);
+        var begin = getCaretIndexOfFirstCharOfLine(lineIndex);
+        var dstCaretIndex = begin + pos;
+        var dstLineIndex = getLineByCaretIndex(dstCaretIndex);
+
+        var lastCaretIndex = getCaretIndexOfFirstCharOfLine(999999999);
+
+
+        if (dstLineIndex != lineIndex) {
+            dstCaretIndex = getCaretIndexOfFirstCharOfLine(lineIndex+1);
+        }
+
+        if (dstCaretIndex < 0) {
+            dstCaretIndex = 0;
+        } else if (dstCaretIndex > lastCaretIndex) {
+            dstCaretIndex = lastCaretIndex;
+        }
+        caretIndex = dstCaretIndex;
+    }
+
+    private function getCaretIndexOfFirstCharOfLine(lineIndex) {
+        var lengthBefore = 0;
+        var line = -1;
+        for (paragraph in mParagraphs) {
+            var first = true;
+            for (s in paragraph.spans) {
+                if (first || s.startFromNewLine) {
+                    line += 1;
+                    first = false;
+                }
+                if (line == lineIndex) {
+                    return lengthBefore;
+                }
+                lengthBefore += s.text.length;
+            }
+        }
+        return lengthBefore;
+    }
+
+    private function getPositionInLine(caretIndex: Int): Int {
+        var lengthBefore = 0;
+        var lengthOfPrevLines = 0;
+        for (paragraph in mParagraphs) {
+            var first = true;
+            for (s in paragraph.spans) {
+                if (first || s.startFromNewLine) {
+                    lengthOfPrevLines = lengthBefore;
+                    first = false;
+                }
+                if (s.text.length + lengthBefore > caretIndex) {
+                    return caretIndex - lengthOfPrevLines;
+                }
+                lengthBefore += s.text.length;
+            }
+        }
+        return caretIndex;
+    }
+
+    private function getLineByCaretIndex(caretIndex: Int): Int {
+        var lengthBefore = 0;
+        var line = -1;
+        for (paragraph in mParagraphs) {
+            var first = true;
+            for (s in paragraph.spans) {
+                if (first || s.startFromNewLine) {
+                    line += 1;
+                    first = false;
+                }
+                if (s.text.length + lengthBefore > caretIndex) {
+                    return line ;
+                }
+                lengthBefore += s.text.length;
+            }
+        }
+        return line;
+    }
+
 	public function setSelection (beginIndex:Int, endIndex:Int) {
         selectionBeginIndex = beginIndex;
         selectionEndIndex = endIndex;
@@ -777,7 +862,7 @@ class TextField extends InteractiveObject {
 			handleGraphicsUpdated (__graphics);
 			
 		}
-//TODO: uncomment
+        //TODO: uncomment
 		if (!mHTMLMode && inMask != null) {
 
 			var m = getSurfaceTransform ();
@@ -795,16 +880,17 @@ class TextField extends InteractiveObject {
         var el: js.html.svg.TextElement = cast(mTextSnap.node);
         if (el.textContent.length > 0) {
             if (selectionBeginIndex != svgSelectionBeginIndex || selectionEndIndex != svgSelectionEndIndex) {
-                if (selectionBeginIndex >= 0) {
-                    el.selectSubString(selectionBeginIndex, selectionEndIndex - selectionBeginIndex+1);
-                } else {
-                    el.selectSubString(0, 0);
-                }
+                try {
+                    if (selectionBeginIndex >= 0) {
+                        el.selectSubString(selectionBeginIndex, selectionEndIndex - selectionBeginIndex+1);
+                    } else {
+                        el.selectSubString(0, 0);
+                    }
+                } catch (e: Dynamic) {}
                 svgSelectionBeginIndex = selectionBeginIndex;
                 svgSelectionEndIndex = selectionEndIndex;
             }
         }
-		
 	}
 
     private var caretTimer: Timer;
@@ -857,6 +943,10 @@ class TextField extends InteractiveObject {
             caretIndex -= 1;
         } else if (evt.keyCode == Keyboard.RIGHT && caretIndex < text.length) {
             caretIndex += 1;
+        } else if (evt.keyCode == Keyboard.DOWN) {
+            moveCaretToNextLine();
+        } else if (evt.keyCode == Keyboard.UP) {
+            moveCaretToPrevLine();
         } else if (evt.keyCode == Keyboard.BACKSPACE && caretIndex > 0) {
             if (isSelected()) {
                 removeSelectedText();
@@ -871,6 +961,9 @@ class TextField extends InteractiveObject {
                 removeText(caretIndex, caretIndex);
             }
             clearSelection();
+        } else if (evt.keyCode == Keyboard.ENTER) {
+            insertText("\n", caretIndex);
+            caretIndex += 1;
         }
 
         if (!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
@@ -1355,8 +1448,6 @@ class TextField extends InteractiveObject {
 		return wordWrap;
 		
 	}
-	
-	
 }
 
 

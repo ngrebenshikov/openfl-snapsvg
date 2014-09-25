@@ -570,36 +570,15 @@ class DisplayObjectContainer extends InteractiveObject {
 	
 	// Getters & Setters
 	
-//	override private function set_filters (filters:Array<Dynamic>):Array<Dynamic> {
-//
-//		super.set_filters (filters);
-//
-//		// TODO: check if we need to merge filters with children.
-//		for (child in __children) {
-//
-//			child.filters = filters;
-//
-//		}
-//
-//		return filters;
-//
-//	}
-	
-	
 	override private function set___combinedVisible (inVal:Bool):Bool {
-		
 		if (inVal != __combinedVisible) {
-			
 			for (child in __children) {
 				
 				child.__combinedVisible = (child.visible && inVal);
 				
 			}
-			
 		}
-		
 		return super.set___combinedVisible (inVal);
-		
 	}
 	
 	
