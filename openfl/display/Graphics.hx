@@ -506,8 +506,10 @@ class Graphics {
 
                     case GRADIENT:
 
-                        var fill:GraphicsGradientFill = cast data;
-                        beginGradientFill (fill.type, fill.colors, fill.alphas, fill.ratios, fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
+                        var fill: GraphicsGradientFill = cast data;
+                        beginGradientFill (fill.type, fill.colors == null ? [] : fill.colors,
+                            fill.alphas == null ? [] : fill.alphas, fill.ratios == null ? [] : fill.ratios,
+                            fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
 
                 }
 
