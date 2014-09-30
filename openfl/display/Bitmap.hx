@@ -184,19 +184,8 @@ class Bitmap extends DisplayObject {
             }
             var el: Element = cast(snap.node);
             el.setAttribute('opacity', Std.string(alpha));
-
-            var snapMask = el.getAttribute('mask');
-            if (null != mask && (null == snapMask || "none" == snapMask) ) {
-                if (null != mask.snap) {
-                    snap.attr({mask:mask.snap});
-                }
-            } else if (null == mask) {
-                if (null != snapMask && "none" != snapMask) {
-                    snap.node.attributes.getNamedItem("mask").nodeValue="none";
-                }
-            }
         }
-        updateClipRect();
+       //updateClipRect();
     }
 
 	// Getters & Setters

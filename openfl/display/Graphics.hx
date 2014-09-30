@@ -1313,9 +1313,9 @@ class Graphics {
     private inline function getSvgPathStringFor(p: GfxPoint): String {
         return switch (p.type) {
 
-            case MOVE: Snap.format("M{x} {y} ", {x:p.x, y:p.y});
-            case CURVE: Snap.format("Q{cx} {cy} {x} {y} ", {cx:p.cx, cy:p.cy, x:p.x, y:p.y});
-            default: Snap.format("L{x} {y} ", {x:p.x, y:p.y});
+            case MOVE: 'M' + p.x + ' ' + p.y + ' ' ;
+            case CURVE: 'Q' + p.cx + ' ' + p.cy + ' ' + p.x + ' ' + p.y + ' ';
+            default: 'L' + p.x + ' ' + p.y + ' ';
 
         }
     }
