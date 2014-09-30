@@ -694,7 +694,7 @@ class Stage extends DisplayObjectContainer {
 		}
 
         var obj = __getObjectByElement(cast(event.target));
-		
+
 		// used in drag implementation
 		_mouseX = point.x;
 		_mouseY = point.y;

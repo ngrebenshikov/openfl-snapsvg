@@ -525,13 +525,11 @@ class DisplayObjectContainer extends InteractiveObject {
 	override private function __render (inMask:SnapElement = null, clipRect:Rectangle = null):Void {
 		
 		if (!__visible) return;
-		
-		if (clipRect == null && __scrollRect != null) {
-			
+
+		if (__scrollRect != null) {
 			clipRect = __scrollRect;
-			
 		}
-		
+
 		super.__render(inMask, clipRect);
 		
 		__combinedAlpha = (parent != null ? parent.__combinedAlpha * alpha : alpha);

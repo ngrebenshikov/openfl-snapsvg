@@ -354,19 +354,24 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         return null;
     }
 
+    private var cacheFiltersString: String;
 	private inline function __applyFilters (surface:SnapElement):Void {
         var blendFilter = __getBlendModeSvg();
+        var filterBuf = new StringBuf();
+        if (null != blendFilter) filterBuf.add(blendFilter);
 		if (__filters != null && __filters.length > 0) {
-            var filterBuf = new StringBuf();
-            if (null != blendFilter) filterBuf.add(blendFilter);
 			for (filter in __filters) {
                 filterBuf.add(filter.__getSvg());
 			}
-            surface.attr({ filter: Lib.snap.filter(filterBuf.toString()) });
-		} else if (null != blendFilter){
-            surface.attr({ filter: Lib.snap.filter(blendFilter) });
-        } else {
-            surface.attr({ filter: 'none' });
+		}
+        var filtersString = filterBuf.toString();
+        if (cacheFiltersString != filtersString) {
+            if (null == filtersString || '' == filtersString) {
+                surface.attr({ filter: 'none' });
+            } else {
+                surface.attr({ filter: Lib.snap.filter(filtersString) });
+            }
+            cacheFiltersString = filtersString;
         }
 	}
 	
@@ -603,7 +608,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private function __render (inMask:SnapElement = null, clipRect:Rectangle = null) {
 		
 		if (!__combinedVisible) return;
-		
+
 		var gfx = __getGraphics ();
 		if (gfx == null) return;
 
@@ -633,28 +638,20 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			}
             var el: Element = cast(snap.node);
             el.setAttribute('opacity', Std.string(alpha));
-
-            var snapMask = el.getAttribute('mask');
-            if (null != mask && (null == snapMask || "none" == snapMask) ) {
-                if (null != mask.snap) {
-                    if (!mask.__isOnStage()) {
-                        Lib.current.addChild(mask);
-                    }
-                    snap.attr({mask:mask.snap});
-                }
-            } else if (null == mask) {
-                if (null != snapMask && "none" != snapMask) {
-                    el.setAttribute('mask', 'none');
-                }
-            }
         }
-        updateClipRect();
+
+        if (null != clipRect) {
+            updateClipRect(clipRect);
+        }
 	}
 
-    private inline function updateClipRect() {
+    private inline function updateClipRect(inRect: Rectangle) {
         var rect: Element = cast(getClipRect().node);
-        rect.setAttribute('width', Std.string(width));
-        rect.setAttribute('height', Std.string(height));
+        //rect.setAttribute('x', Std.string(x));
+        //rect.setAttribute('y', Std.string(y));
+        rect.setAttribute('width', Std.string(inRect.width));
+        rect.setAttribute('height', Std.string(inRect.height));
+        //trace('clip ' + Std.string(x) + ' ' + Std.string(y) + ' ' + Std.string(width) + ' ' + Std.string(height));
     }
 
     private inline function getClipRect():SnapElement {
@@ -901,7 +898,25 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		if (__mask != null) {
 			__mask.__maskingObj = this;
 		}
-        renderNextWake();
+
+        var el: Element = cast(snap.node);
+        var snapMask = el.getAttribute('mask');
+        if (null != mask && (null == snapMask || "none" == snapMask) ) {
+            if (null != mask.snap) {
+                if (!mask.__isOnStage()) {
+                    Lib.current.addChild(mask);
+                }
+                snap.attr({mask:mask.snap});
+                //el.setAttribute('clip-path', el.getAttribute('mask'));
+            }
+        } else if (null == mask) {
+            if (null != snapMask && "none" != snapMask) {
+                el.setAttribute('mask', 'none');
+//                el.setAttribute('clip-path', 'none');
+            }
+        }
+
+        //renderNextWake();
 		return __mask;
 	}
 

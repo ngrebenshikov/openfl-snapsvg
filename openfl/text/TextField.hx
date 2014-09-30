@@ -366,7 +366,7 @@ class TextField extends InteractiveObject {
         mMaxWidth = rect.width;
         mMaxHeight = rect.height;
 
-        updateClipRect();
+        updateClipRect(new Rectangle(x, y, width, height));
 
         __graphics.clear ();
         drawBackgoundAndBorder();
