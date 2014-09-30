@@ -1,6 +1,7 @@
 package openfl.display;
 
 
+import openfl.display.InteractiveObject;
 import StringTools;
 import openfl.events.PasteEvent;
 import haxe.Timer;
@@ -666,19 +667,31 @@ class Stage extends DisplayObjectContainer {
 		
 	}
 	
-    private function __getObjectByElement(element: js.html.Element): DisplayObject {
+    private function __getObjectByElement(element: js.html.Element): InteractiveObject {
         if (!visible) return null;
 
         while(null != element) {
             var id = element.id;
             if (null != id && '' != id && stage.snapIdToDisplayObjects.exists(id)) {
                 var obj: DisplayObject = stage.snapIdToDisplayObjects.get(id);
+
+                // Get the deepest mouse enabled interactive object
                 var p = obj;
+                while (null != p) {
+                    if (cast(p).mouseEnabled) {
+                        obj = p;
+                        break;
+                    }
+                    p = p.parent;
+                }
+
                 // Check if this is not parent of obj
+                p = obj;
                 while (null != p) {
                     if (this == p) return cast obj;
                     p = p.parent;
                 }
+                return null;
             }
             element = element.parentElement;
         }
