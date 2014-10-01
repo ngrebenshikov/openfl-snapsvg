@@ -564,35 +564,23 @@ class DisplayObjectContainer extends InteractiveObject {
             Lib.__swapSurface (surface1, surface2);
         }
 	}
-	
-	
+
 	// Getters & Setters
 	
 	override private function set___combinedVisible (inVal:Bool):Bool {
 		if (inVal != __combinedVisible) {
 			for (child in __children) {
-				
 				child.__combinedVisible = (child.visible && inVal);
-				
 			}
 		}
 		return super.set___combinedVisible (inVal);
 	}
-	
-	
+
 	private inline function get_numChildren ():Int {
 		
 		return __children.length;
 		
 	}
-	
-	
-	override private function set_visible (inVal:Bool):Bool {
-		__combinedVisible = parent != null ? parent.__combinedVisible && inVal : inVal;
-		return super.set_visible (inVal);
-		
-	}
-	
 
 	override private function set_scrollRect (inValue:Rectangle):Rectangle {
 		inValue = super.set_scrollRect (inValue);
