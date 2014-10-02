@@ -462,7 +462,8 @@ class Graphics {
 
                                 case GRADIENT_FILL:
 
-                                    var fill:GraphicsGradientFill = cast stroke.fill;
+                                    lineStyle (stroke.thickness, null, null, stroke.pixelHinting, stroke.scaleMode, stroke.caps, stroke.joints, stroke.miterLimit);
+                                    var fill: GraphicsGradientFill = cast stroke.fill;
                                     lineGradientStyle (fill.type, fill.colors, fill.alphas, fill.ratios, fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
 
                             }
@@ -510,6 +511,10 @@ class Graphics {
                         beginGradientFill (fill.type, fill.colors == null ? [] : fill.colors,
                             fill.alphas == null ? [] : fill.alphas, fill.ratios == null ? [] : fill.ratios,
                             fill.matrix, fill.spreadMethod, fill.interpolationMethod, fill.focalPointRatio);
+
+                    case BITMAP:
+                        var fill: GraphicsBitmapFill = cast data;
+                        beginBitmapFill(fill.bitmapData, fill.matrix, fill.repeat, fill.smooth);
 
                 }
 
@@ -1088,8 +1093,12 @@ class Graphics {
 
     private function __addStrokeAttribute(element: SnapElement, lineJob: LineJob):Void {
         if(lineJob != null){
+            if(lineJob.grad == null){
+                element.attr({stroke: createCanvasColor(lineJob.colour, lineJob.alpha)});
+            } else {
+                element.attr({stroke: createCanvasGradient(lineJob.grad)});
+            }
             element.attr({
-                stroke: if (lineJob.grad == null) createCanvasColor(lineJob.colour, lineJob.alpha) else "none",
                 'stroke-width': lineJob.thickness,
                 'stroke-linecap': switch(lineJob.caps) {
                     case END_ROUND: "round";
