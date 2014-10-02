@@ -294,13 +294,20 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 
 
+    private var __cacheTransformString: String;
     private inline function __setTransform (matrix:Matrix):Void {
         var el: Element = cast(snap.node);
-
         if (matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1 && matrix.tx == 0 && matrix.ty == 0) {
-            el.removeAttribute('transform');
+            if (null != __cacheTransformString) {
+                el.removeAttribute('transform');
+                __cacheTransformString = null;
+            }
         } else {
-            el.setAttribute('transform', matrix.toString());
+            var transformString = matrix.toString();
+            if (__cacheTransformString != transformString) {
+                el.setAttribute('transform', transformString);
+                __cacheTransformString = transformString;
+            }
         }
     }
 
@@ -647,11 +654,13 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 
     private inline function updateClipRect(inRect: Rectangle) {
         var rect: Element = cast(getClipRect().node);
-        //rect.setAttribute('x', Std.string(x));
-        //rect.setAttribute('y', Std.string(y));
-        rect.setAttribute('width', Std.string(inRect.width));
-        rect.setAttribute('height', Std.string(inRect.height));
-        //trace('clip ' + Std.string(x) + ' ' + Std.string(y) + ' ' + Std.string(width) + ' ' + Std.string(height));
+        if (rect.getAttribute('width') != Std.string(inRect.width) || rect.getAttribute('height') != Std.string(inRect.height)) {
+            //rect.setAttribute('x', Std.string(x));
+            //rect.setAttribute('y', Std.string(y));
+            rect.setAttribute('width', Std.string(inRect.width));
+            rect.setAttribute('height', Std.string(inRect.height));
+            //trace('clip ' + Std.string(x) + ' ' + Std.string(y) + ' ' + Std.string(width) + ' ' + Std.string(height));
+        }
     }
 
     private inline function getClipRect():SnapElement {
@@ -1106,7 +1115,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private function set_visible (inValue:Bool):Bool {
-		if (__visible != inValue) {
+        __combinedVisible = parent != null ? parent.__combinedVisible && inValue : inValue;
+        if (__visible != inValue) {
 			__visible = inValue;
 			setSurfaceVisible (inValue);
 		}

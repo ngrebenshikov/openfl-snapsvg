@@ -1,6 +1,7 @@
 package openfl.text;
 
 
+import openfl.events.TextEvent;
 import flash.geom.Rectangle;
 import js.html.Document;
 import js.html.ClientRect;
@@ -376,14 +377,19 @@ class TextField extends InteractiveObject {
         if (background) {
             __graphics.lineStyle(0);
             __graphics.beginFill (backgroundColor);
-            __graphics.drawRect (0, 0, width-.5, height-.5 );
+            __graphics.drawRect (0, 0, mWidth-.5, mHeight-.5 );
+            __graphics.endFill ();
+        } else {
+            __graphics.lineStyle(0);
+            __graphics.beginFill (0,0);
+            __graphics.drawRect (0.5, 0.5, mWidth-.5, mHeight-.5 );
             __graphics.endFill ();
         }
 
         if (border) {
             __graphics.endFill ();
             __graphics.lineStyle (1, borderColor, 1, true);
-            __graphics.drawRect (.5, .5, width-.5, height-.5);
+            __graphics.drawRect (.5, .5, mWidth-.5, mHeight-.5);
         }
     }
 
@@ -1006,6 +1012,7 @@ class TextField extends InteractiveObject {
     }
 
     private function insertText(s: String, index: Int) {
+        dispatchEvent(new TextEvent(TextEvent.TEXT_INPUT, false, false, s));
         if (null != __textFormats) for(f in __textFormats) {
             if (index < f.begin) {
                 f.begin += s.length;
@@ -1328,7 +1335,6 @@ class TextField extends InteractiveObject {
 	
 	
 	public function set_text (inText:String):String {
-		
 		mText = Std.string(inText);
         if (!multiline) {
             mText = StringTools.replace(mText, '\n', '');
@@ -1337,9 +1343,8 @@ class TextField extends InteractiveObject {
 		mHTMLMode = false;
 		RebuildText ();
 		__invalidateBounds ();
-		
+		dispatchEvent(new Event(Event.CHANGE));
 		return mText;
-		
 	}
 	
 	
