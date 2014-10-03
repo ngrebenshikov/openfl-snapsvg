@@ -158,6 +158,7 @@ class TextField extends InteractiveObject {
         caretIndex = 0;
         shouldCaretShowed = true;
 
+        updateSelectability();
         addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
         stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
         addEventListener(Event.PASTE, onPaste);
@@ -1362,12 +1363,16 @@ class TextField extends InteractiveObject {
 	public function get_textHeight ():Float { return mMaxHeight; }
 	
 	
+    private inline function updateSelectability() {
+        mTextSnap.attr({ style: if (__inputEnabled) '' else '-webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;' });
+    }
+
 	public function get_type ():String { return mType; }
 	public function set_type (inType:String):String {
 		
 		mType = inType;
 		__inputEnabled = (mType == TextFieldType.INPUT);
-		
+		updateSelectability();
 //TODO: uncomment
 //		if (mHTMLMode) {
 //
