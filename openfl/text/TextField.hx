@@ -34,7 +34,7 @@ class TextField extends InteractiveObject {
 	public static var mDefaultFont = Font.DEFAULT_FONT_NAME;
 	
 	public var antiAliasType:String;
-	public var autoSize (default, set_autoSize):String;
+	public var autoSize (default, set_autoSize):TextFieldAutoSize;
 	public var background (default,set_background):Bool;
 	public var backgroundColor (default, set_backgroundColor):Int;
 	public var border (default, set_border):Bool;
@@ -1110,19 +1110,17 @@ class TextField extends InteractiveObject {
     // Getters & Setters
 	
 	
-	private function get_autoSize ():String {
+	private function get_autoSize ():TextFieldAutoSize {
 		
 		return autoSize;
 		
 	}
 	
 	
-	private function set_autoSize (inAutoSize:String):String {
-		
+	private function set_autoSize (inAutoSize:TextFieldAutoSize):TextFieldAutoSize {
 		autoSize = inAutoSize;
 		Rebuild ();
 		return inAutoSize;
-		
 	}
 	
 	
