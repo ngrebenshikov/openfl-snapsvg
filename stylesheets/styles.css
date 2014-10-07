@@ -183,6 +183,19 @@ footer {
   bottom:50px;
 }
 
+.demo {
+	padding-bottom: 30px;
+	clear: both;
+}
+
+.demo .thumb {
+	float: left;
+}
+
+.demo h2, .demo .source {
+	margin-left: 120px;
+}
+
 @media print, screen and (max-width: 960px) {
   
   div.wrapper {
