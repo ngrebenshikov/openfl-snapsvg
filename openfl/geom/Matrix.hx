@@ -262,6 +262,18 @@ class Matrix {
 	}
 	
 	
+	public function setTo (a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float):Void {
+		
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.d = d;
+		this.tx = tx;
+		this.ty = ty;
+		
+	}
+	
+	
 	public inline function to3DString ():String {
 		
 		// identityMatrix
