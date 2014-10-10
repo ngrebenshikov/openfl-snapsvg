@@ -1,6 +1,7 @@
 package openfl.display;
 
 
+import openfl.geom.Point;
 import openfl.display.InteractiveObject;
 import StringTools;
 import openfl.events.PasteEvent;
@@ -699,6 +700,7 @@ class Stage extends DisplayObjectContainer {
     }
 
 	private function __onMouse (event:js.html.MouseEvent, type:String) {
+
 		var rect:Dynamic = untyped Lib.mMe.__scr.getBoundingClientRect ();
 		var point:Point = untyped new Point (event.clientX - rect.left, event.clientY - rect.top);
 
@@ -733,15 +735,26 @@ class Stage extends DisplayObjectContainer {
 			}
 			
 			obj.__fireEvent (evt);
+
+            emulateClickEvent(type, event, local, obj);
 			
 		} else {
-			
 			var evt = MouseEvent.__create (type, event, point, null);
 			__checkInOuts (evt, stack);
-			
 		}
 		
 	}
+
+    private var clickPosition: Point;
+    private function emulateClickEvent(type: String, event: js.html.MouseEvent, point: Point, obj: Dynamic) {
+        if (type == MouseEvent.MOUSE_DOWN) {
+            clickPosition = new Point(point.x, point.y);
+        } else if (type == MouseEvent.MOUSE_UP) {
+            if (Math.abs(point.x - clickPosition.x) < 3 && Math.abs(point.y - clickPosition.y) < 3) {
+                obj.__fireEvent (MouseEvent.__create (MouseEvent.CLICK, event, point, cast obj));
+            }
+        }
+    }
 	
 	
 	public function __onResize (inW:Int, inH:Int):Void {

@@ -1023,6 +1023,7 @@ class TextField extends InteractiveObject {
             }
         }
         text = text.substring(0,index) + s + text.substring(index,text.length);
+        dispatchEvent(new Event(Event.CHANGE, true));
     }
 
     private function removeText(beginIndex: Int, endIndex: Int) {
