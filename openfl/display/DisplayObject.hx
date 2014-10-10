@@ -947,7 +947,6 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private function set___combinedVisible (inValue:Bool):Bool {
 		
 		if (__combinedVisible != inValue) {
-			
 			__combinedVisible = inValue;
 			setSurfaceVisible (inValue);
 			renderNextWake();

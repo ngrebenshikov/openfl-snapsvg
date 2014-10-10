@@ -300,9 +300,9 @@ class TextField extends InteractiveObject {
                     //TODO: make it working for webkit
                     //svgBuf.add('textLength="' + span.rect.width+ 'px" ');
                     if (firstSpan) {
-                        svgBuf.add('x="0" dy="' + paragraph.firstLineHeight+ 'px" ');
+                        svgBuf.add('x="' + span.startX + '" dy="' + paragraph.firstLineHeight+ 'px" ');
                     } else if (span.startFromNewLine) {
-                        svgBuf.add('x="0" dy="' + span.rect.height+ 'px" ');
+                        svgBuf.add('x="' + span.startX + '" dy="' + span.rect.height+ 'px" ');
                     }
                 }
                 if (null != span.format) {
@@ -628,7 +628,7 @@ class TextField extends InteractiveObject {
                     if (last_word_break > 0) {
                         var row_end = row.splice (last_word_break, row.length - last_word_break);
                         var head = row.slice(0, last_word_break);
-                        newSpans.push({ font: font, text: Lambda.fold(head, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(head)});
+                        newSpans.push({ font: font, text: Lambda.fold(head, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(head), startX: 0});
                         row = row_end;
                         tx -= last_word_break_width;
                         start_idx = last_word_char_idx;
@@ -637,7 +637,7 @@ class TextField extends InteractiveObject {
                         last_word_break_width = 0;
                         last_word_char_idx = 0;
                     } else {
-                        newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row)});
+                        newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row), startX: 0});
                         row = [];
                         tx = 0;
                         start_idx = charIdx;
@@ -653,15 +653,30 @@ class TextField extends InteractiveObject {
             }
 
             if (row.length > 0) {
-                newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row)});
+                newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row), startX: 0});
                 row = [];
             }
         }
 
         paragraph.firstLineHeight = 0.0;
+        var lineWidth = 0.0;
+        var startSpan: Span = null;
         for (s in newSpans) {
             if (s.startFromNewLine && paragraph.firstLineHeight > 0.0) break;
             if (s.rect.height > paragraph.firstLineHeight) paragraph.firstLineHeight = s.rect.height;
+            if (paragraph.align == TextFormatAlign.CENTER) {
+                if (s.startFromNewLine) {
+                    if (startSpan != null) {
+                        startSpan.startX = Math.floor((mUserWidth - lineWidth)/2);
+                        lineWidth = 0.0;
+                    }
+                    startSpan = s;
+                }
+                lineWidth += s.rect.width;
+            }
+        }
+        if (paragraph.align == TextFormatAlign.CENTER) {
+            startSpan.startX = Math.floor((mUserWidth - lineWidth)/2);
         }
 
         paragraph.spans = newSpans;
@@ -801,9 +816,9 @@ class TextField extends InteractiveObject {
                 var spanEndCharIndex = spanStartCharIndex + span.text.length - 1;
                 if (beginIndex <= spanEndCharIndex && beginIndex >= spanStartCharIndex) {
                     var parts = splitStringByInerval(span.text, beginIndex-spanStartCharIndex, Std.int(Math.min(endIndex-spanStartCharIndex, spanEndCharIndex - spanStartCharIndex)));
-                    if (null != parts[0] && '' != parts[0]) newSpans.push({ font: span.font, text: parts[0], format: span.format, startFromNewLine: span.startFromNewLine, rect: null});
-                    if (null != parts[1] && '' != parts[1]) newSpans.push({ font: font, text: parts[1], format: format, startFromNewLine: false, rect: null});
-                    if (null != parts[2] && '' != parts[2]) newSpans.push({ font: span.font, text: parts[2], format: span.format, startFromNewLine: false, rect: null});
+                    if (null != parts[0] && '' != parts[0]) newSpans.push({ font: span.font, text: parts[0], format: span.format, startFromNewLine: span.startFromNewLine, rect: null, startX: 0});
+                    if (null != parts[1] && '' != parts[1]) newSpans.push({ font: font, text: parts[1], format: format, startFromNewLine: false, rect: null, startX: 0});
+                    if (null != parts[2] && '' != parts[2]) newSpans.push({ font: span.font, text: parts[2], format: span.format, startFromNewLine: false, rect: null, startX: 0});
                     if (endIndex > spanEndCharIndex) {
                         beginIndex = spanEndCharIndex+1;
                     }
@@ -865,13 +880,10 @@ class TextField extends InteractiveObject {
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
 
         if (__graphics.__render (inMask, __filters, 1, 1)) {
-			
 			handleGraphicsUpdated (__graphics);
-			
 		}
-        //TODO: uncomment
-		if (!mHTMLMode && inMask != null) {
 
+		if (!mHTMLMode && inMask != null) {
 			var m = getSurfaceTransform ();
 			//Lib.__drawToSurface (__graphics.__surface, inMask, m, (parent != null ? parent.__combinedAlpha : 1) * alpha, clipRect, (gridFitType != GridFitType.PIXEL));
 
@@ -881,7 +893,7 @@ class TextField extends InteractiveObject {
 				__setTransform (m);
 				__clearFlag (DisplayObject.TRANSFORM_INVALID);
 			}
-			Lib.__setSurfaceOpacity (snap, (parent != null ? parent.__combinedAlpha : 1) * alpha);
+			Lib.__setSurfaceOpacity (snap, alpha);
 		}
 
         var el: js.html.svg.TextElement = cast(mTextSnap.node);
@@ -898,7 +910,8 @@ class TextField extends InteractiveObject {
                 svgSelectionEndIndex = selectionEndIndex;
             }
         }
-	}
+        updateClipRect(new Rectangle(x, y, width, height));
+    }
 
     private var caretTimer: Timer;
     private function onFocus(e: Dynamic) {
@@ -1582,6 +1595,7 @@ typedef Span = {
 	var text: String;
     var format: TextFormat;
     var startFromNewLine: Bool;
+    var startX: Int;
     var rect: Rectangle;
 }
 
