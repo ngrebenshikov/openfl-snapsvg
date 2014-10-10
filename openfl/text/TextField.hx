@@ -1065,6 +1065,7 @@ class TextField extends InteractiveObject {
             text = '';
             caretIndex = 0;
         }
+        dispatchEvent(new Event(Event.CHANGE, true));
     }
 
 
