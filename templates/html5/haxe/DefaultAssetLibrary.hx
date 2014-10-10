@@ -167,7 +167,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		#elseif js
 		
-		return cast (ApplicationMain.loaders.get (path.get (id)).contentLoaderInfo.content, Bitmap).bitmapData;
+		try {
+		    return cast (ApplicationMain.loaders.get (path.get (id)).contentLoaderInfo.content, Bitmap).bitmapData;
+		} catch (e: Dynamic) {
+		    trace("Error: Bitmap not found - " + id + " - " + path.get(id));
+		    return null;
+		}
 		
 		#else
 		

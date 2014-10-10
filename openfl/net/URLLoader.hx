@@ -22,6 +22,7 @@ class URLLoader extends EventDispatcher {
 	public var bytesTotal:Int;
 	public var data:Dynamic;
 	public var dataFormat (default, set):URLLoaderDataFormat;
+    private var url: String;
 	
 	
 	public function new (request:URLRequest = null) {
@@ -181,45 +182,40 @@ class URLLoader extends EventDispatcher {
 			}
 			
 		} catch (e:Dynamic) {
-			
 			onError (e.toString ());
 			return;
-			
 		}
 		
-		//js.Lib.alert ("dataFormat: " + dataFormat);
+//		trace ("dataFormat: " + dataFormat);
 		
 		switch (dataFormat) {
-			
 			case BINARY: untyped xmlHttpRequest.responseType = 'arraybuffer';
 			default:
-			
 		}
 		
 		for (header in requestHeaders) {
-			
 			//js.Lib.alert ("setRequestHeader: " + header.name + ", " + header.value);
 			xmlHttpRequest.setRequestHeader (header.name, header.value);
-			
 		}
 		
-		//js.Lib.alert ("uri: " + uri);
+		//trace ("url: " + Std.string(url));
+
+        this.url = url;
 		
 		xmlHttpRequest.send (uri);
 		onOpen ();
 		
 		getData = function () {
-			
-			if (xmlHttpRequest.response != null) {
-				
+            if (null == xmlHttpRequest) {
+             return null;
+            } else if (xmlHttpRequest.response != null) {
 				return xmlHttpRequest.response;
-				
-			} else { 
-				
+			} else if (null != xmlHttpRequest.responseText) {
 				return xmlHttpRequest.responseText;
-				
-			}
-			
+			} else {
+                return null;
+            }
+
 		};
 		
 	}
@@ -233,15 +229,20 @@ class URLLoader extends EventDispatcher {
 	
 	
 	private function onData (_):Void {
-		
-		var content:Dynamic = getData ();
-		
-		switch (dataFormat) {
-			
-			case BINARY: this.data = ByteArray.__ofBuffer (content);
-			default: this.data = Std.string (content);
-			
-		}
+
+        if (null != _) {
+
+            var content:Dynamic = getData ();
+
+            switch (dataFormat) {
+
+                case BINARY: this.data = ByteArray.__ofBuffer (content);
+                default: this.data = Std.string (content);
+
+            }
+        } else {
+            this.data = null;
+        }
 		
 		var evt = new Event (Event.COMPLETE);
 		evt.currentTarget = this;
@@ -251,7 +252,6 @@ class URLLoader extends EventDispatcher {
 	
 	
 	private function onError (msg:String):Void {
-		
 		var evt = new IOErrorEvent (IOErrorEvent.IO_ERROR);
 		evt.text = msg;
 		evt.currentTarget = this;

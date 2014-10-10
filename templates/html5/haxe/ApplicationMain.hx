@@ -62,17 +62,14 @@ class ApplicationMain {
 		::if (type=="image")::
 		var loader:Loader = new Loader();
 		loaders.set("::resourceName::", loader);
-		total ++;
 		::elseif (type == "binary")::
 		var urlLoader:URLLoader = new URLLoader();
 		urlLoader.dataFormat = BINARY;
 		urlLoaders.set("::resourceName::", urlLoader);
-		total ++;
 		::elseif (type == "text")::
 		var urlLoader:URLLoader = new URLLoader();
 		urlLoader.dataFormat = BINARY;
 		urlLoaders.set("::resourceName::", urlLoader);
-		total ++;
 		::end::
 		::end::::end::
 		
@@ -89,13 +86,14 @@ class ApplicationMain {
 		
 		::if (APP_INIT != null)::::APP_INIT::::end::
 		
+        total += Lambda.count(loaders) + Lambda.count(urlLoaders);
+
 		if (total == 0) {
 			begin();
 		} else {
 			for (path in loaders.keys()) {
 				var loader:Loader = loaders.get(path);
-				loader.contentLoaderInfo.addEventListener("complete",
-          loader_onComplete);
+				loader.contentLoaderInfo.addEventListener("complete", loader_onComplete);
 				loader.load (new URLRequest (path));
 			}
 

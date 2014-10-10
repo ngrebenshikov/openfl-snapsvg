@@ -1556,14 +1556,16 @@ class BitmapData implements IBitmapDrawable {
 		data.bitmapData.height = height;
 		data.bitmapData.rect = new Rectangle (0, 0, width, height);
 		data.bitmapData.__buildLease ();
-		
+
 		if (data.inLoader != null) {
-			
+            data.inLoader.bytesTotal = 1;
+            data.inLoader.bytesLoaded = 1;
 			var e = new Event (Event.COMPLETE);
 			e.target = data.inLoader;
 			data.inLoader.dispatchEvent (e);
-			
-		}
+		} else {
+            trace("Error: loader is null");
+        }
 		
 	}
 	

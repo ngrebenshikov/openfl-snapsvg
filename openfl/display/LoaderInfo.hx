@@ -11,8 +11,8 @@ class LoaderInfo extends EventDispatcher {
 	
 	public var applicationDomain:ApplicationDomain;
 	public var bytes (default, null):ByteArray;
-	public var bytesLoaded (default, null):Int;
-	public var bytesTotal (default, null):Int;
+	public var bytesLoaded:Int;
+	public var bytesTotal:Int;
 	public var childAllowsParent (default, null):Bool;
 	public var content (default, null):DisplayObject;
 	public var contentType (default, null):String;

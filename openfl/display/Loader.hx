@@ -83,8 +83,6 @@ class Loader extends Sprite {
 			addChild (content);
 			
 		} catch (e:Dynamic) {
-			
-			trace ("Error " + e);
 			var evt = new IOErrorEvent (IOErrorEvent.IO_ERROR);
 			evt.currentTarget = this;
 			contentLoaderInfo.dispatchEvent (evt);
@@ -144,8 +142,6 @@ class Loader extends Sprite {
 			});
 			
 		} catch (e:Dynamic) {
-			
-			trace ("Error " + e);
 			var evt = new IOErrorEvent (IOErrorEvent.IO_ERROR);
 			evt.currentTarget = this;
 			contentLoaderInfo.dispatchEvent (evt);
@@ -199,28 +195,25 @@ class Loader extends Sprite {
 	
 	// Event Handlers
 	
-	
-	
-	
 	private function handleLoad (e:Event):Void {
-		
 		e.currentTarget = this;
-                if (content != null) {
+        if (content != null) {
 			content.__invalidateBounds ();
 			content.__render (null, null);
 			contentLoaderInfo.removeEventListener (Event.COMPLETE, handleLoad);
-                }		
+        }
+        dispatchEvent (e);
 	}
 
 	private function handleError (e:Event):Void {
-		
 		e.currentTarget = this;
-                if (content != null) {
-			content.__invalidateBounds ();
-			content.__render (null, null);
-			contentLoaderInfo.removeEventListener (IOErrorEvent.IO_ERROR, handleError);
-                }		
-	}
+        if (content != null) {
+            content.__invalidateBounds ();
+            content.__render (null, null);
+            contentLoaderInfo.removeEventListener (IOErrorEvent.IO_ERROR, handleError);
+        }
+        dispatchEvent (e);
+    }
 	
 	
 }
