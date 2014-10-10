@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Title" />
+			<textinput id="title" text="" width="150" />
+			
+			<text text="Message" />
+			<textinput id="message" text="Please wait..." width="150" />
+			
+			<text text="Delay (ms)" />
+			<textinput id="delay" text="2000" width="150" />
+		</grid>
+		<spacer width="20" />
+		<button id="showButton" text="Show Popup" />
+	</hbox>
+</vbox>

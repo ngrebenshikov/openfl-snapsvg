@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox width="100%" height="100%">
+	<tabview width="100%" height="100%">
+		<vbox text="RTF" width="100%" height="100%"> 
+			<rtfview width="100%" height="100%" text="asset://ui/example.txt" />
+		</vbox>
+		<vbox text="Code Editor" width="100%" height="100%">
+			<code width="100%" height="100%" text="asset://ui/example.hx" syntax="haxe" />
+		</vbox>
+	</tabview>
+</vbox>

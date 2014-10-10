@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Width" />
+			<hslider id="width" width="150" max="350" pos="150" />
+			
+			<text text="Height" />
+			<hslider id="height" width="150" max="350" pos="30"/>
+			
+			<spacer />
+			<checkbox id="disabled" text="Disabled" />
+			
+			<spacer />
+			<checkbox id="password" text="Display as password" />
+			
+			<text text="Placeholder Text" />
+			<textinput id="placeholderText" width="100%" text="Enter text here" />
+			
+			<spacer />
+			<checkbox id="multiline" text="Multiline" />
+			
+			<spacer />
+			<checkbox id="wrapLines" text="Wrap lines" />
+		</grid>
+		<spacer width="20" />
+		<textinput id="theInput" text="Demo Text Input" placeholderText="Enter text here" />
+	</hbox>
+</vbox>

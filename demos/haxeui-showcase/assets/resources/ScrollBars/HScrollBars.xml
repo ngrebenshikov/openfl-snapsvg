@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="3">
+			<text text="Width" />
+			<hslider id="width" max="300" pos="150" width="150"/>
+			<text id="widthLabel" text="???" width="35" autoSize="false" />
+			
+			<text text="Height" />
+			<hslider id="height" max="200" pos="20" width="150"/>
+			<text id="heightLabel" text="???" width="35" autoSize="false" />
+			
+			<text text="Min" />
+			<hslider id="min" max="100" pos="0" width="150"/>
+			<text id="minLabel" text="???" width="35" autoSize="false" />
+			
+			<text text="Max" />
+			<hslider id="max" max="200" pos="100" width="150"/>
+			<text id="maxLabel" text="???" width="35" autoSize="false" />
+			
+			<text text="Pos" />
+			<hslider id="pos" max="100" pos="0" width="150"/>
+			<text id="posLabel" text="???" width="35" autoSize="false" />
+			
+			<text text="Page Size" />
+			<hslider id="pageSize" max="100" pos="0" width="150"/>
+			<text id="pageSizeLabel" text="???" width="35" autoSize="false" />
+			
+			<spacer />
+			<checkbox id="disabled" text="Disabled" />
+			<spacer />
+		</grid>
+		<spacer width="20" />
+		<hscroll id="theScroll" pos="50" width="150" pageSize="50" />
+	</hbox>
+</vbox>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox width="100%">
+	<grid columns="2" width="100%">
+		<text text="Theme" width="100%" />
+		<listSelector text="Default Theme" id="theme" width="140" autoSize="false">
+			<json>[{"text":"Default Theme", "id": "default"},{"text":"Gradient Theme", "id":"gradient"}]</json>
+		</listSelector>
+		
+		<text text="Show sources" width="100%" />
+		<listSelector text="No" id="showSources" width="140" autoSize="false">
+			<array>Yes,No</array>
+		</listSelector>
+		
+		<text text="Selection method" width="100%" />
+		<listSelector text="Theme Decides" id="selectionMethod" width="140" autoSize="false">
+			<json>[{"text":"Theme Decides", "id": "theme"},{"text":"Drop Down List", "id":"dropdown"},{"text":"Popup Up List", "id":"popup"}]</json>
+		</listSelector>
+	</grid>
+	
+	<text text="Please note that in order for these settings to take effect you must first restart (or refresh) the application." multiline="true" wrapLines="true" width="100%" />
+</vbox>

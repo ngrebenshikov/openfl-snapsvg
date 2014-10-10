@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Width" />
+			<hslider id="width" width="150" max="350" pos="200" />
+			
+			<text text="Height" />
+			<hslider id="height" width="150" max="450" pos="300"/>
+		</grid>
+		<spacer width="20" />
+		<accordion id="theAccordion" width="200" height="300">
+			<vbox text="Panel 1">
+				<button text="Button 1" />
+			</vbox>
+			<vbox text="Image Panel">
+				<scrollview width="100%" height="100%">
+					<image resource="images/slinky.jpg" />
+				</scrollview>
+			</vbox>
+			<vbox text="List Panel">
+				<listview width="100%" height="100%">
+					<array>
+						Item 1, Item 2, Item 3, Item 4, Item 5, Item 6, Item 7, Item 8, Item 9, Item 10
+					</array>
+				</listview>
+			</vbox>
+			<vbox text="Panel 4">
+				<button text="Button 4" />
+			</vbox>
+		</accordion>
+	</hbox>
+</vbox>

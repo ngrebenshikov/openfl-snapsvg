@@ -1,0 +1,10 @@
+RTFView{spacingY:8;}
+RTFView #bold{icon:"img/rtfview/edit-bold.png";height:100%;}
+RTFView #italic{icon:"img/rtfview/edit-italic.png";height:100%;}
+RTFView #underline{icon:"img/rtfview/edit-underline.png";height:100%;}
+RTFView #bullet{icon:"img/rtfview/edit-list.png";height:100%;}
+RTFView #alignLeft{icon:"img/rtfview/edit-alignment-left.png";height:100%;}
+RTFView #alignCenter{icon:"img/rtfview/edit-alignment-center.png";height:100%;}
+RTFView #alignRight{icon:"img/rtfview/edit-alignment-right.png";height:100%;}
+RTFView #alignJustify{icon:"img/rtfview/edit-alignment-justify.png";height:100%;}
+

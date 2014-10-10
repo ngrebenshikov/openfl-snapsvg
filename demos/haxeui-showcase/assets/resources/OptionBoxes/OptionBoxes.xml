@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Text" />
+			<textinput id="text" width="100%" text="Optionbox" />
+			
+			<text text="Font Size" />
+			<hslider id="fontSize" width="150" max="350" pos="12" />
+			
+			<spacer />
+			<checkbox id="disabled" text="Disabled" />
+		</grid>
+		<spacer width="20" />
+		<vbox>
+			<optionbox text="Optionbox 1" id="theOptionbox1" selected="true" group="group1" />
+			<optionbox text="Optionbox 2" id="theOptionbox2" group="group1" />
+			<optionbox text="Optionbox 3" id="theOptionbox3" group="group1" />
+		</vbox>
+	</hbox>
+</vbox>

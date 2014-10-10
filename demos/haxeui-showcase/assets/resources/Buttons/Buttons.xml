@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<style>
+		#theButton {
+			width: 140;
+			height: 100;
+			icon: icons/fav_32.png;
+			iconPosition: top;
+		}
+	</style>
+	<hbox>
+		<grid columns="2">
+			<text text="Text" />
+			<textinput id="text" text="Demo Button" width="150" />
+			
+			<text text="Width" />
+			<hslider id="width" max="350" pos="140" width="150" />
+			
+			<text text="Height" />
+			<hslider id="height" max="350" pos="100" width="150"/>
+			
+			<spacer />
+			<checkbox id="disabled" text="Disabled" />
+			
+			<spacer />
+			<checkbox id="toggle" text="Toggle" />
+
+			<text text="Icon" />
+			<listSelector id="icon" text="icons/fav_32.png" selectedIndex="0" width="150" autoSize="false">
+				<array>icons/fav_32.png,icons/fav_16.png</array>
+			</listSelector>
+			
+			<text text="Icon Position" />
+			<listSelector id="iconPosition" text="top" selectedIndex="0" width="150" autoSize="false" >
+				<array>top,left,farLeft,right,farRight</array>
+			</listSelector>
+		</grid>
+		<spacer width="20" />
+		<button text="Demo Button" id="theButton" autoSize="false" />
+	</hbox>
+</vbox>

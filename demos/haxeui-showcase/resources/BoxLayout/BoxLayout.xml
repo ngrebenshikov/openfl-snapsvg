@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="4">
+			<text text="Width" />
+			<hslider id="width" max="280" pos="200" width="150"/>
+			<text id="widthLabel" text="???" width="35" autoSize="false" />
+			<spacer />
+			
+			<text text="Height" />
+			<hslider id="height" max="450" pos="200" width="150"/>
+			<text id="heightLabel" text="???" width="35" autoSize="false" />
+			<spacer />
+
+			<spacer />
+			<checkbox id="disabled" text="Disabled" />
+			<spacer />
+			<spacer />
+			
+			<spacer height="20" />
+			<spacer />
+			<spacer />
+			<spacer />
+			
+			<text text="Child" />
+			<listSelector id="child" text="Button1" verticalAlign="top" selectedIndex="0" width="150" autoSize="false">
+				<array>Button1,Button2,Button3,Button4,Button5,Button6,Button7,Button8,Button9</array>
+			</listSelector>
+			<spacer />
+			<spacer />
+			
+			<text text="Width" />
+			<hslider id="childWidth" max="200" pos="50" width="150"/>
+			<text id="childWidthLabel" text="???" width="35" autoSize="false" />
+			<checkbox id="childWidthAsPercent" text="%" verticalAlign="bottom" />
+			
+			<text text="Height" />
+			<hslider id="childHeight" max="200" pos="50" width="150"/>
+			<text id="childHeightLabel" text="???" width="35" autoSize="false" />
+			<checkbox id="childHeightAsPercent" text="%" verticalAlign="bottom" />
+			
+			<text text="VAlign" />
+			<listSelector id="valign" text="top" selectedIndex="0" width="150" autoSize="false">
+				<array>top,center,bottom</array>
+			</listSelector>
+			<spacer />
+			<spacer />
+			
+			<text text="HAlign" />
+			<listSelector id="halign" text="left" selectedIndex="0" width="150" autoSize="false">
+				<array>left,center,right</array>
+			</listSelector>
+			<spacer />
+			<spacer />
+		</grid>
+		
+		<spacer width="20" />
+		
+		<box id="theBox" style="borderSize:1;padding:5;borderColor:0x000000" width="200" height="200" autoSize="false">
+			<button id="Button1" text="1" width="50" height="50" autoSize="false"/>
+			<button id="Button2" text="2" horizontalAlign="center" width="50" height="50" autoSize="false"/>
+			<button id="Button3" text="3" horizontalAlign="right" width="50" height="50" autoSize="false"/>
+			<button id="Button4" text="4" verticalAlign="center" width="50" height="50" autoSize="false"/>
+			<button id="Button5" text="5" horizontalAlign="center" verticalAlign="center" width="50" height="50" autoSize="false"/>
+			<button id="Button6" text="6" horizontalAlign="right" verticalAlign="center" width="50" height="50" autoSize="false"/>
+			<button id="Button7" text="7" verticalAlign="bottom" width="50" height="50" autoSize="false"/>
+			<button id="Button8" text="8" horizontalAlign="center" verticalAlign="bottom" width="50" height="50" autoSize="false"/>
+			<button id="Button9" text="9" horizontalAlign="right" verticalAlign="bottom" width="50" height="50" autoSize="false"/>
+		</box>
+	</hbox>
+</vbox>

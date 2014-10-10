@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Title" />
+			<textinput id="title" text="Simple" width="150" />
+			
+			<text text="Text" />
+			<textinput id="text" text="Simple Popup Text" width="150" />
+			
+			<text text="Buttons" />
+			<checkbox id="okButton" text="OK" selected="true" />
+			
+			<spacer />
+			<checkbox id="cancelButton" text="Cancel" />
+			
+			<spacer />
+			<checkbox id="confirmButton" text="Confirm" />
+			
+			<spacer />
+			<checkbox id="yesButton" text="Yes" />
+			
+			<spacer />
+			<checkbox id="noButton" text="No" />
+		</grid>
+		<spacer width="20" />
+		<button id="showButton" text="Show Popup" />
+	</hbox>
+</vbox>

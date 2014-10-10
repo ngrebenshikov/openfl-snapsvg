@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Text" />
+			<textinput id="text" width="100%" text="Checkbox" />
+			
+			<text text="Font Size" />
+			<hslider id="fontSize" width="150" max="350" pos="12" />
+			
+			<spacer />
+			<checkbox id="disabled" text="Disabled" />
+		</grid>
+		<spacer width="20" />
+		<vbox>
+			<checkbox text="Checkbox 1" id="theCheckbox1" selected="true" />
+			<checkbox text="Checkbox 2" id="theCheckbox2" />
+			<checkbox text="Checkbox 3" id="theCheckbox3" />
+		</vbox>
+	</hbox>
+</vbox>

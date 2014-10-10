@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grid width="100%" columns="2" id="myCustomPopup">
+	<text text="First Name: "/>
+	<textinput text="Ian" width="100%" id="firstName" />
+	
+	<text text="Last Name: " />
+	<textinput text="Harrigan" width="100%" id="lastName" />
+</grid>

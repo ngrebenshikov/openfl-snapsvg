@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Title" />
+			<textinput id="title" text="List" width="150" />
+			
+			<text text="Items" verticalAlign="top" />
+			<textinput id="items" text="Item 1\nItem 2\nItem 3\nItem 4\nItem 5\nItem 6\nItem 7\nItem 8\nItem 9" width="150" multiline="true" height="90" />
+			
+			<text text="Selection" />
+			<textinput id="selection" text="-1" width="150" />
+		</grid>
+		<spacer width="20" />
+		<button id="showButton" text="Show Popup" />
+	</hbox>
+</vbox>

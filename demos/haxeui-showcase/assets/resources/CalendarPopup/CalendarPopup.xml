@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Title" />
+			<textinput id="title" text="Calendar" width="150" />
+		</grid>
+		<spacer width="20" />
+		<button id="showButton" text="Show Popup" />
+	</hbox>
+</vbox>

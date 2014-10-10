@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="3">
+			<text text="Width" />
+			<hslider id="width" max="310" pos="200" width="150"/>
+			<text id="widthLabel" text="???" width="35" autoSize="false" />
+			
+			<text text="Height" />
+			<hslider id="height" max="450" pos="200" width="150"/>
+			<text id="heightLabel" text="???" width="35" autoSize="false" />
+			
+			<spacer />
+			<checkbox id="clipContent" text="Clip Content" />
+			<spacer />
+
+			<spacer />
+			<checkbox id="disabled" text="Disabled" />
+			<spacer />
+			
+			<spacer height="20" />
+			<spacer />
+			<spacer />
+			
+			<text text="Child" />
+			<listSelector id="child" text="Button1" verticalAlign="top" selectedIndex="0" width="150" autoSize="false">
+				<array>Button1,Button2,Button3,Button4</array>
+			</listSelector>
+			<spacer />
+			
+			<text text="Left" />
+			<hslider id="childLeft" max="200" pos="0" width="150"/>
+			<text id="childLeftLabel" text="???" width="35" autoSize="false" />
+			
+			<text text="Top" />
+			<hslider id="childTop" max="200" pos="0" width="150"/>
+			<text id="childTopLabel" text="???" width="35" autoSize="false" />
+			
+			<text text="Width" />
+			<hslider id="childWidth" max="200" pos="100" width="150"/>
+			<text id="childWidthLabel" text="???" width="35" autoSize="false" />
+			
+			<text text="Height" />
+			<hslider id="childHeight" max="200" pos="100" width="150"/>
+			<text id="childHeightLabel" text="???" width="35" autoSize="false" />
+		</grid>
+		<spacer width="20" />
+		<absolute id="theBox" style="borderSize:1;padding:5;borderColor:0x000000" width="200" height="320" autoSize="false">
+			<button id="Button1" x="0" y="0" text="1" width="100" height="100" autoSize="false" />
+			<button id="Button2" x="60" y="60" text="2" width="100" height="100" autoSize="false" />
+			<button id="Button3" x="0" y="120" text="3" width="100" height="100" autoSize="false" />
+			<button id="Button4" x="60" y="180" text="4" width="100" height="100" autoSize="false" />
+		</absolute>
+	</hbox>
+</vbox>

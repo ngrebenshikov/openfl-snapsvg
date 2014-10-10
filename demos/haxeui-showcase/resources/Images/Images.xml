@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Width" />
+			<hslider id="width" width="150" max="350" pos="140" />
+			
+			<text text="Height" />
+			<hslider id="height" width="150" max="350" pos="100"/>
+			
+			<spacer />
+			<checkbox id="stretch" text="Stretch" selected="true" />
+
+			<text text="Resource" />
+			<listSelector id="resource" text="slinky_small.jpg" selectedIndex="0" width="100%">
+				<array>slinky_small.jpg,slinky.jpg,slinky_large.jpg</array>
+			</listSelector>
+			
+		</grid>
+		<spacer width="20" />
+		<image id="theImage" resource="resources/slinky_small.jpg" stretch="true" />
+	</hbox>
+</vbox>

@@ -1,0 +1,14 @@
+WebView {
+	borderColor: 0xa5b8da;
+	color: 0x000000;
+	paddingLeft: 2;
+	paddingTop: 2;
+	paddingBottom: 2;
+	paddingRight: 2;
+	borderSize: 1;
+	spacingX: 2;
+	spacingY: 2;
+	cornerRadius: 2;
+	backgroundColor: 0xFFFFFF;
+	//backgroundColor: 0xFF0000;
+}

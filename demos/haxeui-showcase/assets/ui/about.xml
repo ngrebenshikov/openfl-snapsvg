@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox width="100%">
+	<style>
+		#appName {
+			fontSize: 20;
+		}
+	</style>
+	<text text="HaxeUI Compononent Showcase" id="appName" />
+	<text text="Demonstration applicaton to allow browsing, testing and dynamically modifying the HaxeUI component suite" multiline="true" wrapLines="true" width="100%" />
+	
+	<spacer height="15" />
+	
+	<grid columns="2" width="100%">
+		<text text="Site: "/>
+		<text text="http://haxeui.org/"/>
+		
+		<text text="Wiki: "/>
+		<text text="http://haxeui.org/wiki/"/>
+		
+		<text text="API: "/>
+		<text text="http://haxeui.org/docs/api/"/>
+		
+		<text text="Source: "/>
+		<text text="https://github.com/ianharrigan/haxeui/"/>
+	</grid>
+	
+	<spacer height="15" />
+</vbox>

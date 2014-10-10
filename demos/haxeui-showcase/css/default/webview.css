@@ -1,0 +1,9 @@
+WebView {
+	autoHideScrolls: false;
+	inlineScrolls: false;
+	backgroundColor: 0xFFFFFF;
+}
+
+WebView Box {
+	backgroundColor: 0xFFFFFF;
+}

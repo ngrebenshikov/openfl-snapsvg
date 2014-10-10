@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox width="100%" height="100%">
+	<style>
+		#views .page {
+			padding: 0;
+		}
+		
+		#views ListView {
+			cornerRadius: 0;
+		}
+		
+		#views AccordionButton {
+			cornerRadius: 0;
+		}
+		
+		ListView #container {
+			spacing: 10;
+		}
+	</style>
+	<menubar>
+		<menubutton text="Application" id="menuApplication">
+			<menu>
+				<menuitem text="Settings..." id="menuSettings" />
+				<menuitem text="About..." id="menuAbout" />
+			</menu>
+		</menubutton>
+		<menubutton text="View" id="menuView">
+		</menubutton>
+		
+		<spacer width="100%" />
+		
+		<listSelector text="Default Theme" id="theme" width="140" autoSize="false">
+			<json>[{"text":"Default Theme", "id": "default"},{"text":"Gradient Theme", "id":"gradient"}]</json>
+		</listSelector>
+	</menubar>
+	<hbox width="100%" height="100%">
+		<accordion id="views" width="200" height="100%" />
+		<tabview width="100%" height="100%" id="tabs">
+			<vbox text="Main">
+				
+			</vbox>
+		</tabview>
+	</hbox>
+</vbox>

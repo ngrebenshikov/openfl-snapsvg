@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<vbox>
+	<hbox>
+		<grid columns="2">
+			<text text="Width" />
+			<hslider id="width" width="150" max="350" pos="200" />
+			
+			<text text="Height" />
+			<hslider id="height" width="150" max="450" pos="300"/>
+		</grid>
+		<spacer width="20" />
+		<listview id="theList" width="200" height="300" />
+	</hbox>
+</vbox>
