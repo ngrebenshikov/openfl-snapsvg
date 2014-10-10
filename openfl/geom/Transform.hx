@@ -32,29 +32,29 @@ class Transform {
 	
 	
 	public inline function __getFullMatrix (localMatrix:Matrix = null):Matrix {
-		
+
 		var m;
-		
+
 		if (localMatrix != null) {
-			
+
 			m = localMatrix.mult (_fullMatrix);
-			
+
 		} else {
-			
+
 			m = _fullMatrix.clone ();
-			
+
 		}
-		
+
 		return m;
-		
+
 	}
-	
-	
+
+
 	public inline function __setFullMatrix (inValue:Matrix):Matrix {
-		
+
 		_fullMatrix.copy (inValue);
 		return _fullMatrix;
-		
+
 	}
 	
 	
@@ -64,13 +64,7 @@ class Transform {
 		
 	}
 	
-	
-	
-	
 	// Getters & Setters
-	
-	
-	
 	
 	private function set_colorTransform (inValue:ColorTransform):ColorTransform {
 		
@@ -81,9 +75,9 @@ class Transform {
 	
 	
 	private function get_concatenatedMatrix ():Matrix {
-		
+
 		return __getFullMatrix (_matrix);
-		
+
 	}
 	
 	

@@ -190,12 +190,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private inline function getSurfaceTransform ():Matrix {
-		var fm = if (null == parent) __getFullMatrix () else {
-            var m = __getFullMatrix();
-            m.concat(parent.__getFullMatrix().invert());
-            m;
-        }
-		return fm;
+        return __getMatrix();
 	}
 	
 	
@@ -481,11 +476,11 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	public inline function __getFullMatrix (localMatrix:Matrix = null):Matrix {
-		
+
 		return transform.__getFullMatrix (localMatrix);
-		
+
 	}
-	
+
 	
 	private function __getGraphics ():Graphics {
 		
@@ -745,21 +740,17 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			}
 			
 			if (_matrixInvalid) {
-				
 				m.identity (); // update matrix if necessary
 				m.scale (__scaleX, __scaleY); // set scale
 			
 				// set rotation if necessary
 				var rad = __rotation * Transform.DEG_TO_RAD;
 				if (rad != 0.0) {
-					
 					m.rotate (rad);
-					
 				}
 				
 				m.translate (__x, __y); // set translation
 				__setMatrix (m);
-				
 			}
 			
 			var cm = __getFullMatrix ();
