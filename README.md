@@ -3,6 +3,8 @@ Openfl-snapsvg
 
 It's the very beginning of a HTML5 backend for [OpenFL](http://www.openfl.org) based on [Snap.SVG](http://snapsvg.io)
 
+[Demos (Actuate, BunnyMark, Aswing UI, Haxe UI)](http://ngrebenshikov.github.io/openfl-snapsvg/)
+
 Getting Started
 ==================
 
