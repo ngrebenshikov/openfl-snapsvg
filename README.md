@@ -16,3 +16,9 @@ Navigate to the application.xml of your project and add the following before the
 ```xml
 <set name="html5-backend" value="openfl-snapsvg" />
 ```
+
+Dependencies
+------------
+
+* openfl 2.0.1
+* lime 1.0.1
