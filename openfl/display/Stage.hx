@@ -491,10 +491,10 @@ class Stage extends DisplayObjectContainer {
 		}
 		__uIEventsQueueIndex = 0;
 
-        this.dispatchEvent(new Event(Event.ENTER_FRAME));
+        __broadcast(new Event(Event.ENTER_FRAME));
 
 		if (__invalid) {
-            this.dispatchEvent(new Event(Event.RENDER));
+            __broadcast(new Event(Event.RENDER));
 		}
 		this.__renderAll ();
         this.dispatchEvent(new Event(Event.STAGE_RENDERED));

@@ -1092,11 +1092,12 @@ class Graphics {
 
 
     private function __addStrokeAttribute(element: SnapElement, lineJob: LineJob):Void {
+        var htmlElement: Element = cast(element.node);
         if(lineJob != null){
-            if(lineJob.grad == null){
-                element.attr({stroke: createCanvasColor(lineJob.colour, lineJob.alpha)});
+            if (lineJob.grad == null) {
+                htmlElement.setAttribute('stroke', createCanvasColor(lineJob.colour, lineJob.alpha));
             } else {
-                element.attr({stroke: createCanvasGradient(lineJob.grad)});
+                element.attr({ stroke: createCanvasGradient(lineJob.grad)});
             }
             element.attr({
                 'stroke-width': lineJob.thickness,
@@ -1122,7 +1123,7 @@ class Graphics {
                 }
             });
         } else {
-            element.attr({ stroke: "none" });
+            htmlElement.setAttribute('stroke', 'none');
         }
     }
 
@@ -1240,6 +1241,10 @@ class Graphics {
 
                         __snap.append(circle);
                     case SnapDrawable.RECT(x, y, width, height, rx, ry):
+                        if (x < 0) x = 0;
+                        if (y < 0) y = 0;
+                        if (width < 0) width = 0;
+                        if (height < 0) height = 0;
                         var rect: SnapElement = Lib.snap.rect(x, y, width, height, rx, ry);
 
                         __addStrokeAttribute(rect, d.lineJobs.length == 1 ? d.lineJobs[0] : null);

@@ -384,9 +384,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	
 	private inline function __clearFlag (mask:Int):Void {
-		
 		___renderFlags &= ~mask;
-		
 	}
 	
 	
@@ -626,21 +624,23 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 		
 		var fullAlpha:Float = (parent != null ? parent.__combinedAlpha : 1) * alpha;
 		
-		if (inMask != null) {
+//		if (inMask != null) {
 //TODO: uncomment
 //			var m = getSurfaceTransform (gfx);
 //            Lib.__drawToSurface (gfx.__surface, inMask, m, fullAlpha, clipRect);
-		} else {
+//		} else {
 
 			if (__testFlag (TRANSFORM_INVALID)) {
-
 				var m = getSurfaceTransform ();
 				__setTransform (m);
 				__clearFlag (TRANSFORM_INVALID);
 			}
             var el: Element = cast(snap.node);
-            el.setAttribute('opacity', Std.string(alpha));
-        }
+            var alphaStr = Std.string(alpha);
+            if (el.getAttribute('opacity') != alphaStr) {
+                el.setAttribute('opacity', alphaStr);
+            }
+//        }
 
         if (null != clipRect) {
             updateClipRect(clipRect);

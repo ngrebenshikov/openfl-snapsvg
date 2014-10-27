@@ -538,7 +538,6 @@ class DisplayObjectContainer extends InteractiveObject {
 			if (child.__visible) {
 				if (clipRect != null) {
 					if (child._matrixInvalid || child._matrixChainInvalid) {
-						//child.invalidateGraphics ();
 						child.__validateMatrix ();
 					}
 				}

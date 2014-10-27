@@ -285,9 +285,11 @@ class TextField extends InteractiveObject {
             char_idx = wrapParagraph(paragraph, wrap, char_idx, mSelStart, mSelEnd);
         }
 
-        mTextSnap.selectAll("tspan").forEach(function (s) {
-            s.remove();
-        }, this);
+        var textNode = mTextSnap.node;
+        var spans = [for (i in 0...textNode.childNodes.length) textNode.childNodes.item(i)];
+        for (s in spans) {
+            textNode.removeChild(s);
+        }
 
         var svgBuf: StringBuf = new StringBuf();
         var firstParagraph = true;
@@ -675,7 +677,7 @@ class TextField extends InteractiveObject {
                 lineWidth += s.rect.width;
             }
         }
-        if (paragraph.align == TextFormatAlign.CENTER) {
+        if (paragraph.align == TextFormatAlign.CENTER && null != startSpan) {
             startSpan.startX = Math.floor((mUserWidth - lineWidth)/2);
         }
 
@@ -1324,11 +1326,11 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	private function get_maxScrollH ():Int { return 0; }
-	private function get_maxScrollV ():Int { return 0; }
+	private function get_maxScrollH ():Int { return scrollH; }
+	private function get_maxScrollV ():Int { return scrollV; }
 	private function get_multiline ():Bool { return multiline; }
 	private function set_multiline (value:Bool):Bool { return multiline = value; }
-	private function get_numLines ():Int { return 0; }
+	private function get_numLines ():Int { return if (null != mText) 1 else 0; }
 	private function get_scrollH ():Int { return scrollH; }
 	private function set_scrollH (value:Int):Int { return scrollH = value; }
 	private function get_scrollV ():Int { return scrollV; }
@@ -1349,16 +1351,20 @@ class TextField extends InteractiveObject {
 	
 	
 	public function set_text (inText:String):String {
-		mText = Std.string(inText);
+        if (mText == inText) return inText;
+
+		mText = inText;
         if (!multiline) {
             mText = StringTools.replace(mText, '\n', '');
         }
+
 		//mHTMLText = inText;
 		mHTMLMode = false;
 		RebuildText ();
 		__invalidateBounds ();
 		dispatchEvent(new Event(Event.CHANGE));
-		return mText;
+
+        return mText;
 	}
 	
 	

@@ -1516,7 +1516,7 @@ class Assets {
 	
 	macro public static function embedBitmap ():Array<Field> {
 		
-		#if (html5 && !openfl_html5_dom)
+		#if (html5 && !openfl_snapsvg)
 		var fields = embedData (":bitmap", true);
 		#else
 		var fields = embedData (":bitmap");
@@ -1527,14 +1527,13 @@ class Assets {
 			var constructor = macro { 
 				
 				#if html5
-				#if openfl_html5_dom
+				#if openfl_snapsvg
 				
 				super (width, height, transparent, fillRGBA);
 				
 				var currentType = Type.getClass (this);
 				
 				if (preload != null) {
-					
 					___textureBuffer.width = Std.int (preload.width);
 					___textureBuffer.height = Std.int (preload.height);
 					rect = new openfl.geom.Rectangle (0, 0, preload.width, preload.height);
@@ -1544,15 +1543,10 @@ class Assets {
 				} else {
 					
 					var byteArray = openfl.utils.ByteArray.fromBytes (haxe.Resource.getBytes(resourceName));
-					
 					if (onload != null && !Std.is (onload, Bool)) {
-						
 						__loadFromBytes(byteArray, null, onload);
-						
 					} else {
-						
 						__loadFromBytes(byteArray);
-						
 					}
 					
 				}
@@ -1562,27 +1556,18 @@ class Assets {
 				super (0, 0, transparent, fillRGBA);
 				
 				if (preload != null) {
-					
-					__sourceImage = preload;
-					width = __sourceImage.width;
-					height = __sourceImage.height;
-					
+					__sourceCanvas = preload.__sourceCanvas;
+					width = preload.__sourceCanvas.width;
+					height = preload.__sourceCanvas.height;
 				} else {
 					
 					__loadFromBase64 (haxe.Resource.getString(resourceName), resourceType, function (b) {
-						
-						if (preload == null) {
-							
-							preload = b.__sourceImage;
-							
-						}
-						
 						if (onload != null) {
-							
 							onload (b);
-							
 						}
-						
+						if (preload == null) {
+							preload = b;
+						}
 					});
 					
 				}
@@ -1603,7 +1588,7 @@ class Assets {
 			
 			#if html5
 			args.push ({ name: "onload", opt: true, type: macro :Dynamic, value: null });
-			#if openfl_html5_dom
+			#if openfl_snapsvg
 			fields.push ({ kind: FVar(macro :openfl.display.BitmapData, null), name: "preload", doc: null, meta: [], access: [ APublic, AStatic ], pos: Context.currentPos() });
 			#else
 			fields.push ({ kind: FVar(macro :js.html.Image, null), name: "preload", doc: null, meta: [], access: [ APublic, AStatic ], pos: Context.currentPos() });
@@ -1696,7 +1681,7 @@ class Assets {
 				
 				super();
 				
-				#if openfl_html5_dom
+				#if openfl_snapsvg
 				nmeFromBytes (haxe.Resource.getBytes (resourceName));
 				#else
 				__fromBytes (haxe.Resource.getBytes (resourceName));

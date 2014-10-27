@@ -43,6 +43,10 @@ class TextFormat {
 		rightMargin = in_rightMargin;
 		indent = in_indent;
 		leading = in_leading;
+
+        if (null == leading) {
+            leading = 0.0;
+        }
 		
 	}
 	

@@ -143,16 +143,13 @@ class Bitmap extends DisplayObject {
 	
 	override public function __render (inMask:SnapElement = null, clipRect:Rectangle = null):Void {
 		
-		if (!__combinedVisible) return;
-		if (bitmapData == null) return;
-		
-		if (_matrixInvalid || _matrixChainInvalid) {
-			
-			__validateMatrix ();
-			
-		}
-        var imageDataLease = bitmapData.__getLease ();
+		if (!__combinedVisible || bitmapData == null) return;
 
+		if (_matrixInvalid || _matrixChainInvalid) {
+			__validateMatrix ();
+		}
+
+        var imageDataLease = bitmapData.__getLease ();
         if (imageDataLease != null && (__currentLease == null || imageDataLease.seed != __currentLease.seed || imageDataLease.time != __currentLease.time)) {
             var srcCanvas: CanvasElement = bitmapData.handle ();
             var child = snap.select('*');
@@ -170,21 +167,24 @@ class Bitmap extends DisplayObject {
             handleGraphicsUpdated (null);
         }
 //TODO: uncomment
-		if (inMask != null) {
+//		if (inMask != null) {
 //
 //			__applyFilters (__graphics.__surface);
 //			var m = getBitmapSurfaceTransform (__graphics);
 //			Lib.__drawToSurface (__graphics.__surface, inMask, m, (parent != null ? parent.__combinedAlpha : 1) * alpha, clipRect, smoothing);
 //
-        } else {
-            if (__testFlag (DisplayObject.TRANSFORM_INVALID)) {
+//        } else {
+            if (__testFlag(DisplayObject.TRANSFORM_INVALID)) {
                 var m = getSurfaceTransform ();
                 __setTransform (m);
-                __clearFlag (DisplayObject.TRANSFORM_INVALID);
+                __clearFlag(DisplayObject.TRANSFORM_INVALID);
             }
             var el: Element = cast(snap.node);
-            el.setAttribute('opacity', Std.string(alpha));
-        }
+            var alphaStr = Std.string(alpha);
+            if (el.getAttribute('opacity') != alphaStr) {
+                el.setAttribute('opacity', alphaStr);
+            }
+//        }
        //updateClipRect();
     }
 

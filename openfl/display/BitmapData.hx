@@ -1362,9 +1362,7 @@ class BitmapData implements IBitmapDrawable {
 	
 	
 	public inline function __getLease ():ImageDataLease {
-		
 		return __lease;
-		
 	}
 	
 	
@@ -1374,7 +1372,6 @@ class BitmapData implements IBitmapDrawable {
 		var canvas = ___textureBuffer;
 		
 		var drawImage = function (_) {
-			
 			canvas.width = img.width;
 			canvas.height = img.height;
 			
@@ -1382,11 +1379,12 @@ class BitmapData implements IBitmapDrawable {
 			ctx.drawImage (img, 0, 0);
 			
 			rect = new Rectangle (0, 0, canvas.width, canvas.height);
-			
+            __buildLease ();
+
+            __sourceImage = cast(img);
+
 			if (onload != null) {
-				
 				onload (this);
-				
 			}
 			
 		}
@@ -1530,15 +1528,10 @@ class BitmapData implements IBitmapDrawable {
 		if (image.complete) { }
 		
 	}
-	
-	
-	
+
 	
 	// Event Handlers
-	
-	
-	
-	
+
 	private function __onLoad (data:LoadData, e) {
 		
 		var canvas:CanvasElement = cast data.texture;
@@ -1551,6 +1544,8 @@ class BitmapData implements IBitmapDrawable {
 		
 		var ctx:CanvasRenderingContext2D = canvas.getContext ("2d");
 		ctx.drawImage (data.image, 0, 0, width, height);
+
+        __sourceImage = cast(data.image);
 		
 		data.bitmapData.width = width;
 		data.bitmapData.height = height;
@@ -1569,13 +1564,7 @@ class BitmapData implements IBitmapDrawable {
 		
 	}
 	
-	
-	
-	
 	// Getters & Setters
-	
-	
-	
 	
 	private inline function get_height ():Int {
 		
