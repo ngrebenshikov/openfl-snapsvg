@@ -7,5 +7,8 @@
   "version": "0.0.1",
   "releasenote": "Initial release",
   "contributors": [ "grebenshikov.n" ],
-  "dependencies": {}
+  "dependencies": {
+    "openfl" : "2.0.1",
+    "lime": "1.0.1"
+  }
 }
