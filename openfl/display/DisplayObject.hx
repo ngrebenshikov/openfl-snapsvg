@@ -1,6 +1,12 @@
 package openfl.display;
 
 
+import js.html.CanvasRenderingContext2D;
+import haxe.io.Bytes;
+import StringTools;
+import haxe.crypto.Base64;
+import js.html.Image;
+import js.html.CanvasElement;
 import js.html.Element;
 import js.html.Node;
 import snap.Snap;
@@ -142,16 +148,36 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	}
 	
 	
-	public function drawToSurface (inSurface:Dynamic, matrix:Matrix, inColorTransform:ColorTransform, blendMode:BlendMode, clipRect:Rectangle, smoothing:Bool):Void {
+	public function drawToSurface(inSurface:Dynamic, matrix:Matrix, inColorTransform:ColorTransform, blendMode:BlendMode, clipRect:Rectangle, smoothing:Bool):Void {
 		
 		var oldAlpha = alpha;
 		alpha = 1;
-		__render (inSurface, clipRect);
+
+		__render (null, null, true);
+
+		var image: Image = new Image();
+		image.src = getSvgDataUrl();
+
+		var canvas:CanvasElement = cast(inSurface);
+		var c: CanvasRenderingContext2D = canvas.getContext("2d");
+		if (null != matrix) {
+			c.drawImage(image, matrix.tx, matrix.ty);
+		} else {
+			c.drawImage(image, 0, 0);
+		}
+		//TODO: process scale, rotate, blend, clip
 		alpha = oldAlpha;
-		
 	}
-	
-	
+
+	public function getSvgDataUrl() {
+		var buf: StringBuf = new StringBuf();
+		buf.add("data:image/svg+xml;utf8,");
+		buf.add('<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">');
+		buf.add(this.snap.innerSVG());
+		buf.add("</svg>");
+		return buf.toString();
+	}
+
 	public function getBounds (targetCoordinateSpace:DisplayObject):Rectangle {
 		
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
@@ -605,9 +631,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         renderNextWake();
 	}
 
-	private function __render (inMask:SnapElement = null, clipRect:Rectangle = null) {
+	private function __render (inMask:SnapElement = null, clipRect:Rectangle = null, force: Bool = false) {
 		
-		if (!__combinedVisible) return;
+		if (!__combinedVisible && !force) return;
 
 		var gfx = __getGraphics ();
 		if (gfx == null) return;

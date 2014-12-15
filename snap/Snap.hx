@@ -258,6 +258,7 @@ extern class SnapElement {
 	public function mouseout(handler:Event->Void):SnapElement;
 	public function mouseover(handler:Event->Void):SnapElement;
 	public function mouseup(handler:Event->Void):SnapElement;
+	public function outerSVG(): String;
 	public function parent():SnapElement;
 	public function pattern(x:Float, y:Float, width:String, height:String):SnapElement;
 	public function prepend(el:SnapElement):SnapElement;

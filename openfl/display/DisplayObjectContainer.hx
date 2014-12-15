@@ -522,9 +522,9 @@ class DisplayObjectContainer extends InteractiveObject {
 	}
 	
 	
-	override private function __render (inMask:SnapElement = null, clipRect:Rectangle = null):Void {
+	override private function __render (inMask:SnapElement = null, clipRect:Rectangle = null, force:Bool = false):Void {
 		
-		if (!__visible) return;
+		if (!__visible && !force) return;
 
 		if (__scrollRect != null) {
 			clipRect = __scrollRect;

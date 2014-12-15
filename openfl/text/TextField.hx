@@ -876,9 +876,9 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	override public function __render (inMask:SnapElement = null, clipRect:Rectangle = null):Void {
+	override public function __render (inMask:SnapElement = null, clipRect:Rectangle = null, force:Bool = false):Void {
 		
-		if (!__combinedVisible) return;
+		if (!__combinedVisible && !force) return;
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
 
         if (__graphics.__render (inMask, __filters, 1, 1)) {

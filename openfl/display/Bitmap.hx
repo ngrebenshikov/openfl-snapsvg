@@ -141,9 +141,9 @@ class Bitmap extends DisplayObject {
 	}
 	
 	
-	override public function __render (inMask:SnapElement = null, clipRect:Rectangle = null):Void {
+	override public function __render (inMask:SnapElement = null, clipRect:Rectangle = null, force:Bool = false):Void {
 		
-		if (!__combinedVisible || bitmapData == null) return;
+		if (!__combinedVisible && !force || bitmapData == null) return;
 
 		if (_matrixInvalid || _matrixChainInvalid) {
 			__validateMatrix ();
