@@ -1,6 +1,7 @@
 package openfl;
 
 
+import lime.system.System;
 import openfl.text.TextField.Span;
 import snap.Snap;
 import openfl.display.DisplayObject;
@@ -1061,6 +1062,12 @@ class Lib {
         }
         return mFreeSnap;
     }
+	@:keep @:expose("openfl.embed")
+	public static function embed (elementName:String, width:Null<Int> = null, height:Null<Int> = null, background:String = null) {
+
+		System.embed (elementName, width, height, background);
+
+	}
 }
 
 

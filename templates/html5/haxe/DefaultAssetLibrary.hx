@@ -1,81 +1,102 @@
 package;
 
 
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.MovieClip;
-import flash.text.Font;
-import flash.media.Sound;
-import flash.net.URLRequest;
-import flash.utils.ByteArray;
+import haxe.Timer;
 import haxe.Unserializer;
-import openfl.Assets;
+import lime.app.Preloader;
+import lime.audio.openal.AL;
+import lime.audio.AudioBuffer;
+import lime.graphics.Font;
+import lime.graphics.Image;
+import lime.utils.ByteArray;
+import lime.utils.UInt8Array;
+import lime.Assets;
 
-#if (flash || js)
-import flash.display.Loader;
-import flash.events.Event;
-import flash.net.URLLoader;
+#if (sys || nodejs)
+import sys.FileSystem;
 #end
 
-#if ios
-import openfl.utils.SystemPath;
+#if flash
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.Loader;
+import flash.events.Event;
+import flash.media.Sound;
+import flash.net.URLLoader;
+import flash.net.URLRequest;
 #end
 
 
 class DefaultAssetLibrary extends AssetLibrary {
-	
-	
-	public static var className (default, null) = new Map <String, Dynamic> ();
-	public static var path (default, null) = new Map <String, String> ();
-	public static var type (default, null) = new Map <String, AssetType> ();
-	
-	
+
+
+	public var className (default, null) = new Map <String, Dynamic> ();
+	public var path (default, null) = new Map <String, String> ();
+	public var type (default, null) = new Map <String, AssetType> ();
+
+	private var lastModified:Float;
+	private var timer:Timer;
+
+
 	public function new () {
-		
+
 		super ();
-		
-		#if flash
+
+#if flash
 		
 		::if (assets != null)::::foreach assets::::if (embed)::className.set ("::id::", __ASSET__::flatName::);::else::path.set ("::id::", "::resourceName::");::end::
-		type.set ("::id::", Reflect.field (AssetType, "::type::".toUpperCase ()));
+		type.set ("::id::", AssetType.$$upper(::type::));
 		::end::::end::
 		
 		#elseif html5
 		
-		::if (assets != null)::::foreach assets::::if (embed)::::if (type == "font")::className.set ("::id::", __ASSET__::flatName::);::else::path.set ("::id::", "::resourceName::");::end::
-		type.set ("::id::", Reflect.field (AssetType, "::type::".toUpperCase ()));
-		::end::::end::::end::
+		::if (assets != null)::var id;
+		::foreach assets::id = "::id::";
+		::if (embed)::::if (type == "font")::className.set (id, __ASSET__::flatName::);::else::path.set (id, ::if (resourceName == id)::id::else::"::resourceName::"::end::);::end::
+		::else::path.set (id, ::if (resourceName == id)::id::else::"::resourceName::"::end::);::end::
+		type.set (id, AssetType.$$upper(::type::));
+		::end::::end::
 		
 		#else
+
+#if openfl
+		::if (assets != null)::
+		::foreach assets::::if (type == "font")::openfl.text.Font.registerFont (__ASSET__::flatName::);::end::
+		::end::::end::
+		#end
+
+#if (windows || mac || linux)
 		
-		try {
+		/*var useManifest = false;
+		::if (assets != null)::::foreach assets::::if (embed)::
+		className.set ("::id::", __ASSET__::flatName::);
+		type.set ("::id::", AssetType.$$upper(::type::));
+		::else::useManifest = true;
+		::end::::end::::end::*/
+		var useManifest = true;
+		
+		if (useManifest) {
 			
-			#if blackberry
-			var bytes = ByteArray.readFile ("app/native/manifest");
-			#elseif tizen
-			var bytes = ByteArray.readFile ("../res/manifest");
-			#elseif emscripten
-			var bytes = ByteArray.readFile ("assets/manifest");
-			#else
-			var bytes = ByteArray.readFile ("manifest");
-			#end
+			loadManifest ();
 			
-			if (bytes != null) {
+			if (Sys.args ().indexOf ("-livereload") > -1) {
 				
-				bytes.position = 0;
+				var path = FileSystem.fullPath ("manifest");
+				lastModified = FileSystem.stat (path).mtime.getTime ();
 				
-				if (bytes.length > 0) {
+				timer = new Timer (2000);
+				timer.run = function () {
 					
-					var data = bytes.readUTFBytes (bytes.length);
+					var modified = FileSystem.stat (path).mtime.getTime ();
 					
-					if (data != null && data.length > 0) {
+					if (modified > lastModified) {
 						
-						var manifest:Array<AssetData> = Unserializer.run (data);
+						lastModified = modified;
+						loadManifest ();
 						
-						for (asset in manifest) {
+						if (eventCallback != null) {
 							
-							path.set (asset.id, asset.path);
-							type.set (asset.id, asset.type);
+							eventCallback (this, "change");
 							
 						}
 						
@@ -83,52 +104,36 @@ class DefaultAssetLibrary extends AssetLibrary {
 					
 				}
 				
-			} else {
-				
-				trace ("Warning: Could not load asset manifest");
-				
 			}
-			
-		} catch (e:Dynamic) {
-			
-			trace ("Warning: Could not load asset manifest");
 			
 		}
 		
-		#end
-		
+		#else
+
+		loadManifest ();
+
+#end
+#end
+
 	}
-	
-	
-	public override function exists (id:String, type:AssetType):Bool {
-		
-		var assetType = DefaultAssetLibrary.type.get (id);
-		
-		#if pixi
-		
-		if (assetType == IMAGE) {
-			
-			return true;
-			
-		} else {
-			
-			return false;
-			
-		}
-		
-		#end
-		
+
+
+	public override function exists (id:String, type:String):Bool {
+
+		var requestedType = type != null ? cast (type, AssetType) : null;
+		var assetType = this.type.get (id);
+
 		if (assetType != null) {
-			
-			if (assetType == type || ((type == SOUND || type == MUSIC) && (assetType == MUSIC || assetType == SOUND))) {
-				
+
+			if (assetType == requestedType || ((requestedType == SOUND || requestedType == MUSIC) && (assetType == MUSIC || assetType == SOUND))) {
+
 				return true;
-				
+
 			}
+
+#if flash
 			
-			#if flash
-			
-			if ((assetType == BINARY || assetType == TEXT) && type == BINARY) {
+			if ((assetType == BINARY || assetType == TEXT) && requestedType == BINARY) {
 				
 				return true;
 				
@@ -139,64 +144,56 @@ class DefaultAssetLibrary extends AssetLibrary {
 			}
 			
 			#else
-			
-			if (type == BINARY || type == null) {
-				
+
+			if (requestedType == BINARY || requestedType == null || (assetType == BINARY && requestedType == TEXT)) {
+
 				return true;
-				
+
 			}
-			
-			#end
-			
+
+#end
+
 		}
-		
+
 		return false;
-		
+
 	}
-	
-	
-	public override function getBitmapData (id:String):BitmapData {
+
+
+	public override function getAudioBuffer (id:String):AudioBuffer {
+
+#if flash
 		
-		#if pixi
+		var buffer = new AudioBuffer ();
+		buffer.src = cast (Type.createInstance (className.get (id), []), Sound);
+		return buffer;
 		
-		return BitmapData.fromImage (path.get (id));
-		
-		#elseif flash
-		
-		return cast (Type.createInstance (className.get (id), []), BitmapData);
-		
-		#elseif js
-		
-		try {
-		    return cast (ApplicationMain.loaders.get (path.get (id)).contentLoaderInfo.content, Bitmap).bitmapData;
-		} catch (e: Dynamic) {
-		    trace("Error: Bitmap not found - " + id + " - " + path.get(id));
-		    return null;
-		}
-		
-		#else
-		
-		return BitmapData.load (path.get (id));
-		
-		#end
-		
-	}
-	
-	
-	public override function getBytes (id:String):ByteArray {
-		
-		#if pixi
+		#elseif html5
 		
 		return null;
+		//return new Sound (new URLRequest (path.get (id)));
 		
-		#elseif flash
+		#else
+
+		return AudioBuffer.fromFile (path.get (id));
+//if (className.exists(id)) return cast (Type.createInstance (className.get (id), []), Sound);
+//else return new Sound (new URLRequest (path.get (id)), null, type.get (id) == MUSIC);
+
+#end
+
+	}
+
+
+	public override function getBytes (id:String):ByteArray {
+
+#if flash
 		
 		return cast (Type.createInstance (className.get (id), []), ByteArray);
 		
-		#elseif js
+		#elseif html5
 		
 		var bytes:ByteArray = null;
-		var data = ApplicationMain.urlLoaders.get (path.get (id)).data;
+		var data = Preloader.loaders.get (path.get (id)).data;
 		
 		if (Std.is (data, String)) {
 			
@@ -212,7 +209,7 @@ class DefaultAssetLibrary extends AssetLibrary {
 			bytes = null;
 			
 		}
-
+		
 		if (bytes != null) {
 			
 			bytes.position = 0;
@@ -224,151 +221,233 @@ class DefaultAssetLibrary extends AssetLibrary {
 		}
 		
 		#else
-		
+
+//return null;
+//if (className.exists(id)) return cast (Type.createInstance (className.get (id), []), ByteArray);
+//else
 		return ByteArray.readFile (path.get (id));
+
+#end
+
+	}
+
+
+	public override function getFont (id:String):Dynamic /*Font*/ {
+
+// TODO: Complete Lime Font API
+
+#if openfl
+		#if (flash || js)
+		
+		return cast (Type.createInstance (className.get (id), []), openfl.text.Font);
+		
+		#else
+		
+		if (className.exists (id)) {
+			
+			var fontClass = className.get (id);
+			openfl.text.Font.registerFont (fontClass);
+			return cast (Type.createInstance (fontClass, []), openfl.text.Font);
+			
+		} else {
+			
+			return new openfl.text.Font (path.get (id));
+			
+		}
 		
 		#end
-		
-	}
-	
-	
-	public override function getFont (id:String):Font {
-		
-		#if pixi
-		
+		#end
+
 		return null;
+
+	}
+
+
+	public override function getImage (id:String):Image {
+
+#if flash
 		
-		#elseif (flash || js)
+		return Image.fromBitmapData (cast (Type.createInstance (className.get (id), []), BitmapData));
 		
-		return cast (Type.createInstance (className.get (id), []), Font);
+		#elseif html5
+		
+		return Image.fromImageElement (Preloader.images.get (path.get (id)));
 		
 		#else
-		
-		return new Font (path.get (id));
-		
-		#end
-		
+
+		return Image.fromFile (path.get (id));
+
+#end
+
 	}
-	
-	
-	public override function getMusic (id:String):Sound {
-		
-		#if pixi
-		
-		//return null;		
-		
-		#elseif flash
-		
-		return cast (Type.createInstance (className.get (id), []), Sound);
-		
-		#elseif js
-		
-		return new Sound (new URLRequest (path.get (id)));
-		
-		#else
-		
-		return new Sound (new URLRequest (path.get (id)), null, true);
-		
-		#end
-		
-	}
-	
-	
-	public override function getPath (id:String):String {
-		
-		#if ios
-		
-		return SystemPath.applicationDirectory + "/assets/" + path.get (id);
-		
-		#else
-		
-		return path.get (id);
-		
-		#end
-		
-	}
-	
-	
-	public override function getSound (id:String):Sound {
-		
-		#if pixi
-		
-		return null;
-		
-		#elseif flash
-		
-		return cast (Type.createInstance (className.get (id), []), Sound);
-		
-		#elseif js
-		
-		return new Sound (new URLRequest (path.get (id)));
-		
-		#else
-		
-		return new Sound (new URLRequest (path.get (id)), null, type.get (id) == MUSIC);
-		
-		#end
-		
-	}
-	
-	
-	public override function isLocal (id:String, type:AssetType):Bool {
+
+
+/*public override function getMusic (id:String):Dynamic {
 		
 		#if flash
 		
-		if (type != AssetType.MUSIC && type != AssetType.SOUND) {
+		return cast (Type.createInstance (className.get (id), []), Sound);
+		
+		#elseif openfl_html5
+		
+		//var sound = new Sound ();
+		//sound.__buffer = true;
+		//sound.load (new URLRequest (path.get (id)));
+		//return sound;
+		return null;
+		
+		#elseif html5
+		
+		return null;
+		//return new Sound (new URLRequest (path.get (id)));
+		
+		#else
+		
+		return null;
+		//if (className.exists(id)) return cast (Type.createInstance (className.get (id), []), Sound);
+		//else return new Sound (new URLRequest (path.get (id)), null, true);
+		
+		#end
+		
+	}*/
+
+
+	public override function getPath (id:String):String {
+
+//#if ios
+
+//return SystemPath.applicationDirectory + "/assets/" + path.get (id);
+
+//#else
+
+		return path.get (id);
+
+//#end
+
+	}
+
+
+	public override function getText (id:String):String {
+
+#if html5
+		
+		var bytes:ByteArray = null;
+		var data = Preloader.loaders.get (path.get (id)).data;
+		
+		if (Std.is (data, String)) {
+			
+			return cast data;
+			
+		} else if (Std.is (data, ByteArray)) {
+			
+			bytes = cast data;
+			
+		} else {
+			
+			bytes = null;
+			
+		}
+		
+		if (bytes != null) {
+			
+			bytes.position = 0;
+			return bytes.readUTFBytes (bytes.length);
+			
+		} else {
+			
+			return null;
+		}
+		
+		#else
+
+		var bytes = getBytes (id);
+
+		if (bytes == null) {
+
+			return null;
+
+		} else {
+
+			return bytes.readUTFBytes (bytes.length);
+
+		}
+
+#end
+
+	}
+
+
+	public override function isLocal (id:String, type:String):Bool {
+
+		var requestedType = type != null ? cast (type, AssetType) : null;
+
+#if flash
+		
+		if (requestedType != AssetType.MUSIC && requestedType != AssetType.SOUND) {
 			
 			return className.exists (id);
 			
 		}
 		
 		#end
-		
+
 		return true;
-		
+
 	}
-	
-	
-	public override function loadBitmapData (id:String, handler:BitmapData -> Void):Void {
-		
-		#if pixi
-		
-		handler (getBitmapData (id));
-		
-		#elseif (flash || js)
-		
-		if (path.exists (id)) {
-			
-			var loader = new Loader ();
-			loader.contentLoaderInfo.addEventListener (Event.COMPLETE, function (event:Event) {
-				
-				handler (cast (event.currentTarget.content, Bitmap).bitmapData);
-				
-			});
-			loader.load (new URLRequest (path.get (id)));
-			
-		} else {
-			
-			handler (getBitmapData (id));
-			
+
+
+	public override function list (type:String):Array<String> {
+
+		var requestedType = type != null ? cast (type, AssetType) : null;
+		var items = [];
+
+		for (id in this.type.keys ()) {
+
+			if (requestedType == null || exists (id, type)) {
+
+				items.push (id);
+
+			}
+
 		}
+
+		return items;
+
+	}
+
+
+	public override function loadAudioBuffer (id:String, handler:AudioBuffer -> Void):Void {
+
+#if (flash || js)
+		
+		//if (path.exists (id)) {
+			
+		//	var loader = new Loader ();
+		//	loader.contentLoaderInfo.addEventListener (Event.COMPLETE, function (event) {
+				
+		//		handler (cast (event.currentTarget.content, Bitmap).bitmapData);
+				
+		//	});
+		//	loader.load (new URLRequest (path.get (id)));
+			
+		//} else {
+			
+			handler (getAudioBuffer (id));
+			
+		//}
 		
 		#else
-		
-		handler (getBitmapData (id));
-		
-		#end
-		
+
+		handler (getAudioBuffer (id));
+
+#end
+
 	}
-	
-	
+
+
 	public override function loadBytes (id:String, handler:ByteArray -> Void):Void {
-		
-		#if pixi
-		
-		handler (getBytes (id));
-		
-		#elseif (flash || js)
+
+#if flash
 		
 		if (path.exists (id)) {
 			
@@ -391,58 +470,117 @@ class DefaultAssetLibrary extends AssetLibrary {
 		}
 		
 		#else
-		
+
 		handler (getBytes (id));
-		
-		#end
-		
+
+#end
+
 	}
-	
-	
-	public override function loadFont (id:String, handler:Font -> Void):Void {
+
+
+	public override function loadImage (id:String, handler:Image -> Void):Void {
+
+#if flash
 		
-		#if (flash || js)
-		
-		/*if (path.exists (id)) {
+		if (path.exists (id)) {
 			
 			var loader = new Loader ();
-			loader.contentLoaderInfo.addEventListener (Event.COMPLETE, function (event) {
+			loader.contentLoaderInfo.addEventListener (Event.COMPLETE, function (event:Event) {
 				
-				handler (cast (event.currentTarget.content, Bitmap).bitmapData);
+				var bitmapData = cast (event.currentTarget.content, Bitmap).bitmapData;
+				handler (Image.fromBitmapData (bitmapData));
 				
 			});
 			loader.load (new URLRequest (path.get (id)));
 			
-		} else {*/
+		} else {
 			
-			handler (getFont (id));
+			handler (getImage (id));
 			
-		//}
+		}
 		
 		#else
-		
-		handler (getFont (id));
-		
-		#end
-		
+
+		handler (getImage (id));
+
+#end
+
 	}
-	
-	
-	public override function loadMusic (id:String, handler:Sound -> Void):Void {
+
+
+#if (!flash && !html5)
+	private function loadManifest ():Void {
+
+	try {
+
+#if blackberry
+			var bytes = ByteArray.readFile ("app/native/manifest");
+			#elseif tizen
+			var bytes = ByteArray.readFile ("../res/manifest");
+			#elseif emscripten
+			var bytes = ByteArray.readFile ("assets/manifest");
+			#else
+		var bytes = ByteArray.readFile ("manifest");
+#end
+
+		if (bytes != null) {
+
+			bytes.position = 0;
+
+			if (bytes.length > 0) {
+
+				var data = bytes.readUTFBytes (bytes.length);
+
+				if (data != null && data.length > 0) {
+
+					var manifest:Array<Dynamic> = Unserializer.run (data);
+
+					for (asset in manifest) {
+
+						if (!className.exists (asset.id)) {
+
+							path.set (asset.id, asset.path);
+							type.set (asset.id, cast (asset.type, AssetType));
+
+						}
+
+					}
+
+				}
+
+			}
+
+		} else {
+
+			trace ("Warning: Could not load asset manifest (bytes was null)");
+
+		}
+
+	} catch (e:Dynamic) {
+
+		trace ('Warning: Could not load asset manifest (${e})');
+
+	}
+
+}
+#end
+
+
+/*public override function loadMusic (id:String, handler:Dynamic -> Void):Void {
 		
 		#if (flash || js)
 		
-		/*if (path.exists (id)) {
+		//if (path.exists (id)) {
 			
-			var loader = new Loader ();
-			loader.contentLoaderInfo.addEventListener (Event.COMPLETE, function (event) {
+		//	var loader = new Loader ();
+		//	loader.contentLoaderInfo.addEventListener (Event.COMPLETE, function (event) {
 				
-				handler (cast (event.currentTarget.content, Bitmap).bitmapData);
+		//		handler (cast (event.currentTarget.content, Bitmap).bitmapData);
 				
-			});
-			loader.load (new URLRequest (path.get (id)));
+		//	});
+		//	loader.load (new URLRequest (path.get (id)));
 			
-		} else {*/
+		//} else {
 			
 			handler (getMusic (id));
 			
@@ -454,50 +592,88 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		#end
 		
-	}
-	
-	
-	public override function loadSound (id:String, handler:Sound -> Void):Void {
-		
-		#if (flash || js)
-		
-		/*if (path.exists (id)) {
+	}*/
+
+
+	public override function loadText (id:String, handler:String -> Void):Void {
+
+//#if html5
+
+/*if (path.exists (id)) {
 			
-			var loader = new Loader ();
-			loader.contentLoaderInfo.addEventListener (Event.COMPLETE, function (event) {
+			var loader = new URLLoader ();
+			loader.addEventListener (Event.COMPLETE, function (event:Event) {
 				
-				handler (cast (event.currentTarget.content, Bitmap).bitmapData);
+				handler (event.currentTarget.data);
 				
 			});
 			loader.load (new URLRequest (path.get (id)));
 			
-		} else {*/
+		} else {
 			
-			handler (getSound (id));
+			handler (getText (id));
 			
-		//}
-		
-		#else
-		
-		handler (getSound (id));
-		
-		#end
-		
+		}*/
+
+//#else
+
+		var callback = function (bytes:ByteArray):Void {
+
+			if (bytes == null) {
+
+				handler (null);
+
+			} else {
+
+				handler (bytes.readUTFBytes (bytes.length));
+
+			}
+
+		}
+
+		loadBytes (id, callback);
+
+//#end
+
 	}
-	
-	
+
+
 }
 
 
-#if pixi
-#elseif flash
+#if !display
+#if flash
 
-::foreach assets::::if (embed)::::if (type == "image")::class __ASSET__::flatName:: extends flash.display.BitmapData { public function new () { super (0, 0); } }::else::class __ASSET__::flatName:: extends ::flashClass:: { }::end::::end::
+::foreach assets::::if (embed)::::if (type == "image")::@:keep @:bind #if display private #end class __ASSET__::flatName:: extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }::else::@:keep @:bind #if display private #end class __ASSET__::flatName:: extends ::flashClass:: { }::end::::end::
 ::end::
 
 #elseif html5
 
-::foreach assets::::if (type == "font")::class __ASSET__::flatName:: extends flash.text.Font { }::end::
+#if openfl
+::foreach assets::::if (type == "font")::@:keep #if display private #end class __ASSET__::flatName:: extends openfl.text.Font { public function new () { super (); fontName = "::id::"; } } ::end::
 ::end::
+#end
+
+#else
+
+#if openfl
+::if (assets != null)::::foreach assets::::if (type == "font")::class __ASSET__::flatName:: extends openfl.text.Font { public function new () { super (); __fontPath = "::targetPath::"; fontName = "::fontName::"; }}
+::end::::end::::end::
+#end
+
+#if (windows || mac || linux)
+
+//::if (assets != null)::
+//::foreach assets::::if (embed)::::if (type == "image")::@:bitmap("::sourcePath::") class __ASSET__::flatName:: extends openfl.display.BitmapData {}
+//::elseif (type == "sound")::@:sound("::sourcePath::") class __ASSET__::flatName:: extends openfl.media.Sound {}
+//::elseif (type == "music")::@:sound("::sourcePath::") class __ASSET__::flatName:: extends openfl.media.Sound {}
+//::elseif (type == "font")::@:font("::sourcePath::") class __ASSET__::flatName:: extends openfl.text.Font {}
+//::else::@:file("::sourcePath::") class __ASSET__::flatName:: extends lime.utils.ByteArray {}
+//::end::::end::::end::
+//::end::
 
 #end
+
+#end
+#end
+

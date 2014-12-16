@@ -1,191 +1,159 @@
-#if !macro
-#if (openfl_html5 && !flambe)
-
-import ::APP_MAIN_PACKAGE::::APP_MAIN_CLASS::;
-import haxe.Resource;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.Loader;
-import flash.events.Event;
-import flash.media.Sound;
-import flash.net.URLLoader;
-import flash.net.URLRequest;
-import flash.net.URLLoaderDataFormat;
-//import flash.Assets;
-import flash.Lib;
+import lime.Assets;
 
 class ApplicationMain {
 
-	private static var completed:Int;
-	private static var preloader:::PRELOADER_NAME::;
-	private static var total:Int;
 
-	public static var loaders:Map <String, Loader>;
-	public static var urlLoaders:Map <String, URLLoader>;
+	public static var config:lime.app.Config;
+	public static var preloader:openfl.display.Preloader;
 
-	public static function main() {
+	public static function create ():Void {
+
+		var display = ::if (PRELOADER_NAME != "")::new ::PRELOADER_NAME:: ()::else::new NMEPreloader ()::end::;
+
+		preloader = new openfl.display.Preloader (display);
+		preloader.onComplete = init;
+		preloader.create (config);
+
+#if js
+		var urls = [];
+		var types = [];
 		
-		completed = 0;
-		loaders = new Map <String, Loader>();
-		urlLoaders = new Map <String, URLLoader>();
-		total = 0;
-		
-		//flash.Lib.setPackage("::APP_COMPANY::", "::APP_FILE::", "::APP_PACKAGE::", "::APP_VERSION::");
-		flash.Lib.current.loaderInfo = flash.display.LoaderInfo.create (null);
-		
-		try {
-			
-			if (Reflect.hasField (js.Browser.window, "winParameters")) {
-				
-				Reflect.setField (flash.Lib.current.loaderInfo, "parameters", Reflect.field (js.Browser.window, "winParameters")());
-				
-			}
-			
-			flash.Lib.current.stage.loaderInfo = flash.Lib.current.loaderInfo;
-			
-		} catch (e:Dynamic) {}
-
-		::if (WIN_WIDTH == "0")::::if (WIN_HEIGHT == "0")::
-		flash.Lib.preventDefaultTouchMove();
-		::end::::end::
-
-		::if (PRELOADER_NAME!="")::
-		preloader = new ::PRELOADER_NAME::();
-		::else::
-		preloader = new NMEPreloader();
-		::end::
-		Lib.current.addChild(preloader);
-		preloader.onInit();
-
-		::foreach assets::
-		::if (embed)::
-		::if (type=="image")::
-		var loader:Loader = new Loader();
-		loaders.set("::resourceName::", loader);
-		::elseif (type == "binary")::
-		var urlLoader:URLLoader = new URLLoader();
-		urlLoader.dataFormat = BINARY;
-		urlLoaders.set("::resourceName::", urlLoader);
-		::elseif (type == "text")::
-		var urlLoader:URLLoader = new URLLoader();
-		urlLoader.dataFormat = BINARY;
-		urlLoaders.set("::resourceName::", urlLoader);
-		::end::
+		::foreach assets::::if (embed)::
+		if(urls.indexOf("::resourceName::") < 0) {
+			urls.push ("::resourceName::");
+			::if (type == "image")::types.push (AssetType.IMAGE);
+			::elseif (type == "binary")::types.push (AssetType.BINARY);
+			::elseif (type == "text")::types.push (AssetType.TEXT);
+			::elseif (type == "font")::types.push (AssetType.FONT);
+			::elseif (type == "sound")::types.push (AssetType.SOUND);
+			::elseif (type == "music")::types.push (AssetType.MUSIC);
+			::else::types.push (null);::end::
+		}
 		::end::::end::
 		
-		var resourcePrefix = "__ASSET__:bitmap_";
-		for (resourceName in Resource.listNames()) {
-			if (StringTools.startsWith (resourceName, resourcePrefix)) {
-				var type = Type.resolveClass(StringTools.replace (resourceName.substring(resourcePrefix.length), "_", "."));
-				if (type != null) {
-					total++;
-					var instance = Type.createInstance (type, [ 0, 0, true, 0x00FFFFFF, bitmapClass_onComplete ]);
-				}
+		preloader.load (urls, types);
+		#end
+
+		#if sys
+		Sys.exit (result);
+		#end
+
+	}
+
+
+	public static function init ():Void {
+
+		var loaded = 0;
+		var total = 0;
+		var library_onLoad = function (_) {
+
+			loaded++;
+
+			if (loaded == total) {
+
+				start ();
+
 			}
+
 		}
-		
-		::if (APP_INIT != null)::::APP_INIT::::end::
-		
-        total += Lambda.count(loaders) + Lambda.count(urlLoaders);
 
-		if (total == 0) {
-			begin();
-		} else {
-			for (path in loaders.keys()) {
-				var loader:Loader = loaders.get(path);
-				loader.contentLoaderInfo.addEventListener("complete", loader_onComplete);
-				loader.load (new URLRequest (path));
-			}
-
-			for (path in urlLoaders.keys()) {
-				var urlLoader:URLLoader = urlLoaders.get(path);
-				urlLoader.addEventListener("complete", loader_onComplete);
-				urlLoader.load(new URLRequest (path));
-			}
-		}
-	}
-
-	private static function begin():Void {
-		preloader.addEventListener(Event.COMPLETE, preloader_onComplete);
-		preloader.onLoaded ();
-	}
-	
-	private static function bitmapClass_onComplete(instance:BitmapData):Void {
-		completed++;
-		var classType = Type.getClass (instance);
-		Reflect.setField (classType, "preload", instance);
-		if (completed == total) {
-			begin ();
-		}
-	}
-
-	private static function loader_onComplete(event:Event):Void {
-		completed ++;
-		preloader.onUpdate (completed, total);
-		if (completed == total) {
-			begin ();
-		}
-	}
-
-	private static function preloader_onComplete(event:Event):Void {
-		preloader.removeEventListener(Event.COMPLETE, preloader_onComplete);
-		Lib.current.removeChild(preloader);
 		preloader = null;
-		if (Reflect.field(::APP_MAIN::, "main") == null)
-		{
-			var mainDisplayObj = Type.createInstance(DocumentClass, []);
-			if (Std.is(mainDisplayObj, flash.display.DisplayObject))
-				flash.Lib.current.addChild(cast mainDisplayObj);
+
+		::if (libraries != null)::::foreach libraries::::if (preload)::
+		total++;
+		openfl.Assets.loadLibrary ("::name::", library_onLoad);
+		::end::::end::::end::
+
+		if (loaded == total) {
+
+		start ();
+
 		}
-		else
-		{
-			Reflect.callMethod(::APP_MAIN::, Reflect.field (::APP_MAIN::, "main"), []);
-		}
+
 	}
-}
 
-@:build(DocumentClass.build())
-class DocumentClass extends ::APP_MAIN:: {}
 
-#else
+	public static function main () {
 
-import ::APP_MAIN_PACKAGE::::APP_MAIN_CLASS::;
+		config = {
 
-class ApplicationMain {
+		antialiasing: Std.int (::WIN_ANTIALIASING::),
+		background: Std.int (::WIN_BACKGROUND::),
+		borderless: ::WIN_BORDERLESS::,
+		depthBuffer: ::WIN_DEPTH_BUFFER::,
+		fps: Std.int (::WIN_FPS::),
+		fullscreen: ::WIN_FULLSCREEN::,
+		height: Std.int (::WIN_HEIGHT::),
+		orientation: "::WIN_ORIENTATION::",
+		resizable: ::WIN_RESIZABLE::,
+		stencilBuffer: ::WIN_STENCIL_BUFFER::,
+		title: "::APP_TITLE::",
+		vsync: ::WIN_VSYNC::,
+		width: Std.int (::WIN_WIDTH::),
 
-	public static function main() {
-		if (Reflect.field(::APP_MAIN::, "main") == null) {
-			Type.createInstance(::APP_MAIN::, []);
-		} else {
-			Reflect.callMethod(::APP_MAIN::, Reflect.field(::APP_MAIN::, "main"), []);
 		}
+
+		#if munit
+		flash.Lib.embed (null, ::WIN_WIDTH::, ::WIN_HEIGHT::, "::WIN_FLASHBACKGROUND::");
+		#else
+		create ();
+		#end
+
 	}
-}
 
-#end
-#else
 
-import haxe.macro.Context;
-import haxe.macro.Expr;
+	public static function start ():Void {
 
-class DocumentClass {
-	
-	macro public static function build ():Array<Field> {
-		var classType = Context.getLocalClass().get();
-		var searchTypes = classType;
-		while (searchTypes.superClass != null) {
-			if (searchTypes.pack.length == 2 && searchTypes.pack[1] == "display" && searchTypes.name == "DisplayObject") {
-				var fields = Context.getBuildFields();
-				var method = macro {
-					return flash.Lib.current.stage;
-				}
-				fields.push ({ name: "get_stage", access: [ APrivate, AOverride ], kind: FFun({ args: [], expr: method, params: [], ret: macro :flash.display.Stage }), pos: Context.currentPos() });
-				return fields;
+		openfl.Lib.current.stage.align = openfl.display.StageAlign.TOP_LEFT;
+		openfl.Lib.current.stage.scaleMode = openfl.display.StageScaleMode.NO_SCALE;
+
+		var hasMain = false;
+
+		for (methodName in Type.getClassFields (::APP_MAIN::)) {
+
+			if (methodName == "main") {
+
+				hasMain = true;
+				break;
+
 			}
-			searchTypes = searchTypes.superClass.t.get();
+
 		}
-		return null;
+
+		if (hasMain) {
+
+			Reflect.callMethod (::APP_MAIN::, Reflect.field (::APP_MAIN::, "main"), []);
+
+		} else {
+
+			var instance:DocumentClass = Type.createInstance (DocumentClass, []);
+
+			if (Std.is (instance, openfl.display.DisplayObject)) {
+
+				openfl.Lib.current.addChild (cast instance);
+
+			}
+
+		}
+
+		openfl.Lib.current.stage.dispatchEvent (new openfl.events.Event (openfl.events.Event.RESIZE, false, false));
+
 	}
-	
+
+
+#if neko
+	@:noCompletion public static function __init__ () {
+		
+		var loader = new neko.vm.Loader (untyped $loader);
+		loader.addPath (haxe.io.Path.directory (Sys.executablePath ()));
+		loader.addPath ("./");
+		loader.addPath ("@executable_path/");
+		
+	}
+	#end
+
+
 }
-#end
+
+
+@:keep class DocumentClass extends ::APP_MAIN:: {}

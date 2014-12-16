@@ -1,15 +1,26 @@
 package openfl.utils;
 
 
-import openfl.errors.IOError;
-import openfl.utils.UInt;
+#if (flash || openfl_next || js || display)
+typedef ByteArray = lime.utils.ByteArray;
+#else
+typedef ByteArray = openfl._v2.utils.ByteArray;
+#end
+
+/*
+
+
 import haxe.io.Bytes;
 import haxe.io.BytesBuffer;
 import haxe.io.BytesData;
 import haxe.io.Input;
+import openfl.errors.IOError;
+import openfl.utils.ArrayBuffer;
+
+#if js
 import js.html.DataView;
 import js.html.Uint8Array;
-import openfl.utils.ArrayBuffer;
+#end
 
 #if format
 import format.tools.Inflate;
@@ -20,9 +31,9 @@ import format.tools.Inflate;
 class ByteArray implements ArrayAccess<Int> {
 	
 	
-	public var bytesAvailable (get_bytesAvailable, null):Int;
-	public var endian (get_endian, set_endian):String;
-	public var length (default, set_length):Int = 0;
+	public var bytesAvailable (get, null):Int;
+	public var endian (get, set):String;
+	public var length (default, set):Int = 0;
 	public var objectEncoding:Int;
 	public var position:Int = 0;
 	
@@ -44,6 +55,7 @@ class ByteArray implements ArrayAccess<Int> {
 	public function clear () {
 		
 		length = 0;
+		position = 0;
 		
 	}
 	
@@ -54,12 +66,13 @@ class ByteArray implements ArrayAccess<Int> {
 	}
 	
 	
-	static public function fromBytes (inBytes:Bytes) 
-   {
-      var result = new ByteArray ();
-	  result.__fromBytes (inBytes);
-      return result;
-   }
+	static public function fromBytes (inBytes:Bytes) {
+		
+		var result = new ByteArray ();
+		result.__fromBytes (inBytes);
+		return result;
+		
+	}
 	
 	
 	public inline function readBoolean ():Bool {
@@ -72,7 +85,7 @@ class ByteArray implements ArrayAccess<Int> {
 	public inline function readByte ():Int {
 		
 		var data:Dynamic = data;
-		return data.getUint8 (this.position++);
+		return data.getInt8 (this.position++);
 		
 	}
 	
@@ -85,7 +98,7 @@ class ByteArray implements ArrayAccess<Int> {
 			
 		}
 		
-		if (length == 0) length = this.length;
+		if (length == 0) length = this.bytesAvailable;
 		
 		bytes.ensureWrite (offset + length);
 		
@@ -137,6 +150,13 @@ class ByteArray implements ArrayAccess<Int> {
 		var int = data.getInt32 (this.position, littleEndian);
 		this.position += 4;
 		return int;
+		
+	}
+	
+	
+	public inline function readMultiByte (length:Int, charSet:String):String {
+		
+		return readUTFBytes (length);
 		
 	}
 	
@@ -381,12 +401,13 @@ class ByteArray implements ArrayAccess<Int> {
 		byteView = untyped __new__("Uint8Array", inBytes.getData ());
 		length = byteView.length;
 		allocated = length;
+		
 	}
    
    
    	public function __get (pos:Int):Int {
    		
-   		return data.getUint8 (pos);
+   		return data.getInt8 (pos);
    		
    	}
 	
@@ -505,3 +526,4 @@ class ByteArray implements ArrayAccess<Int> {
 	
 	
 }
+*/

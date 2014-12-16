@@ -1093,16 +1093,16 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	
 	private function get_stage ():Stage {
 		
-		var gfx = __getGraphics ();
-		
-		if (gfx != null) {
-			
+//		var gfx = __getGraphics ();
+//
+//		if (gfx != null) {
+//
 			return Lib.__getStage ();
 			
-		}
-		
-		return null;
-		
+//		}
+//
+//		return null;
+//
 	}
 	
 	
