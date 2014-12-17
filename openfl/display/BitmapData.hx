@@ -53,6 +53,7 @@ class BitmapData implements IBitmapDrawable {
 
     public var __sourceCanvas: CanvasElement;
     public var __sourceImage: Image;
+	public var __image: lime.graphics.Image;
 
 
 	public function new (width:Int, height:Int, transparent:Bool = true, inFillColor:Int = 0xFFFFFFFF) {
@@ -1367,31 +1368,36 @@ class BitmapData implements IBitmapDrawable {
 
 
 	private inline function __loadFromBase64 (base64:String, type:String, ?onload:BitmapData -> Void):Void {
-
-		var img:ImageElement = cast Browser.document.createElement ("img");
-		var canvas = ___textureBuffer;
-
-		var drawImage = function (_) {
-			canvas.width = img.width;
-			canvas.height = img.height;
-
-			var ctx = canvas.getContext ('2d');
-			ctx.drawImage (img, 0, 0);
-
-			rect = new Rectangle (0, 0, canvas.width, canvas.height);
-            __buildLease ();
-
-            __sourceImage = cast(img);
-
+//
+//		var img:ImageElement = cast Browser.document.createElement ("img");
+//		var canvas = ___textureBuffer;
+//
+//		var drawImage = function (_) {
+//			canvas.width = img.width;
+//			canvas.height = img.height;
+//
+//			var ctx = canvas.getContext ('2d');
+//			ctx.drawImage (img, 0, 0);
+//
+//			rect = new Rectangle (0, 0, canvas.width, canvas.height);
+//            __buildLease ();
+//
+//            __sourceImage = cast(img);
+//
+//			if (onload != null) {
+//				onload (this);
+//			}
+//
+//		}
+//
+//		img.addEventListener ("load", drawImage, false);
+//		img.src = "data:" + type + ";base64," + base64;
+		lime.graphics.Image.fromBase64 (base64, type, function (image) {
+			__loadFromImage (image);
 			if (onload != null) {
 				onload (this);
 			}
-
-		}
-
-		img.addEventListener ("load", drawImage, false);
-		img.src = "data:" + type + ";base64," + base64;
-
+		});
 	}
 
 
@@ -1575,14 +1581,13 @@ class BitmapData implements IBitmapDrawable {
 
 	@:noCompletion private function __loadFromImage (image:lime.graphics.Image):Void {
 
+		__image = image;
 		___textureBuffer.width = image.width;
 		___textureBuffer.height = image.height;
 		rect = new Rectangle (0, 0, image.width, image.height);
 
 		var ctx:CanvasRenderingContext2D = ___textureBuffer.getContext ("2d");
 		ctx.drawImage (image.buffer.src, 0, 0, width, height);
-
-		trace(___textureBuffer.toDataURL("image/png"));
 
 		__sourceImage = image.buffer.src;
 		__buildLease();

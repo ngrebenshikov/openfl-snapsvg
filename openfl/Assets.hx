@@ -1140,25 +1140,18 @@ class Assets {
 				super (0, 0, transparent, fillRGBA);
 				
 				if (preload != null) {
-					
-					__image = preload;
-					width = __image.width;
-					height = __image.height;
-					
+					__loadFromImage(preload);
+
 				} else {
 					
 					__loadFromBase64 (haxe.Resource.getString (resourceName), resourceType, function (b) {
 						
 						if (preload == null) {
-							
 							preload = b.__image;
-							
 						}
 						
 						if (onload != null) {
-							
 							onload (b);
-							
 						}
 						
 					});

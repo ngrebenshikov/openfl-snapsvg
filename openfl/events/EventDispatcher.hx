@@ -93,7 +93,7 @@ class EventDispatcher implements IEventDispatcher {
 				}
 				
 				// Detect if the just used event listener was removed...
-				if (idx < list.length && listener != list[idx]) {
+				if (idx < list.length && !listener.Is(list[idx].mListner, listener.mUseCapture)) {
 					
 					// do not advance to next item because it looks like one was just removed
 					
