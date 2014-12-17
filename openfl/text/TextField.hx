@@ -297,16 +297,15 @@ class TextField extends InteractiveObject {
             var firstSpan = true;
             for (span in paragraph.spans) {
                 svgBuf.add('<tspan xml:space="preserve" height="' + span.rect.height + 'px" ');
-                if (null != span.rect) {
-                    //Commented yet because WebKit doesn't support it correctly
-                    //TODO: make it working for webkit
-                    //svgBuf.add('textLength="' + span.rect.width+ 'px" ');
-                    if (firstSpan) {
-                        svgBuf.add('x="' + span.startX + '" dy="' + paragraph.firstLineHeight+ 'px" ');
-                    } else if (span.startFromNewLine) {
-                        svgBuf.add('x="' + span.startX + '" dy="' + span.rect.height+ 'px" ');
-                    }
-                }
+				//Commented yet because WebKit doesn't support it correctly
+				//TODO: make it working for webkit
+				//svgBuf.add('textLength="' + span.rect.width+ 'px" ');
+				if (firstSpan) {
+					svgBuf.add('x="' + span.startX + '" dy="' + paragraph.firstLineHeight+ 'px" ');
+				} else if (span.startFromNewLine) {
+					svgBuf.add('x="' + span.startX + '" dy="' + span.rect.height+ 'px" ');
+				}
+
                 if (null != span.format) {
                     if (null != span.format.color) {
                         svgBuf.add('fill="#' + StringTools.hex(span.format.color,6) + '" ');
@@ -333,9 +332,9 @@ class TextField extends InteractiveObject {
                         svgBuf.add('letter-spacing="' + span.format.letterSpacing + 'px" ');
                     }
                 }
-                svgBuf.add('>');
+                svgBuf.add('><![CDATA[');
                 svgBuf.add(span.text);
-                svgBuf.add('</tspan>');
+                svgBuf.add(']]></tspan>');
                 firstSpan = false;
             }
             firstParagraph = false;
@@ -425,7 +424,7 @@ class TextField extends InteractiveObject {
 			var font = FontInstance.CreateSolid (mFace, mTextHeight, mTextColour, 1.0);
 			var paras = mText.split ("\n");
             for (paragraph in paras) {
-				mParagraphs.push ( cast { align: mAlign, spans: [ { font : font, text: paragraph + if (mText.length > 0) "\n" else '', format: defaultTextFormat, startFromNewLine: false } ] } );
+				mParagraphs.push ( cast { align: mAlign, spans: [ { font : font, text: paragraph + if (mText.length > 0) "\n" else '', format: defaultTextFormat, startFromNewLine: true } ] } );
 			}
 		}
         __textChanged = true;
@@ -655,7 +654,8 @@ class TextField extends InteractiveObject {
             }
 
             if (row.length > 0) {
-                newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: true, rect: getRowDimension(row), startX: 0});
+				var startFromNewLine = if (row.length < text.length) true else span.startFromNewLine;
+                newSpans.push({ font: font, text: Lambda.fold(row, function(o,s) {return s + String.fromCharCode(o.chr);}, ''), format: span.format, startFromNewLine: startFromNewLine, rect: getRowDimension(row), startX: 0});
                 row = [];
             }
         }
@@ -811,6 +811,7 @@ class TextField extends InteractiveObject {
 
     private function applyTextFormat(format: TextFormat, beginIndex: Int, endIndex: Int) {
         var font = FontInstance.CreateSolid (format.font, Std.int(format.size), format.color, 1.0);
+		endIndex -= 1;
         var spanStartCharIndex: Int = 0;
         for (paragraph in mParagraphs) {
             var newSpans: Array<Span> = [];
