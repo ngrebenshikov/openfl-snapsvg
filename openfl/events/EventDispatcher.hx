@@ -48,14 +48,11 @@ class EventDispatcher implements IEventDispatcher {
 		
 		list.push (new Listener (inListener, capture, priority));
 		list.sort (compareListeners);
-		
 	}
 	
 	
 	private static function compareListeners (l1:Listener, l2:Listener):Int {
-		
 		return l1.mPriority == l2.mPriority ? 0 : (l1.mPriority > l2.mPriority ? -1 : 1);
-		
 	}
 	
 	
@@ -77,66 +74,44 @@ class EventDispatcher implements IEventDispatcher {
 			var idx = 0;
 			
 			while (idx < list.length) {
-				
 				var listener = list[idx];
-				
 				if (listener.mUseCapture == capture) {
-					
 					listener.dispatchEvent (event);
-					
 					if (event.__getIsCancelledNow ()) {
-						
 						return true;
-						
 					}
-					
 				}
 				
 				// Detect if the just used event listener was removed...
 				if (idx < list.length && !listener.Is(list[idx].mListner, listener.mUseCapture)) {
-					
 					// do not advance to next item because it looks like one was just removed
-					
 				} else {
-					
 					idx++;
-					
 				}
 				
 			}
-			
 			return true;
-			
 		}
-		
 		return false;
-		
 	}
 	
 	
 	private function existList (type:String):Bool { 
-		
 		untyped return (__eventMap != null && __eventMap[type] != __js__("undefined"));
-		
 	}
 	
 	
 	private function getList (type:String):ListenerList {
-		
 		untyped return __eventMap[type];
-		
 	}
 	
 	
 	public function hasEventListener (type:String):Bool {
-		
 		return existList (type);
-		
 	}
 	
 	
 	public function removeEventListener (type:String, listener:Dynamic->Void, inCapture:Bool = false):Void {
-		
 		if (!existList (type)) return;
 		
 		var list = getList (type);
