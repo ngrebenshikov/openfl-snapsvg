@@ -30,11 +30,12 @@ class EventDispatcher implements IEventDispatcher {
 	
 	
 	public function addEventListener (type:String, inListener:Dynamic -> Void, useCapture:Bool = false, inPriority:Int = 0, useWeakReference:Bool = false):Void {
-//        var stage = Lib.__getStage();
-//		if ((type == Event.RENDER || type == Event.ENTER_FRAME || type == Event.STAGE_RENDERED) && null != stage && this != stage) {
-//            return stage.addEventListener(type, inListener, useCapture, inPriority, useWeakReference);
-//        }
-
+		#if openfl_snapsvg_without_massive_broadcasting
+        var stage = Lib.__getStage();
+		if ((type == Event.RENDER || type == Event.ENTER_FRAME || type == Event.STAGE_RENDERED) && null != stage && this != stage) {
+            return stage.addEventListener(type, inListener, useCapture, inPriority, useWeakReference);
+        }
+        #end
         var capture:Bool = (useCapture == null ? false : useCapture);
 		var priority:Int = (inPriority==null ? 0 : inPriority);
 		var list = getList (type);

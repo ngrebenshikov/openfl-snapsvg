@@ -12,13 +12,22 @@ For the "openfl-snapsvg" library, you can use a development build like this:
 
     haxelib git openfl-snapsvg https://github.com/ngrebenshikov/openfl-snapsvg
 
-Navigate to the application.xml of your project and add the following before the inclusion of OpenFL:
+Navigate to the application.xml of your project and add the following after the inclusion of OpenFL and all inclusions that depend on OpenFL:
 ```xml
-<set name="html5-backend" value="openfl-snapsvg" />
+<haxelib name="openfl-snapsvg" />
+```
+
+Parameters
+----------
+
+openfl_snapsvg_without_massive_broadcasting - it adds all listerners of `ENTER_FRAME` and `RENDER` to the stage and does not broadcast those events to all display objects.
+
+```xml
+<haxedef name="openfl_snapsvg_without_massive_broadcasting"/>
 ```
 
 Dependencies
 ------------
 
-* openfl 2.0.1
-* lime 1.0.1
+* openfl 2.1.7
+* lime 2.1.7

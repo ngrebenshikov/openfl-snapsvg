@@ -491,12 +491,20 @@ class Stage extends DisplayObjectContainer {
 		}
 		__uIEventsQueueIndex = 0;
 
-        __broadcast(new Event(Event.ENTER_FRAME));
+		#if openfl_snapsvg_without_massive_broadcasting
+		this.dispatchEvent(new Event(Event.ENTER_FRAME));
 
 		if (__invalid) {
-            __broadcast(new Event(Event.RENDER));
+            this.dispatchEvent(new Event(Event.RENDER));
 		}
-		this.__renderAll ();
+		#else
+		__broadcast(new Event(Event.ENTER_FRAME));
+
+		if (__invalid) {
+			__broadcast(new Event(Event.RENDER));
+		}
+	    #end
+		this.__renderAll();
         this.dispatchEvent(new Event(Event.STAGE_RENDERED));
 	}
 	
