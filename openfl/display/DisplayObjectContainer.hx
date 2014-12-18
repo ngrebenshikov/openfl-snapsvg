@@ -534,7 +534,14 @@ class DisplayObjectContainer extends InteractiveObject {
 		
 		__combinedAlpha = (parent != null ? parent.__combinedAlpha * alpha : alpha);
 		
-		for (child in renderList.keys()) {
+		#if openfl_snapsvg_render_only_changed
+		var childrenToRender = renderList.keys();
+		renderList = new ObjectMap<DisplayObject, Bool>();
+
+		for (child in childrenToRender) {
+		#else
+		for (child in __children) {
+		#end
 			if (child.__visible) {
 				if (clipRect != null) {
 					if (child._matrixInvalid || child._matrixChainInvalid) {
@@ -544,8 +551,7 @@ class DisplayObjectContainer extends InteractiveObject {
 				child.__render (inMask, clipRect);
 			}
 		}
-        renderList = new ObjectMap<DisplayObject, Bool>();
-		
+
 		if (__addedChildren) {
 			__addedChildren = false;
 		}

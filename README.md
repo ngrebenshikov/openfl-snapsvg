@@ -22,9 +22,11 @@ Parameters
 
 openfl_snapsvg_without_massive_broadcasting - it adds all listerners of `ENTER_FRAME` and `RENDER` to the stage and does not broadcast those events to all display objects.
 
-```xml
-<haxedef name="openfl_snapsvg_without_massive_broadcasting"/>
-```
+```xml <haxedef name="openfl_snapsvg_without_massive_broadcasting"/> ```
+
+openfl_snapsvg_render_only_changed - it renders only changed display objects and all those parents.
+
+```xml <haxedef name="openfl_snapsvg_render_only_changed"/> ```
 
 Dependencies
 ------------
