@@ -40,7 +40,8 @@ class TextField extends InteractiveObject {
 	public var border (default, set_border):Bool;
 	public var borderColor (default, set_borderColor):Int;
 	public var bottomScrollV (get_bottomScrollV, null):Int;
-	public var caretIndex:Int;
+	private var _caretIndex: Int;
+	public var caretIndex(get, set):Int;
 	public var caretPos (get_caretPos, null):Int;
 	public var defaultTextFormat (get_defaultTextFormat, set_defaultTextFormat):TextFormat;
 	public var displayAsPassword:Bool;
@@ -77,7 +78,8 @@ class TextField extends InteractiveObject {
 	@:isVar public var wordWrap (get_wordWrap, set_wordWrap):Bool;
 	
 	private static var sSelectionOwner:TextField = null;
-	
+
+	private var textElementOffset(get, set):Point;
 	private var mAlign:TextFormatAlign;
 	private var mHeight:Float;
 	private var mHTMLText:String;
@@ -373,6 +375,14 @@ class TextField extends InteractiveObject {
 
         __graphics.clear ();
         drawBackgoundAndBorder();
+
+		var caretRect: Rectangle = getCaretRect();
+		var textX = Std.parseInt(textElement.getAttribute("x"));
+		var textY = Std.parseInt(textElement.getAttribute("y"));
+		if (caretRect.left < textX) { textElement.setAttribute("x", Std.string(caretRect.left)); }
+		if (caretRect.top < textY) { textElement.setAttribute("y", Std.string(caretRect.top)); }
+		if (caretRect.right > textX + width) { textElement.setAttribute("x", Std.string(width - caretRect.right)); }
+		if (caretRect.bottom > textY + height) { textElement.setAttribute("y", Std.string(height - caretRect.bottom)); }
 	}
 
     private function drawBackgoundAndBorder() {
@@ -934,12 +944,13 @@ class TextField extends InteractiveObject {
     private function showCaret() {
         if (__inputEnabled && stage.focus == this && shouldCaretShowed) {
             var rect = getCaretRect();
+			var offset = textElementOffset;
             __graphics.clear();
             drawBackgoundAndBorder();
-            if (rect.x <= mWidth) {
+            if (rect.x <= mWidth - offset.x) {
                 __graphics.lineStyle(0.5, 0, 1, true);
-                __graphics.moveTo(rect.x,rect.y);
-                __graphics.lineTo(rect.x,rect.bottom);
+                __graphics.moveTo(rect.x + offset.x, rect.y + offset.y);
+                __graphics.lineTo(rect.x + offset.x, rect.bottom + offset.y);
                 __graphics.flush();
             }
             caretTimer.run = hideCaret;
@@ -957,7 +968,6 @@ class TextField extends InteractiveObject {
 
     private function onKeyDown(e: Dynamic) {
         var evt: openfl.events.KeyboardEvent = e;
-
         if ((null == selectionInteractionStartIndex || selectionInteractionStartIndex < 0) && evt.shiftKey) {
             selectionInteractionStartIndex = caretIndex;
         }
@@ -1478,13 +1488,44 @@ class TextField extends InteractiveObject {
 		return wordWrap;
 		
 	}
+
+	public function get_caretIndex(): Int { return _caretIndex;	}
+	public function set_caretIndex(v: Int): Int {
+		_caretIndex = v;
+
+		var caretRect: Rectangle = getCaretRect();
+		var offset = textElementOffset;
+		var newOffset = textElementOffset;
+
+		if (caretRect.left < -offset.x) { newOffset.x = caretRect.left; }
+		if (caretRect.top < -offset.y) { newOffset.y = caretRect.top; }
+		if (caretRect.right > -offset.x + width) { newOffset.x = width - caretRect.right; }
+		if (caretRect.bottom > -offset.y + height) { newOffset.y = height - caretRect.bottom; }
+
+		textElementOffset = newOffset;
+
+		return v;
+	}
+
+	private function get_textElementOffset(): Point {
+		var textElement: js.html.svg.TextElement = cast(mTextSnap.node);
+		var xStr = textElement.getAttribute("offset-x");
+		var yStr = textElement.getAttribute("offset-y");
+		return new Point(if (null == xStr) 0.0 else Std.parseFloat(xStr), if (null == xStr) 0.0 else Std.parseFloat(yStr));
+	}
+
+	private function set_textElementOffset(v: Point): Point {
+		var textElement: js.html.svg.TextElement = cast(mTextSnap.node);
+		textElement.setAttribute("offset-x", Std.string(v.x));
+		textElement.setAttribute("offset-y", Std.string(v.y));
+		textElement.setAttribute("transform", 'matrix(1,0,0,1,${v.x},${v.y})');
+		return v;
+	}
 }
 
 
 enum FontInstanceMode {
-	
 	fimSolid;
-	
 }
 
 
