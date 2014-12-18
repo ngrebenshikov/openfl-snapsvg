@@ -526,10 +526,6 @@ class DisplayObjectContainer extends InteractiveObject {
 		
 		if (!__visible && !force) return;
 
-		if (__scrollRect != null) {
-			clipRect = __scrollRect;
-		}
-
 		super.__render(inMask, clipRect);
 		
 		__combinedAlpha = (parent != null ? parent.__combinedAlpha * alpha : alpha);

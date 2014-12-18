@@ -633,6 +633,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 
 	private function __render (inMask:SnapElement = null, clipRect:Rectangle = null, force: Bool = false) {
 		
+		if (null == clipRect) clipRect = scrollRect;
+
 		if (!__combinedVisible && !force) return;
 
 		var gfx = __getGraphics ();
