@@ -44,7 +44,7 @@ class TextField extends InteractiveObject {
 	public var caretIndex(get, set):Int;
 	public var caretPos (get_caretPos, null):Int;
 	public var defaultTextFormat (get_defaultTextFormat, set_defaultTextFormat):TextFormat;
-	public var displayAsPassword:Bool;
+	public var displayAsPassword(default, set):Bool;
 	public var embedFonts:Bool;
 	public var gridFitType:GridFitType;
 	public var htmlText (get_htmlText, set_htmlText):String;
@@ -434,6 +434,7 @@ class TextField extends InteractiveObject {
 			var font = FontInstance.CreateSolid (mFace, mTextHeight, mTextColour, 1.0);
 			var paras = mText.split ("\n");
             for (paragraph in paras) {
+				if (displayAsPassword) paragraph = StringTools.rpad("","*",paragraph.length);
 				mParagraphs.push ( cast { align: mAlign, spans: [ { font : font, text: paragraph + if (mText.length > 0) "\n" else '', format: defaultTextFormat, startFromNewLine: true } ] } );
 			}
 		}
@@ -1519,6 +1520,12 @@ class TextField extends InteractiveObject {
 		textElement.setAttribute("offset-x", Std.string(v.x));
 		textElement.setAttribute("offset-y", Std.string(v.y));
 		textElement.setAttribute("transform", 'matrix(1,0,0,1,${v.x},${v.y})');
+		return v;
+	}
+
+	private function set_displayAsPassword(v: Bool): Bool {
+		displayAsPassword = v;
+		RebuildText();
 		return v;
 	}
 }
