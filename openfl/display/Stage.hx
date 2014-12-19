@@ -331,7 +331,6 @@ class Stage extends DisplayObjectContainer {
 				__onMouse (cast evt, MouseEvent.MOUSE_MOVE);
 			
 			case "mousedown":
-				
 				__onMouse (cast evt, MouseEvent.MOUSE_DOWN);
 			
 			case "mouseup":
@@ -423,14 +422,15 @@ class Stage extends DisplayObjectContainer {
 
 	public function __queueStageEvent (evt:js.html.Event):Void {
         var target: Element = cast evt.target;
-
-        if (evt.type == 'keydown') {
+        if (evt.type == "dragstart") {
+			evt.preventDefault();
+		} else if (evt.type == "keydown") {
             var e: KeyboardEvent = cast evt;
             if (e.keyCode == Keyboard.V && (e.ctrlKey || e.commandKey || e.controlKey || cast(e).metaKey)) {
                 var document: Document = untyped window.document;
                 var curFocus = document.activeElement;
                 var input = document.getElementById('openfl-snapsvg-input');
-                input.innerText = '';
+                input.innerText = "";
                 e.stopImmediatePropagation();
 
                 input.addEventListener('focusin', stopPropagationOfEvent);
