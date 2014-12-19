@@ -1,4 +1,6 @@
-(function () { "use strict";
+(function ($hx_exports) { "use strict";
+$hx_exports.openfl = $hx_exports.openfl || {};
+$hx_exports.lime = $hx_exports.lime || {};
 var $hxClasses = {},$estr = function() { return js.Boot.__string_rec(this,''); };
 function $extend(from, fields) {
 	function Inherit() {} Inherit.prototype = from; var proto = new Inherit();
@@ -9,933 +11,1714 @@ function $extend(from, fields) {
 var ApplicationMain = function() { };
 $hxClasses["ApplicationMain"] = ApplicationMain;
 ApplicationMain.__name__ = ["ApplicationMain"];
-ApplicationMain.main = function() {
-	ApplicationMain.completed = 0;
-	ApplicationMain.loaders = new haxe.ds.StringMap();
-	ApplicationMain.urlLoaders = new haxe.ds.StringMap();
-	ApplicationMain.total = 0;
-	openfl.Lib.get_current().loaderInfo = openfl.display.LoaderInfo.create(null);
-	try {
-		if(Reflect.hasField(window,"winParameters")) Reflect.setField(openfl.Lib.get_current().loaderInfo,"parameters",(Reflect.field(window,"winParameters"))());
-		openfl.Lib.get_current().get_stage().loaderInfo = openfl.Lib.get_current().loaderInfo;
-	} catch( e ) {
+ApplicationMain.config = null;
+ApplicationMain.preloader = null;
+ApplicationMain.create = function() {
+	var display = new NMEPreloader();
+	ApplicationMain.preloader = new openfl.display.Preloader(display);
+	ApplicationMain.preloader.onComplete = ApplicationMain.init;
+	ApplicationMain.preloader.create(ApplicationMain.config);
+	var urls = [];
+	var types = [];
+	if(HxOverrides.indexOf(urls,"assets/fonts/Oxygen-Bold.eot",0) < 0) {
+		urls.push("assets/fonts/Oxygen-Bold.eot");
+		types.push("BINARY");
 	}
-	ApplicationMain.preloader = new NMEPreloader();
-	openfl.Lib.get_current().addChild(ApplicationMain.preloader);
-	ApplicationMain.preloader.onInit();
-	var loader = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/default/circle.png",loader);
-	var loader1 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/default/collapse.png",loader1);
-	var loader2 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/default/cross.png",loader2);
-	var loader3 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/default/expand.png",loader3);
-	var loader4 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/default/up_down.png",loader4);
-	var loader5 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_down.png",loader5);
-	var loader6 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_down_dark.png",loader6);
-	var loader7 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_down_disabled.png",loader7);
-	var loader8 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_left.png",loader8);
-	var loader9 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_left_disabled.png",loader9);
-	var loader10 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_right.png",loader10);
-	var loader11 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_right2.png",loader11);
-	var loader12 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_right_dark.png",loader12);
-	var loader13 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_right_disabled.png",loader13);
-	var loader14 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_up.png",loader14);
-	var loader15 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/arrow_up_disabled.png",loader15);
-	var loader16 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/circle_dark.png",loader16);
-	var loader17 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/cross_dark.png",loader17);
-	var loader18 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/cross_dark_disabled.png",loader18);
-	var urlLoader = new openfl.net.URLLoader();
-	urlLoader.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/gradient/gradient.css",urlLoader);
-	var urlLoader1 = new openfl.net.URLLoader();
-	urlLoader1.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/gradient/gradient.min.css",urlLoader1);
-	var urlLoader2 = new openfl.net.URLLoader();
-	urlLoader2.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/gradient/gradient_mobile.css",urlLoader2);
-	var urlLoader3 = new openfl.net.URLLoader();
-	urlLoader3.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/gradient/gradient_mobile.min.css",urlLoader3);
-	var loader19 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/gripper_horizontal.png",loader19);
-	var loader20 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/gripper_horizontal_disabled.png",loader20);
-	var loader21 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/gripper_vertical.png",loader21);
-	var loader22 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/gradient/gripper_vertical_disabled.png",loader22);
-	var urlLoader4 = new openfl.net.URLLoader();
-	urlLoader4.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/accordion.css",urlLoader4);
-	var urlLoader5 = new openfl.net.URLLoader();
-	urlLoader5.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/accordion.min.css",urlLoader5);
-	var loader23 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/button.png",loader23);
-	var urlLoader6 = new openfl.net.URLLoader();
-	urlLoader6.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/buttons.css",urlLoader6);
-	var urlLoader7 = new openfl.net.URLLoader();
-	urlLoader7.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/buttons.min.css",urlLoader7);
-	var urlLoader8 = new openfl.net.URLLoader();
-	urlLoader8.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/calendar.css",urlLoader8);
-	var loader24 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/checkbox.png",loader24);
-	var loader25 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/container.png",loader25);
-	var loader26 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/down_arrow.png",loader26);
-	var loader27 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/hscroll_thumb_gripper_down.png",loader27);
-	var loader28 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/hscroll_thumb_gripper_over.png",loader28);
-	var loader29 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/hscroll_thumb_gripper_up.png",loader29);
-	var loader30 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/left_arrow.png",loader30);
-	var loader31 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/right_arrow.png",loader31);
-	var loader32 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/up_arrow.png",loader32);
-	var loader33 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/vscroll_thumb_gripper_down.png",loader33);
-	var loader34 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/vscroll_thumb_gripper_over.png",loader34);
-	var loader35 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/glyphs/vscroll_thumb_gripper_up.png",loader35);
-	var loader36 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/hprogress.png",loader36);
-	var loader37 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/hscroll.png",loader37);
-	var urlLoader9 = new openfl.net.URLLoader();
-	urlLoader9.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/listview.css",urlLoader9);
-	var urlLoader10 = new openfl.net.URLLoader();
-	urlLoader10.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/listview.min.css",urlLoader10);
-	var loader38 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/listview.png",loader38);
-	var urlLoader11 = new openfl.net.URLLoader();
-	urlLoader11.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/menus.css",urlLoader11);
-	var loader39 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/optionbox.png",loader39);
-	var loader40 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/popup.png",loader40);
-	var urlLoader12 = new openfl.net.URLLoader();
-	urlLoader12.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/popups.css",urlLoader12);
-	var urlLoader13 = new openfl.net.URLLoader();
-	urlLoader13.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/rtf.css",urlLoader13);
-	var urlLoader14 = new openfl.net.URLLoader();
-	urlLoader14.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/scrolls.css",urlLoader14);
-	var urlLoader15 = new openfl.net.URLLoader();
-	urlLoader15.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/scrolls.min.css",urlLoader15);
-	var urlLoader16 = new openfl.net.URLLoader();
-	urlLoader16.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/sliders.css",urlLoader16);
-	var loader41 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/tab.png",loader41);
-	var urlLoader17 = new openfl.net.URLLoader();
-	urlLoader17.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/tabs.css",urlLoader17);
-	var loader42 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/textinput.png",loader42);
-	var loader43 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/vprogress.png",loader43);
-	var loader44 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("styles/windows/vscroll.png",loader44);
-	var urlLoader18 = new openfl.net.URLLoader();
-	urlLoader18.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("styles/windows/windows.css",urlLoader18);
-	var loader45 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/slinky_small.jpg",loader45);
-	var loader46 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/slinky_tiny.jpg",loader46);
-	var urlLoader19 = new openfl.net.URLLoader();
-	urlLoader19.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("fonts/Oxygen-Bold.eot",urlLoader19);
-	var urlLoader20 = new openfl.net.URLLoader();
-	urlLoader20.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("fonts/Oxygen-Bold.svg",urlLoader20);
-	var urlLoader21 = new openfl.net.URLLoader();
-	urlLoader21.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("fonts/Oxygen-Bold.woff",urlLoader21);
-	var urlLoader22 = new openfl.net.URLLoader();
-	urlLoader22.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("fonts/Oxygen.eot",urlLoader22);
-	var urlLoader23 = new openfl.net.URLLoader();
-	urlLoader23.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("fonts/Oxygen.svg",urlLoader23);
-	var urlLoader24 = new openfl.net.URLLoader();
-	urlLoader24.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("fonts/Oxygen.woff",urlLoader24);
-	var urlLoader25 = new openfl.net.URLLoader();
-	urlLoader25.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/css/code.css",urlLoader25);
-	var urlLoader26 = new openfl.net.URLLoader();
-	urlLoader26.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/css/code.min.css",urlLoader26);
-	var urlLoader27 = new openfl.net.URLLoader();
-	urlLoader27.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/css/rtf.css",urlLoader27);
-	var urlLoader28 = new openfl.net.URLLoader();
-	urlLoader28.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/css/rtf.min.css",urlLoader28);
-	var loader47 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/rtfview/edit-alignment-center.png",loader47);
-	var loader48 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/rtfview/edit-alignment-justify.png",loader48);
-	var loader49 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/rtfview/edit-alignment-left.png",loader49);
-	var loader50 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/rtfview/edit-alignment-right.png",loader50);
-	var loader51 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/rtfview/edit-bold.png",loader51);
-	var loader52 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/rtfview/edit-italic.png",loader52);
-	var loader53 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/rtfview/edit-list.png",loader53);
-	var loader54 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/rtfview/edit-underline.png",loader54);
-	var urlLoader29 = new openfl.net.URLLoader();
-	urlLoader29.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/openfl.svg",urlLoader29);
-	var urlLoader30 = new openfl.net.URLLoader();
-	urlLoader30.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/demo.xml",urlLoader30);
-	var urlLoader31 = new openfl.net.URLLoader();
-	urlLoader31.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/example.hx",urlLoader31);
-	var urlLoader32 = new openfl.net.URLLoader();
-	urlLoader32.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/example.txt",urlLoader32);
-	var loader55 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/rtfview/edit-alignment-center.png",loader55);
-	var loader56 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/rtfview/edit-alignment-justify.png",loader56);
-	var loader57 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/rtfview/edit-alignment-left.png",loader57);
-	var loader58 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/rtfview/edit-alignment-right.png",loader58);
-	var loader59 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/rtfview/edit-bold.png",loader59);
-	var loader60 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/rtfview/edit-italic.png",loader60);
-	var loader61 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/rtfview/edit-list.png",loader61);
-	var loader62 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/rtfview/edit-underline.png",loader62);
-	var urlLoader33 = new openfl.net.URLLoader();
-	urlLoader33.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("css/code.css",urlLoader33);
-	var urlLoader34 = new openfl.net.URLLoader();
-	urlLoader34.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("css/code.min.css",urlLoader34);
-	var urlLoader35 = new openfl.net.URLLoader();
-	urlLoader35.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("css/rtf.css",urlLoader35);
-	var urlLoader36 = new openfl.net.URLLoader();
-	urlLoader36.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("css/rtf.min.css",urlLoader36);
-	var urlLoader37 = new openfl.net.URLLoader();
-	urlLoader37.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/css/default/webview.css",urlLoader37);
-	var urlLoader38 = new openfl.net.URLLoader();
-	urlLoader38.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/css/gradient/webview.css",urlLoader38);
-	var urlLoader39 = new openfl.net.URLLoader();
-	urlLoader39.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/css/gradient/webview.min.css",urlLoader39);
-	var urlLoader40 = new openfl.net.URLLoader();
-	urlLoader40.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/css/webview.css",urlLoader40);
-	var loader63 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/haxe_ui.png",loader63);
-	var loader64 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/icone_cocktail_blanche_ombre.png",loader64);
-	var loader65 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/img/icone_haxe_blanche_ombre.png",loader65);
-	var urlLoader41 = new openfl.net.URLLoader();
-	urlLoader41.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/openfl.svg",urlLoader41);
-	var urlLoader42 = new openfl.net.URLLoader();
-	urlLoader42.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/demo.xml",urlLoader42);
-	var urlLoader43 = new openfl.net.URLLoader();
-	urlLoader43.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/example.html",urlLoader43);
-	var urlLoader44 = new openfl.net.URLLoader();
-	urlLoader44.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/test.html",urlLoader44);
-	var loader66 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/haxe_ui.png",loader66);
-	var loader67 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/icone_cocktail_blanche_ombre.png",loader67);
-	var loader68 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("img/icone_haxe_blanche_ombre.png",loader68);
-	var urlLoader45 = new openfl.net.URLLoader();
-	urlLoader45.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("css/default/webview.css",urlLoader45);
-	var urlLoader46 = new openfl.net.URLLoader();
-	urlLoader46.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("css/gradient/webview.css",urlLoader46);
-	var urlLoader47 = new openfl.net.URLLoader();
-	urlLoader47.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("css/gradient/webview.min.css",urlLoader47);
-	var urlLoader48 = new openfl.net.URLLoader();
-	urlLoader48.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("css/webview.css",urlLoader48);
-	var urlLoader49 = new openfl.net.URLLoader();
-	urlLoader49.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/application-default-icon.svg",urlLoader49);
-	var urlLoader50 = new openfl.net.URLLoader();
-	urlLoader50.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/data/views.xml",urlLoader50);
-	var loader69 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/application-dialog.png",loader69);
-	var loader70 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/blue-document-css.png",loader70);
-	var loader71 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/blue-document-haxe.png",loader71);
-	var loader72 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/blue-document-xml.png",loader72);
-	var loader73 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/blue-document.png",loader73);
-	var loader74 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/fav_16.png",loader74);
-	var loader75 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/fav_32.png",loader75);
-	var loader76 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/grid.png",loader76);
-	var loader77 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/images.png",loader77);
-	var loader78 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-accordion.png",loader78);
-	var loader79 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-button.png",loader79);
-	var loader80 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-buttons.png",loader80);
-	var loader81 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-check-boxes.png",loader81);
-	var loader82 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-combo-box-calendar.png",loader82);
-	var loader83 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-flow-vertical.png",loader83);
-	var loader84 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-flow.png",loader84);
-	var loader85 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-labels.png",loader85);
-	var loader86 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-layered-pane.png",loader86);
-	var loader87 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-list-box-blue.png",loader87);
-	var loader88 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-menu-blue.png",loader88);
-	var loader89 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-panel.png",loader89);
-	var loader90 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-progress-bar-vertical.png",loader90);
-	var loader91 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-progress-bar.png",loader91);
-	var loader92 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-radio-buttons.png",loader92);
-	var loader93 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-scroll-bar-horizontal.png",loader93);
-	var loader94 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-scroll-bar.png",loader94);
-	var loader95 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-scroll-pane-image.png",loader95);
-	var loader96 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-slider-050.png",loader96);
-	var loader97 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-slider-vertical-050.png",loader97);
-	var loader98 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-spacer.png",loader98);
-	var loader99 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-split-panel-vertical.png",loader99);
-	var loader100 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-split-panel.png",loader100);
-	var loader101 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-tab-content.png",loader101);
-	var loader102 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-tab.png",loader102);
-	var loader103 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/icons/ui-text-field.png",loader103);
-	var loader104 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/images/slinky.jpg",loader104);
-	var urlLoader51 = new openfl.net.URLLoader();
-	urlLoader51.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/AbsoluteLayout/AbsoluteLayout.hx",urlLoader51);
-	var urlLoader52 = new openfl.net.URLLoader();
-	urlLoader52.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/AbsoluteLayout/AbsoluteLayout.xml",urlLoader52);
-	var urlLoader53 = new openfl.net.URLLoader();
-	urlLoader53.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Accordions/Accordions.hx",urlLoader53);
-	var urlLoader54 = new openfl.net.URLLoader();
-	urlLoader54.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Accordions/Accordions.xml",urlLoader54);
-	var urlLoader55 = new openfl.net.URLLoader();
-	urlLoader55.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/BoxLayout/BoxLayout.hx",urlLoader55);
-	var urlLoader56 = new openfl.net.URLLoader();
-	urlLoader56.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/BoxLayout/BoxLayout.xml",urlLoader56);
-	var urlLoader57 = new openfl.net.URLLoader();
-	urlLoader57.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/BusyPopup/BusyPopup.hx",urlLoader57);
-	var urlLoader58 = new openfl.net.URLLoader();
-	urlLoader58.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/BusyPopup/BusyPopup.xml",urlLoader58);
-	var urlLoader59 = new openfl.net.URLLoader();
-	urlLoader59.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Buttons/Buttons.hx",urlLoader59);
-	var urlLoader60 = new openfl.net.URLLoader();
-	urlLoader60.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Buttons/Buttons.xml",urlLoader60);
-	var urlLoader61 = new openfl.net.URLLoader();
-	urlLoader61.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/CalendarPopup/CalendarPopup.hx",urlLoader61);
-	var urlLoader62 = new openfl.net.URLLoader();
-	urlLoader62.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/CalendarPopup/CalendarPopup.xml",urlLoader62);
-	var urlLoader63 = new openfl.net.URLLoader();
-	urlLoader63.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/CheckBoxes/CheckBoxes.hx",urlLoader63);
-	var urlLoader64 = new openfl.net.URLLoader();
-	urlLoader64.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/CheckBoxes/CheckBoxes.xml",urlLoader64);
-	var urlLoader65 = new openfl.net.URLLoader();
-	urlLoader65.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ContinuousLayout/HContinuousLayout.hx",urlLoader65);
-	var urlLoader66 = new openfl.net.URLLoader();
-	urlLoader66.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ContinuousLayout/HContinuousLayout.xml",urlLoader66);
-	var urlLoader67 = new openfl.net.URLLoader();
-	urlLoader67.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ContinuousLayout/VContinuousLayout.hx",urlLoader67);
-	var urlLoader68 = new openfl.net.URLLoader();
-	urlLoader68.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ContinuousLayout/VContinuousLayout.xml",urlLoader68);
-	var urlLoader69 = new openfl.net.URLLoader();
-	urlLoader69.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/CustomPopup/CustomPopup.hx",urlLoader69);
-	var urlLoader70 = new openfl.net.URLLoader();
-	urlLoader70.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/CustomPopup/CustomPopup.xml",urlLoader70);
-	var urlLoader71 = new openfl.net.URLLoader();
-	urlLoader71.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/CustomPopup/CustomPopupContent.xml",urlLoader71);
-	var urlLoader72 = new openfl.net.URLLoader();
-	urlLoader72.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/DateSelectors/DateSelectors.hx",urlLoader72);
-	var urlLoader73 = new openfl.net.URLLoader();
-	urlLoader73.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/DateSelectors/DateSelectors.xml",urlLoader73);
-	var urlLoader74 = new openfl.net.URLLoader();
-	urlLoader74.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/GridLayout/GridLayout.hx",urlLoader74);
-	var urlLoader75 = new openfl.net.URLLoader();
-	urlLoader75.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/GridLayout/GridLayout.xml",urlLoader75);
-	var urlLoader76 = new openfl.net.URLLoader();
-	urlLoader76.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/HorizontalLayout/HorizontalLayout.hx",urlLoader76);
-	var urlLoader77 = new openfl.net.URLLoader();
-	urlLoader77.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/HorizontalLayout/HorizontalLayout.xml",urlLoader77);
-	var urlLoader78 = new openfl.net.URLLoader();
-	urlLoader78.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Images/Images.hx",urlLoader78);
-	var urlLoader79 = new openfl.net.URLLoader();
-	urlLoader79.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Images/Images.xml",urlLoader79);
-	var urlLoader80 = new openfl.net.URLLoader();
-	urlLoader80.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ListPopup/ListPopup.hx",urlLoader80);
-	var urlLoader81 = new openfl.net.URLLoader();
-	urlLoader81.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ListPopup/ListPopup.xml",urlLoader81);
-	var urlLoader82 = new openfl.net.URLLoader();
-	urlLoader82.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ListSelectors/ListSelectors.hx",urlLoader82);
-	var urlLoader83 = new openfl.net.URLLoader();
-	urlLoader83.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ListSelectors/ListSelectors.xml",urlLoader83);
-	var urlLoader84 = new openfl.net.URLLoader();
-	urlLoader84.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ListViews/ListViews.hx",urlLoader84);
-	var urlLoader85 = new openfl.net.URLLoader();
-	urlLoader85.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ListViews/ListViews.xml",urlLoader85);
-	var urlLoader86 = new openfl.net.URLLoader();
-	urlLoader86.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/OptionBoxes/OptionBoxes.hx",urlLoader86);
-	var urlLoader87 = new openfl.net.URLLoader();
-	urlLoader87.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/OptionBoxes/OptionBoxes.xml",urlLoader87);
-	var urlLoader88 = new openfl.net.URLLoader();
-	urlLoader88.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ProgressBars/HProgressBars.hx",urlLoader88);
-	var urlLoader89 = new openfl.net.URLLoader();
-	urlLoader89.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ProgressBars/HProgressBars.xml",urlLoader89);
-	var urlLoader90 = new openfl.net.URLLoader();
-	urlLoader90.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ProgressBars/VProgressBars.hx",urlLoader90);
-	var urlLoader91 = new openfl.net.URLLoader();
-	urlLoader91.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ProgressBars/VProgressBars.xml",urlLoader91);
-	var urlLoader92 = new openfl.net.URLLoader();
-	urlLoader92.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ScrollBars/HScrollBars.hx",urlLoader92);
-	var urlLoader93 = new openfl.net.URLLoader();
-	urlLoader93.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ScrollBars/HScrollBars.xml",urlLoader93);
-	var urlLoader94 = new openfl.net.URLLoader();
-	urlLoader94.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ScrollBars/VScrollBars.hx",urlLoader94);
-	var urlLoader95 = new openfl.net.URLLoader();
-	urlLoader95.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ScrollBars/VScrollBars.xml",urlLoader95);
-	var urlLoader96 = new openfl.net.URLLoader();
-	urlLoader96.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ScrollViews/ScrollViews.hx",urlLoader96);
-	var urlLoader97 = new openfl.net.URLLoader();
-	urlLoader97.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/ScrollViews/ScrollViews.xml",urlLoader97);
-	var urlLoader98 = new openfl.net.URLLoader();
-	urlLoader98.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/SimplePopup/SimplePopup.hx",urlLoader98);
-	var urlLoader99 = new openfl.net.URLLoader();
-	urlLoader99.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/SimplePopup/SimplePopup.xml",urlLoader99);
-	var urlLoader100 = new openfl.net.URLLoader();
-	urlLoader100.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Sliders/HSliders.hx",urlLoader100);
-	var urlLoader101 = new openfl.net.URLLoader();
-	urlLoader101.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Sliders/HSliders.xml",urlLoader101);
-	var urlLoader102 = new openfl.net.URLLoader();
-	urlLoader102.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Sliders/VSliders.hx",urlLoader102);
-	var urlLoader103 = new openfl.net.URLLoader();
-	urlLoader103.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/Sliders/VSliders.xml",urlLoader103);
-	var loader105 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/resources/slinky.jpg",loader105);
-	var loader106 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/resources/slinky_large.jpg",loader106);
-	var loader107 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/resources/slinky_small.jpg",loader107);
-	var urlLoader104 = new openfl.net.URLLoader();
-	urlLoader104.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/TextFields/TextFields.hx",urlLoader104);
-	var urlLoader105 = new openfl.net.URLLoader();
-	urlLoader105.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/TextFields/TextFields.xml",urlLoader105);
-	var urlLoader106 = new openfl.net.URLLoader();
-	urlLoader106.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/TextInputs/TextInputs.hx",urlLoader106);
-	var urlLoader107 = new openfl.net.URLLoader();
-	urlLoader107.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/TextInputs/TextInputs.xml",urlLoader107);
-	var urlLoader108 = new openfl.net.URLLoader();
-	urlLoader108.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/VerticalLayout/VerticalLayout.hx",urlLoader108);
-	var urlLoader109 = new openfl.net.URLLoader();
-	urlLoader109.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/VerticalLayout/VerticalLayout.xml",urlLoader109);
-	var urlLoader110 = new openfl.net.URLLoader();
-	urlLoader110.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/WebViews/example.html",urlLoader110);
-	var loader108 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/resources/WebViews/img/haxe_ui.png",loader108);
-	var loader109 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/resources/WebViews/img/icone_cocktail_blanche_ombre.png",loader109);
-	var loader110 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("assets/resources/WebViews/img/icone_haxe_blanche_ombre.png",loader110);
-	var urlLoader111 = new openfl.net.URLLoader();
-	urlLoader111.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/WebViews/WebViews.hx",urlLoader111);
-	var urlLoader112 = new openfl.net.URLLoader();
-	urlLoader112.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/resources/WebViews/WebViews.xml",urlLoader112);
-	var urlLoader113 = new openfl.net.URLLoader();
-	urlLoader113.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/about.xml",urlLoader113);
-	var urlLoader114 = new openfl.net.URLLoader();
-	urlLoader114.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/main.xml",urlLoader114);
-	var urlLoader115 = new openfl.net.URLLoader();
-	urlLoader115.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/prefs.xml",urlLoader115);
-	var urlLoader116 = new openfl.net.URLLoader();
-	urlLoader116.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("assets/ui/todo.xml",urlLoader116);
-	var urlLoader117 = new openfl.net.URLLoader();
-	urlLoader117.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("ui/about.xml",urlLoader117);
-	var urlLoader118 = new openfl.net.URLLoader();
-	urlLoader118.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("ui/main.xml",urlLoader118);
-	var urlLoader119 = new openfl.net.URLLoader();
-	urlLoader119.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("ui/prefs.xml",urlLoader119);
-	var urlLoader120 = new openfl.net.URLLoader();
-	urlLoader120.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("ui/todo.xml",urlLoader120);
-	var urlLoader121 = new openfl.net.URLLoader();
-	urlLoader121.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("data/views.xml",urlLoader121);
-	var urlLoader122 = new openfl.net.URLLoader();
-	urlLoader122.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/AbsoluteLayout/AbsoluteLayout.hx",urlLoader122);
-	var urlLoader123 = new openfl.net.URLLoader();
-	urlLoader123.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/AbsoluteLayout/AbsoluteLayout.xml",urlLoader123);
-	var urlLoader124 = new openfl.net.URLLoader();
-	urlLoader124.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Accordions/Accordions.hx",urlLoader124);
-	var urlLoader125 = new openfl.net.URLLoader();
-	urlLoader125.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Accordions/Accordions.xml",urlLoader125);
-	var urlLoader126 = new openfl.net.URLLoader();
-	urlLoader126.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/BoxLayout/BoxLayout.hx",urlLoader126);
-	var urlLoader127 = new openfl.net.URLLoader();
-	urlLoader127.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/BoxLayout/BoxLayout.xml",urlLoader127);
-	var urlLoader128 = new openfl.net.URLLoader();
-	urlLoader128.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/BusyPopup/BusyPopup.hx",urlLoader128);
-	var urlLoader129 = new openfl.net.URLLoader();
-	urlLoader129.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/BusyPopup/BusyPopup.xml",urlLoader129);
-	var urlLoader130 = new openfl.net.URLLoader();
-	urlLoader130.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Buttons/Buttons.hx",urlLoader130);
-	var urlLoader131 = new openfl.net.URLLoader();
-	urlLoader131.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Buttons/Buttons.xml",urlLoader131);
-	var urlLoader132 = new openfl.net.URLLoader();
-	urlLoader132.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/CalendarPopup/CalendarPopup.hx",urlLoader132);
-	var urlLoader133 = new openfl.net.URLLoader();
-	urlLoader133.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/CalendarPopup/CalendarPopup.xml",urlLoader133);
-	var urlLoader134 = new openfl.net.URLLoader();
-	urlLoader134.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/CheckBoxes/CheckBoxes.hx",urlLoader134);
-	var urlLoader135 = new openfl.net.URLLoader();
-	urlLoader135.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/CheckBoxes/CheckBoxes.xml",urlLoader135);
-	var urlLoader136 = new openfl.net.URLLoader();
-	urlLoader136.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ContinuousLayout/HContinuousLayout.hx",urlLoader136);
-	var urlLoader137 = new openfl.net.URLLoader();
-	urlLoader137.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ContinuousLayout/HContinuousLayout.xml",urlLoader137);
-	var urlLoader138 = new openfl.net.URLLoader();
-	urlLoader138.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ContinuousLayout/VContinuousLayout.hx",urlLoader138);
-	var urlLoader139 = new openfl.net.URLLoader();
-	urlLoader139.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ContinuousLayout/VContinuousLayout.xml",urlLoader139);
-	var urlLoader140 = new openfl.net.URLLoader();
-	urlLoader140.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/CustomPopup/CustomPopup.hx",urlLoader140);
-	var urlLoader141 = new openfl.net.URLLoader();
-	urlLoader141.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/CustomPopup/CustomPopup.xml",urlLoader141);
-	var urlLoader142 = new openfl.net.URLLoader();
-	urlLoader142.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/CustomPopup/CustomPopupContent.xml",urlLoader142);
-	var urlLoader143 = new openfl.net.URLLoader();
-	urlLoader143.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/DateSelectors/DateSelectors.hx",urlLoader143);
-	var urlLoader144 = new openfl.net.URLLoader();
-	urlLoader144.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/DateSelectors/DateSelectors.xml",urlLoader144);
-	var urlLoader145 = new openfl.net.URLLoader();
-	urlLoader145.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/GridLayout/GridLayout.hx",urlLoader145);
-	var urlLoader146 = new openfl.net.URLLoader();
-	urlLoader146.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/GridLayout/GridLayout.xml",urlLoader146);
-	var urlLoader147 = new openfl.net.URLLoader();
-	urlLoader147.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/HorizontalLayout/HorizontalLayout.hx",urlLoader147);
-	var urlLoader148 = new openfl.net.URLLoader();
-	urlLoader148.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/HorizontalLayout/HorizontalLayout.xml",urlLoader148);
-	var urlLoader149 = new openfl.net.URLLoader();
-	urlLoader149.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Images/Images.hx",urlLoader149);
-	var urlLoader150 = new openfl.net.URLLoader();
-	urlLoader150.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Images/Images.xml",urlLoader150);
-	var urlLoader151 = new openfl.net.URLLoader();
-	urlLoader151.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ListPopup/ListPopup.hx",urlLoader151);
-	var urlLoader152 = new openfl.net.URLLoader();
-	urlLoader152.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ListPopup/ListPopup.xml",urlLoader152);
-	var urlLoader153 = new openfl.net.URLLoader();
-	urlLoader153.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ListSelectors/ListSelectors.hx",urlLoader153);
-	var urlLoader154 = new openfl.net.URLLoader();
-	urlLoader154.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ListSelectors/ListSelectors.xml",urlLoader154);
-	var urlLoader155 = new openfl.net.URLLoader();
-	urlLoader155.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ListViews/ListViews.hx",urlLoader155);
-	var urlLoader156 = new openfl.net.URLLoader();
-	urlLoader156.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ListViews/ListViews.xml",urlLoader156);
-	var urlLoader157 = new openfl.net.URLLoader();
-	urlLoader157.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/OptionBoxes/OptionBoxes.hx",urlLoader157);
-	var urlLoader158 = new openfl.net.URLLoader();
-	urlLoader158.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/OptionBoxes/OptionBoxes.xml",urlLoader158);
-	var urlLoader159 = new openfl.net.URLLoader();
-	urlLoader159.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ProgressBars/HProgressBars.hx",urlLoader159);
-	var urlLoader160 = new openfl.net.URLLoader();
-	urlLoader160.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ProgressBars/HProgressBars.xml",urlLoader160);
-	var urlLoader161 = new openfl.net.URLLoader();
-	urlLoader161.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ProgressBars/VProgressBars.hx",urlLoader161);
-	var urlLoader162 = new openfl.net.URLLoader();
-	urlLoader162.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ProgressBars/VProgressBars.xml",urlLoader162);
-	var urlLoader163 = new openfl.net.URLLoader();
-	urlLoader163.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ScrollBars/HScrollBars.hx",urlLoader163);
-	var urlLoader164 = new openfl.net.URLLoader();
-	urlLoader164.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ScrollBars/HScrollBars.xml",urlLoader164);
-	var urlLoader165 = new openfl.net.URLLoader();
-	urlLoader165.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ScrollBars/VScrollBars.hx",urlLoader165);
-	var urlLoader166 = new openfl.net.URLLoader();
-	urlLoader166.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ScrollBars/VScrollBars.xml",urlLoader166);
-	var urlLoader167 = new openfl.net.URLLoader();
-	urlLoader167.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ScrollViews/ScrollViews.hx",urlLoader167);
-	var urlLoader168 = new openfl.net.URLLoader();
-	urlLoader168.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/ScrollViews/ScrollViews.xml",urlLoader168);
-	var urlLoader169 = new openfl.net.URLLoader();
-	urlLoader169.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/SimplePopup/SimplePopup.hx",urlLoader169);
-	var urlLoader170 = new openfl.net.URLLoader();
-	urlLoader170.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/SimplePopup/SimplePopup.xml",urlLoader170);
-	var urlLoader171 = new openfl.net.URLLoader();
-	urlLoader171.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Sliders/HSliders.hx",urlLoader171);
-	var urlLoader172 = new openfl.net.URLLoader();
-	urlLoader172.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Sliders/HSliders.xml",urlLoader172);
-	var urlLoader173 = new openfl.net.URLLoader();
-	urlLoader173.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Sliders/VSliders.hx",urlLoader173);
-	var urlLoader174 = new openfl.net.URLLoader();
-	urlLoader174.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/Sliders/VSliders.xml",urlLoader174);
-	var loader111 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("resources/slinky.jpg",loader111);
-	var loader112 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("resources/slinky_large.jpg",loader112);
-	var loader113 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("resources/slinky_small.jpg",loader113);
-	var urlLoader175 = new openfl.net.URLLoader();
-	urlLoader175.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/TextFields/TextFields.hx",urlLoader175);
-	var urlLoader176 = new openfl.net.URLLoader();
-	urlLoader176.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/TextFields/TextFields.xml",urlLoader176);
-	var urlLoader177 = new openfl.net.URLLoader();
-	urlLoader177.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/TextInputs/TextInputs.hx",urlLoader177);
-	var urlLoader178 = new openfl.net.URLLoader();
-	urlLoader178.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/TextInputs/TextInputs.xml",urlLoader178);
-	var urlLoader179 = new openfl.net.URLLoader();
-	urlLoader179.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/VerticalLayout/VerticalLayout.hx",urlLoader179);
-	var urlLoader180 = new openfl.net.URLLoader();
-	urlLoader180.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/VerticalLayout/VerticalLayout.xml",urlLoader180);
-	var urlLoader181 = new openfl.net.URLLoader();
-	urlLoader181.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/WebViews/example.html",urlLoader181);
-	var loader114 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("resources/WebViews/img/haxe_ui.png",loader114);
-	var loader115 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("resources/WebViews/img/icone_cocktail_blanche_ombre.png",loader115);
-	var loader116 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("resources/WebViews/img/icone_haxe_blanche_ombre.png",loader116);
-	var urlLoader182 = new openfl.net.URLLoader();
-	urlLoader182.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/WebViews/WebViews.hx",urlLoader182);
-	var urlLoader183 = new openfl.net.URLLoader();
-	urlLoader183.set_dataFormat(openfl.net.URLLoaderDataFormat.BINARY);
-	ApplicationMain.urlLoaders.set("resources/WebViews/WebViews.xml",urlLoader183);
-	var loader117 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/application-dialog.png",loader117);
-	var loader118 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/blue-document-css.png",loader118);
-	var loader119 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/blue-document-haxe.png",loader119);
-	var loader120 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/blue-document-xml.png",loader120);
-	var loader121 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/blue-document.png",loader121);
-	var loader122 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/fav_16.png",loader122);
-	var loader123 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/fav_32.png",loader123);
-	var loader124 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/grid.png",loader124);
-	var loader125 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/images.png",loader125);
-	var loader126 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-accordion.png",loader126);
-	var loader127 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-button.png",loader127);
-	var loader128 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-buttons.png",loader128);
-	var loader129 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-check-boxes.png",loader129);
-	var loader130 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-combo-box-calendar.png",loader130);
-	var loader131 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-flow-vertical.png",loader131);
-	var loader132 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-flow.png",loader132);
-	var loader133 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-labels.png",loader133);
-	var loader134 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-layered-pane.png",loader134);
-	var loader135 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-list-box-blue.png",loader135);
-	var loader136 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-menu-blue.png",loader136);
-	var loader137 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-panel.png",loader137);
-	var loader138 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-progress-bar-vertical.png",loader138);
-	var loader139 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-progress-bar.png",loader139);
-	var loader140 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-radio-buttons.png",loader140);
-	var loader141 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-scroll-bar-horizontal.png",loader141);
-	var loader142 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-scroll-bar.png",loader142);
-	var loader143 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-scroll-pane-image.png",loader143);
-	var loader144 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-slider-050.png",loader144);
-	var loader145 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-slider-vertical-050.png",loader145);
-	var loader146 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-spacer.png",loader146);
-	var loader147 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-split-panel-vertical.png",loader147);
-	var loader148 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-split-panel.png",loader148);
-	var loader149 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-tab-content.png",loader149);
-	var loader150 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-tab.png",loader150);
-	var loader151 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("icons/ui-text-field.png",loader151);
-	var loader152 = new openfl.display.Loader();
-	ApplicationMain.loaders.set("images/slinky.jpg",loader152);
-	var resourcePrefix = "__ASSET__:bitmap_";
-	var _g = 0;
-	var _g1 = haxe.Resource.listNames();
-	while(_g < _g1.length) {
-		var resourceName = _g1[_g];
-		++_g;
-		if(StringTools.startsWith(resourceName,resourcePrefix)) {
-			var type = Type.resolveClass(StringTools.replace(resourceName.substring(resourcePrefix.length),"_","."));
-			if(type != null) {
-				ApplicationMain.total++;
-				var instance = Type.createInstance(type,[0,0,true,16777215,ApplicationMain.bitmapClass_onComplete]);
-			}
-		}
+	if(HxOverrides.indexOf(urls,"assets/fonts/Oxygen-Bold.svg",0) < 0) {
+		urls.push("assets/fonts/Oxygen-Bold.svg");
+		types.push("TEXT");
 	}
-	ApplicationMain.total += Lambda.count(ApplicationMain.loaders) + Lambda.count(ApplicationMain.urlLoaders);
-	if(ApplicationMain.total == 0) ApplicationMain.begin(); else {
-		var $it0 = ApplicationMain.loaders.keys();
-		while( $it0.hasNext() ) {
-			var path = $it0.next();
-			var loader153 = ApplicationMain.loaders.get(path);
-			loader153.contentLoaderInfo.addEventListener("complete",ApplicationMain.loader_onComplete);
-			loader153.load(new openfl.net.URLRequest(path));
-		}
-		var $it1 = ApplicationMain.urlLoaders.keys();
-		while( $it1.hasNext() ) {
-			var path1 = $it1.next();
-			var urlLoader184 = ApplicationMain.urlLoaders.get(path1);
-			urlLoader184.addEventListener("complete",ApplicationMain.loader_onComplete);
-			urlLoader184.load(new openfl.net.URLRequest(path1));
-		}
+	if(HxOverrides.indexOf(urls,"assets/fonts/Oxygen-Bold.ttf",0) < 0) {
+		urls.push("assets/fonts/Oxygen-Bold.ttf");
+		types.push("FONT");
 	}
+	if(HxOverrides.indexOf(urls,"assets/fonts/Oxygen-Bold.woff",0) < 0) {
+		urls.push("assets/fonts/Oxygen-Bold.woff");
+		types.push("BINARY");
+	}
+	if(HxOverrides.indexOf(urls,"assets/fonts/Oxygen.eot",0) < 0) {
+		urls.push("assets/fonts/Oxygen.eot");
+		types.push("BINARY");
+	}
+	if(HxOverrides.indexOf(urls,"assets/fonts/Oxygen.svg",0) < 0) {
+		urls.push("assets/fonts/Oxygen.svg");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/fonts/Oxygen.ttf",0) < 0) {
+		urls.push("assets/fonts/Oxygen.ttf");
+		types.push("FONT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/fonts/Oxygen.woff",0) < 0) {
+		urls.push("assets/fonts/Oxygen.woff");
+		types.push("BINARY");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/default/circle.png",0) < 0) {
+		urls.push("assets/styles/default/circle.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/default/collapse.png",0) < 0) {
+		urls.push("assets/styles/default/collapse.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/default/cross.png",0) < 0) {
+		urls.push("assets/styles/default/cross.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/default/expand.png",0) < 0) {
+		urls.push("assets/styles/default/expand.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/default/up_down.png",0) < 0) {
+		urls.push("assets/styles/default/up_down.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_down.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_down.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_down_dark.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_down_dark.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_down_disabled.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_down_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_left.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_left.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_left_disabled.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_left_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_right.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_right.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_right2.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_right2.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_right_dark.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_right_dark.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_right_disabled.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_right_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_up.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_up.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/arrow_up_disabled.png",0) < 0) {
+		urls.push("assets/styles/gradient/arrow_up_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/circle_dark.png",0) < 0) {
+		urls.push("assets/styles/gradient/circle_dark.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/cross_dark.png",0) < 0) {
+		urls.push("assets/styles/gradient/cross_dark.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/cross_dark_disabled.png",0) < 0) {
+		urls.push("assets/styles/gradient/cross_dark_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/cross_light_small.png",0) < 0) {
+		urls.push("assets/styles/gradient/cross_light_small.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/gradient.css",0) < 0) {
+		urls.push("assets/styles/gradient/gradient.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/gradient.min.css",0) < 0) {
+		urls.push("assets/styles/gradient/gradient.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/gradient_mobile.css",0) < 0) {
+		urls.push("assets/styles/gradient/gradient_mobile.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/gradient_mobile.min.css",0) < 0) {
+		urls.push("assets/styles/gradient/gradient_mobile.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/gripper_horizontal.png",0) < 0) {
+		urls.push("assets/styles/gradient/gripper_horizontal.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/gripper_horizontal_disabled.png",0) < 0) {
+		urls.push("assets/styles/gradient/gripper_horizontal_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/gripper_vertical.png",0) < 0) {
+		urls.push("assets/styles/gradient/gripper_vertical.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/gripper_vertical_disabled.png",0) < 0) {
+		urls.push("assets/styles/gradient/gripper_vertical_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/hsplitter_gripper.png",0) < 0) {
+		urls.push("assets/styles/gradient/hsplitter_gripper.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/gradient/vsplitter_gripper.png",0) < 0) {
+		urls.push("assets/styles/gradient/vsplitter_gripper.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/accordion.css",0) < 0) {
+		urls.push("assets/styles/windows/accordion.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/accordion.min.css",0) < 0) {
+		urls.push("assets/styles/windows/accordion.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/button.png",0) < 0) {
+		urls.push("assets/styles/windows/button.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/buttons.css",0) < 0) {
+		urls.push("assets/styles/windows/buttons.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/buttons.min.css",0) < 0) {
+		urls.push("assets/styles/windows/buttons.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/calendar.css",0) < 0) {
+		urls.push("assets/styles/windows/calendar.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/checkbox.png",0) < 0) {
+		urls.push("assets/styles/windows/checkbox.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/container.png",0) < 0) {
+		urls.push("assets/styles/windows/container.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/down_arrow.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/down_arrow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/hscroll_thumb_gripper_down.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/hscroll_thumb_gripper_down.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/hscroll_thumb_gripper_over.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/hscroll_thumb_gripper_over.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/hscroll_thumb_gripper_up.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/hscroll_thumb_gripper_up.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/left_arrow.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/left_arrow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/right_arrow.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/right_arrow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/up_arrow.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/up_arrow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/vscroll_thumb_gripper_down.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/vscroll_thumb_gripper_down.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/vscroll_thumb_gripper_over.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/vscroll_thumb_gripper_over.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/glyphs/vscroll_thumb_gripper_up.png",0) < 0) {
+		urls.push("assets/styles/windows/glyphs/vscroll_thumb_gripper_up.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/hprogress.png",0) < 0) {
+		urls.push("assets/styles/windows/hprogress.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/hscroll.png",0) < 0) {
+		urls.push("assets/styles/windows/hscroll.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/listview.css",0) < 0) {
+		urls.push("assets/styles/windows/listview.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/listview.min.css",0) < 0) {
+		urls.push("assets/styles/windows/listview.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/listview.png",0) < 0) {
+		urls.push("assets/styles/windows/listview.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/menus.css",0) < 0) {
+		urls.push("assets/styles/windows/menus.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/optionbox.png",0) < 0) {
+		urls.push("assets/styles/windows/optionbox.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/popup.png",0) < 0) {
+		urls.push("assets/styles/windows/popup.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/popups.css",0) < 0) {
+		urls.push("assets/styles/windows/popups.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/rtf.css",0) < 0) {
+		urls.push("assets/styles/windows/rtf.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/scrolls.css",0) < 0) {
+		urls.push("assets/styles/windows/scrolls.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/scrolls.min.css",0) < 0) {
+		urls.push("assets/styles/windows/scrolls.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/sliders.css",0) < 0) {
+		urls.push("assets/styles/windows/sliders.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/tab.png",0) < 0) {
+		urls.push("assets/styles/windows/tab.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/tabs.css",0) < 0) {
+		urls.push("assets/styles/windows/tabs.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/textinput.png",0) < 0) {
+		urls.push("assets/styles/windows/textinput.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/vprogress.png",0) < 0) {
+		urls.push("assets/styles/windows/vprogress.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/vscroll.png",0) < 0) {
+		urls.push("assets/styles/windows/vscroll.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/styles/windows/windows.css",0) < 0) {
+		urls.push("assets/styles/windows/windows.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/default/circle.png",0) < 0) {
+		urls.push("styles/default/circle.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/default/collapse.png",0) < 0) {
+		urls.push("styles/default/collapse.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/default/cross.png",0) < 0) {
+		urls.push("styles/default/cross.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/default/expand.png",0) < 0) {
+		urls.push("styles/default/expand.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/default/up_down.png",0) < 0) {
+		urls.push("styles/default/up_down.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_down.png",0) < 0) {
+		urls.push("styles/gradient/arrow_down.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_down_dark.png",0) < 0) {
+		urls.push("styles/gradient/arrow_down_dark.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_down_disabled.png",0) < 0) {
+		urls.push("styles/gradient/arrow_down_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_left.png",0) < 0) {
+		urls.push("styles/gradient/arrow_left.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_left_disabled.png",0) < 0) {
+		urls.push("styles/gradient/arrow_left_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_right.png",0) < 0) {
+		urls.push("styles/gradient/arrow_right.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_right2.png",0) < 0) {
+		urls.push("styles/gradient/arrow_right2.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_right_dark.png",0) < 0) {
+		urls.push("styles/gradient/arrow_right_dark.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_right_disabled.png",0) < 0) {
+		urls.push("styles/gradient/arrow_right_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_up.png",0) < 0) {
+		urls.push("styles/gradient/arrow_up.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/arrow_up_disabled.png",0) < 0) {
+		urls.push("styles/gradient/arrow_up_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/circle_dark.png",0) < 0) {
+		urls.push("styles/gradient/circle_dark.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/cross_dark.png",0) < 0) {
+		urls.push("styles/gradient/cross_dark.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/cross_dark_disabled.png",0) < 0) {
+		urls.push("styles/gradient/cross_dark_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/cross_light_small.png",0) < 0) {
+		urls.push("styles/gradient/cross_light_small.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/gradient.css",0) < 0) {
+		urls.push("styles/gradient/gradient.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/gradient.min.css",0) < 0) {
+		urls.push("styles/gradient/gradient.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/gradient_mobile.css",0) < 0) {
+		urls.push("styles/gradient/gradient_mobile.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/gradient_mobile.min.css",0) < 0) {
+		urls.push("styles/gradient/gradient_mobile.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/gripper_horizontal.png",0) < 0) {
+		urls.push("styles/gradient/gripper_horizontal.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/gripper_horizontal_disabled.png",0) < 0) {
+		urls.push("styles/gradient/gripper_horizontal_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/gripper_vertical.png",0) < 0) {
+		urls.push("styles/gradient/gripper_vertical.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/gripper_vertical_disabled.png",0) < 0) {
+		urls.push("styles/gradient/gripper_vertical_disabled.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/hsplitter_gripper.png",0) < 0) {
+		urls.push("styles/gradient/hsplitter_gripper.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/gradient/vsplitter_gripper.png",0) < 0) {
+		urls.push("styles/gradient/vsplitter_gripper.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/accordion.css",0) < 0) {
+		urls.push("styles/windows/accordion.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/accordion.min.css",0) < 0) {
+		urls.push("styles/windows/accordion.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/button.png",0) < 0) {
+		urls.push("styles/windows/button.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/buttons.css",0) < 0) {
+		urls.push("styles/windows/buttons.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/buttons.min.css",0) < 0) {
+		urls.push("styles/windows/buttons.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/calendar.css",0) < 0) {
+		urls.push("styles/windows/calendar.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/checkbox.png",0) < 0) {
+		urls.push("styles/windows/checkbox.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/container.png",0) < 0) {
+		urls.push("styles/windows/container.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/down_arrow.png",0) < 0) {
+		urls.push("styles/windows/glyphs/down_arrow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/hscroll_thumb_gripper_down.png",0) < 0) {
+		urls.push("styles/windows/glyphs/hscroll_thumb_gripper_down.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/hscroll_thumb_gripper_over.png",0) < 0) {
+		urls.push("styles/windows/glyphs/hscroll_thumb_gripper_over.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/hscroll_thumb_gripper_up.png",0) < 0) {
+		urls.push("styles/windows/glyphs/hscroll_thumb_gripper_up.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/left_arrow.png",0) < 0) {
+		urls.push("styles/windows/glyphs/left_arrow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/right_arrow.png",0) < 0) {
+		urls.push("styles/windows/glyphs/right_arrow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/up_arrow.png",0) < 0) {
+		urls.push("styles/windows/glyphs/up_arrow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/vscroll_thumb_gripper_down.png",0) < 0) {
+		urls.push("styles/windows/glyphs/vscroll_thumb_gripper_down.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/vscroll_thumb_gripper_over.png",0) < 0) {
+		urls.push("styles/windows/glyphs/vscroll_thumb_gripper_over.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/glyphs/vscroll_thumb_gripper_up.png",0) < 0) {
+		urls.push("styles/windows/glyphs/vscroll_thumb_gripper_up.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/hprogress.png",0) < 0) {
+		urls.push("styles/windows/hprogress.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/hscroll.png",0) < 0) {
+		urls.push("styles/windows/hscroll.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/listview.css",0) < 0) {
+		urls.push("styles/windows/listview.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/listview.min.css",0) < 0) {
+		urls.push("styles/windows/listview.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/listview.png",0) < 0) {
+		urls.push("styles/windows/listview.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/menus.css",0) < 0) {
+		urls.push("styles/windows/menus.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/optionbox.png",0) < 0) {
+		urls.push("styles/windows/optionbox.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/popup.png",0) < 0) {
+		urls.push("styles/windows/popup.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/popups.css",0) < 0) {
+		urls.push("styles/windows/popups.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/rtf.css",0) < 0) {
+		urls.push("styles/windows/rtf.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/scrolls.css",0) < 0) {
+		urls.push("styles/windows/scrolls.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/scrolls.min.css",0) < 0) {
+		urls.push("styles/windows/scrolls.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/sliders.css",0) < 0) {
+		urls.push("styles/windows/sliders.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/tab.png",0) < 0) {
+		urls.push("styles/windows/tab.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/tabs.css",0) < 0) {
+		urls.push("styles/windows/tabs.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/textinput.png",0) < 0) {
+		urls.push("styles/windows/textinput.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/vprogress.png",0) < 0) {
+		urls.push("styles/windows/vprogress.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/vscroll.png",0) < 0) {
+		urls.push("styles/windows/vscroll.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"styles/windows/windows.css",0) < 0) {
+		urls.push("styles/windows/windows.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"fonts/Oxygen-Bold.eot",0) < 0) {
+		urls.push("fonts/Oxygen-Bold.eot");
+		types.push("BINARY");
+	}
+	if(HxOverrides.indexOf(urls,"fonts/Oxygen-Bold.svg",0) < 0) {
+		urls.push("fonts/Oxygen-Bold.svg");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"fonts/Oxygen-Bold.ttf",0) < 0) {
+		urls.push("fonts/Oxygen-Bold.ttf");
+		types.push("FONT");
+	}
+	if(HxOverrides.indexOf(urls,"fonts/Oxygen-Bold.woff",0) < 0) {
+		urls.push("fonts/Oxygen-Bold.woff");
+		types.push("BINARY");
+	}
+	if(HxOverrides.indexOf(urls,"fonts/Oxygen.eot",0) < 0) {
+		urls.push("fonts/Oxygen.eot");
+		types.push("BINARY");
+	}
+	if(HxOverrides.indexOf(urls,"fonts/Oxygen.svg",0) < 0) {
+		urls.push("fonts/Oxygen.svg");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"fonts/Oxygen.ttf",0) < 0) {
+		urls.push("fonts/Oxygen.ttf");
+		types.push("FONT");
+	}
+	if(HxOverrides.indexOf(urls,"fonts/Oxygen.woff",0) < 0) {
+		urls.push("fonts/Oxygen.woff");
+		types.push("BINARY");
+	}
+	if(HxOverrides.indexOf(urls,"assets/css/code.css",0) < 0) {
+		urls.push("assets/css/code.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/css/code.min.css",0) < 0) {
+		urls.push("assets/css/code.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/css/rtf.css",0) < 0) {
+		urls.push("assets/css/rtf.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/css/rtf.min.css",0) < 0) {
+		urls.push("assets/css/rtf.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/rtfview/edit-alignment-center.png",0) < 0) {
+		urls.push("assets/img/rtfview/edit-alignment-center.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/rtfview/edit-alignment-justify.png",0) < 0) {
+		urls.push("assets/img/rtfview/edit-alignment-justify.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/rtfview/edit-alignment-left.png",0) < 0) {
+		urls.push("assets/img/rtfview/edit-alignment-left.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/rtfview/edit-alignment-right.png",0) < 0) {
+		urls.push("assets/img/rtfview/edit-alignment-right.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/rtfview/edit-bold.png",0) < 0) {
+		urls.push("assets/img/rtfview/edit-bold.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/rtfview/edit-italic.png",0) < 0) {
+		urls.push("assets/img/rtfview/edit-italic.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/rtfview/edit-list.png",0) < 0) {
+		urls.push("assets/img/rtfview/edit-list.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/rtfview/edit-underline.png",0) < 0) {
+		urls.push("assets/img/rtfview/edit-underline.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/openfl.svg",0) < 0) {
+		urls.push("assets/openfl.svg");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/demo.xml",0) < 0) {
+		urls.push("assets/ui/demo.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/example.hx",0) < 0) {
+		urls.push("assets/ui/example.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/example.txt",0) < 0) {
+		urls.push("assets/ui/example.txt");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/example.xml",0) < 0) {
+		urls.push("assets/ui/example.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"img/rtfview/edit-alignment-center.png",0) < 0) {
+		urls.push("img/rtfview/edit-alignment-center.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"img/rtfview/edit-alignment-justify.png",0) < 0) {
+		urls.push("img/rtfview/edit-alignment-justify.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"img/rtfview/edit-alignment-left.png",0) < 0) {
+		urls.push("img/rtfview/edit-alignment-left.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"img/rtfview/edit-alignment-right.png",0) < 0) {
+		urls.push("img/rtfview/edit-alignment-right.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"img/rtfview/edit-bold.png",0) < 0) {
+		urls.push("img/rtfview/edit-bold.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"img/rtfview/edit-italic.png",0) < 0) {
+		urls.push("img/rtfview/edit-italic.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"img/rtfview/edit-list.png",0) < 0) {
+		urls.push("img/rtfview/edit-list.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"img/rtfview/edit-underline.png",0) < 0) {
+		urls.push("img/rtfview/edit-underline.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"css/code.css",0) < 0) {
+		urls.push("css/code.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"css/code.min.css",0) < 0) {
+		urls.push("css/code.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"css/rtf.css",0) < 0) {
+		urls.push("css/rtf.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"css/rtf.min.css",0) < 0) {
+		urls.push("css/rtf.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/css/default/webview.css",0) < 0) {
+		urls.push("assets/css/default/webview.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/css/gradient/webview.css",0) < 0) {
+		urls.push("assets/css/gradient/webview.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/css/gradient/webview.min.css",0) < 0) {
+		urls.push("assets/css/gradient/webview.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/css/webview.css",0) < 0) {
+		urls.push("assets/css/webview.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/haxe_ui.png",0) < 0) {
+		urls.push("assets/img/haxe_ui.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/icone_cocktail_blanche_ombre.png",0) < 0) {
+		urls.push("assets/img/icone_cocktail_blanche_ombre.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/img/icone_haxe_blanche_ombre.png",0) < 0) {
+		urls.push("assets/img/icone_haxe_blanche_ombre.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/openfl.svg",0) < 0) {
+		urls.push("assets/openfl.svg");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/demo.xml",0) < 0) {
+		urls.push("assets/ui/demo.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/example.html",0) < 0) {
+		urls.push("assets/ui/example.html");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/test.html",0) < 0) {
+		urls.push("assets/ui/test.html");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"img/haxe_ui.png",0) < 0) {
+		urls.push("img/haxe_ui.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"img/icone_cocktail_blanche_ombre.png",0) < 0) {
+		urls.push("img/icone_cocktail_blanche_ombre.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"img/icone_haxe_blanche_ombre.png",0) < 0) {
+		urls.push("img/icone_haxe_blanche_ombre.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"css/default/webview.css",0) < 0) {
+		urls.push("css/default/webview.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"css/gradient/webview.css",0) < 0) {
+		urls.push("css/gradient/webview.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"css/gradient/webview.min.css",0) < 0) {
+		urls.push("css/gradient/webview.min.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"css/webview.css",0) < 0) {
+		urls.push("css/webview.css");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/application-default-icon.svg",0) < 0) {
+		urls.push("assets/application-default-icon.svg");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/data/views.xml",0) < 0) {
+		urls.push("assets/data/views.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/application-dialog.png",0) < 0) {
+		urls.push("assets/icons/application-dialog.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/blue-document-css.png",0) < 0) {
+		urls.push("assets/icons/blue-document-css.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/blue-document-haxe.png",0) < 0) {
+		urls.push("assets/icons/blue-document-haxe.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/blue-document-xml.png",0) < 0) {
+		urls.push("assets/icons/blue-document-xml.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/blue-document.png",0) < 0) {
+		urls.push("assets/icons/blue-document.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/fav_16.png",0) < 0) {
+		urls.push("assets/icons/fav_16.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/fav_32.png",0) < 0) {
+		urls.push("assets/icons/fav_32.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/grid.png",0) < 0) {
+		urls.push("assets/icons/grid.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/images.png",0) < 0) {
+		urls.push("assets/icons/images.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-accordion.png",0) < 0) {
+		urls.push("assets/icons/ui-accordion.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-button.png",0) < 0) {
+		urls.push("assets/icons/ui-button.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-buttons.png",0) < 0) {
+		urls.push("assets/icons/ui-buttons.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-check-boxes.png",0) < 0) {
+		urls.push("assets/icons/ui-check-boxes.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-combo-box-calendar.png",0) < 0) {
+		urls.push("assets/icons/ui-combo-box-calendar.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-flow-vertical.png",0) < 0) {
+		urls.push("assets/icons/ui-flow-vertical.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-flow.png",0) < 0) {
+		urls.push("assets/icons/ui-flow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-labels.png",0) < 0) {
+		urls.push("assets/icons/ui-labels.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-layered-pane.png",0) < 0) {
+		urls.push("assets/icons/ui-layered-pane.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-list-box-blue.png",0) < 0) {
+		urls.push("assets/icons/ui-list-box-blue.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-menu-blue.png",0) < 0) {
+		urls.push("assets/icons/ui-menu-blue.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-panel.png",0) < 0) {
+		urls.push("assets/icons/ui-panel.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-progress-bar-vertical.png",0) < 0) {
+		urls.push("assets/icons/ui-progress-bar-vertical.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-progress-bar.png",0) < 0) {
+		urls.push("assets/icons/ui-progress-bar.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-radio-buttons.png",0) < 0) {
+		urls.push("assets/icons/ui-radio-buttons.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-scroll-bar-horizontal.png",0) < 0) {
+		urls.push("assets/icons/ui-scroll-bar-horizontal.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-scroll-bar.png",0) < 0) {
+		urls.push("assets/icons/ui-scroll-bar.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-scroll-pane-image.png",0) < 0) {
+		urls.push("assets/icons/ui-scroll-pane-image.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-slider-050.png",0) < 0) {
+		urls.push("assets/icons/ui-slider-050.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-slider-vertical-050.png",0) < 0) {
+		urls.push("assets/icons/ui-slider-vertical-050.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-spacer.png",0) < 0) {
+		urls.push("assets/icons/ui-spacer.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-split-panel-vertical.png",0) < 0) {
+		urls.push("assets/icons/ui-split-panel-vertical.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-split-panel.png",0) < 0) {
+		urls.push("assets/icons/ui-split-panel.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-tab-content.png",0) < 0) {
+		urls.push("assets/icons/ui-tab-content.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-tab.png",0) < 0) {
+		urls.push("assets/icons/ui-tab.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/icons/ui-text-field.png",0) < 0) {
+		urls.push("assets/icons/ui-text-field.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/images/slinky.jpg",0) < 0) {
+		urls.push("assets/images/slinky.jpg");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/AbsoluteLayout/AbsoluteLayout.hx",0) < 0) {
+		urls.push("assets/resources/AbsoluteLayout/AbsoluteLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/AbsoluteLayout/AbsoluteLayout.xml",0) < 0) {
+		urls.push("assets/resources/AbsoluteLayout/AbsoluteLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Accordions/Accordions.hx",0) < 0) {
+		urls.push("assets/resources/Accordions/Accordions.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Accordions/Accordions.xml",0) < 0) {
+		urls.push("assets/resources/Accordions/Accordions.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/BoxLayout/BoxLayout.hx",0) < 0) {
+		urls.push("assets/resources/BoxLayout/BoxLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/BoxLayout/BoxLayout.xml",0) < 0) {
+		urls.push("assets/resources/BoxLayout/BoxLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/BusyPopup/BusyPopup.hx",0) < 0) {
+		urls.push("assets/resources/BusyPopup/BusyPopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/BusyPopup/BusyPopup.xml",0) < 0) {
+		urls.push("assets/resources/BusyPopup/BusyPopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Buttons/Buttons.hx",0) < 0) {
+		urls.push("assets/resources/Buttons/Buttons.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Buttons/Buttons.xml",0) < 0) {
+		urls.push("assets/resources/Buttons/Buttons.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/CalendarPopup/CalendarPopup.hx",0) < 0) {
+		urls.push("assets/resources/CalendarPopup/CalendarPopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/CalendarPopup/CalendarPopup.xml",0) < 0) {
+		urls.push("assets/resources/CalendarPopup/CalendarPopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/CheckBoxes/CheckBoxes.hx",0) < 0) {
+		urls.push("assets/resources/CheckBoxes/CheckBoxes.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/CheckBoxes/CheckBoxes.xml",0) < 0) {
+		urls.push("assets/resources/CheckBoxes/CheckBoxes.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ContinuousLayout/HContinuousLayout.hx",0) < 0) {
+		urls.push("assets/resources/ContinuousLayout/HContinuousLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ContinuousLayout/HContinuousLayout.xml",0) < 0) {
+		urls.push("assets/resources/ContinuousLayout/HContinuousLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ContinuousLayout/VContinuousLayout.hx",0) < 0) {
+		urls.push("assets/resources/ContinuousLayout/VContinuousLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ContinuousLayout/VContinuousLayout.xml",0) < 0) {
+		urls.push("assets/resources/ContinuousLayout/VContinuousLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/CustomPopup/CustomPopup.hx",0) < 0) {
+		urls.push("assets/resources/CustomPopup/CustomPopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/CustomPopup/CustomPopup.xml",0) < 0) {
+		urls.push("assets/resources/CustomPopup/CustomPopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/CustomPopup/CustomPopupContent.xml",0) < 0) {
+		urls.push("assets/resources/CustomPopup/CustomPopupContent.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/DateSelectors/DateSelectors.hx",0) < 0) {
+		urls.push("assets/resources/DateSelectors/DateSelectors.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/DateSelectors/DateSelectors.xml",0) < 0) {
+		urls.push("assets/resources/DateSelectors/DateSelectors.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/GridLayout/GridLayout.hx",0) < 0) {
+		urls.push("assets/resources/GridLayout/GridLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/GridLayout/GridLayout.xml",0) < 0) {
+		urls.push("assets/resources/GridLayout/GridLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/HorizontalLayout/HorizontalLayout.hx",0) < 0) {
+		urls.push("assets/resources/HorizontalLayout/HorizontalLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/HorizontalLayout/HorizontalLayout.xml",0) < 0) {
+		urls.push("assets/resources/HorizontalLayout/HorizontalLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Images/Images.hx",0) < 0) {
+		urls.push("assets/resources/Images/Images.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Images/Images.xml",0) < 0) {
+		urls.push("assets/resources/Images/Images.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ListPopup/ListPopup.hx",0) < 0) {
+		urls.push("assets/resources/ListPopup/ListPopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ListPopup/ListPopup.xml",0) < 0) {
+		urls.push("assets/resources/ListPopup/ListPopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ListSelectors/ListSelectors.hx",0) < 0) {
+		urls.push("assets/resources/ListSelectors/ListSelectors.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ListSelectors/ListSelectors.xml",0) < 0) {
+		urls.push("assets/resources/ListSelectors/ListSelectors.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ListViews/ListViews.hx",0) < 0) {
+		urls.push("assets/resources/ListViews/ListViews.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ListViews/ListViews.xml",0) < 0) {
+		urls.push("assets/resources/ListViews/ListViews.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/OptionBoxes/OptionBoxes.hx",0) < 0) {
+		urls.push("assets/resources/OptionBoxes/OptionBoxes.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/OptionBoxes/OptionBoxes.xml",0) < 0) {
+		urls.push("assets/resources/OptionBoxes/OptionBoxes.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ProgressBars/HProgressBars.hx",0) < 0) {
+		urls.push("assets/resources/ProgressBars/HProgressBars.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ProgressBars/HProgressBars.xml",0) < 0) {
+		urls.push("assets/resources/ProgressBars/HProgressBars.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ProgressBars/VProgressBars.hx",0) < 0) {
+		urls.push("assets/resources/ProgressBars/VProgressBars.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ProgressBars/VProgressBars.xml",0) < 0) {
+		urls.push("assets/resources/ProgressBars/VProgressBars.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ScrollBars/HScrollBars.hx",0) < 0) {
+		urls.push("assets/resources/ScrollBars/HScrollBars.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ScrollBars/HScrollBars.xml",0) < 0) {
+		urls.push("assets/resources/ScrollBars/HScrollBars.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ScrollBars/VScrollBars.hx",0) < 0) {
+		urls.push("assets/resources/ScrollBars/VScrollBars.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ScrollBars/VScrollBars.xml",0) < 0) {
+		urls.push("assets/resources/ScrollBars/VScrollBars.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ScrollViews/ScrollViews.hx",0) < 0) {
+		urls.push("assets/resources/ScrollViews/ScrollViews.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/ScrollViews/ScrollViews.xml",0) < 0) {
+		urls.push("assets/resources/ScrollViews/ScrollViews.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/SimplePopup/SimplePopup.hx",0) < 0) {
+		urls.push("assets/resources/SimplePopup/SimplePopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/SimplePopup/SimplePopup.xml",0) < 0) {
+		urls.push("assets/resources/SimplePopup/SimplePopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Sliders/HSliders.hx",0) < 0) {
+		urls.push("assets/resources/Sliders/HSliders.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Sliders/HSliders.xml",0) < 0) {
+		urls.push("assets/resources/Sliders/HSliders.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Sliders/VSliders.hx",0) < 0) {
+		urls.push("assets/resources/Sliders/VSliders.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/Sliders/VSliders.xml",0) < 0) {
+		urls.push("assets/resources/Sliders/VSliders.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/slinky.jpg",0) < 0) {
+		urls.push("assets/resources/slinky.jpg");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/slinky_large.jpg",0) < 0) {
+		urls.push("assets/resources/slinky_large.jpg");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/slinky_small.jpg",0) < 0) {
+		urls.push("assets/resources/slinky_small.jpg");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/TextFields/TextFields.hx",0) < 0) {
+		urls.push("assets/resources/TextFields/TextFields.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/TextFields/TextFields.xml",0) < 0) {
+		urls.push("assets/resources/TextFields/TextFields.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/TextInputs/TextInputs.hx",0) < 0) {
+		urls.push("assets/resources/TextInputs/TextInputs.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/TextInputs/TextInputs.xml",0) < 0) {
+		urls.push("assets/resources/TextInputs/TextInputs.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/VerticalLayout/VerticalLayout.hx",0) < 0) {
+		urls.push("assets/resources/VerticalLayout/VerticalLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/VerticalLayout/VerticalLayout.xml",0) < 0) {
+		urls.push("assets/resources/VerticalLayout/VerticalLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/WebViews/example.html",0) < 0) {
+		urls.push("assets/resources/WebViews/example.html");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/WebViews/img/haxe_ui.png",0) < 0) {
+		urls.push("assets/resources/WebViews/img/haxe_ui.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/WebViews/img/icone_cocktail_blanche_ombre.png",0) < 0) {
+		urls.push("assets/resources/WebViews/img/icone_cocktail_blanche_ombre.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/WebViews/img/icone_haxe_blanche_ombre.png",0) < 0) {
+		urls.push("assets/resources/WebViews/img/icone_haxe_blanche_ombre.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/WebViews/WebViews.hx",0) < 0) {
+		urls.push("assets/resources/WebViews/WebViews.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/resources/WebViews/WebViews.xml",0) < 0) {
+		urls.push("assets/resources/WebViews/WebViews.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/about.xml",0) < 0) {
+		urls.push("assets/ui/about.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/main.xml",0) < 0) {
+		urls.push("assets/ui/main.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/prefs.xml",0) < 0) {
+		urls.push("assets/ui/prefs.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"assets/ui/todo.xml",0) < 0) {
+		urls.push("assets/ui/todo.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"ui/about.xml",0) < 0) {
+		urls.push("ui/about.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"ui/main.xml",0) < 0) {
+		urls.push("ui/main.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"ui/prefs.xml",0) < 0) {
+		urls.push("ui/prefs.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"ui/todo.xml",0) < 0) {
+		urls.push("ui/todo.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"data/views.xml",0) < 0) {
+		urls.push("data/views.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/AbsoluteLayout/AbsoluteLayout.hx",0) < 0) {
+		urls.push("resources/AbsoluteLayout/AbsoluteLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/AbsoluteLayout/AbsoluteLayout.xml",0) < 0) {
+		urls.push("resources/AbsoluteLayout/AbsoluteLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Accordions/Accordions.hx",0) < 0) {
+		urls.push("resources/Accordions/Accordions.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Accordions/Accordions.xml",0) < 0) {
+		urls.push("resources/Accordions/Accordions.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/BoxLayout/BoxLayout.hx",0) < 0) {
+		urls.push("resources/BoxLayout/BoxLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/BoxLayout/BoxLayout.xml",0) < 0) {
+		urls.push("resources/BoxLayout/BoxLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/BusyPopup/BusyPopup.hx",0) < 0) {
+		urls.push("resources/BusyPopup/BusyPopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/BusyPopup/BusyPopup.xml",0) < 0) {
+		urls.push("resources/BusyPopup/BusyPopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Buttons/Buttons.hx",0) < 0) {
+		urls.push("resources/Buttons/Buttons.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Buttons/Buttons.xml",0) < 0) {
+		urls.push("resources/Buttons/Buttons.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/CalendarPopup/CalendarPopup.hx",0) < 0) {
+		urls.push("resources/CalendarPopup/CalendarPopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/CalendarPopup/CalendarPopup.xml",0) < 0) {
+		urls.push("resources/CalendarPopup/CalendarPopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/CheckBoxes/CheckBoxes.hx",0) < 0) {
+		urls.push("resources/CheckBoxes/CheckBoxes.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/CheckBoxes/CheckBoxes.xml",0) < 0) {
+		urls.push("resources/CheckBoxes/CheckBoxes.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ContinuousLayout/HContinuousLayout.hx",0) < 0) {
+		urls.push("resources/ContinuousLayout/HContinuousLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ContinuousLayout/HContinuousLayout.xml",0) < 0) {
+		urls.push("resources/ContinuousLayout/HContinuousLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ContinuousLayout/VContinuousLayout.hx",0) < 0) {
+		urls.push("resources/ContinuousLayout/VContinuousLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ContinuousLayout/VContinuousLayout.xml",0) < 0) {
+		urls.push("resources/ContinuousLayout/VContinuousLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/CustomPopup/CustomPopup.hx",0) < 0) {
+		urls.push("resources/CustomPopup/CustomPopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/CustomPopup/CustomPopup.xml",0) < 0) {
+		urls.push("resources/CustomPopup/CustomPopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/CustomPopup/CustomPopupContent.xml",0) < 0) {
+		urls.push("resources/CustomPopup/CustomPopupContent.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/DateSelectors/DateSelectors.hx",0) < 0) {
+		urls.push("resources/DateSelectors/DateSelectors.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/DateSelectors/DateSelectors.xml",0) < 0) {
+		urls.push("resources/DateSelectors/DateSelectors.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/GridLayout/GridLayout.hx",0) < 0) {
+		urls.push("resources/GridLayout/GridLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/GridLayout/GridLayout.xml",0) < 0) {
+		urls.push("resources/GridLayout/GridLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/HorizontalLayout/HorizontalLayout.hx",0) < 0) {
+		urls.push("resources/HorizontalLayout/HorizontalLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/HorizontalLayout/HorizontalLayout.xml",0) < 0) {
+		urls.push("resources/HorizontalLayout/HorizontalLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Images/Images.hx",0) < 0) {
+		urls.push("resources/Images/Images.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Images/Images.xml",0) < 0) {
+		urls.push("resources/Images/Images.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ListPopup/ListPopup.hx",0) < 0) {
+		urls.push("resources/ListPopup/ListPopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ListPopup/ListPopup.xml",0) < 0) {
+		urls.push("resources/ListPopup/ListPopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ListSelectors/ListSelectors.hx",0) < 0) {
+		urls.push("resources/ListSelectors/ListSelectors.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ListSelectors/ListSelectors.xml",0) < 0) {
+		urls.push("resources/ListSelectors/ListSelectors.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ListViews/ListViews.hx",0) < 0) {
+		urls.push("resources/ListViews/ListViews.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ListViews/ListViews.xml",0) < 0) {
+		urls.push("resources/ListViews/ListViews.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/OptionBoxes/OptionBoxes.hx",0) < 0) {
+		urls.push("resources/OptionBoxes/OptionBoxes.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/OptionBoxes/OptionBoxes.xml",0) < 0) {
+		urls.push("resources/OptionBoxes/OptionBoxes.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ProgressBars/HProgressBars.hx",0) < 0) {
+		urls.push("resources/ProgressBars/HProgressBars.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ProgressBars/HProgressBars.xml",0) < 0) {
+		urls.push("resources/ProgressBars/HProgressBars.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ProgressBars/VProgressBars.hx",0) < 0) {
+		urls.push("resources/ProgressBars/VProgressBars.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ProgressBars/VProgressBars.xml",0) < 0) {
+		urls.push("resources/ProgressBars/VProgressBars.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ScrollBars/HScrollBars.hx",0) < 0) {
+		urls.push("resources/ScrollBars/HScrollBars.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ScrollBars/HScrollBars.xml",0) < 0) {
+		urls.push("resources/ScrollBars/HScrollBars.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ScrollBars/VScrollBars.hx",0) < 0) {
+		urls.push("resources/ScrollBars/VScrollBars.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ScrollBars/VScrollBars.xml",0) < 0) {
+		urls.push("resources/ScrollBars/VScrollBars.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ScrollViews/ScrollViews.hx",0) < 0) {
+		urls.push("resources/ScrollViews/ScrollViews.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/ScrollViews/ScrollViews.xml",0) < 0) {
+		urls.push("resources/ScrollViews/ScrollViews.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/SimplePopup/SimplePopup.hx",0) < 0) {
+		urls.push("resources/SimplePopup/SimplePopup.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/SimplePopup/SimplePopup.xml",0) < 0) {
+		urls.push("resources/SimplePopup/SimplePopup.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Sliders/HSliders.hx",0) < 0) {
+		urls.push("resources/Sliders/HSliders.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Sliders/HSliders.xml",0) < 0) {
+		urls.push("resources/Sliders/HSliders.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Sliders/VSliders.hx",0) < 0) {
+		urls.push("resources/Sliders/VSliders.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/Sliders/VSliders.xml",0) < 0) {
+		urls.push("resources/Sliders/VSliders.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/slinky.jpg",0) < 0) {
+		urls.push("resources/slinky.jpg");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"resources/slinky_large.jpg",0) < 0) {
+		urls.push("resources/slinky_large.jpg");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"resources/slinky_small.jpg",0) < 0) {
+		urls.push("resources/slinky_small.jpg");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"resources/TextFields/TextFields.hx",0) < 0) {
+		urls.push("resources/TextFields/TextFields.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/TextFields/TextFields.xml",0) < 0) {
+		urls.push("resources/TextFields/TextFields.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/TextInputs/TextInputs.hx",0) < 0) {
+		urls.push("resources/TextInputs/TextInputs.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/TextInputs/TextInputs.xml",0) < 0) {
+		urls.push("resources/TextInputs/TextInputs.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/VerticalLayout/VerticalLayout.hx",0) < 0) {
+		urls.push("resources/VerticalLayout/VerticalLayout.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/VerticalLayout/VerticalLayout.xml",0) < 0) {
+		urls.push("resources/VerticalLayout/VerticalLayout.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/WebViews/example.html",0) < 0) {
+		urls.push("resources/WebViews/example.html");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/WebViews/img/haxe_ui.png",0) < 0) {
+		urls.push("resources/WebViews/img/haxe_ui.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"resources/WebViews/img/icone_cocktail_blanche_ombre.png",0) < 0) {
+		urls.push("resources/WebViews/img/icone_cocktail_blanche_ombre.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"resources/WebViews/img/icone_haxe_blanche_ombre.png",0) < 0) {
+		urls.push("resources/WebViews/img/icone_haxe_blanche_ombre.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"resources/WebViews/WebViews.hx",0) < 0) {
+		urls.push("resources/WebViews/WebViews.hx");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"resources/WebViews/WebViews.xml",0) < 0) {
+		urls.push("resources/WebViews/WebViews.xml");
+		types.push("TEXT");
+	}
+	if(HxOverrides.indexOf(urls,"icons/application-dialog.png",0) < 0) {
+		urls.push("icons/application-dialog.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/blue-document-css.png",0) < 0) {
+		urls.push("icons/blue-document-css.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/blue-document-haxe.png",0) < 0) {
+		urls.push("icons/blue-document-haxe.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/blue-document-xml.png",0) < 0) {
+		urls.push("icons/blue-document-xml.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/blue-document.png",0) < 0) {
+		urls.push("icons/blue-document.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/fav_16.png",0) < 0) {
+		urls.push("icons/fav_16.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/fav_32.png",0) < 0) {
+		urls.push("icons/fav_32.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/grid.png",0) < 0) {
+		urls.push("icons/grid.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/images.png",0) < 0) {
+		urls.push("icons/images.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-accordion.png",0) < 0) {
+		urls.push("icons/ui-accordion.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-button.png",0) < 0) {
+		urls.push("icons/ui-button.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-buttons.png",0) < 0) {
+		urls.push("icons/ui-buttons.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-check-boxes.png",0) < 0) {
+		urls.push("icons/ui-check-boxes.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-combo-box-calendar.png",0) < 0) {
+		urls.push("icons/ui-combo-box-calendar.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-flow-vertical.png",0) < 0) {
+		urls.push("icons/ui-flow-vertical.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-flow.png",0) < 0) {
+		urls.push("icons/ui-flow.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-labels.png",0) < 0) {
+		urls.push("icons/ui-labels.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-layered-pane.png",0) < 0) {
+		urls.push("icons/ui-layered-pane.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-list-box-blue.png",0) < 0) {
+		urls.push("icons/ui-list-box-blue.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-menu-blue.png",0) < 0) {
+		urls.push("icons/ui-menu-blue.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-panel.png",0) < 0) {
+		urls.push("icons/ui-panel.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-progress-bar-vertical.png",0) < 0) {
+		urls.push("icons/ui-progress-bar-vertical.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-progress-bar.png",0) < 0) {
+		urls.push("icons/ui-progress-bar.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-radio-buttons.png",0) < 0) {
+		urls.push("icons/ui-radio-buttons.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-scroll-bar-horizontal.png",0) < 0) {
+		urls.push("icons/ui-scroll-bar-horizontal.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-scroll-bar.png",0) < 0) {
+		urls.push("icons/ui-scroll-bar.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-scroll-pane-image.png",0) < 0) {
+		urls.push("icons/ui-scroll-pane-image.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-slider-050.png",0) < 0) {
+		urls.push("icons/ui-slider-050.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-slider-vertical-050.png",0) < 0) {
+		urls.push("icons/ui-slider-vertical-050.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-spacer.png",0) < 0) {
+		urls.push("icons/ui-spacer.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-split-panel-vertical.png",0) < 0) {
+		urls.push("icons/ui-split-panel-vertical.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-split-panel.png",0) < 0) {
+		urls.push("icons/ui-split-panel.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-tab-content.png",0) < 0) {
+		urls.push("icons/ui-tab-content.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-tab.png",0) < 0) {
+		urls.push("icons/ui-tab.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"icons/ui-text-field.png",0) < 0) {
+		urls.push("icons/ui-text-field.png");
+		types.push("IMAGE");
+	}
+	if(HxOverrides.indexOf(urls,"images/slinky.jpg",0) < 0) {
+		urls.push("images/slinky.jpg");
+		types.push("IMAGE");
+	}
+	ApplicationMain.preloader.load(urls,types);
 };
-ApplicationMain.begin = function() {
-	ApplicationMain.preloader.addEventListener(openfl.events.Event.COMPLETE,ApplicationMain.preloader_onComplete);
-	ApplicationMain.preloader.onLoaded();
-};
-ApplicationMain.bitmapClass_onComplete = function(instance) {
-	ApplicationMain.completed++;
-	var classType = Type.getClass(instance);
-	classType.preload = instance;
-	if(ApplicationMain.completed == ApplicationMain.total) ApplicationMain.begin();
-};
-ApplicationMain.loader_onComplete = function(event) {
-	ApplicationMain.completed++;
-	ApplicationMain.preloader.onUpdate(ApplicationMain.completed,ApplicationMain.total);
-	if(ApplicationMain.completed == ApplicationMain.total) ApplicationMain.begin();
-};
-ApplicationMain.preloader_onComplete = function(event) {
-	ApplicationMain.preloader.removeEventListener(openfl.events.Event.COMPLETE,ApplicationMain.preloader_onComplete);
-	openfl.Lib.get_current().removeChild(ApplicationMain.preloader);
+ApplicationMain.init = function() {
+	var loaded = 0;
+	var total = 0;
+	var library_onLoad = function(_) {
+		loaded++;
+		if(loaded == total) ApplicationMain.start();
+	};
 	ApplicationMain.preloader = null;
-	if(Reflect.field(haxe.ui.showcase.Main,"main") == null) {
-		var mainDisplayObj = Type.createInstance(DocumentClass,[]);
-		if(js.Boot.__instanceof(mainDisplayObj,openfl.display.DisplayObject)) openfl.Lib.get_current().addChild(mainDisplayObj);
-	} else Reflect.callMethod(haxe.ui.showcase.Main,Reflect.field(haxe.ui.showcase.Main,"main"),[]);
+	if(loaded == total) ApplicationMain.start();
+};
+ApplicationMain.main = function() {
+	ApplicationMain.config = { antialiasing : 0, background : 16777215, borderless : false, depthBuffer : false, fps : 60, fullscreen : false, height : 0, orientation : "", resizable : true, stencilBuffer : false, title : "HaxeUI Showcase", vsync : false, width : 0};
+	ApplicationMain.create();
+};
+ApplicationMain.start = function() {
+	openfl.Lib.get_current().get_stage().align = openfl.display.StageAlign.TOP_LEFT;
+	openfl.Lib.get_current().get_stage().scaleMode = openfl.display.StageScaleMode.NO_SCALE;
+	var hasMain = false;
+	var _g = 0;
+	var _g1 = Type.getClassFields(haxe.ui.showcase.Main);
+	while(_g < _g1.length) {
+		var methodName = _g1[_g];
+		++_g;
+		if(methodName == "main") {
+			hasMain = true;
+			break;
+		}
+	}
+	if(hasMain) Reflect.callMethod(haxe.ui.showcase.Main,Reflect.field(haxe.ui.showcase.Main,"main"),[]); else {
+		var instance = Type.createInstance(DocumentClass,[]);
+		if(js.Boot.__instanceof(instance,openfl.display.DisplayObject)) openfl.Lib.get_current().addChild(instance);
+	}
+	openfl.Lib.get_current().get_stage().dispatchEvent(new openfl.events.Event(openfl.events.Event.RESIZE,false,false));
 };
 var haxe = {};
 haxe.ui = {};
@@ -1035,16 +1818,16 @@ DateTools.__format = function(d,f) {
 DateTools.format = function(d,f) {
 	return DateTools.__format(d,f);
 };
-var openfl = {};
-openfl.AssetLibrary = function() {
+var lime = {};
+lime.AssetLibrary = function() {
 };
-$hxClasses["openfl.AssetLibrary"] = openfl.AssetLibrary;
-openfl.AssetLibrary.__name__ = ["openfl","AssetLibrary"];
-openfl.AssetLibrary.prototype = {
+$hxClasses["lime.AssetLibrary"] = lime.AssetLibrary;
+lime.AssetLibrary.__name__ = ["lime","AssetLibrary"];
+lime.AssetLibrary.prototype = {
 	exists: function(id,type) {
 		return false;
 	}
-	,getBitmapData: function(id) {
+	,getAudioBuffer: function(id) {
 		return null;
 	}
 	,getBytes: function(id) {
@@ -1053,16 +1836,10 @@ openfl.AssetLibrary.prototype = {
 	,getFont: function(id) {
 		return null;
 	}
-	,getMovieClip: function(id) {
+	,getImage: function(id) {
 		return null;
-	}
-	,getMusic: function(id) {
-		return this.getSound(id);
 	}
 	,getPath: function(id) {
-		return null;
-	}
-	,getSound: function(id) {
 		return null;
 	}
 	,getText: function(id) {
@@ -1078,8 +1855,8 @@ openfl.AssetLibrary.prototype = {
 	,load: function(handler) {
 		handler(this);
 	}
-	,loadBitmapData: function(id,handler) {
-		handler(this.getBitmapData(id));
+	,loadAudioBuffer: function(id,handler) {
+		handler(this.getAudioBuffer(id));
 	}
 	,loadBytes: function(id,handler) {
 		handler(this.getBytes(id));
@@ -1087,14 +1864,8 @@ openfl.AssetLibrary.prototype = {
 	,loadFont: function(id,handler) {
 		handler(this.getFont(id));
 	}
-	,loadMovieClip: function(id,handler) {
-		handler(this.getMovieClip(id));
-	}
-	,loadMusic: function(id,handler) {
-		handler(this.getMusic(id));
-	}
-	,loadSound: function(id,handler) {
-		handler(this.getSound(id));
+	,loadImage: function(id,handler) {
+		handler(this.getImage(id));
 	}
 	,loadText: function(id,handler) {
 		var callback = function(bytes) {
@@ -1102,1117 +1873,1360 @@ openfl.AssetLibrary.prototype = {
 		};
 		this.loadBytes(id,callback);
 	}
-	,__class__: openfl.AssetLibrary
+	,__class__: lime.AssetLibrary
 };
 var DefaultAssetLibrary = function() {
-	openfl.AssetLibrary.call(this);
-	DefaultAssetLibrary.path.set("styles/default/circle.png","styles/default/circle.png");
-	var value = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/default/circle.png",value);
-	DefaultAssetLibrary.path.set("styles/default/collapse.png","styles/default/collapse.png");
-	var value1 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/default/collapse.png",value1);
-	DefaultAssetLibrary.path.set("styles/default/cross.png","styles/default/cross.png");
-	var value2 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/default/cross.png",value2);
-	DefaultAssetLibrary.path.set("styles/default/expand.png","styles/default/expand.png");
-	var value3 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/default/expand.png",value3);
-	DefaultAssetLibrary.path.set("styles/default/up_down.png","styles/default/up_down.png");
-	var value4 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/default/up_down.png",value4);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_down.png","styles/gradient/arrow_down.png");
-	var value5 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_down.png",value5);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_down_dark.png","styles/gradient/arrow_down_dark.png");
-	var value6 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_down_dark.png",value6);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_down_disabled.png","styles/gradient/arrow_down_disabled.png");
-	var value7 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_down_disabled.png",value7);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_left.png","styles/gradient/arrow_left.png");
-	var value8 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_left.png",value8);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_left_disabled.png","styles/gradient/arrow_left_disabled.png");
-	var value9 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_left_disabled.png",value9);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_right.png","styles/gradient/arrow_right.png");
-	var value10 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_right.png",value10);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_right2.png","styles/gradient/arrow_right2.png");
-	var value11 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_right2.png",value11);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_right_dark.png","styles/gradient/arrow_right_dark.png");
-	var value12 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_right_dark.png",value12);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_right_disabled.png","styles/gradient/arrow_right_disabled.png");
-	var value13 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_right_disabled.png",value13);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_up.png","styles/gradient/arrow_up.png");
-	var value14 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_up.png",value14);
-	DefaultAssetLibrary.path.set("styles/gradient/arrow_up_disabled.png","styles/gradient/arrow_up_disabled.png");
-	var value15 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/arrow_up_disabled.png",value15);
-	DefaultAssetLibrary.path.set("styles/gradient/circle_dark.png","styles/gradient/circle_dark.png");
-	var value16 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/circle_dark.png",value16);
-	DefaultAssetLibrary.path.set("styles/gradient/cross_dark.png","styles/gradient/cross_dark.png");
-	var value17 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/cross_dark.png",value17);
-	DefaultAssetLibrary.path.set("styles/gradient/cross_dark_disabled.png","styles/gradient/cross_dark_disabled.png");
-	var value18 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/cross_dark_disabled.png",value18);
-	DefaultAssetLibrary.path.set("styles/gradient/gradient.css","styles/gradient/gradient.css");
-	var value19 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/gradient.css",value19);
-	DefaultAssetLibrary.path.set("styles/gradient/gradient.min.css","styles/gradient/gradient.min.css");
-	var value20 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/gradient.min.css",value20);
-	DefaultAssetLibrary.path.set("styles/gradient/gradient_mobile.css","styles/gradient/gradient_mobile.css");
-	var value21 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/gradient_mobile.css",value21);
-	DefaultAssetLibrary.path.set("styles/gradient/gradient_mobile.min.css","styles/gradient/gradient_mobile.min.css");
-	var value22 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/gradient_mobile.min.css",value22);
-	DefaultAssetLibrary.path.set("styles/gradient/gripper_horizontal.png","styles/gradient/gripper_horizontal.png");
-	var value23 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/gripper_horizontal.png",value23);
-	DefaultAssetLibrary.path.set("styles/gradient/gripper_horizontal_disabled.png","styles/gradient/gripper_horizontal_disabled.png");
-	var value24 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/gripper_horizontal_disabled.png",value24);
-	DefaultAssetLibrary.path.set("styles/gradient/gripper_vertical.png","styles/gradient/gripper_vertical.png");
-	var value25 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/gripper_vertical.png",value25);
-	DefaultAssetLibrary.path.set("styles/gradient/gripper_vertical_disabled.png","styles/gradient/gripper_vertical_disabled.png");
-	var value26 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/gradient/gripper_vertical_disabled.png",value26);
-	DefaultAssetLibrary.path.set("styles/windows/accordion.css","styles/windows/accordion.css");
-	var value27 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/accordion.css",value27);
-	DefaultAssetLibrary.path.set("styles/windows/accordion.min.css","styles/windows/accordion.min.css");
-	var value28 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/accordion.min.css",value28);
-	DefaultAssetLibrary.path.set("styles/windows/button.png","styles/windows/button.png");
-	var value29 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/button.png",value29);
-	DefaultAssetLibrary.path.set("styles/windows/buttons.css","styles/windows/buttons.css");
-	var value30 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/buttons.css",value30);
-	DefaultAssetLibrary.path.set("styles/windows/buttons.min.css","styles/windows/buttons.min.css");
-	var value31 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/buttons.min.css",value31);
-	DefaultAssetLibrary.path.set("styles/windows/calendar.css","styles/windows/calendar.css");
-	var value32 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/calendar.css",value32);
-	DefaultAssetLibrary.path.set("styles/windows/checkbox.png","styles/windows/checkbox.png");
-	var value33 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/checkbox.png",value33);
-	DefaultAssetLibrary.path.set("styles/windows/container.png","styles/windows/container.png");
-	var value34 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/container.png",value34);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/down_arrow.png","styles/windows/glyphs/down_arrow.png");
-	var value35 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/down_arrow.png",value35);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/hscroll_thumb_gripper_down.png","styles/windows/glyphs/hscroll_thumb_gripper_down.png");
-	var value36 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/hscroll_thumb_gripper_down.png",value36);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/hscroll_thumb_gripper_over.png","styles/windows/glyphs/hscroll_thumb_gripper_over.png");
-	var value37 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/hscroll_thumb_gripper_over.png",value37);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/hscroll_thumb_gripper_up.png","styles/windows/glyphs/hscroll_thumb_gripper_up.png");
-	var value38 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/hscroll_thumb_gripper_up.png",value38);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/left_arrow.png","styles/windows/glyphs/left_arrow.png");
-	var value39 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/left_arrow.png",value39);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/right_arrow.png","styles/windows/glyphs/right_arrow.png");
-	var value40 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/right_arrow.png",value40);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/up_arrow.png","styles/windows/glyphs/up_arrow.png");
-	var value41 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/up_arrow.png",value41);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/vscroll_thumb_gripper_down.png","styles/windows/glyphs/vscroll_thumb_gripper_down.png");
-	var value42 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/vscroll_thumb_gripper_down.png",value42);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/vscroll_thumb_gripper_over.png","styles/windows/glyphs/vscroll_thumb_gripper_over.png");
-	var value43 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/vscroll_thumb_gripper_over.png",value43);
-	DefaultAssetLibrary.path.set("styles/windows/glyphs/vscroll_thumb_gripper_up.png","styles/windows/glyphs/vscroll_thumb_gripper_up.png");
-	var value44 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/glyphs/vscroll_thumb_gripper_up.png",value44);
-	DefaultAssetLibrary.path.set("styles/windows/hprogress.png","styles/windows/hprogress.png");
-	var value45 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/hprogress.png",value45);
-	DefaultAssetLibrary.path.set("styles/windows/hscroll.png","styles/windows/hscroll.png");
-	var value46 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/hscroll.png",value46);
-	DefaultAssetLibrary.path.set("styles/windows/listview.css","styles/windows/listview.css");
-	var value47 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/listview.css",value47);
-	DefaultAssetLibrary.path.set("styles/windows/listview.min.css","styles/windows/listview.min.css");
-	var value48 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/listview.min.css",value48);
-	DefaultAssetLibrary.path.set("styles/windows/listview.png","styles/windows/listview.png");
-	var value49 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/listview.png",value49);
-	DefaultAssetLibrary.path.set("styles/windows/menus.css","styles/windows/menus.css");
-	var value50 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/menus.css",value50);
-	DefaultAssetLibrary.path.set("styles/windows/optionbox.png","styles/windows/optionbox.png");
-	var value51 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/optionbox.png",value51);
-	DefaultAssetLibrary.path.set("styles/windows/popup.png","styles/windows/popup.png");
-	var value52 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/popup.png",value52);
-	DefaultAssetLibrary.path.set("styles/windows/popups.css","styles/windows/popups.css");
-	var value53 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/popups.css",value53);
-	DefaultAssetLibrary.path.set("styles/windows/rtf.css","styles/windows/rtf.css");
-	var value54 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/rtf.css",value54);
-	DefaultAssetLibrary.path.set("styles/windows/scrolls.css","styles/windows/scrolls.css");
-	var value55 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/scrolls.css",value55);
-	DefaultAssetLibrary.path.set("styles/windows/scrolls.min.css","styles/windows/scrolls.min.css");
-	var value56 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/scrolls.min.css",value56);
-	DefaultAssetLibrary.path.set("styles/windows/sliders.css","styles/windows/sliders.css");
-	var value57 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/sliders.css",value57);
-	DefaultAssetLibrary.path.set("styles/windows/tab.png","styles/windows/tab.png");
-	var value58 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/tab.png",value58);
-	DefaultAssetLibrary.path.set("styles/windows/tabs.css","styles/windows/tabs.css");
-	var value59 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/tabs.css",value59);
-	DefaultAssetLibrary.path.set("styles/windows/textinput.png","styles/windows/textinput.png");
-	var value60 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/textinput.png",value60);
-	DefaultAssetLibrary.path.set("styles/windows/vprogress.png","styles/windows/vprogress.png");
-	var value61 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/vprogress.png",value61);
-	DefaultAssetLibrary.path.set("styles/windows/vscroll.png","styles/windows/vscroll.png");
-	var value62 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/vscroll.png",value62);
-	DefaultAssetLibrary.path.set("styles/windows/windows.css","styles/windows/windows.css");
-	var value63 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("styles/windows/windows.css",value63);
-	DefaultAssetLibrary.path.set("img/slinky_small.jpg","img/slinky_small.jpg");
-	var value64 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/slinky_small.jpg",value64);
-	DefaultAssetLibrary.path.set("img/slinky_tiny.jpg","img/slinky_tiny.jpg");
-	var value65 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/slinky_tiny.jpg",value65);
-	DefaultAssetLibrary.path.set("fonts/Oxygen-Bold.eot","fonts/Oxygen-Bold.eot");
-	var value66 = Reflect.field(openfl.AssetType,"binary".toUpperCase());
-	DefaultAssetLibrary.type.set("fonts/Oxygen-Bold.eot",value66);
-	DefaultAssetLibrary.path.set("fonts/Oxygen-Bold.svg","fonts/Oxygen-Bold.svg");
-	var value67 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("fonts/Oxygen-Bold.svg",value67);
-	DefaultAssetLibrary.className.set("fonts/Oxygen-Bold.ttf",__ASSET__fonts_oxygen_bold_ttf);
-	var value68 = Reflect.field(openfl.AssetType,"font".toUpperCase());
-	DefaultAssetLibrary.type.set("fonts/Oxygen-Bold.ttf",value68);
-	DefaultAssetLibrary.path.set("fonts/Oxygen-Bold.woff","fonts/Oxygen-Bold.woff");
-	var value69 = Reflect.field(openfl.AssetType,"binary".toUpperCase());
-	DefaultAssetLibrary.type.set("fonts/Oxygen-Bold.woff",value69);
-	DefaultAssetLibrary.path.set("fonts/Oxygen.eot","fonts/Oxygen.eot");
-	var value70 = Reflect.field(openfl.AssetType,"binary".toUpperCase());
-	DefaultAssetLibrary.type.set("fonts/Oxygen.eot",value70);
-	DefaultAssetLibrary.path.set("fonts/Oxygen.svg","fonts/Oxygen.svg");
-	var value71 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("fonts/Oxygen.svg",value71);
-	DefaultAssetLibrary.className.set("fonts/Oxygen.ttf",__ASSET__fonts_oxygen_ttf);
-	var value72 = Reflect.field(openfl.AssetType,"font".toUpperCase());
-	DefaultAssetLibrary.type.set("fonts/Oxygen.ttf",value72);
-	DefaultAssetLibrary.path.set("fonts/Oxygen.woff","fonts/Oxygen.woff");
-	var value73 = Reflect.field(openfl.AssetType,"binary".toUpperCase());
-	DefaultAssetLibrary.type.set("fonts/Oxygen.woff",value73);
-	DefaultAssetLibrary.path.set("assets/css/code.css","assets/css/code.css");
-	var value74 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/css/code.css",value74);
-	DefaultAssetLibrary.path.set("assets/css/code.min.css","assets/css/code.min.css");
-	var value75 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/css/code.min.css",value75);
-	DefaultAssetLibrary.path.set("assets/css/rtf.css","assets/css/rtf.css");
-	var value76 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/css/rtf.css",value76);
-	DefaultAssetLibrary.path.set("assets/css/rtf.min.css","assets/css/rtf.min.css");
-	var value77 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/css/rtf.min.css",value77);
-	DefaultAssetLibrary.path.set("assets/img/rtfview/edit-alignment-center.png","assets/img/rtfview/edit-alignment-center.png");
-	var value78 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/rtfview/edit-alignment-center.png",value78);
-	DefaultAssetLibrary.path.set("assets/img/rtfview/edit-alignment-justify.png","assets/img/rtfview/edit-alignment-justify.png");
-	var value79 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/rtfview/edit-alignment-justify.png",value79);
-	DefaultAssetLibrary.path.set("assets/img/rtfview/edit-alignment-left.png","assets/img/rtfview/edit-alignment-left.png");
-	var value80 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/rtfview/edit-alignment-left.png",value80);
-	DefaultAssetLibrary.path.set("assets/img/rtfview/edit-alignment-right.png","assets/img/rtfview/edit-alignment-right.png");
-	var value81 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/rtfview/edit-alignment-right.png",value81);
-	DefaultAssetLibrary.path.set("assets/img/rtfview/edit-bold.png","assets/img/rtfview/edit-bold.png");
-	var value82 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/rtfview/edit-bold.png",value82);
-	DefaultAssetLibrary.path.set("assets/img/rtfview/edit-italic.png","assets/img/rtfview/edit-italic.png");
-	var value83 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/rtfview/edit-italic.png",value83);
-	DefaultAssetLibrary.path.set("assets/img/rtfview/edit-list.png","assets/img/rtfview/edit-list.png");
-	var value84 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/rtfview/edit-list.png",value84);
-	DefaultAssetLibrary.path.set("assets/img/rtfview/edit-underline.png","assets/img/rtfview/edit-underline.png");
-	var value85 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/rtfview/edit-underline.png",value85);
-	DefaultAssetLibrary.path.set("assets/openfl.svg","assets/openfl.svg");
-	var value86 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/openfl.svg",value86);
-	DefaultAssetLibrary.path.set("assets/ui/demo.xml","assets/ui/demo.xml");
-	var value87 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/demo.xml",value87);
-	DefaultAssetLibrary.path.set("assets/ui/example.hx","assets/ui/example.hx");
-	var value88 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/example.hx",value88);
-	DefaultAssetLibrary.path.set("assets/ui/example.txt","assets/ui/example.txt");
-	var value89 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/example.txt",value89);
-	DefaultAssetLibrary.path.set("img/rtfview/edit-alignment-center.png","img/rtfview/edit-alignment-center.png");
-	var value90 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/rtfview/edit-alignment-center.png",value90);
-	DefaultAssetLibrary.path.set("img/rtfview/edit-alignment-justify.png","img/rtfview/edit-alignment-justify.png");
-	var value91 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/rtfview/edit-alignment-justify.png",value91);
-	DefaultAssetLibrary.path.set("img/rtfview/edit-alignment-left.png","img/rtfview/edit-alignment-left.png");
-	var value92 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/rtfview/edit-alignment-left.png",value92);
-	DefaultAssetLibrary.path.set("img/rtfview/edit-alignment-right.png","img/rtfview/edit-alignment-right.png");
-	var value93 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/rtfview/edit-alignment-right.png",value93);
-	DefaultAssetLibrary.path.set("img/rtfview/edit-bold.png","img/rtfview/edit-bold.png");
-	var value94 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/rtfview/edit-bold.png",value94);
-	DefaultAssetLibrary.path.set("img/rtfview/edit-italic.png","img/rtfview/edit-italic.png");
-	var value95 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/rtfview/edit-italic.png",value95);
-	DefaultAssetLibrary.path.set("img/rtfview/edit-list.png","img/rtfview/edit-list.png");
-	var value96 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/rtfview/edit-list.png",value96);
-	DefaultAssetLibrary.path.set("img/rtfview/edit-underline.png","img/rtfview/edit-underline.png");
-	var value97 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/rtfview/edit-underline.png",value97);
-	DefaultAssetLibrary.path.set("css/code.css","css/code.css");
-	var value98 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("css/code.css",value98);
-	DefaultAssetLibrary.path.set("css/code.min.css","css/code.min.css");
-	var value99 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("css/code.min.css",value99);
-	DefaultAssetLibrary.path.set("css/rtf.css","css/rtf.css");
-	var value100 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("css/rtf.css",value100);
-	DefaultAssetLibrary.path.set("css/rtf.min.css","css/rtf.min.css");
-	var value101 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("css/rtf.min.css",value101);
-	DefaultAssetLibrary.path.set("assets/css/default/webview.css","assets/css/default/webview.css");
-	var value102 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/css/default/webview.css",value102);
-	DefaultAssetLibrary.path.set("assets/css/gradient/webview.css","assets/css/gradient/webview.css");
-	var value103 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/css/gradient/webview.css",value103);
-	DefaultAssetLibrary.path.set("assets/css/gradient/webview.min.css","assets/css/gradient/webview.min.css");
-	var value104 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/css/gradient/webview.min.css",value104);
-	DefaultAssetLibrary.path.set("assets/css/webview.css","assets/css/webview.css");
-	var value105 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/css/webview.css",value105);
-	DefaultAssetLibrary.path.set("assets/img/haxe_ui.png","assets/img/haxe_ui.png");
-	var value106 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/haxe_ui.png",value106);
-	DefaultAssetLibrary.path.set("assets/img/icone_cocktail_blanche_ombre.png","assets/img/icone_cocktail_blanche_ombre.png");
-	var value107 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/icone_cocktail_blanche_ombre.png",value107);
-	DefaultAssetLibrary.path.set("assets/img/icone_haxe_blanche_ombre.png","assets/img/icone_haxe_blanche_ombre.png");
-	var value108 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/img/icone_haxe_blanche_ombre.png",value108);
-	DefaultAssetLibrary.path.set("assets/openfl.svg","assets/openfl.svg");
-	var value109 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/openfl.svg",value109);
-	DefaultAssetLibrary.path.set("assets/ui/demo.xml","assets/ui/demo.xml");
-	var value110 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/demo.xml",value110);
-	DefaultAssetLibrary.path.set("assets/ui/example.html","assets/ui/example.html");
-	var value111 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/example.html",value111);
-	DefaultAssetLibrary.path.set("assets/ui/test.html","assets/ui/test.html");
-	var value112 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/test.html",value112);
-	DefaultAssetLibrary.path.set("img/haxe_ui.png","img/haxe_ui.png");
-	var value113 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/haxe_ui.png",value113);
-	DefaultAssetLibrary.path.set("img/icone_cocktail_blanche_ombre.png","img/icone_cocktail_blanche_ombre.png");
-	var value114 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/icone_cocktail_blanche_ombre.png",value114);
-	DefaultAssetLibrary.path.set("img/icone_haxe_blanche_ombre.png","img/icone_haxe_blanche_ombre.png");
-	var value115 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("img/icone_haxe_blanche_ombre.png",value115);
-	DefaultAssetLibrary.path.set("css/default/webview.css","css/default/webview.css");
-	var value116 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("css/default/webview.css",value116);
-	DefaultAssetLibrary.path.set("css/gradient/webview.css","css/gradient/webview.css");
-	var value117 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("css/gradient/webview.css",value117);
-	DefaultAssetLibrary.path.set("css/gradient/webview.min.css","css/gradient/webview.min.css");
-	var value118 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("css/gradient/webview.min.css",value118);
-	DefaultAssetLibrary.path.set("css/webview.css","css/webview.css");
-	var value119 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("css/webview.css",value119);
-	DefaultAssetLibrary.path.set("assets/application-default-icon.svg","assets/application-default-icon.svg");
-	var value120 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/application-default-icon.svg",value120);
-	DefaultAssetLibrary.path.set("assets/data/views.xml","assets/data/views.xml");
-	var value121 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/data/views.xml",value121);
-	DefaultAssetLibrary.path.set("assets/icons/application-dialog.png","assets/icons/application-dialog.png");
-	var value122 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/application-dialog.png",value122);
-	DefaultAssetLibrary.path.set("assets/icons/blue-document-css.png","assets/icons/blue-document-css.png");
-	var value123 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/blue-document-css.png",value123);
-	DefaultAssetLibrary.path.set("assets/icons/blue-document-haxe.png","assets/icons/blue-document-haxe.png");
-	var value124 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/blue-document-haxe.png",value124);
-	DefaultAssetLibrary.path.set("assets/icons/blue-document-xml.png","assets/icons/blue-document-xml.png");
-	var value125 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/blue-document-xml.png",value125);
-	DefaultAssetLibrary.path.set("assets/icons/blue-document.png","assets/icons/blue-document.png");
-	var value126 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/blue-document.png",value126);
-	DefaultAssetLibrary.path.set("assets/icons/fav_16.png","assets/icons/fav_16.png");
-	var value127 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/fav_16.png",value127);
-	DefaultAssetLibrary.path.set("assets/icons/fav_32.png","assets/icons/fav_32.png");
-	var value128 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/fav_32.png",value128);
-	DefaultAssetLibrary.path.set("assets/icons/grid.png","assets/icons/grid.png");
-	var value129 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/grid.png",value129);
-	DefaultAssetLibrary.path.set("assets/icons/images.png","assets/icons/images.png");
-	var value130 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/images.png",value130);
-	DefaultAssetLibrary.path.set("assets/icons/ui-accordion.png","assets/icons/ui-accordion.png");
-	var value131 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-accordion.png",value131);
-	DefaultAssetLibrary.path.set("assets/icons/ui-button.png","assets/icons/ui-button.png");
-	var value132 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-button.png",value132);
-	DefaultAssetLibrary.path.set("assets/icons/ui-buttons.png","assets/icons/ui-buttons.png");
-	var value133 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-buttons.png",value133);
-	DefaultAssetLibrary.path.set("assets/icons/ui-check-boxes.png","assets/icons/ui-check-boxes.png");
-	var value134 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-check-boxes.png",value134);
-	DefaultAssetLibrary.path.set("assets/icons/ui-combo-box-calendar.png","assets/icons/ui-combo-box-calendar.png");
-	var value135 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-combo-box-calendar.png",value135);
-	DefaultAssetLibrary.path.set("assets/icons/ui-flow-vertical.png","assets/icons/ui-flow-vertical.png");
-	var value136 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-flow-vertical.png",value136);
-	DefaultAssetLibrary.path.set("assets/icons/ui-flow.png","assets/icons/ui-flow.png");
-	var value137 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-flow.png",value137);
-	DefaultAssetLibrary.path.set("assets/icons/ui-labels.png","assets/icons/ui-labels.png");
-	var value138 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-labels.png",value138);
-	DefaultAssetLibrary.path.set("assets/icons/ui-layered-pane.png","assets/icons/ui-layered-pane.png");
-	var value139 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-layered-pane.png",value139);
-	DefaultAssetLibrary.path.set("assets/icons/ui-list-box-blue.png","assets/icons/ui-list-box-blue.png");
-	var value140 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-list-box-blue.png",value140);
-	DefaultAssetLibrary.path.set("assets/icons/ui-menu-blue.png","assets/icons/ui-menu-blue.png");
-	var value141 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-menu-blue.png",value141);
-	DefaultAssetLibrary.path.set("assets/icons/ui-panel.png","assets/icons/ui-panel.png");
-	var value142 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-panel.png",value142);
-	DefaultAssetLibrary.path.set("assets/icons/ui-progress-bar-vertical.png","assets/icons/ui-progress-bar-vertical.png");
-	var value143 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-progress-bar-vertical.png",value143);
-	DefaultAssetLibrary.path.set("assets/icons/ui-progress-bar.png","assets/icons/ui-progress-bar.png");
-	var value144 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-progress-bar.png",value144);
-	DefaultAssetLibrary.path.set("assets/icons/ui-radio-buttons.png","assets/icons/ui-radio-buttons.png");
-	var value145 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-radio-buttons.png",value145);
-	DefaultAssetLibrary.path.set("assets/icons/ui-scroll-bar-horizontal.png","assets/icons/ui-scroll-bar-horizontal.png");
-	var value146 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-scroll-bar-horizontal.png",value146);
-	DefaultAssetLibrary.path.set("assets/icons/ui-scroll-bar.png","assets/icons/ui-scroll-bar.png");
-	var value147 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-scroll-bar.png",value147);
-	DefaultAssetLibrary.path.set("assets/icons/ui-scroll-pane-image.png","assets/icons/ui-scroll-pane-image.png");
-	var value148 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-scroll-pane-image.png",value148);
-	DefaultAssetLibrary.path.set("assets/icons/ui-slider-050.png","assets/icons/ui-slider-050.png");
-	var value149 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-slider-050.png",value149);
-	DefaultAssetLibrary.path.set("assets/icons/ui-slider-vertical-050.png","assets/icons/ui-slider-vertical-050.png");
-	var value150 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-slider-vertical-050.png",value150);
-	DefaultAssetLibrary.path.set("assets/icons/ui-spacer.png","assets/icons/ui-spacer.png");
-	var value151 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-spacer.png",value151);
-	DefaultAssetLibrary.path.set("assets/icons/ui-split-panel-vertical.png","assets/icons/ui-split-panel-vertical.png");
-	var value152 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-split-panel-vertical.png",value152);
-	DefaultAssetLibrary.path.set("assets/icons/ui-split-panel.png","assets/icons/ui-split-panel.png");
-	var value153 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-split-panel.png",value153);
-	DefaultAssetLibrary.path.set("assets/icons/ui-tab-content.png","assets/icons/ui-tab-content.png");
-	var value154 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-tab-content.png",value154);
-	DefaultAssetLibrary.path.set("assets/icons/ui-tab.png","assets/icons/ui-tab.png");
-	var value155 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-tab.png",value155);
-	DefaultAssetLibrary.path.set("assets/icons/ui-text-field.png","assets/icons/ui-text-field.png");
-	var value156 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/icons/ui-text-field.png",value156);
-	DefaultAssetLibrary.path.set("assets/images/slinky.jpg","assets/images/slinky.jpg");
-	var value157 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/images/slinky.jpg",value157);
-	DefaultAssetLibrary.path.set("assets/resources/AbsoluteLayout/AbsoluteLayout.hx","assets/resources/AbsoluteLayout/AbsoluteLayout.hx");
-	var value158 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/AbsoluteLayout/AbsoluteLayout.hx",value158);
-	DefaultAssetLibrary.path.set("assets/resources/AbsoluteLayout/AbsoluteLayout.xml","assets/resources/AbsoluteLayout/AbsoluteLayout.xml");
-	var value159 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/AbsoluteLayout/AbsoluteLayout.xml",value159);
-	DefaultAssetLibrary.path.set("assets/resources/Accordions/Accordions.hx","assets/resources/Accordions/Accordions.hx");
-	var value160 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Accordions/Accordions.hx",value160);
-	DefaultAssetLibrary.path.set("assets/resources/Accordions/Accordions.xml","assets/resources/Accordions/Accordions.xml");
-	var value161 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Accordions/Accordions.xml",value161);
-	DefaultAssetLibrary.path.set("assets/resources/BoxLayout/BoxLayout.hx","assets/resources/BoxLayout/BoxLayout.hx");
-	var value162 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/BoxLayout/BoxLayout.hx",value162);
-	DefaultAssetLibrary.path.set("assets/resources/BoxLayout/BoxLayout.xml","assets/resources/BoxLayout/BoxLayout.xml");
-	var value163 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/BoxLayout/BoxLayout.xml",value163);
-	DefaultAssetLibrary.path.set("assets/resources/BusyPopup/BusyPopup.hx","assets/resources/BusyPopup/BusyPopup.hx");
-	var value164 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/BusyPopup/BusyPopup.hx",value164);
-	DefaultAssetLibrary.path.set("assets/resources/BusyPopup/BusyPopup.xml","assets/resources/BusyPopup/BusyPopup.xml");
-	var value165 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/BusyPopup/BusyPopup.xml",value165);
-	DefaultAssetLibrary.path.set("assets/resources/Buttons/Buttons.hx","assets/resources/Buttons/Buttons.hx");
-	var value166 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Buttons/Buttons.hx",value166);
-	DefaultAssetLibrary.path.set("assets/resources/Buttons/Buttons.xml","assets/resources/Buttons/Buttons.xml");
-	var value167 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Buttons/Buttons.xml",value167);
-	DefaultAssetLibrary.path.set("assets/resources/CalendarPopup/CalendarPopup.hx","assets/resources/CalendarPopup/CalendarPopup.hx");
-	var value168 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/CalendarPopup/CalendarPopup.hx",value168);
-	DefaultAssetLibrary.path.set("assets/resources/CalendarPopup/CalendarPopup.xml","assets/resources/CalendarPopup/CalendarPopup.xml");
-	var value169 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/CalendarPopup/CalendarPopup.xml",value169);
-	DefaultAssetLibrary.path.set("assets/resources/CheckBoxes/CheckBoxes.hx","assets/resources/CheckBoxes/CheckBoxes.hx");
-	var value170 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/CheckBoxes/CheckBoxes.hx",value170);
-	DefaultAssetLibrary.path.set("assets/resources/CheckBoxes/CheckBoxes.xml","assets/resources/CheckBoxes/CheckBoxes.xml");
-	var value171 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/CheckBoxes/CheckBoxes.xml",value171);
-	DefaultAssetLibrary.path.set("assets/resources/ContinuousLayout/HContinuousLayout.hx","assets/resources/ContinuousLayout/HContinuousLayout.hx");
-	var value172 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ContinuousLayout/HContinuousLayout.hx",value172);
-	DefaultAssetLibrary.path.set("assets/resources/ContinuousLayout/HContinuousLayout.xml","assets/resources/ContinuousLayout/HContinuousLayout.xml");
-	var value173 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ContinuousLayout/HContinuousLayout.xml",value173);
-	DefaultAssetLibrary.path.set("assets/resources/ContinuousLayout/VContinuousLayout.hx","assets/resources/ContinuousLayout/VContinuousLayout.hx");
-	var value174 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ContinuousLayout/VContinuousLayout.hx",value174);
-	DefaultAssetLibrary.path.set("assets/resources/ContinuousLayout/VContinuousLayout.xml","assets/resources/ContinuousLayout/VContinuousLayout.xml");
-	var value175 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ContinuousLayout/VContinuousLayout.xml",value175);
-	DefaultAssetLibrary.path.set("assets/resources/CustomPopup/CustomPopup.hx","assets/resources/CustomPopup/CustomPopup.hx");
-	var value176 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/CustomPopup/CustomPopup.hx",value176);
-	DefaultAssetLibrary.path.set("assets/resources/CustomPopup/CustomPopup.xml","assets/resources/CustomPopup/CustomPopup.xml");
-	var value177 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/CustomPopup/CustomPopup.xml",value177);
-	DefaultAssetLibrary.path.set("assets/resources/CustomPopup/CustomPopupContent.xml","assets/resources/CustomPopup/CustomPopupContent.xml");
-	var value178 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/CustomPopup/CustomPopupContent.xml",value178);
-	DefaultAssetLibrary.path.set("assets/resources/DateSelectors/DateSelectors.hx","assets/resources/DateSelectors/DateSelectors.hx");
-	var value179 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/DateSelectors/DateSelectors.hx",value179);
-	DefaultAssetLibrary.path.set("assets/resources/DateSelectors/DateSelectors.xml","assets/resources/DateSelectors/DateSelectors.xml");
-	var value180 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/DateSelectors/DateSelectors.xml",value180);
-	DefaultAssetLibrary.path.set("assets/resources/GridLayout/GridLayout.hx","assets/resources/GridLayout/GridLayout.hx");
-	var value181 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/GridLayout/GridLayout.hx",value181);
-	DefaultAssetLibrary.path.set("assets/resources/GridLayout/GridLayout.xml","assets/resources/GridLayout/GridLayout.xml");
-	var value182 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/GridLayout/GridLayout.xml",value182);
-	DefaultAssetLibrary.path.set("assets/resources/HorizontalLayout/HorizontalLayout.hx","assets/resources/HorizontalLayout/HorizontalLayout.hx");
-	var value183 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/HorizontalLayout/HorizontalLayout.hx",value183);
-	DefaultAssetLibrary.path.set("assets/resources/HorizontalLayout/HorizontalLayout.xml","assets/resources/HorizontalLayout/HorizontalLayout.xml");
-	var value184 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/HorizontalLayout/HorizontalLayout.xml",value184);
-	DefaultAssetLibrary.path.set("assets/resources/Images/Images.hx","assets/resources/Images/Images.hx");
-	var value185 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Images/Images.hx",value185);
-	DefaultAssetLibrary.path.set("assets/resources/Images/Images.xml","assets/resources/Images/Images.xml");
-	var value186 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Images/Images.xml",value186);
-	DefaultAssetLibrary.path.set("assets/resources/ListPopup/ListPopup.hx","assets/resources/ListPopup/ListPopup.hx");
-	var value187 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ListPopup/ListPopup.hx",value187);
-	DefaultAssetLibrary.path.set("assets/resources/ListPopup/ListPopup.xml","assets/resources/ListPopup/ListPopup.xml");
-	var value188 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ListPopup/ListPopup.xml",value188);
-	DefaultAssetLibrary.path.set("assets/resources/ListSelectors/ListSelectors.hx","assets/resources/ListSelectors/ListSelectors.hx");
-	var value189 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ListSelectors/ListSelectors.hx",value189);
-	DefaultAssetLibrary.path.set("assets/resources/ListSelectors/ListSelectors.xml","assets/resources/ListSelectors/ListSelectors.xml");
-	var value190 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ListSelectors/ListSelectors.xml",value190);
-	DefaultAssetLibrary.path.set("assets/resources/ListViews/ListViews.hx","assets/resources/ListViews/ListViews.hx");
-	var value191 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ListViews/ListViews.hx",value191);
-	DefaultAssetLibrary.path.set("assets/resources/ListViews/ListViews.xml","assets/resources/ListViews/ListViews.xml");
-	var value192 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ListViews/ListViews.xml",value192);
-	DefaultAssetLibrary.path.set("assets/resources/OptionBoxes/OptionBoxes.hx","assets/resources/OptionBoxes/OptionBoxes.hx");
-	var value193 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/OptionBoxes/OptionBoxes.hx",value193);
-	DefaultAssetLibrary.path.set("assets/resources/OptionBoxes/OptionBoxes.xml","assets/resources/OptionBoxes/OptionBoxes.xml");
-	var value194 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/OptionBoxes/OptionBoxes.xml",value194);
-	DefaultAssetLibrary.path.set("assets/resources/ProgressBars/HProgressBars.hx","assets/resources/ProgressBars/HProgressBars.hx");
-	var value195 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ProgressBars/HProgressBars.hx",value195);
-	DefaultAssetLibrary.path.set("assets/resources/ProgressBars/HProgressBars.xml","assets/resources/ProgressBars/HProgressBars.xml");
-	var value196 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ProgressBars/HProgressBars.xml",value196);
-	DefaultAssetLibrary.path.set("assets/resources/ProgressBars/VProgressBars.hx","assets/resources/ProgressBars/VProgressBars.hx");
-	var value197 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ProgressBars/VProgressBars.hx",value197);
-	DefaultAssetLibrary.path.set("assets/resources/ProgressBars/VProgressBars.xml","assets/resources/ProgressBars/VProgressBars.xml");
-	var value198 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ProgressBars/VProgressBars.xml",value198);
-	DefaultAssetLibrary.path.set("assets/resources/ScrollBars/HScrollBars.hx","assets/resources/ScrollBars/HScrollBars.hx");
-	var value199 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ScrollBars/HScrollBars.hx",value199);
-	DefaultAssetLibrary.path.set("assets/resources/ScrollBars/HScrollBars.xml","assets/resources/ScrollBars/HScrollBars.xml");
-	var value200 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ScrollBars/HScrollBars.xml",value200);
-	DefaultAssetLibrary.path.set("assets/resources/ScrollBars/VScrollBars.hx","assets/resources/ScrollBars/VScrollBars.hx");
-	var value201 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ScrollBars/VScrollBars.hx",value201);
-	DefaultAssetLibrary.path.set("assets/resources/ScrollBars/VScrollBars.xml","assets/resources/ScrollBars/VScrollBars.xml");
-	var value202 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ScrollBars/VScrollBars.xml",value202);
-	DefaultAssetLibrary.path.set("assets/resources/ScrollViews/ScrollViews.hx","assets/resources/ScrollViews/ScrollViews.hx");
-	var value203 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ScrollViews/ScrollViews.hx",value203);
-	DefaultAssetLibrary.path.set("assets/resources/ScrollViews/ScrollViews.xml","assets/resources/ScrollViews/ScrollViews.xml");
-	var value204 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/ScrollViews/ScrollViews.xml",value204);
-	DefaultAssetLibrary.path.set("assets/resources/SimplePopup/SimplePopup.hx","assets/resources/SimplePopup/SimplePopup.hx");
-	var value205 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/SimplePopup/SimplePopup.hx",value205);
-	DefaultAssetLibrary.path.set("assets/resources/SimplePopup/SimplePopup.xml","assets/resources/SimplePopup/SimplePopup.xml");
-	var value206 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/SimplePopup/SimplePopup.xml",value206);
-	DefaultAssetLibrary.path.set("assets/resources/Sliders/HSliders.hx","assets/resources/Sliders/HSliders.hx");
-	var value207 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Sliders/HSliders.hx",value207);
-	DefaultAssetLibrary.path.set("assets/resources/Sliders/HSliders.xml","assets/resources/Sliders/HSliders.xml");
-	var value208 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Sliders/HSliders.xml",value208);
-	DefaultAssetLibrary.path.set("assets/resources/Sliders/VSliders.hx","assets/resources/Sliders/VSliders.hx");
-	var value209 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Sliders/VSliders.hx",value209);
-	DefaultAssetLibrary.path.set("assets/resources/Sliders/VSliders.xml","assets/resources/Sliders/VSliders.xml");
-	var value210 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/Sliders/VSliders.xml",value210);
-	DefaultAssetLibrary.path.set("assets/resources/slinky.jpg","assets/resources/slinky.jpg");
-	var value211 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/slinky.jpg",value211);
-	DefaultAssetLibrary.path.set("assets/resources/slinky_large.jpg","assets/resources/slinky_large.jpg");
-	var value212 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/slinky_large.jpg",value212);
-	DefaultAssetLibrary.path.set("assets/resources/slinky_small.jpg","assets/resources/slinky_small.jpg");
-	var value213 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/slinky_small.jpg",value213);
-	DefaultAssetLibrary.path.set("assets/resources/TextFields/TextFields.hx","assets/resources/TextFields/TextFields.hx");
-	var value214 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/TextFields/TextFields.hx",value214);
-	DefaultAssetLibrary.path.set("assets/resources/TextFields/TextFields.xml","assets/resources/TextFields/TextFields.xml");
-	var value215 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/TextFields/TextFields.xml",value215);
-	DefaultAssetLibrary.path.set("assets/resources/TextInputs/TextInputs.hx","assets/resources/TextInputs/TextInputs.hx");
-	var value216 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/TextInputs/TextInputs.hx",value216);
-	DefaultAssetLibrary.path.set("assets/resources/TextInputs/TextInputs.xml","assets/resources/TextInputs/TextInputs.xml");
-	var value217 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/TextInputs/TextInputs.xml",value217);
-	DefaultAssetLibrary.path.set("assets/resources/VerticalLayout/VerticalLayout.hx","assets/resources/VerticalLayout/VerticalLayout.hx");
-	var value218 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/VerticalLayout/VerticalLayout.hx",value218);
-	DefaultAssetLibrary.path.set("assets/resources/VerticalLayout/VerticalLayout.xml","assets/resources/VerticalLayout/VerticalLayout.xml");
-	var value219 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/VerticalLayout/VerticalLayout.xml",value219);
-	DefaultAssetLibrary.path.set("assets/resources/WebViews/example.html","assets/resources/WebViews/example.html");
-	var value220 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/WebViews/example.html",value220);
-	DefaultAssetLibrary.path.set("assets/resources/WebViews/img/haxe_ui.png","assets/resources/WebViews/img/haxe_ui.png");
-	var value221 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/WebViews/img/haxe_ui.png",value221);
-	DefaultAssetLibrary.path.set("assets/resources/WebViews/img/icone_cocktail_blanche_ombre.png","assets/resources/WebViews/img/icone_cocktail_blanche_ombre.png");
-	var value222 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/WebViews/img/icone_cocktail_blanche_ombre.png",value222);
-	DefaultAssetLibrary.path.set("assets/resources/WebViews/img/icone_haxe_blanche_ombre.png","assets/resources/WebViews/img/icone_haxe_blanche_ombre.png");
-	var value223 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/WebViews/img/icone_haxe_blanche_ombre.png",value223);
-	DefaultAssetLibrary.path.set("assets/resources/WebViews/WebViews.hx","assets/resources/WebViews/WebViews.hx");
-	var value224 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/WebViews/WebViews.hx",value224);
-	DefaultAssetLibrary.path.set("assets/resources/WebViews/WebViews.xml","assets/resources/WebViews/WebViews.xml");
-	var value225 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/resources/WebViews/WebViews.xml",value225);
-	DefaultAssetLibrary.path.set("assets/ui/about.xml","assets/ui/about.xml");
-	var value226 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/about.xml",value226);
-	DefaultAssetLibrary.path.set("assets/ui/main.xml","assets/ui/main.xml");
-	var value227 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/main.xml",value227);
-	DefaultAssetLibrary.path.set("assets/ui/prefs.xml","assets/ui/prefs.xml");
-	var value228 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/prefs.xml",value228);
-	DefaultAssetLibrary.path.set("assets/ui/todo.xml","assets/ui/todo.xml");
-	var value229 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("assets/ui/todo.xml",value229);
-	DefaultAssetLibrary.path.set("ui/about.xml","ui/about.xml");
-	var value230 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("ui/about.xml",value230);
-	DefaultAssetLibrary.path.set("ui/main.xml","ui/main.xml");
-	var value231 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("ui/main.xml",value231);
-	DefaultAssetLibrary.path.set("ui/prefs.xml","ui/prefs.xml");
-	var value232 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("ui/prefs.xml",value232);
-	DefaultAssetLibrary.path.set("ui/todo.xml","ui/todo.xml");
-	var value233 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("ui/todo.xml",value233);
-	DefaultAssetLibrary.path.set("data/views.xml","data/views.xml");
-	var value234 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("data/views.xml",value234);
-	DefaultAssetLibrary.path.set("resources/AbsoluteLayout/AbsoluteLayout.hx","resources/AbsoluteLayout/AbsoluteLayout.hx");
-	var value235 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/AbsoluteLayout/AbsoluteLayout.hx",value235);
-	DefaultAssetLibrary.path.set("resources/AbsoluteLayout/AbsoluteLayout.xml","resources/AbsoluteLayout/AbsoluteLayout.xml");
-	var value236 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/AbsoluteLayout/AbsoluteLayout.xml",value236);
-	DefaultAssetLibrary.path.set("resources/Accordions/Accordions.hx","resources/Accordions/Accordions.hx");
-	var value237 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Accordions/Accordions.hx",value237);
-	DefaultAssetLibrary.path.set("resources/Accordions/Accordions.xml","resources/Accordions/Accordions.xml");
-	var value238 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Accordions/Accordions.xml",value238);
-	DefaultAssetLibrary.path.set("resources/BoxLayout/BoxLayout.hx","resources/BoxLayout/BoxLayout.hx");
-	var value239 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/BoxLayout/BoxLayout.hx",value239);
-	DefaultAssetLibrary.path.set("resources/BoxLayout/BoxLayout.xml","resources/BoxLayout/BoxLayout.xml");
-	var value240 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/BoxLayout/BoxLayout.xml",value240);
-	DefaultAssetLibrary.path.set("resources/BusyPopup/BusyPopup.hx","resources/BusyPopup/BusyPopup.hx");
-	var value241 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/BusyPopup/BusyPopup.hx",value241);
-	DefaultAssetLibrary.path.set("resources/BusyPopup/BusyPopup.xml","resources/BusyPopup/BusyPopup.xml");
-	var value242 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/BusyPopup/BusyPopup.xml",value242);
-	DefaultAssetLibrary.path.set("resources/Buttons/Buttons.hx","resources/Buttons/Buttons.hx");
-	var value243 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Buttons/Buttons.hx",value243);
-	DefaultAssetLibrary.path.set("resources/Buttons/Buttons.xml","resources/Buttons/Buttons.xml");
-	var value244 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Buttons/Buttons.xml",value244);
-	DefaultAssetLibrary.path.set("resources/CalendarPopup/CalendarPopup.hx","resources/CalendarPopup/CalendarPopup.hx");
-	var value245 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/CalendarPopup/CalendarPopup.hx",value245);
-	DefaultAssetLibrary.path.set("resources/CalendarPopup/CalendarPopup.xml","resources/CalendarPopup/CalendarPopup.xml");
-	var value246 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/CalendarPopup/CalendarPopup.xml",value246);
-	DefaultAssetLibrary.path.set("resources/CheckBoxes/CheckBoxes.hx","resources/CheckBoxes/CheckBoxes.hx");
-	var value247 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/CheckBoxes/CheckBoxes.hx",value247);
-	DefaultAssetLibrary.path.set("resources/CheckBoxes/CheckBoxes.xml","resources/CheckBoxes/CheckBoxes.xml");
-	var value248 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/CheckBoxes/CheckBoxes.xml",value248);
-	DefaultAssetLibrary.path.set("resources/ContinuousLayout/HContinuousLayout.hx","resources/ContinuousLayout/HContinuousLayout.hx");
-	var value249 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ContinuousLayout/HContinuousLayout.hx",value249);
-	DefaultAssetLibrary.path.set("resources/ContinuousLayout/HContinuousLayout.xml","resources/ContinuousLayout/HContinuousLayout.xml");
-	var value250 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ContinuousLayout/HContinuousLayout.xml",value250);
-	DefaultAssetLibrary.path.set("resources/ContinuousLayout/VContinuousLayout.hx","resources/ContinuousLayout/VContinuousLayout.hx");
-	var value251 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ContinuousLayout/VContinuousLayout.hx",value251);
-	DefaultAssetLibrary.path.set("resources/ContinuousLayout/VContinuousLayout.xml","resources/ContinuousLayout/VContinuousLayout.xml");
-	var value252 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ContinuousLayout/VContinuousLayout.xml",value252);
-	DefaultAssetLibrary.path.set("resources/CustomPopup/CustomPopup.hx","resources/CustomPopup/CustomPopup.hx");
-	var value253 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/CustomPopup/CustomPopup.hx",value253);
-	DefaultAssetLibrary.path.set("resources/CustomPopup/CustomPopup.xml","resources/CustomPopup/CustomPopup.xml");
-	var value254 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/CustomPopup/CustomPopup.xml",value254);
-	DefaultAssetLibrary.path.set("resources/CustomPopup/CustomPopupContent.xml","resources/CustomPopup/CustomPopupContent.xml");
-	var value255 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/CustomPopup/CustomPopupContent.xml",value255);
-	DefaultAssetLibrary.path.set("resources/DateSelectors/DateSelectors.hx","resources/DateSelectors/DateSelectors.hx");
-	var value256 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/DateSelectors/DateSelectors.hx",value256);
-	DefaultAssetLibrary.path.set("resources/DateSelectors/DateSelectors.xml","resources/DateSelectors/DateSelectors.xml");
-	var value257 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/DateSelectors/DateSelectors.xml",value257);
-	DefaultAssetLibrary.path.set("resources/GridLayout/GridLayout.hx","resources/GridLayout/GridLayout.hx");
-	var value258 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/GridLayout/GridLayout.hx",value258);
-	DefaultAssetLibrary.path.set("resources/GridLayout/GridLayout.xml","resources/GridLayout/GridLayout.xml");
-	var value259 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/GridLayout/GridLayout.xml",value259);
-	DefaultAssetLibrary.path.set("resources/HorizontalLayout/HorizontalLayout.hx","resources/HorizontalLayout/HorizontalLayout.hx");
-	var value260 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/HorizontalLayout/HorizontalLayout.hx",value260);
-	DefaultAssetLibrary.path.set("resources/HorizontalLayout/HorizontalLayout.xml","resources/HorizontalLayout/HorizontalLayout.xml");
-	var value261 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/HorizontalLayout/HorizontalLayout.xml",value261);
-	DefaultAssetLibrary.path.set("resources/Images/Images.hx","resources/Images/Images.hx");
-	var value262 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Images/Images.hx",value262);
-	DefaultAssetLibrary.path.set("resources/Images/Images.xml","resources/Images/Images.xml");
-	var value263 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Images/Images.xml",value263);
-	DefaultAssetLibrary.path.set("resources/ListPopup/ListPopup.hx","resources/ListPopup/ListPopup.hx");
-	var value264 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ListPopup/ListPopup.hx",value264);
-	DefaultAssetLibrary.path.set("resources/ListPopup/ListPopup.xml","resources/ListPopup/ListPopup.xml");
-	var value265 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ListPopup/ListPopup.xml",value265);
-	DefaultAssetLibrary.path.set("resources/ListSelectors/ListSelectors.hx","resources/ListSelectors/ListSelectors.hx");
-	var value266 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ListSelectors/ListSelectors.hx",value266);
-	DefaultAssetLibrary.path.set("resources/ListSelectors/ListSelectors.xml","resources/ListSelectors/ListSelectors.xml");
-	var value267 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ListSelectors/ListSelectors.xml",value267);
-	DefaultAssetLibrary.path.set("resources/ListViews/ListViews.hx","resources/ListViews/ListViews.hx");
-	var value268 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ListViews/ListViews.hx",value268);
-	DefaultAssetLibrary.path.set("resources/ListViews/ListViews.xml","resources/ListViews/ListViews.xml");
-	var value269 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ListViews/ListViews.xml",value269);
-	DefaultAssetLibrary.path.set("resources/OptionBoxes/OptionBoxes.hx","resources/OptionBoxes/OptionBoxes.hx");
-	var value270 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/OptionBoxes/OptionBoxes.hx",value270);
-	DefaultAssetLibrary.path.set("resources/OptionBoxes/OptionBoxes.xml","resources/OptionBoxes/OptionBoxes.xml");
-	var value271 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/OptionBoxes/OptionBoxes.xml",value271);
-	DefaultAssetLibrary.path.set("resources/ProgressBars/HProgressBars.hx","resources/ProgressBars/HProgressBars.hx");
-	var value272 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ProgressBars/HProgressBars.hx",value272);
-	DefaultAssetLibrary.path.set("resources/ProgressBars/HProgressBars.xml","resources/ProgressBars/HProgressBars.xml");
-	var value273 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ProgressBars/HProgressBars.xml",value273);
-	DefaultAssetLibrary.path.set("resources/ProgressBars/VProgressBars.hx","resources/ProgressBars/VProgressBars.hx");
-	var value274 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ProgressBars/VProgressBars.hx",value274);
-	DefaultAssetLibrary.path.set("resources/ProgressBars/VProgressBars.xml","resources/ProgressBars/VProgressBars.xml");
-	var value275 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ProgressBars/VProgressBars.xml",value275);
-	DefaultAssetLibrary.path.set("resources/ScrollBars/HScrollBars.hx","resources/ScrollBars/HScrollBars.hx");
-	var value276 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ScrollBars/HScrollBars.hx",value276);
-	DefaultAssetLibrary.path.set("resources/ScrollBars/HScrollBars.xml","resources/ScrollBars/HScrollBars.xml");
-	var value277 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ScrollBars/HScrollBars.xml",value277);
-	DefaultAssetLibrary.path.set("resources/ScrollBars/VScrollBars.hx","resources/ScrollBars/VScrollBars.hx");
-	var value278 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ScrollBars/VScrollBars.hx",value278);
-	DefaultAssetLibrary.path.set("resources/ScrollBars/VScrollBars.xml","resources/ScrollBars/VScrollBars.xml");
-	var value279 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ScrollBars/VScrollBars.xml",value279);
-	DefaultAssetLibrary.path.set("resources/ScrollViews/ScrollViews.hx","resources/ScrollViews/ScrollViews.hx");
-	var value280 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ScrollViews/ScrollViews.hx",value280);
-	DefaultAssetLibrary.path.set("resources/ScrollViews/ScrollViews.xml","resources/ScrollViews/ScrollViews.xml");
-	var value281 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/ScrollViews/ScrollViews.xml",value281);
-	DefaultAssetLibrary.path.set("resources/SimplePopup/SimplePopup.hx","resources/SimplePopup/SimplePopup.hx");
-	var value282 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/SimplePopup/SimplePopup.hx",value282);
-	DefaultAssetLibrary.path.set("resources/SimplePopup/SimplePopup.xml","resources/SimplePopup/SimplePopup.xml");
-	var value283 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/SimplePopup/SimplePopup.xml",value283);
-	DefaultAssetLibrary.path.set("resources/Sliders/HSliders.hx","resources/Sliders/HSliders.hx");
-	var value284 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Sliders/HSliders.hx",value284);
-	DefaultAssetLibrary.path.set("resources/Sliders/HSliders.xml","resources/Sliders/HSliders.xml");
-	var value285 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Sliders/HSliders.xml",value285);
-	DefaultAssetLibrary.path.set("resources/Sliders/VSliders.hx","resources/Sliders/VSliders.hx");
-	var value286 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Sliders/VSliders.hx",value286);
-	DefaultAssetLibrary.path.set("resources/Sliders/VSliders.xml","resources/Sliders/VSliders.xml");
-	var value287 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/Sliders/VSliders.xml",value287);
-	DefaultAssetLibrary.path.set("resources/slinky.jpg","resources/slinky.jpg");
-	var value288 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/slinky.jpg",value288);
-	DefaultAssetLibrary.path.set("resources/slinky_large.jpg","resources/slinky_large.jpg");
-	var value289 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/slinky_large.jpg",value289);
-	DefaultAssetLibrary.path.set("resources/slinky_small.jpg","resources/slinky_small.jpg");
-	var value290 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/slinky_small.jpg",value290);
-	DefaultAssetLibrary.path.set("resources/TextFields/TextFields.hx","resources/TextFields/TextFields.hx");
-	var value291 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/TextFields/TextFields.hx",value291);
-	DefaultAssetLibrary.path.set("resources/TextFields/TextFields.xml","resources/TextFields/TextFields.xml");
-	var value292 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/TextFields/TextFields.xml",value292);
-	DefaultAssetLibrary.path.set("resources/TextInputs/TextInputs.hx","resources/TextInputs/TextInputs.hx");
-	var value293 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/TextInputs/TextInputs.hx",value293);
-	DefaultAssetLibrary.path.set("resources/TextInputs/TextInputs.xml","resources/TextInputs/TextInputs.xml");
-	var value294 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/TextInputs/TextInputs.xml",value294);
-	DefaultAssetLibrary.path.set("resources/VerticalLayout/VerticalLayout.hx","resources/VerticalLayout/VerticalLayout.hx");
-	var value295 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/VerticalLayout/VerticalLayout.hx",value295);
-	DefaultAssetLibrary.path.set("resources/VerticalLayout/VerticalLayout.xml","resources/VerticalLayout/VerticalLayout.xml");
-	var value296 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/VerticalLayout/VerticalLayout.xml",value296);
-	DefaultAssetLibrary.path.set("resources/WebViews/example.html","resources/WebViews/example.html");
-	var value297 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/WebViews/example.html",value297);
-	DefaultAssetLibrary.path.set("resources/WebViews/img/haxe_ui.png","resources/WebViews/img/haxe_ui.png");
-	var value298 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/WebViews/img/haxe_ui.png",value298);
-	DefaultAssetLibrary.path.set("resources/WebViews/img/icone_cocktail_blanche_ombre.png","resources/WebViews/img/icone_cocktail_blanche_ombre.png");
-	var value299 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/WebViews/img/icone_cocktail_blanche_ombre.png",value299);
-	DefaultAssetLibrary.path.set("resources/WebViews/img/icone_haxe_blanche_ombre.png","resources/WebViews/img/icone_haxe_blanche_ombre.png");
-	var value300 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/WebViews/img/icone_haxe_blanche_ombre.png",value300);
-	DefaultAssetLibrary.path.set("resources/WebViews/WebViews.hx","resources/WebViews/WebViews.hx");
-	var value301 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/WebViews/WebViews.hx",value301);
-	DefaultAssetLibrary.path.set("resources/WebViews/WebViews.xml","resources/WebViews/WebViews.xml");
-	var value302 = Reflect.field(openfl.AssetType,"text".toUpperCase());
-	DefaultAssetLibrary.type.set("resources/WebViews/WebViews.xml",value302);
-	DefaultAssetLibrary.path.set("icons/application-dialog.png","icons/application-dialog.png");
-	var value303 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/application-dialog.png",value303);
-	DefaultAssetLibrary.path.set("icons/blue-document-css.png","icons/blue-document-css.png");
-	var value304 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/blue-document-css.png",value304);
-	DefaultAssetLibrary.path.set("icons/blue-document-haxe.png","icons/blue-document-haxe.png");
-	var value305 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/blue-document-haxe.png",value305);
-	DefaultAssetLibrary.path.set("icons/blue-document-xml.png","icons/blue-document-xml.png");
-	var value306 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/blue-document-xml.png",value306);
-	DefaultAssetLibrary.path.set("icons/blue-document.png","icons/blue-document.png");
-	var value307 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/blue-document.png",value307);
-	DefaultAssetLibrary.path.set("icons/fav_16.png","icons/fav_16.png");
-	var value308 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/fav_16.png",value308);
-	DefaultAssetLibrary.path.set("icons/fav_32.png","icons/fav_32.png");
-	var value309 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/fav_32.png",value309);
-	DefaultAssetLibrary.path.set("icons/grid.png","icons/grid.png");
-	var value310 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/grid.png",value310);
-	DefaultAssetLibrary.path.set("icons/images.png","icons/images.png");
-	var value311 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/images.png",value311);
-	DefaultAssetLibrary.path.set("icons/ui-accordion.png","icons/ui-accordion.png");
-	var value312 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-accordion.png",value312);
-	DefaultAssetLibrary.path.set("icons/ui-button.png","icons/ui-button.png");
-	var value313 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-button.png",value313);
-	DefaultAssetLibrary.path.set("icons/ui-buttons.png","icons/ui-buttons.png");
-	var value314 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-buttons.png",value314);
-	DefaultAssetLibrary.path.set("icons/ui-check-boxes.png","icons/ui-check-boxes.png");
-	var value315 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-check-boxes.png",value315);
-	DefaultAssetLibrary.path.set("icons/ui-combo-box-calendar.png","icons/ui-combo-box-calendar.png");
-	var value316 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-combo-box-calendar.png",value316);
-	DefaultAssetLibrary.path.set("icons/ui-flow-vertical.png","icons/ui-flow-vertical.png");
-	var value317 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-flow-vertical.png",value317);
-	DefaultAssetLibrary.path.set("icons/ui-flow.png","icons/ui-flow.png");
-	var value318 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-flow.png",value318);
-	DefaultAssetLibrary.path.set("icons/ui-labels.png","icons/ui-labels.png");
-	var value319 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-labels.png",value319);
-	DefaultAssetLibrary.path.set("icons/ui-layered-pane.png","icons/ui-layered-pane.png");
-	var value320 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-layered-pane.png",value320);
-	DefaultAssetLibrary.path.set("icons/ui-list-box-blue.png","icons/ui-list-box-blue.png");
-	var value321 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-list-box-blue.png",value321);
-	DefaultAssetLibrary.path.set("icons/ui-menu-blue.png","icons/ui-menu-blue.png");
-	var value322 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-menu-blue.png",value322);
-	DefaultAssetLibrary.path.set("icons/ui-panel.png","icons/ui-panel.png");
-	var value323 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-panel.png",value323);
-	DefaultAssetLibrary.path.set("icons/ui-progress-bar-vertical.png","icons/ui-progress-bar-vertical.png");
-	var value324 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-progress-bar-vertical.png",value324);
-	DefaultAssetLibrary.path.set("icons/ui-progress-bar.png","icons/ui-progress-bar.png");
-	var value325 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-progress-bar.png",value325);
-	DefaultAssetLibrary.path.set("icons/ui-radio-buttons.png","icons/ui-radio-buttons.png");
-	var value326 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-radio-buttons.png",value326);
-	DefaultAssetLibrary.path.set("icons/ui-scroll-bar-horizontal.png","icons/ui-scroll-bar-horizontal.png");
-	var value327 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-scroll-bar-horizontal.png",value327);
-	DefaultAssetLibrary.path.set("icons/ui-scroll-bar.png","icons/ui-scroll-bar.png");
-	var value328 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-scroll-bar.png",value328);
-	DefaultAssetLibrary.path.set("icons/ui-scroll-pane-image.png","icons/ui-scroll-pane-image.png");
-	var value329 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-scroll-pane-image.png",value329);
-	DefaultAssetLibrary.path.set("icons/ui-slider-050.png","icons/ui-slider-050.png");
-	var value330 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-slider-050.png",value330);
-	DefaultAssetLibrary.path.set("icons/ui-slider-vertical-050.png","icons/ui-slider-vertical-050.png");
-	var value331 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-slider-vertical-050.png",value331);
-	DefaultAssetLibrary.path.set("icons/ui-spacer.png","icons/ui-spacer.png");
-	var value332 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-spacer.png",value332);
-	DefaultAssetLibrary.path.set("icons/ui-split-panel-vertical.png","icons/ui-split-panel-vertical.png");
-	var value333 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-split-panel-vertical.png",value333);
-	DefaultAssetLibrary.path.set("icons/ui-split-panel.png","icons/ui-split-panel.png");
-	var value334 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-split-panel.png",value334);
-	DefaultAssetLibrary.path.set("icons/ui-tab-content.png","icons/ui-tab-content.png");
-	var value335 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-tab-content.png",value335);
-	DefaultAssetLibrary.path.set("icons/ui-tab.png","icons/ui-tab.png");
-	var value336 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-tab.png",value336);
-	DefaultAssetLibrary.path.set("icons/ui-text-field.png","icons/ui-text-field.png");
-	var value337 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("icons/ui-text-field.png",value337);
-	DefaultAssetLibrary.path.set("images/slinky.jpg","images/slinky.jpg");
-	var value338 = Reflect.field(openfl.AssetType,"image".toUpperCase());
-	DefaultAssetLibrary.type.set("images/slinky.jpg",value338);
+	this.type = new haxe.ds.StringMap();
+	this.path = new haxe.ds.StringMap();
+	this.className = new haxe.ds.StringMap();
+	lime.AssetLibrary.call(this);
+	var id;
+	id = "assets/fonts/Oxygen-Bold.eot";
+	this.path.set(id,id);
+	this.type.set(id,"BINARY");
+	id = "assets/fonts/Oxygen-Bold.svg";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/fonts/Oxygen-Bold.ttf";
+	this.className.set(id,__ASSET__assets_fonts_oxygen_bold_ttf);
+	this.type.set(id,"FONT");
+	id = "assets/fonts/Oxygen-Bold.woff";
+	this.path.set(id,id);
+	this.type.set(id,"BINARY");
+	id = "assets/fonts/Oxygen.eot";
+	this.path.set(id,id);
+	this.type.set(id,"BINARY");
+	id = "assets/fonts/Oxygen.svg";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/fonts/Oxygen.ttf";
+	this.className.set(id,__ASSET__assets_fonts_oxygen_ttf);
+	this.type.set(id,"FONT");
+	id = "assets/fonts/Oxygen.woff";
+	this.path.set(id,id);
+	this.type.set(id,"BINARY");
+	id = "assets/styles/default/circle.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/default/collapse.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/default/cross.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/default/expand.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/default/up_down.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_down.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_down_dark.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_down_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_left.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_left_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_right.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_right2.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_right_dark.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_right_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_up.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/arrow_up_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/circle_dark.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/cross_dark.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/cross_dark_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/cross_light_small.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/gradient.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/gradient/gradient.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/gradient/gradient_mobile.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/gradient/gradient_mobile.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/gradient/gripper_horizontal.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/gripper_horizontal_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/gripper_vertical.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/gripper_vertical_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/hsplitter_gripper.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/gradient/vsplitter_gripper.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/accordion.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/accordion.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/button.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/buttons.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/buttons.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/calendar.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/checkbox.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/container.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/down_arrow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/hscroll_thumb_gripper_down.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/hscroll_thumb_gripper_over.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/hscroll_thumb_gripper_up.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/left_arrow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/right_arrow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/up_arrow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/vscroll_thumb_gripper_down.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/vscroll_thumb_gripper_over.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/glyphs/vscroll_thumb_gripper_up.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/hprogress.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/hscroll.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/listview.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/listview.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/listview.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/menus.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/optionbox.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/popup.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/popups.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/rtf.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/scrolls.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/scrolls.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/sliders.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/tab.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/tabs.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/styles/windows/textinput.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/vprogress.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/vscroll.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/styles/windows/windows.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/default/circle.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/default/collapse.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/default/cross.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/default/expand.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/default/up_down.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_down.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_down_dark.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_down_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_left.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_left_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_right.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_right2.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_right_dark.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_right_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_up.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/arrow_up_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/circle_dark.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/cross_dark.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/cross_dark_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/cross_light_small.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/gradient.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/gradient/gradient.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/gradient/gradient_mobile.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/gradient/gradient_mobile.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/gradient/gripper_horizontal.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/gripper_horizontal_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/gripper_vertical.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/gripper_vertical_disabled.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/hsplitter_gripper.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/gradient/vsplitter_gripper.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/accordion.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/accordion.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/button.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/buttons.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/buttons.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/calendar.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/checkbox.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/container.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/down_arrow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/hscroll_thumb_gripper_down.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/hscroll_thumb_gripper_over.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/hscroll_thumb_gripper_up.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/left_arrow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/right_arrow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/up_arrow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/vscroll_thumb_gripper_down.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/vscroll_thumb_gripper_over.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/glyphs/vscroll_thumb_gripper_up.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/hprogress.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/hscroll.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/listview.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/listview.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/listview.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/menus.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/optionbox.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/popup.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/popups.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/rtf.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/scrolls.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/scrolls.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/sliders.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/tab.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/tabs.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "styles/windows/textinput.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/vprogress.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/vscroll.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "styles/windows/windows.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "fonts/Oxygen-Bold.eot";
+	this.path.set(id,id);
+	this.type.set(id,"BINARY");
+	id = "fonts/Oxygen-Bold.svg";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "fonts/Oxygen-Bold.ttf";
+	this.className.set(id,__ASSET__fonts_oxygen_bold_ttf);
+	this.type.set(id,"FONT");
+	id = "fonts/Oxygen-Bold.woff";
+	this.path.set(id,id);
+	this.type.set(id,"BINARY");
+	id = "fonts/Oxygen.eot";
+	this.path.set(id,id);
+	this.type.set(id,"BINARY");
+	id = "fonts/Oxygen.svg";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "fonts/Oxygen.ttf";
+	this.className.set(id,__ASSET__fonts_oxygen_ttf);
+	this.type.set(id,"FONT");
+	id = "fonts/Oxygen.woff";
+	this.path.set(id,id);
+	this.type.set(id,"BINARY");
+	id = "assets/css/code.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/css/code.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/css/rtf.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/css/rtf.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/img/rtfview/edit-alignment-center.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/img/rtfview/edit-alignment-justify.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/img/rtfview/edit-alignment-left.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/img/rtfview/edit-alignment-right.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/img/rtfview/edit-bold.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/img/rtfview/edit-italic.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/img/rtfview/edit-list.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/img/rtfview/edit-underline.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/openfl.svg";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/demo.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/example.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/example.txt";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/example.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "img/rtfview/edit-alignment-center.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "img/rtfview/edit-alignment-justify.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "img/rtfview/edit-alignment-left.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "img/rtfview/edit-alignment-right.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "img/rtfview/edit-bold.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "img/rtfview/edit-italic.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "img/rtfview/edit-list.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "img/rtfview/edit-underline.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "css/code.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "css/code.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "css/rtf.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "css/rtf.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/css/default/webview.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/css/gradient/webview.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/css/gradient/webview.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/css/webview.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/img/haxe_ui.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/img/icone_cocktail_blanche_ombre.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/img/icone_haxe_blanche_ombre.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/openfl.svg";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/demo.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/example.html";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/test.html";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "img/haxe_ui.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "img/icone_cocktail_blanche_ombre.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "img/icone_haxe_blanche_ombre.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "css/default/webview.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "css/gradient/webview.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "css/gradient/webview.min.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "css/webview.css";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/application-default-icon.svg";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/data/views.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/icons/application-dialog.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/blue-document-css.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/blue-document-haxe.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/blue-document-xml.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/blue-document.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/fav_16.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/fav_32.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/grid.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/images.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-accordion.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-button.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-buttons.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-check-boxes.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-combo-box-calendar.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-flow-vertical.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-flow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-labels.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-layered-pane.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-list-box-blue.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-menu-blue.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-panel.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-progress-bar-vertical.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-progress-bar.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-radio-buttons.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-scroll-bar-horizontal.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-scroll-bar.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-scroll-pane-image.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-slider-050.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-slider-vertical-050.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-spacer.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-split-panel-vertical.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-split-panel.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-tab-content.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-tab.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/icons/ui-text-field.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/images/slinky.jpg";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/resources/AbsoluteLayout/AbsoluteLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/AbsoluteLayout/AbsoluteLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Accordions/Accordions.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Accordions/Accordions.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/BoxLayout/BoxLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/BoxLayout/BoxLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/BusyPopup/BusyPopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/BusyPopup/BusyPopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Buttons/Buttons.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Buttons/Buttons.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/CalendarPopup/CalendarPopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/CalendarPopup/CalendarPopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/CheckBoxes/CheckBoxes.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/CheckBoxes/CheckBoxes.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ContinuousLayout/HContinuousLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ContinuousLayout/HContinuousLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ContinuousLayout/VContinuousLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ContinuousLayout/VContinuousLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/CustomPopup/CustomPopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/CustomPopup/CustomPopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/CustomPopup/CustomPopupContent.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/DateSelectors/DateSelectors.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/DateSelectors/DateSelectors.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/GridLayout/GridLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/GridLayout/GridLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/HorizontalLayout/HorizontalLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/HorizontalLayout/HorizontalLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Images/Images.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Images/Images.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ListPopup/ListPopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ListPopup/ListPopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ListSelectors/ListSelectors.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ListSelectors/ListSelectors.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ListViews/ListViews.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ListViews/ListViews.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/OptionBoxes/OptionBoxes.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/OptionBoxes/OptionBoxes.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ProgressBars/HProgressBars.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ProgressBars/HProgressBars.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ProgressBars/VProgressBars.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ProgressBars/VProgressBars.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ScrollBars/HScrollBars.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ScrollBars/HScrollBars.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ScrollBars/VScrollBars.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ScrollBars/VScrollBars.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ScrollViews/ScrollViews.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/ScrollViews/ScrollViews.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/SimplePopup/SimplePopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/SimplePopup/SimplePopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Sliders/HSliders.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Sliders/HSliders.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Sliders/VSliders.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/Sliders/VSliders.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/slinky.jpg";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/resources/slinky_large.jpg";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/resources/slinky_small.jpg";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/resources/TextFields/TextFields.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/TextFields/TextFields.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/TextInputs/TextInputs.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/TextInputs/TextInputs.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/VerticalLayout/VerticalLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/VerticalLayout/VerticalLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/WebViews/example.html";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/WebViews/img/haxe_ui.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/resources/WebViews/img/icone_cocktail_blanche_ombre.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/resources/WebViews/img/icone_haxe_blanche_ombre.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "assets/resources/WebViews/WebViews.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/resources/WebViews/WebViews.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/about.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/main.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/prefs.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "assets/ui/todo.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "ui/about.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "ui/main.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "ui/prefs.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "ui/todo.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "data/views.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/AbsoluteLayout/AbsoluteLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/AbsoluteLayout/AbsoluteLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Accordions/Accordions.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Accordions/Accordions.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/BoxLayout/BoxLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/BoxLayout/BoxLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/BusyPopup/BusyPopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/BusyPopup/BusyPopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Buttons/Buttons.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Buttons/Buttons.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/CalendarPopup/CalendarPopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/CalendarPopup/CalendarPopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/CheckBoxes/CheckBoxes.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/CheckBoxes/CheckBoxes.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ContinuousLayout/HContinuousLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ContinuousLayout/HContinuousLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ContinuousLayout/VContinuousLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ContinuousLayout/VContinuousLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/CustomPopup/CustomPopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/CustomPopup/CustomPopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/CustomPopup/CustomPopupContent.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/DateSelectors/DateSelectors.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/DateSelectors/DateSelectors.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/GridLayout/GridLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/GridLayout/GridLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/HorizontalLayout/HorizontalLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/HorizontalLayout/HorizontalLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Images/Images.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Images/Images.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ListPopup/ListPopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ListPopup/ListPopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ListSelectors/ListSelectors.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ListSelectors/ListSelectors.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ListViews/ListViews.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ListViews/ListViews.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/OptionBoxes/OptionBoxes.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/OptionBoxes/OptionBoxes.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ProgressBars/HProgressBars.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ProgressBars/HProgressBars.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ProgressBars/VProgressBars.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ProgressBars/VProgressBars.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ScrollBars/HScrollBars.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ScrollBars/HScrollBars.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ScrollBars/VScrollBars.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ScrollBars/VScrollBars.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ScrollViews/ScrollViews.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/ScrollViews/ScrollViews.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/SimplePopup/SimplePopup.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/SimplePopup/SimplePopup.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Sliders/HSliders.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Sliders/HSliders.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Sliders/VSliders.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/Sliders/VSliders.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/slinky.jpg";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "resources/slinky_large.jpg";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "resources/slinky_small.jpg";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "resources/TextFields/TextFields.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/TextFields/TextFields.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/TextInputs/TextInputs.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/TextInputs/TextInputs.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/VerticalLayout/VerticalLayout.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/VerticalLayout/VerticalLayout.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/WebViews/example.html";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/WebViews/img/haxe_ui.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "resources/WebViews/img/icone_cocktail_blanche_ombre.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "resources/WebViews/img/icone_haxe_blanche_ombre.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "resources/WebViews/WebViews.hx";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "resources/WebViews/WebViews.xml";
+	this.path.set(id,id);
+	this.type.set(id,"TEXT");
+	id = "icons/application-dialog.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/blue-document-css.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/blue-document-haxe.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/blue-document-xml.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/blue-document.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/fav_16.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/fav_32.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/grid.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/images.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-accordion.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-button.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-buttons.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-check-boxes.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-combo-box-calendar.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-flow-vertical.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-flow.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-labels.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-layered-pane.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-list-box-blue.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-menu-blue.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-panel.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-progress-bar-vertical.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-progress-bar.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-radio-buttons.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-scroll-bar-horizontal.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-scroll-bar.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-scroll-pane-image.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-slider-050.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-slider-vertical-050.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-spacer.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-split-panel-vertical.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-split-panel.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-tab-content.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-tab.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "icons/ui-text-field.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
+	id = "images/slinky.jpg";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
 };
 $hxClasses["DefaultAssetLibrary"] = DefaultAssetLibrary;
 DefaultAssetLibrary.__name__ = ["DefaultAssetLibrary"];
-DefaultAssetLibrary.__super__ = openfl.AssetLibrary;
-DefaultAssetLibrary.prototype = $extend(openfl.AssetLibrary.prototype,{
+DefaultAssetLibrary.__super__ = lime.AssetLibrary;
+DefaultAssetLibrary.prototype = $extend(lime.AssetLibrary.prototype,{
 	exists: function(id,type) {
-		var assetType = DefaultAssetLibrary.type.get(id);
+		var requestedType;
+		if(type != null) requestedType = js.Boot.__cast(type , String); else requestedType = null;
+		var assetType = this.type.get(id);
 		if(assetType != null) {
-			if(assetType == type || (type == openfl.AssetType.SOUND || type == openfl.AssetType.MUSIC) && (assetType == openfl.AssetType.MUSIC || assetType == openfl.AssetType.SOUND)) return true;
-			if(type == openfl.AssetType.BINARY || type == null) return true;
+			if(assetType == requestedType || (requestedType == "SOUND" || requestedType == "MUSIC") && (assetType == "MUSIC" || assetType == "SOUND")) return true;
+			if(requestedType == "BINARY" || requestedType == null || assetType == "BINARY" && requestedType == "TEXT") return true;
 		}
 		return false;
 	}
-	,getBitmapData: function(id) {
-		try {
-			return (js.Boot.__cast(((function($this) {
-				var $r;
-				var key = DefaultAssetLibrary.path.get(id);
-				$r = ApplicationMain.loaders.get(key);
-				return $r;
-			}(this))).contentLoaderInfo.content , openfl.display.Bitmap)).bitmapData;
-		} catch( e ) {
-			haxe.Log.trace("Error: Bitmap not found - " + id + " - " + DefaultAssetLibrary.path.get(id),{ fileName : "DefaultAssetLibrary.hx", lineNumber : 1525, className : "DefaultAssetLibrary", methodName : "getBitmapData"});
-			return null;
-		}
+	,getAudioBuffer: function(id) {
+		return null;
 	}
 	,getBytes: function(id) {
 		var bytes = null;
 		var data = ((function($this) {
 			var $r;
-			var key = DefaultAssetLibrary.path.get(id);
-			$r = ApplicationMain.urlLoaders.get(key);
+			var key = $this.path.get(id);
+			$r = lime.app.Preloader.loaders.get(key);
 			return $r;
 		}(this))).data;
 		if(typeof(data) == "string") {
-			bytes = new openfl.utils.ByteArray();
+			bytes = new lime.utils.ByteArray();
 			bytes.writeUTFBytes(data);
-		} else if(js.Boot.__instanceof(data,openfl.utils.ByteArray)) bytes = data; else bytes = null;
+		} else if(js.Boot.__instanceof(data,lime.utils.ByteArray)) bytes = data; else bytes = null;
 		if(bytes != null) {
 			bytes.position = 0;
 			return bytes;
 		} else return null;
 	}
 	,getFont: function(id) {
-		return js.Boot.__cast(Type.createInstance(DefaultAssetLibrary.className.get(id),[]) , openfl.text.Font);
+		return js.Boot.__cast(Type.createInstance(this.className.get(id),[]) , openfl.text.Font);
+		return null;
 	}
-	,getMusic: function(id) {
-		return new openfl.media.Sound(new openfl.net.URLRequest(DefaultAssetLibrary.path.get(id)));
+	,getImage: function(id) {
+		return lime.graphics.Image.fromImageElement((function($this) {
+			var $r;
+			var key = $this.path.get(id);
+			$r = lime.app.Preloader.images.get(key);
+			return $r;
+		}(this)));
 	}
 	,getPath: function(id) {
-		return DefaultAssetLibrary.path.get(id);
+		return this.path.get(id);
 	}
-	,getSound: function(id) {
-		return new openfl.media.Sound(new openfl.net.URLRequest(DefaultAssetLibrary.path.get(id)));
+	,getText: function(id) {
+		var bytes = null;
+		var data = ((function($this) {
+			var $r;
+			var key = $this.path.get(id);
+			$r = lime.app.Preloader.loaders.get(key);
+			return $r;
+		}(this))).data;
+		if(typeof(data) == "string") return data; else if(js.Boot.__instanceof(data,lime.utils.ByteArray)) bytes = data; else bytes = null;
+		if(bytes != null) {
+			bytes.position = 0;
+			return bytes.readUTFBytes(bytes.length);
+		} else return null;
 	}
 	,isLocal: function(id,type) {
+		var requestedType;
+		if(type != null) requestedType = js.Boot.__cast(type , String); else requestedType = null;
 		return true;
 	}
-	,loadBitmapData: function(id,handler) {
-		if(DefaultAssetLibrary.path.exists(id)) {
-			var loader = new openfl.display.Loader();
-			loader.contentLoaderInfo.addEventListener(openfl.events.Event.COMPLETE,function(event) {
-				handler((js.Boot.__cast(event.currentTarget.content , openfl.display.Bitmap)).bitmapData);
-			});
-			loader.load(new openfl.net.URLRequest(DefaultAssetLibrary.path.get(id)));
-		} else handler(this.getBitmapData(id));
+	,list: function(type) {
+		var requestedType;
+		if(type != null) requestedType = js.Boot.__cast(type , String); else requestedType = null;
+		var items = [];
+		var $it0 = this.type.keys();
+		while( $it0.hasNext() ) {
+			var id = $it0.next();
+			if(requestedType == null || this.exists(id,type)) items.push(id);
+		}
+		return items;
+	}
+	,loadAudioBuffer: function(id,handler) {
+		handler(this.getAudioBuffer(id));
 	}
 	,loadBytes: function(id,handler) {
-		if(DefaultAssetLibrary.path.exists(id)) {
-			var loader = new openfl.net.URLLoader();
-			loader.addEventListener(openfl.events.Event.COMPLETE,function(event) {
-				var bytes = new openfl.utils.ByteArray();
-				bytes.writeUTFBytes(event.currentTarget.data);
-				bytes.position = 0;
-				handler(bytes);
-			});
-			loader.load(new openfl.net.URLRequest(DefaultAssetLibrary.path.get(id)));
-		} else handler(this.getBytes(id));
+		handler(this.getBytes(id));
 	}
-	,loadFont: function(id,handler) {
-		handler(this.getFont(id));
+	,loadImage: function(id,handler) {
+		handler(this.getImage(id));
 	}
-	,loadMusic: function(id,handler) {
-		handler(this.getMusic(id));
-	}
-	,loadSound: function(id,handler) {
-		handler(this.getSound(id));
+	,loadText: function(id,handler) {
+		var callback = function(bytes) {
+			if(bytes == null) handler(null); else handler(bytes.readUTFBytes(bytes.length));
+		};
+		this.loadBytes(id,callback);
 	}
 	,__class__: DefaultAssetLibrary
 });
+var openfl = {};
 openfl.text = {};
 openfl.text.Font = function() {
 	this.__metrics = [];
@@ -2226,6 +3240,7 @@ openfl.text.Font = function() {
 };
 $hxClasses["openfl.text.Font"] = openfl.text.Font;
 openfl.text.Font.__name__ = ["openfl","text","Font"];
+openfl.text.Font.__fontData = null;
 openfl.text.Font.enumerateFonts = function(enumerateDeviceFonts) {
 	if(enumerateDeviceFonts == null) enumerateDeviceFonts = false;
 	return openfl.text.Font.__registeredFonts.slice();
@@ -2310,8 +3325,29 @@ openfl.text.Font.prototype = {
 	,__class__: openfl.text.Font
 	,__properties__: {set_fontName:"set_fontName"}
 };
+var __ASSET__assets_fonts_oxygen_bold_ttf = function() {
+	openfl.text.Font.call(this);
+	this.set_fontName("assets/fonts/Oxygen-Bold.ttf");
+};
+$hxClasses["__ASSET__assets_fonts_oxygen_bold_ttf"] = __ASSET__assets_fonts_oxygen_bold_ttf;
+__ASSET__assets_fonts_oxygen_bold_ttf.__name__ = ["__ASSET__assets_fonts_oxygen_bold_ttf"];
+__ASSET__assets_fonts_oxygen_bold_ttf.__super__ = openfl.text.Font;
+__ASSET__assets_fonts_oxygen_bold_ttf.prototype = $extend(openfl.text.Font.prototype,{
+	__class__: __ASSET__assets_fonts_oxygen_bold_ttf
+});
+var __ASSET__assets_fonts_oxygen_ttf = function() {
+	openfl.text.Font.call(this);
+	this.set_fontName("assets/fonts/Oxygen.ttf");
+};
+$hxClasses["__ASSET__assets_fonts_oxygen_ttf"] = __ASSET__assets_fonts_oxygen_ttf;
+__ASSET__assets_fonts_oxygen_ttf.__name__ = ["__ASSET__assets_fonts_oxygen_ttf"];
+__ASSET__assets_fonts_oxygen_ttf.__super__ = openfl.text.Font;
+__ASSET__assets_fonts_oxygen_ttf.prototype = $extend(openfl.text.Font.prototype,{
+	__class__: __ASSET__assets_fonts_oxygen_ttf
+});
 var __ASSET__fonts_oxygen_bold_ttf = function() {
 	openfl.text.Font.call(this);
+	this.set_fontName("fonts/Oxygen-Bold.ttf");
 };
 $hxClasses["__ASSET__fonts_oxygen_bold_ttf"] = __ASSET__fonts_oxygen_bold_ttf;
 __ASSET__fonts_oxygen_bold_ttf.__name__ = ["__ASSET__fonts_oxygen_bold_ttf"];
@@ -2321,6 +3357,7 @@ __ASSET__fonts_oxygen_bold_ttf.prototype = $extend(openfl.text.Font.prototype,{
 });
 var __ASSET__fonts_oxygen_ttf = function() {
 	openfl.text.Font.call(this);
+	this.set_fontName("fonts/Oxygen.ttf");
 };
 $hxClasses["__ASSET__fonts_oxygen_ttf"] = __ASSET__fonts_oxygen_ttf;
 __ASSET__fonts_oxygen_ttf.__name__ = ["__ASSET__fonts_oxygen_ttf"];
@@ -2501,14 +3538,6 @@ Lambda.map = function(it,f) {
 	}
 	return l;
 };
-Lambda.has = function(it,elt) {
-	var $it0 = $iterator(it)();
-	while( $it0.hasNext() ) {
-		var x = $it0.next();
-		if(x == elt) return true;
-	}
-	return false;
-};
 Lambda.iter = function(it,f) {
 	var $it0 = $iterator(it)();
 	while( $it0.hasNext() ) {
@@ -2523,23 +3552,6 @@ Lambda.fold = function(it,f,first) {
 		first = f(x,first);
 	}
 	return first;
-};
-Lambda.count = function(it,pred) {
-	var n = 0;
-	if(pred == null) {
-		var $it0 = $iterator(it)();
-		while( $it0.hasNext() ) {
-			var _ = $it0.next();
-			n++;
-		}
-	} else {
-		var $it1 = $iterator(it)();
-		while( $it1.hasNext() ) {
-			var x = $it1.next();
-			if(pred(x)) n++;
-		}
-	}
-	return n;
 };
 Lambda.indexOf = function(it,v) {
 	var i = 0;
@@ -2651,7 +3663,7 @@ openfl.events.EventDispatcher.prototype = {
 					listener.dispatchEvent(event);
 					if(event.__getIsCancelledNow()) return true;
 				}
-				if(idx < list.length && listener != list[idx]) {
+				if(idx < list.length && !listener.Is(list[idx].mListner,listener.mUseCapture)) {
 				} else idx++;
 			}
 			return true;
@@ -2742,8 +3754,21 @@ openfl.display.DisplayObject.prototype = $extend(openfl.events.EventDispatcher.p
 	,drawToSurface: function(inSurface,matrix,inColorTransform,blendMode,clipRect,smoothing) {
 		var oldAlpha = this.alpha;
 		this.set_alpha(1);
-		this.__render(inSurface,clipRect);
+		this.__render(null,null,true);
+		var image = new Image();
+		image.src = this.getSvgDataUrl();
+		var canvas = inSurface;
+		var c = canvas.getContext("2d");
+		if(null != matrix) c.drawImage(image,matrix.tx,matrix.ty); else c.drawImage(image,0,0);
 		this.set_alpha(oldAlpha);
+	}
+	,getSvgDataUrl: function() {
+		var buf = new StringBuf();
+		buf.b += "data:image/svg+xml;utf8,";
+		buf.add("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" + this.get_width() + "\" height=\"" + this.get_height() + "\">");
+		buf.add(this.snap.innerSVG());
+		buf.b += "</svg>";
+		return buf.b;
 	}
 	,getBounds: function(targetCoordinateSpace) {
 		if((this.___renderFlags & 4) != 0 || (this.___renderFlags & 8) != 0) this.__validateMatrix();
@@ -3001,8 +4026,10 @@ openfl.display.DisplayObject.prototype = $extend(openfl.events.EventDispatcher.p
 		}
 		this.renderNextWake();
 	}
-	,__render: function(inMask,clipRect) {
-		if(!this.__combinedVisible) return;
+	,__render: function(inMask,clipRect,force) {
+		if(force == null) force = false;
+		if(null == clipRect) clipRect = this.get_scrollRect();
+		if(!this.__combinedVisible && !force) return;
 		var gfx = this.__getGraphics();
 		if(gfx == null) return;
 		if(null != this.get_mask()) this.get_mask().__render(inMask,clipRect);
@@ -3016,16 +4043,14 @@ openfl.display.DisplayObject.prototype = $extend(openfl.events.EventDispatcher.p
 		}
 		var fullAlpha;
 		fullAlpha = (this.parent != null?this.parent.__combinedAlpha:1) * this.alpha;
-		if(inMask != null) {
-		} else {
-			if((this.___renderFlags & 32) != 0) {
-				var m = this.transform.get_matrix();
-				this.__setTransform(m);
-				this.___renderFlags &= -33;
-			}
-			var el = this.snap.node;
-			el.setAttribute("opacity",Std.string(this.alpha));
+		if((this.___renderFlags & 32) != 0) {
+			var m = this.transform.get_matrix();
+			this.__setTransform(m);
+			this.___renderFlags &= -33;
 		}
+		var el = this.snap.node;
+		var alphaStr = Std.string(this.alpha);
+		if(el.getAttribute("opacity") != alphaStr) el.setAttribute("opacity",alphaStr);
 		if(null != clipRect) this.updateClipRect(clipRect);
 	}
 	,updateClipRect: function(inRect) {
@@ -3294,9 +4319,7 @@ openfl.display.DisplayObject.prototype = $extend(openfl.events.EventDispatcher.p
 		return inValue;
 	}
 	,get_stage: function() {
-		var gfx = this.__getGraphics();
-		if(gfx != null) return openfl.Lib.__getStage();
-		return null;
+		return openfl.Lib.__getStage();
 	}
 	,get__topmostSurface: function() {
 		return this.snap;
@@ -3686,14 +4709,16 @@ openfl.display.DisplayObjectContainer.prototype = $extend(openfl.display.Interac
 			child.__removeFromStage();
 		}
 	}
-	,__render: function(inMask,clipRect) {
-		if(!this.__visible) return;
-		if(this.__scrollRect != null) clipRect = this.__scrollRect;
+	,__render: function(inMask,clipRect,force) {
+		if(force == null) force = false;
+		if(!this.__visible && !force) return;
 		openfl.display.InteractiveObject.prototype.__render.call(this,inMask,clipRect);
 		if(this.parent != null) this.__combinedAlpha = this.parent.__combinedAlpha * this.alpha; else this.__combinedAlpha = this.alpha;
-		var $it0 = this.renderList.keys();
-		while( $it0.hasNext() ) {
-			var child = $it0.next();
+		var _g = 0;
+		var _g1 = this.__children;
+		while(_g < _g1.length) {
+			var child = _g1[_g];
+			++_g;
 			if(child.__visible) {
 				if(clipRect != null) {
 					if((child.___renderFlags & 4) != 0 || (child.___renderFlags & 8) != 0) child.__validateMatrix();
@@ -3701,7 +4726,6 @@ openfl.display.DisplayObjectContainer.prototype = $extend(openfl.display.Interac
 				child.__render(inMask,clipRect);
 			}
 		}
-		this.renderList = new haxe.ds.ObjectMap();
 		if(this.__addedChildren) this.__addedChildren = false;
 	}
 	,__swapSurface: function(c1,c2) {
@@ -3914,6 +4938,17 @@ Reflect.deleteField = function(o,field) {
 	delete(o[field]);
 	return true;
 };
+Reflect.copy = function(o) {
+	var o2 = { };
+	var _g = 0;
+	var _g1 = Reflect.fields(o);
+	while(_g < _g1.length) {
+		var f = _g1[_g];
+		++_g;
+		Reflect.setField(o2,f,Reflect.field(o,f));
+	}
+	return o2;
+};
 Reflect.makeVarArgs = function(f) {
 	return function() {
 		var a = Array.prototype.slice.call(arguments);
@@ -4003,6 +5038,11 @@ StringTools.lpad = function(s,c,l) {
 	while(s.length < l) s = c + s;
 	return s;
 };
+StringTools.rpad = function(s,c,l) {
+	if(c.length <= 0) return s;
+	while(s.length < l) s = s + c;
+	return s;
+};
 StringTools.replace = function(s,sub,by) {
 	return s.split(sub).join(by);
 };
@@ -4048,7 +5088,7 @@ $hxClasses["Type"] = Type;
 Type.__name__ = ["Type"];
 Type.getClass = function(o) {
 	if(o == null) return null;
-	if((o instanceof Array) && o.__enum__ == null) return Array; else return o.__class__;
+	return js.Boot.getClass(o);
 };
 Type.getSuperClass = function(c) {
 	return c.__super__;
@@ -4116,6 +5156,15 @@ Type.createEnumIndex = function(e,index,params) {
 	if(c == null) throw index + " is not a valid enum constructor index";
 	return Type.createEnum(e,c,params);
 };
+Type.getClassFields = function(c) {
+	var a = Reflect.fields(c);
+	HxOverrides.remove(a,"__name__");
+	HxOverrides.remove(a,"__interfaces__");
+	HxOverrides.remove(a,"__properties__");
+	HxOverrides.remove(a,"__super__");
+	HxOverrides.remove(a,"prototype");
+	return a;
+};
 Type.getEnumConstructs = function(e) {
 	var a = e.__constructs__;
 	return a.slice();
@@ -4134,8 +5183,7 @@ Type["typeof"] = function(v) {
 		if(v == null) return ValueType.TNull;
 		var e = v.__enum__;
 		if(e != null) return ValueType.TEnum(e);
-		var c;
-		if((v instanceof Array) && v.__enum__ == null) c = Array; else c = v.__class__;
+		var c = js.Boot.getClass(v);
 		if(c != null) return ValueType.TClass(c);
 		return ValueType.TObject;
 	case "function":
@@ -4169,6 +5217,13 @@ var Xml = function() {
 };
 $hxClasses["Xml"] = Xml;
 Xml.__name__ = ["Xml"];
+Xml.Element = null;
+Xml.PCData = null;
+Xml.CData = null;
+Xml.Comment = null;
+Xml.DocType = null;
+Xml.ProcessingInstruction = null;
+Xml.Document = null;
 Xml.parse = function(str) {
 	return haxe.xml.Parser.parse(str);
 };
@@ -5266,6 +6321,7 @@ cocktail.core.config.Config = function() {
 };
 $hxClasses["cocktail.core.config.Config"] = cocktail.core.config.Config;
 cocktail.core.config.Config.__name__ = ["cocktail","core","config","Config"];
+cocktail.core.config.Config._instance = null;
 cocktail.core.config.Config.getInstance = function() {
 	if(cocktail.core.config.Config._instance == null) cocktail.core.config.Config._instance = new cocktail.core.config.Config();
 	return cocktail.core.config.Config._instance;
@@ -12491,6 +13547,7 @@ cocktail.core.css.InitialStyleDeclaration = function() {
 };
 $hxClasses["cocktail.core.css.InitialStyleDeclaration"] = cocktail.core.css.InitialStyleDeclaration;
 cocktail.core.css.InitialStyleDeclaration.__name__ = ["cocktail","core","css","InitialStyleDeclaration"];
+cocktail.core.css.InitialStyleDeclaration._instance = null;
 cocktail.core.css.InitialStyleDeclaration.getInstance = function() {
 	if(cocktail.core.css.InitialStyleDeclaration._instance == null) cocktail.core.css.InitialStyleDeclaration._instance = new cocktail.core.css.InitialStyleDeclaration();
 	return cocktail.core.css.InitialStyleDeclaration._instance;
@@ -14236,6 +15293,7 @@ cocktail.core.css.parsers.CSSStyleParser = function() {
 };
 $hxClasses["cocktail.core.css.parsers.CSSStyleParser"] = cocktail.core.css.parsers.CSSStyleParser;
 cocktail.core.css.parsers.CSSStyleParser.__name__ = ["cocktail","core","css","parsers","CSSStyleParser"];
+cocktail.core.css.parsers.CSSStyleParser._typedProperties = null;
 cocktail.core.css.parsers.CSSStyleParser.parseStyle = function(styles,baseURL) {
 	cocktail.core.css.parsers.CSSStyleParser._position = 0;
 	var state = cocktail.core.css.parsers.StyleDeclarationParserState.IGNORE_SPACES;
@@ -19172,6 +20230,7 @@ cocktail.core.geom.Matrix = function(a,b,c,d,e,f) {
 };
 $hxClasses["cocktail.core.geom.Matrix"] = cocktail.core.geom.Matrix;
 cocktail.core.geom.Matrix.__name__ = ["cocktail","core","geom","Matrix"];
+cocktail.core.geom.Matrix._concatenationMatrix = null;
 cocktail.core.geom.Matrix.getConcatenationMatrix = function(a,b,c,d,e,f) {
 	if(cocktail.core.geom.Matrix._concatenationMatrix == null) cocktail.core.geom.Matrix._concatenationMatrix = new cocktail.core.geom.Matrix();
 	cocktail.core.geom.Matrix._concatenationMatrix.a = a;
@@ -26616,6 +27675,7 @@ cocktail.core.renderer.AnonymousBlockBoxRenderer = function(document) {
 };
 $hxClasses["cocktail.core.renderer.AnonymousBlockBoxRenderer"] = cocktail.core.renderer.AnonymousBlockBoxRenderer;
 cocktail.core.renderer.AnonymousBlockBoxRenderer.__name__ = ["cocktail","core","renderer","AnonymousBlockBoxRenderer"];
+cocktail.core.renderer.AnonymousBlockBoxRenderer._node = null;
 cocktail.core.renderer.AnonymousBlockBoxRenderer.__super__ = cocktail.core.renderer.BlockBoxRenderer;
 cocktail.core.renderer.AnonymousBlockBoxRenderer.prototype = $extend(cocktail.core.renderer.BlockBoxRenderer.prototype,{
 	removeChild: function(oldChild) {
@@ -28594,13 +29654,14 @@ openfl.display.SpreadMethod.PAD.__enum__ = openfl.display.SpreadMethod;
 format.gfx.GfxBytes = function(inBuffer,inFlags) {
 	if(inFlags == null) inFlags = 0;
 	format.gfx.Gfx.call(this);
-	if(inBuffer == null) this.buffer = new openfl.utils.ByteArray(); else this.buffer = inBuffer;
+	if(inBuffer == null) this.buffer = new lime.utils.ByteArray(); else this.buffer = inBuffer;
 };
 $hxClasses["format.gfx.GfxBytes"] = format.gfx.GfxBytes;
 format.gfx.GfxBytes.__name__ = ["format","gfx","GfxBytes"];
+format.gfx.GfxBytes.baseCoder = null;
 format.gfx.GfxBytes.fromString = function(inString) {
 	if(format.gfx.GfxBytes.baseCoder == null) format.gfx.GfxBytes.baseCoder = new haxe.crypto.BaseCode(haxe.io.Bytes.ofString(format.gfx.GfxBytes.base64));
-	var bytes = new openfl.utils.ByteArray();
+	var bytes = new lime.utils.ByteArray();
 	bytes.writeUTF(inString);
 	return new format.gfx.GfxBytes(bytes);
 };
@@ -28985,6 +30046,7 @@ format.svg.PathParser = function() {
 };
 $hxClasses["format.svg.PathParser"] = format.svg.PathParser;
 format.svg.PathParser.__name__ = ["format","svg","PathParser"];
+format.svg.PathParser.sCommandArgs = null;
 format.svg.PathParser.prototype = {
 	parse: function(pathToParse,inConvertCubics) {
 		this.lastMoveX = this.lastMoveY = 0;
@@ -30001,6 +31063,33 @@ haxe.StackItem.LocalFunction = function(v) { var $x = ["LocalFunction",4,v]; $x.
 haxe.CallStack = function() { };
 $hxClasses["haxe.CallStack"] = haxe.CallStack;
 haxe.CallStack.__name__ = ["haxe","CallStack"];
+haxe.CallStack.callStack = function() {
+	var oldValue = Error.prepareStackTrace;
+	Error.prepareStackTrace = function(error,callsites) {
+		var stack = [];
+		var _g = 0;
+		while(_g < callsites.length) {
+			var site = callsites[_g];
+			++_g;
+			var method = null;
+			var fullName = site.getFunctionName();
+			if(fullName != null) {
+				var idx = fullName.lastIndexOf(".");
+				if(idx >= 0) {
+					var className = HxOverrides.substr(fullName,0,idx);
+					var methodName = HxOverrides.substr(fullName,idx + 1,null);
+					method = haxe.StackItem.Method(className,methodName);
+				}
+			}
+			stack.push(haxe.StackItem.FilePos(method,site.getFileName(),site.getLineNumber()));
+		}
+		return stack;
+	};
+	var a = haxe.CallStack.makeStack(new Error().stack);
+	a.shift();
+	Error.prepareStackTrace = oldValue;
+	return a;
+};
 haxe.CallStack.exceptionStack = function() {
 	return [];
 };
@@ -30052,6 +31141,19 @@ haxe.CallStack.itemToString = function(b,s) {
 		break;
 	}
 };
+haxe.CallStack.makeStack = function(s) {
+	if(typeof(s) == "string") {
+		var stack = s.split("\n");
+		var m = [];
+		var _g = 0;
+		while(_g < stack.length) {
+			var line = stack[_g];
+			++_g;
+			m.push(haxe.StackItem.Module(line));
+		}
+		return m;
+	} else return s;
+};
 haxe.Log = function() { };
 $hxClasses["haxe.Log"] = haxe.Log;
 haxe.Log.__name__ = ["haxe","Log"];
@@ -30061,17 +31163,7 @@ haxe.Log.trace = function(v,infos) {
 haxe.Resource = function() { };
 $hxClasses["haxe.Resource"] = haxe.Resource;
 haxe.Resource.__name__ = ["haxe","Resource"];
-haxe.Resource.listNames = function() {
-	var names = new Array();
-	var _g = 0;
-	var _g1 = haxe.Resource.content;
-	while(_g < _g1.length) {
-		var x = _g1[_g];
-		++_g;
-		names.push(x.name);
-	}
-	return names;
-};
+haxe.Resource.content = null;
 haxe.Resource.getString = function(name) {
 	var _g = 0;
 	var _g1 = haxe.Resource.content;
@@ -30737,6 +31829,20 @@ haxe.Timer = function(time_ms) {
 };
 $hxClasses["haxe.Timer"] = haxe.Timer;
 haxe.Timer.__name__ = ["haxe","Timer"];
+haxe.Timer.delay = function(f,time_ms) {
+	var t = new haxe.Timer(time_ms);
+	t.run = function() {
+		t.stop();
+		f();
+	};
+	return t;
+};
+haxe.Timer.measure = function(f,pos) {
+	var t0 = haxe.Timer.stamp();
+	var r = f();
+	haxe.Log.trace(haxe.Timer.stamp() - t0 + "s",pos);
+	return r;
+};
 haxe.Timer.stamp = function() {
 	return new Date().getTime() / 1000;
 };
@@ -31058,6 +32164,9 @@ haxe.io.Bytes.ofString = function(s) {
 	}
 	return new haxe.io.Bytes(a.length,a);
 };
+haxe.io.Bytes.ofData = function(b) {
+	return new haxe.io.Bytes(b.length,b);
+};
 haxe.io.Bytes.prototype = {
 	get: function(pos) {
 		return this.b[pos];
@@ -31115,7 +32224,29 @@ haxe.crypto.BaseCode = function(base) {
 $hxClasses["haxe.crypto.BaseCode"] = haxe.crypto.BaseCode;
 haxe.crypto.BaseCode.__name__ = ["haxe","crypto","BaseCode"];
 haxe.crypto.BaseCode.prototype = {
-	initTable: function() {
+	encodeBytes: function(b) {
+		var nbits = this.nbits;
+		var base = this.base;
+		var size = b.length * 8 / nbits | 0;
+		var out = haxe.io.Bytes.alloc(size + (b.length * 8 % nbits == 0?0:1));
+		var buf = 0;
+		var curbits = 0;
+		var mask = (1 << nbits) - 1;
+		var pin = 0;
+		var pout = 0;
+		while(pout < size) {
+			while(curbits < nbits) {
+				curbits += 8;
+				buf <<= 8;
+				buf |= b.get(pin++);
+			}
+			curbits -= nbits;
+			out.set(pout++,base.b[buf >> curbits & mask]);
+		}
+		if(curbits > 0) out.set(pout++,base.b[buf << nbits - curbits & mask]);
+		return out;
+	}
+	,initTable: function() {
 		var tbl = new Array();
 		var _g = 0;
 		while(_g < 256) {
@@ -31524,6 +32655,39 @@ haxe.io.Error.OutsideBounds = ["OutsideBounds",2];
 haxe.io.Error.OutsideBounds.toString = $estr;
 haxe.io.Error.OutsideBounds.__enum__ = haxe.io.Error;
 haxe.io.Error.Custom = function(e) { var $x = ["Custom",3,e]; $x.__enum__ = haxe.io.Error; $x.toString = $estr; return $x; };
+haxe.io.Path = function(path) {
+	var c1 = path.lastIndexOf("/");
+	var c2 = path.lastIndexOf("\\");
+	if(c1 < c2) {
+		this.dir = HxOverrides.substr(path,0,c2);
+		path = HxOverrides.substr(path,c2 + 1,null);
+		this.backslash = true;
+	} else if(c2 < c1) {
+		this.dir = HxOverrides.substr(path,0,c1);
+		path = HxOverrides.substr(path,c1 + 1,null);
+	} else this.dir = null;
+	var cp = path.lastIndexOf(".");
+	if(cp != -1) {
+		this.ext = HxOverrides.substr(path,cp + 1,null);
+		this.file = HxOverrides.substr(path,0,cp);
+	} else {
+		this.ext = null;
+		this.file = path;
+	}
+};
+$hxClasses["haxe.io.Path"] = haxe.io.Path;
+haxe.io.Path.__name__ = ["haxe","io","Path"];
+haxe.io.Path.withoutExtension = function(path) {
+	var s = new haxe.io.Path(path);
+	s.ext = null;
+	return s.toString();
+};
+haxe.io.Path.prototype = {
+	toString: function() {
+		return (this.dir == null?"":this.dir + (this.backslash?"\\":"/")) + this.file + (this.ext == null?"":"." + this.ext);
+	}
+	,__class__: haxe.io.Path
+};
 haxe.io.StringInput = function(s) {
 	haxe.io.BytesInput.call(this,haxe.io.Bytes.ofString(s));
 };
@@ -31731,10 +32895,14 @@ haxe.ui.toolkit.core.interfaces.IDisplayObject.prototype = {
 	__class__: haxe.ui.toolkit.core.interfaces.IDisplayObject
 };
 haxe.ui.toolkit.core.DisplayObject = function() {
+	this._alpha = 1;
+	this._includeInLayout = true;
 	this._valign = "top";
 	this._halign = "left";
 	this._invalidating = false;
 	this._ready = false;
+	this._minHeight = 0;
+	this._minWidth = 0;
 	this._percentHeight = -1;
 	this._percentWidth = -1;
 	this._height = 0;
@@ -31805,10 +32973,10 @@ haxe.ui.toolkit.core.DisplayObject.prototype = {
 		return value;
 	}
 	,get_width: function() {
-		return this._width;
+		return this._width / this.get_sprite().get_scaleX();
 	}
 	,set_width: function(value) {
-		value = value | 0;
+		value = Math.round(value);
 		if(this._width == value) return value;
 		this._width = value;
 		this._invalidating = false;
@@ -31819,10 +32987,10 @@ haxe.ui.toolkit.core.DisplayObject.prototype = {
 		return value;
 	}
 	,get_height: function() {
-		return this._height;
+		return this._height / this.get_sprite().get_scaleY();
 	}
 	,set_height: function(value) {
-		value = value | 0;
+		value = Math.round(value);
 		if(this._height == value) return value;
 		this._height = value;
 		this._invalidating = false;
@@ -31850,6 +33018,20 @@ haxe.ui.toolkit.core.DisplayObject.prototype = {
 		this._percentHeight = value;
 		this.invalidate();
 		if(this._parent != null) this._parent.invalidate(1);
+		return value;
+	}
+	,get_minWidth: function() {
+		return this._minWidth;
+	}
+	,set_minWidth: function(value) {
+		this._minWidth = value;
+		return value;
+	}
+	,get_minHeight: function() {
+		return this._minHeight;
+	}
+	,set_minHeight: function(value) {
+		this._minHeight = value;
 		return value;
 	}
 	,get_ready: function() {
@@ -31888,6 +33070,24 @@ haxe.ui.toolkit.core.DisplayObject.prototype = {
 		if(this._parent != null) this._parent.invalidate(1);
 		return value;
 	}
+	,get_alpha: function() {
+		return this._alpha;
+	}
+	,set_alpha: function(value) {
+		if(value != this._alpha) {
+			this._alpha = value;
+			this.invalidate();
+		}
+		return value;
+	}
+	,get_includeInLayout: function() {
+		return this._includeInLayout;
+	}
+	,set_includeInLayout: function(value) {
+		this._includeInLayout = value;
+		if(this._parent != null) this._parent.invalidate(1);
+		return value;
+	}
 	,get_horizontalAlign: function() {
 		return this._halign;
 	}
@@ -31902,6 +33102,14 @@ haxe.ui.toolkit.core.DisplayObject.prototype = {
 	,set_verticalAlign: function(value) {
 		this._valign = value;
 		if(this._ready) this.get_parent().invalidate(1);
+		return value;
+	}
+	,get_useHandCursor: function() {
+		return this.get_sprite().useHandCursor;
+	}
+	,set_useHandCursor: function(value) {
+		this.get_sprite().set_useHandCursor(value);
+		this.get_sprite().buttonMode = true;
 		return value;
 	}
 	,hitTest: function(xpos,ypos) {
@@ -32161,15 +33369,20 @@ haxe.ui.toolkit.core.DisplayObject.prototype = {
 		c.set_height(this.get_height());
 		c.set_percentWidth(this.get_percentWidth());
 		c.set_percentHeight(this.get_percentHeight());
+		c.set_minWidth(this.get_minWidth());
+		c.set_minHeight(this.get_minHeight());
+		c.set_alpha(this.get_alpha());
+		c.set_includeInLayout(this.get_includeInLayout());
 		c.set_horizontalAlign(this.get_horizontalAlign());
 		c.set_verticalAlign(this.get_verticalAlign());
+		c.set_useHandCursor(this.get_useHandCursor());
 		return c;
 	}
 	,self: function() {
 		return new haxe.ui.toolkit.core.DisplayObject();
 	}
 	,__class__: haxe.ui.toolkit.core.DisplayObject
-	,__properties__: {set_onMenuOpen:"set_onMenuOpen",set_onMenuSelect:"set_onMenuSelect",set_onGlyphClick:"set_onGlyphClick",set_onDeactivate:"set_onDeactivate",set_onActivate:"set_onActivate",set_onRemovedFromStage:"set_onRemovedFromStage",set_onRemoved:"set_onRemoved",set_onAddedToStage:"set_onAddedToStage",set_onAdded:"set_onAdded",set_onScroll:"set_onScroll",set_onChange:"set_onChange",set_onRollOut:"set_onRollOut",set_onRollOver:"set_onRollOver",set_onDoubleClick:"set_onDoubleClick",set_onMouseMove:"set_onMouseMove",set_onMouseOut:"set_onMouseOut",set_onMouseOver:"set_onMouseOver",set_onMouseUp:"set_onMouseUp",set_onMouseDown:"set_onMouseDown",set_onClick:"set_onClick",set_onReady:"set_onReady",set_onResize:"set_onResize",set_onInit:"set_onInit",get_graphics:"get_graphics",set_verticalAlign:"set_verticalAlign",get_verticalAlign:"get_verticalAlign",set_horizontalAlign:"set_horizontalAlign",get_horizontalAlign:"get_horizontalAlign",set_visible:"set_visible",get_visible:"get_visible",get_stageY:"get_stageY",get_stageX:"get_stageX",get_sprite:"get_sprite",get_ready:"get_ready",set_percentHeight:"set_percentHeight",get_percentHeight:"get_percentHeight",set_percentWidth:"set_percentWidth",get_percentWidth:"get_percentWidth",set_height:"set_height",get_height:"get_height",set_width:"set_width",get_width:"get_width",set_y:"set_y",get_y:"get_y",set_x:"set_x",get_x:"get_x",set_id:"set_id",get_id:"get_id",set_root:"set_root",get_root:"get_root",set_parent:"set_parent",get_parent:"get_parent"}
+	,__properties__: {set_onMenuOpen:"set_onMenuOpen",set_onMenuSelect:"set_onMenuSelect",set_onGlyphClick:"set_onGlyphClick",set_onDeactivate:"set_onDeactivate",set_onActivate:"set_onActivate",set_onRemovedFromStage:"set_onRemovedFromStage",set_onRemoved:"set_onRemoved",set_onAddedToStage:"set_onAddedToStage",set_onAdded:"set_onAdded",set_onScroll:"set_onScroll",set_onChange:"set_onChange",set_onRollOut:"set_onRollOut",set_onRollOver:"set_onRollOver",set_onDoubleClick:"set_onDoubleClick",set_onMouseMove:"set_onMouseMove",set_onMouseOut:"set_onMouseOut",set_onMouseOver:"set_onMouseOver",set_onMouseUp:"set_onMouseUp",set_onMouseDown:"set_onMouseDown",set_onClick:"set_onClick",set_onReady:"set_onReady",set_onResize:"set_onResize",set_onInit:"set_onInit",get_graphics:"get_graphics",set_useHandCursor:"set_useHandCursor",get_useHandCursor:"get_useHandCursor",set_verticalAlign:"set_verticalAlign",get_verticalAlign:"get_verticalAlign",set_horizontalAlign:"set_horizontalAlign",get_horizontalAlign:"get_horizontalAlign",set_includeInLayout:"set_includeInLayout",get_includeInLayout:"get_includeInLayout",set_alpha:"set_alpha",get_alpha:"get_alpha",set_visible:"set_visible",get_visible:"get_visible",get_stageY:"get_stageY",get_stageX:"get_stageX",get_sprite:"get_sprite",get_ready:"get_ready",set_minHeight:"set_minHeight",get_minHeight:"get_minHeight",set_minWidth:"set_minWidth",get_minWidth:"get_minWidth",set_percentHeight:"set_percentHeight",get_percentHeight:"get_percentHeight",set_percentWidth:"set_percentWidth",get_percentWidth:"get_percentWidth",set_height:"set_height",get_height:"get_height",set_width:"set_width",get_width:"get_width",set_y:"set_y",get_y:"get_y",set_x:"set_x",get_x:"get_x",set_id:"set_id",get_id:"get_id",set_root:"set_root",get_root:"get_root",set_parent:"set_parent",get_parent:"get_parent"}
 };
 haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer = function() { };
 $hxClasses["haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer"] = haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer;
@@ -32192,16 +33405,6 @@ haxe.ui.toolkit.core.DisplayObjectContainer.prototype = $extend(haxe.ui.toolkit.
 	initialize: function() {
 		haxe.ui.toolkit.core.DisplayObject.prototype.initialize.call(this);
 		this._layout.set_container(this);
-		if(this._childrenToAdd != null) {
-			var _g = 0;
-			var _g1 = this._childrenToAdd;
-			while(_g < _g1.length) {
-				var child = _g1[_g];
-				++_g;
-				this.addChild(child);
-			}
-			this._childrenToAdd = null;
-		}
 	}
 	,invalidate: function(type,recursive) {
 		if(recursive == null) recursive = false;
@@ -32223,12 +33426,10 @@ haxe.ui.toolkit.core.DisplayObjectContainer.prototype = $extend(haxe.ui.toolkit.
 	}
 	,get_numChildren: function() {
 		var arr = this._children;
-		if(this._childrenToAdd != null) arr = arr.concat(this._childrenToAdd);
 		return arr.length;
 	}
 	,get_children: function() {
 		var arr = this._children;
-		if(this._childrenToAdd != null) arr = arr.concat(this._childrenToAdd);
 		return arr;
 	}
 	,indexOfChild: function(child) {
@@ -32240,11 +33441,6 @@ haxe.ui.toolkit.core.DisplayObjectContainer.prototype = $extend(haxe.ui.toolkit.
 	}
 	,addChildAt: function(child,index) {
 		if(child == null) return null;
-		if(this._ready == false) {
-			if(this._childrenToAdd == null) this._childrenToAdd = new Array();
-			this._childrenToAdd.splice(index,0,child);
-			return child;
-		}
 		var childSprite = child.get_sprite();
 		if(js.Boot.__instanceof(child,haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer)) (js.Boot.__cast(child , haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer)).set_parent(this);
 		child.set_root(this.get_root());
@@ -32255,11 +33451,6 @@ haxe.ui.toolkit.core.DisplayObjectContainer.prototype = $extend(haxe.ui.toolkit.
 	}
 	,addChild: function(child) {
 		if(child == null) return null;
-		if(this._ready == false) {
-			if(this._childrenToAdd == null) this._childrenToAdd = new Array();
-			this._childrenToAdd.push(child);
-			return child;
-		}
 		var childSprite = child.get_sprite();
 		if(js.Boot.__instanceof(child,haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer)) (js.Boot.__cast(child , haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer)).set_parent(this);
 		child.set_root(this.get_root());
@@ -32276,10 +33467,6 @@ haxe.ui.toolkit.core.DisplayObjectContainer.prototype = $extend(haxe.ui.toolkit.
 		HxOverrides.remove(this._children,child);
 		if(dispose == true) child.dispose();
 		this.invalidate(1);
-		if(this._childrenToAdd != null) {
-			var success = HxOverrides.remove(this._childrenToAdd,child);
-			if(dispose && success) child.dispose();
-		}
 		return child;
 	}
 	,removeChildAt: function(index,dispose) {
@@ -32294,19 +33481,13 @@ haxe.ui.toolkit.core.DisplayObjectContainer.prototype = $extend(haxe.ui.toolkit.
 			this.removeChild(child,dispose);
 		}
 		while(this.get_sprite().get_numChildren() > 0) this.get_sprite().removeChildAt(0);
-		this._childrenToAdd = null;
 	}
 	,contains: function(child) {
 		if(child == null) return false;
-		if(this._childrenToAdd != null) return Lambda.has(this._childrenToAdd,child);
 		return this.get_sprite().contains(child.get_sprite());
 	}
 	,setChildIndex: function(child,index) {
 		if(child != null) this.get_sprite().setChildIndex(child.get_sprite(),index);
-		if(this._childrenToAdd != null) {
-			HxOverrides.remove(this._childrenToAdd,child);
-			this._childrenToAdd.splice(index,0,child);
-		}
 	}
 	,findChildAs: function(type) {
 		var match = null;
@@ -32396,8 +33577,8 @@ haxe.ui.toolkit.core.DisplayObjectContainer.prototype = $extend(haxe.ui.toolkit.
 					this.removeChild(child);
 				} catch( e ) {
 					var stack = haxe.CallStack.exceptionStack();
-					haxe.Log.trace("Problem removing component: " + Std.string(this) + ", " + Std.string(child) + "(" + Std.string(e) + "), callstack:",{ fileName : "DisplayObjectContainer.hx", lineNumber : 311, className : "haxe.ui.toolkit.core.DisplayObjectContainer", methodName : "dispose"});
-					haxe.Log.trace(haxe.CallStack.toString(stack),{ fileName : "DisplayObjectContainer.hx", lineNumber : 312, className : "haxe.ui.toolkit.core.DisplayObjectContainer", methodName : "dispose"});
+					haxe.Log.trace("Problem removing component: " + Std.string(this) + ", " + Std.string(child) + "(" + Std.string(e) + "), callstack:",{ fileName : "DisplayObjectContainer.hx", lineNumber : 246, className : "haxe.ui.toolkit.core.DisplayObjectContainer", methodName : "dispose"});
+					haxe.Log.trace(haxe.CallStack.toString(stack),{ fileName : "DisplayObjectContainer.hx", lineNumber : 247, className : "haxe.ui.toolkit.core.DisplayObjectContainer", methodName : "dispose"});
 				}
 			}
 		}
@@ -32501,8 +33682,15 @@ haxe.ui.toolkit.core.StyleableDisplayObject.prototype = $extend(haxe.ui.toolkit.
 		if(this._ready) {
 			if(this._lazyLoadStyles == false) this.buildStyles(); else this.clearStyles();
 			this._baseStyle = haxe.ui.toolkit.style.StyleManager.get_instance().buildStyleFor(this);
-			this.invalidate(16);
+			this.invalidate(1048592);
 		}
+		return value;
+	}
+	,get_styleString: function() {
+		return this._styleString;
+	}
+	,set_styleString: function(value) {
+		this._styleString = value;
 		return value;
 	}
 	,get_style: function() {
@@ -32527,20 +33715,27 @@ haxe.ui.toolkit.core.StyleableDisplayObject.prototype = $extend(haxe.ui.toolkit.
 		this._storedStyles.set(id,value);
 	}
 	,retrieveStyle: function(id) {
-		var style = null;
+		var storedStyle = null;
 		if(this._lazyLoadStyles == false) {
 			if(this._storedStyles == null) return null;
-			style = this._storedStyles.get(id);
-		} else if(this._ready) style = haxe.ui.toolkit.style.StyleManager.get_instance().buildStyleFor(this,id);
-		return style;
+			storedStyle = this._storedStyles.get(id);
+		} else if(this._ready) {
+			if(this._storedStyles != null) storedStyle = this._storedStyles.get(id);
+			if(storedStyle == null) {
+				storedStyle = haxe.ui.toolkit.style.StyleManager.get_instance().buildStyleFor(this,id);
+				this.storeStyle(id,storedStyle);
+			}
+		}
+		return storedStyle;
 	}
 	,applyStyle: function() {
 		if(this._baseStyle == null) return;
 		if(this._inlineStyle != null) this._baseStyle.merge(this._inlineStyle);
 		if(this._baseStyle != null) {
-			if(this._baseStyle.get_alpha() != -1) this._sprite.set_alpha(this._baseStyle.get_alpha()); else this._sprite.set_alpha(1);
+			if(this._baseStyle.get_alpha() != -1) this._sprite.set_alpha(this._baseStyle.get_alpha()); else this._sprite.set_alpha(this.get_alpha());
 			if(this._baseStyle.get_horizontalAlignment() != null) this.set_horizontalAlign(this._baseStyle.get_horizontalAlignment());
 			if(this._baseStyle.get_verticalAlignment() != null) this.set_verticalAlign(this._baseStyle.get_verticalAlignment());
+			if(this._baseStyle.get_filter() != null) this._sprite.set_filters([this._baseStyle.get_filter()]); else this._sprite.set_filters([]);
 		}
 		this.invalidate(16);
 	}
@@ -32574,18 +33769,20 @@ haxe.ui.toolkit.core.StyleableDisplayObject.prototype = $extend(haxe.ui.toolkit.
 			}
 		}
 		this.applyStyle();
-		null;
 	}
 	,clone: function() {
 		var c = haxe.ui.toolkit.core.DisplayObjectContainer.prototype.clone.call(this);
+		c.set_baseStyle(this.get_baseStyle());
 		c.set_styleName(this.get_styleName());
+		c.set_style(this.get_style());
+		c.set_styleString(this.get_styleString());
 		return c;
 	}
 	,self: function() {
 		return new haxe.ui.toolkit.core.StyleableDisplayObject();
 	}
 	,__class__: haxe.ui.toolkit.core.StyleableDisplayObject
-	,__properties__: $extend(haxe.ui.toolkit.core.DisplayObjectContainer.prototype.__properties__,{set_style:"set_style",get_style:"get_style",set_styleName:"set_styleName",get_styleName:"get_styleName",set_baseStyle:"set_baseStyle",get_baseStyle:"get_baseStyle"})
+	,__properties__: $extend(haxe.ui.toolkit.core.DisplayObjectContainer.prototype.__properties__,{set_styleString:"set_styleString",get_styleString:"get_styleString",set_style:"set_style",get_style:"get_style",set_styleName:"set_styleName",get_styleName:"get_styleName",set_baseStyle:"set_baseStyle",get_baseStyle:"get_baseStyle"})
 });
 haxe.ui.toolkit.core.interfaces.IComponent = function() { };
 $hxClasses["haxe.ui.toolkit.core.interfaces.IComponent"] = haxe.ui.toolkit.core.interfaces.IComponent;
@@ -32825,7 +34022,7 @@ haxe.ui.toolkit.core.Component.prototype = $extend(haxe.ui.toolkit.core.Styleabl
 			var line = parser.parseString(expr);
 			this.findInterp().expr(line);
 		} catch( e ) {
-			haxe.Log.trace("Problem executing scriptlet: " + Std.string(e),{ fileName : "Component.hx", lineNumber : 322, className : "haxe.ui.toolkit.core.Component", methodName : "executeScriptletExpr"});
+			haxe.Log.trace("Problem executing scriptlet: " + Std.string(e),{ fileName : "Component.hx", lineNumber : 323, className : "haxe.ui.toolkit.core.Component", methodName : "executeScriptletExpr"});
 		}
 	}
 	,addScriptletEventHandler: function(event,scriptlet) {
@@ -32852,12 +34049,12 @@ haxe.ui.toolkit.core.Component.prototype = $extend(haxe.ui.toolkit.core.Styleabl
 			while(_g < comps.length) {
 				var comp = comps[_g];
 				++_g;
-				var key = comp.get_id();
-				this._interp.variables.set(key,comp);
+				var safeId = haxe.ui.toolkit.util.StringUtil.capitalizeHyphens(comp.get_id());
+				this._interp.variables.set(safeId,comp);
 			}
 			this._interp.execute(program);
 		} catch( e ) {
-			haxe.Log.trace("Problem running script: " + Std.string(e),{ fileName : "Component.hx", lineNumber : 358, className : "haxe.ui.toolkit.core.Component", methodName : "initScriplet"});
+			haxe.Log.trace("Problem running script: " + Std.string(e),{ fileName : "Component.hx", lineNumber : 360, className : "haxe.ui.toolkit.core.Component", methodName : "initScriplet"});
 		}
 	}
 	,get_namedComponents: function() {
@@ -32904,7 +34101,6 @@ haxe.ui.toolkit.core.StateComponent.prototype = $extend(haxe.ui.toolkit.core.Com
 			var stateStyle = haxe.ui.toolkit.style.StyleManager.get_instance().buildStyleFor(this,s);
 			if(stateStyle != null) this.storeStyle(s,stateStyle);
 		}
-		null;
 	}
 	,addStates: function(stateNames,rebuildStyles) {
 		if(rebuildStyles == null) rebuildStyles = true;
@@ -33016,7 +34212,6 @@ haxe.ui.toolkit.controls.TextInput.prototype = $extend(haxe.ui.toolkit.core.Stat
 		return value;
 	}
 	,_onTextChange: function(event) {
-		haxe.Log.trace(event,{ fileName : "TextInput.hx", lineNumber : 108, className : "haxe.ui.toolkit.controls.TextInput", methodName : "_onTextChange"});
 		this.checkScrolls();
 		if(this._textPlaceHolder != null) this._textPlaceHolder.set_visible(this.get_text().length == 0);
 	}
@@ -33299,17 +34494,7 @@ haxe.ui.richtext._Code.SyntaxHighlightRunner = function(tf,syntax,timeShare) {
 	this._tf = tf;
 	this._syntax = syntax;
 	this._runningTimeShare = timeShare;
-	this._syntaxRules = new Array();
-	var $it0 = (function($this) {
-		var $r;
-		var this1 = $this._syntax.get_rules();
-		$r = this1.keys();
-		return $r;
-	}(this));
-	while( $it0.hasNext() ) {
-		var rule = $it0.next();
-		this._syntaxRules.push(rule);
-	}
+	this._syntaxRules = this._syntax.get_rulesArray();
 	this._matches = new haxe.ds.StringMap();
 	this._txt = tf.get_text();
 	if(this._txt != "") tf.setTextFormat(this._syntax.get_defaultFormat(),0,this._txt.length);
@@ -33693,6 +34878,7 @@ haxe.ui.toolkit.core.interfaces.IFocusable.prototype = {
 };
 haxe.ui.toolkit.controls.Button = function() {
 	this.dispatchChangeEvents = true;
+	this._mouseIn = false;
 	this._iconPosition = "left";
 	this._allowSelection = true;
 	this._selected = false;
@@ -33712,6 +34898,7 @@ haxe.ui.toolkit.controls.Button = function() {
 $hxClasses["haxe.ui.toolkit.controls.Button"] = haxe.ui.toolkit.controls.Button;
 haxe.ui.toolkit.controls.Button.__name__ = ["haxe","ui","toolkit","controls","Button"];
 haxe.ui.toolkit.controls.Button.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable,haxe.ui.toolkit.core.interfaces.IFocusable];
+haxe.ui.toolkit.controls.Button._groups = null;
 haxe.ui.toolkit.controls.Button.optionInGroup = function(value,option) {
 	var exists = false;
 	var arr = haxe.ui.toolkit.controls.Button._groups.get(value);
@@ -33796,6 +34983,7 @@ haxe.ui.toolkit.controls.Button.prototype = $extend(haxe.ui.toolkit.core.StateCo
 				this._label.set_textAlign("center");
 			} else {
 				this._label.set_percentWidth(-1);
+				this._label.set_autoSize(true);
 				this._label.set_textAlign("center");
 			}
 		}
@@ -33834,13 +35022,32 @@ haxe.ui.toolkit.controls.Button.prototype = $extend(haxe.ui.toolkit.core.StateCo
 		haxe.ui.toolkit.core.StateComponent.prototype.preInitialize.call(this);
 	}
 	,initialize: function() {
+		var _g = this;
 		haxe.ui.toolkit.core.StateComponent.prototype.initialize.call(this);
 		this.addEventListener(openfl.events.MouseEvent.MOUSE_OVER,$bind(this,this._onMouseOver));
 		this.addEventListener(openfl.events.MouseEvent.MOUSE_OUT,$bind(this,this._onMouseOut));
 		this.addEventListener(openfl.events.MouseEvent.MOUSE_DOWN,$bind(this,this._onMouseDown));
 		this.addEventListener(openfl.events.MouseEvent.MOUSE_UP,$bind(this,this._onMouseUp));
 		this.addEventListener(openfl.events.MouseEvent.CLICK,$bind(this,this._onMouseClick));
+		this.addEventListener(openfl.events.MouseEvent.MOUSE_MOVE,function(e) {
+			if(_g._mouseIn == false) {
+				_g._mouseIn = true;
+				var mouseEvent = new openfl.events.MouseEvent(openfl.events.MouseEvent.MOUSE_OVER,false,e.cancelable,e.localX,e.localY,e.relatedObject,e.ctrlKey,e.altKey,e.shiftKey,e.buttonDown,e.delta,e.commandKey,e.clickCount);
+				_g.dispatchEvent(mouseEvent);
+				haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.MouseEvent.MOUSE_MOVE,$bind(_g,_g.__onScreenMouseMove));
+			}
+		});
 		this.organiseChildren();
+	}
+	,__onScreenMouseMove: function(e) {
+		if(this._mouseIn == true) {
+			if(this.hitTest(e.stageX,e.stageY) == false) {
+				haxe.ui.toolkit.core.Screen.get_instance().removeEventListener(openfl.events.MouseEvent.MOUSE_MOVE,$bind(this,this.__onScreenMouseMove));
+				this._mouseIn = false;
+				var mouseEvent = new openfl.events.MouseEvent(openfl.events.MouseEvent.MOUSE_OUT,false,e.cancelable,e.localX,e.localY,e.relatedObject,e.ctrlKey,e.altKey,e.shiftKey,e.buttonDown,e.delta,e.commandKey,e.clickCount);
+				this.dispatchEvent(mouseEvent);
+			}
+		}
 	}
 	,set_disabled: function(value) {
 		haxe.ui.toolkit.core.StateComponent.prototype.set_disabled.call(this,value);
@@ -34054,6 +35261,7 @@ haxe.ui.richtext.syntax = {};
 haxe.ui.richtext.syntax.CodeSyntax = function() {
 	this._identifier = "";
 	this._rules = new haxe.ds.StringMap();
+	this._rulesArray = new Array();
 	this._compiledRules = new haxe.ds.StringMap();
 	this._defaultFormat = new openfl.text.TextFormat("_typewriter",13,0);
 };
@@ -34061,7 +35269,8 @@ $hxClasses["haxe.ui.richtext.syntax.CodeSyntax"] = haxe.ui.richtext.syntax.CodeS
 haxe.ui.richtext.syntax.CodeSyntax.__name__ = ["haxe","ui","richtext","syntax","CodeSyntax"];
 haxe.ui.richtext.syntax.CodeSyntax.getSyntax = function(id) {
 	var syntax = new haxe.ui.richtext.syntax.CodeSyntax();
-	if(id == "haxe") syntax = new haxe.ui.richtext.syntax.HaxeSyntax(); else if(id == "xml") syntax = new haxe.ui.richtext.syntax.XMLSyntax(); else if(id == "css") syntax = new haxe.ui.richtext.syntax.CSSSyntax();
+	id = id.toLowerCase();
+	if(id == "haxe") syntax = new haxe.ui.richtext.syntax.HaxeSyntax(); else if(id == "xml") syntax = new haxe.ui.richtext.syntax.XMLSyntax(); else if(id == "css") syntax = new haxe.ui.richtext.syntax.CSSSyntax(); else if(id == "haxeui-xml") syntax = new haxe.ui.richtext.syntax.HaxeUIXMLSyntax();
 	return syntax;
 };
 haxe.ui.richtext.syntax.CodeSyntax.prototype = {
@@ -34070,6 +35279,7 @@ haxe.ui.richtext.syntax.CodeSyntax.prototype = {
 		var f = new openfl.text.TextFormat(this._defaultFormat.font,this._defaultFormat.size,color);
 		f.bold = bold;
 		this._rules.set(regex,f);
+		this._rulesArray.push(regex);
 	}
 	,get_identifier: function() {
 		return this._identifier;
@@ -34084,6 +35294,9 @@ haxe.ui.richtext.syntax.CodeSyntax.prototype = {
 	,get_rules: function() {
 		return this._rules;
 	}
+	,get_rulesArray: function() {
+		return this._rulesArray;
+	}
 	,getCompiledRule: function(rule) {
 		var r = this._compiledRules.get(rule);
 		if(r == null) {
@@ -34093,7 +35306,7 @@ haxe.ui.richtext.syntax.CodeSyntax.prototype = {
 		return r;
 	}
 	,__class__: haxe.ui.richtext.syntax.CodeSyntax
-	,__properties__: {get_rules:"get_rules",set_defaultFormat:"set_defaultFormat",get_defaultFormat:"get_defaultFormat",get_identifier:"get_identifier"}
+	,__properties__: {get_rulesArray:"get_rulesArray",get_rules:"get_rules",set_defaultFormat:"set_defaultFormat",get_defaultFormat:"get_defaultFormat",get_identifier:"get_identifier"}
 };
 haxe.ui.richtext.syntax.CSSSyntax = function() {
 	haxe.ui.richtext.syntax.CodeSyntax.call(this);
@@ -34125,7 +35338,7 @@ haxe.ui.richtext.syntax.HaxeSyntax.prototype = $extend(haxe.ui.richtext.syntax.C
 haxe.ui.richtext.syntax.XMLSyntax = function() {
 	haxe.ui.richtext.syntax.CodeSyntax.call(this);
 	this._identifier = "xml";
-	this.addRule("(<(.*?) |</(.*?)>|/>)",255,true);
+	this.addRule("<[\\s\\S]*?>",255,true);
 	this.addRule("(\\w*)\\=",3840511,true);
 	this.addRule("\"(.*?)\"",8912896);
 };
@@ -34135,7 +35348,22 @@ haxe.ui.richtext.syntax.XMLSyntax.__super__ = haxe.ui.richtext.syntax.CodeSyntax
 haxe.ui.richtext.syntax.XMLSyntax.prototype = $extend(haxe.ui.richtext.syntax.CodeSyntax.prototype,{
 	__class__: haxe.ui.richtext.syntax.XMLSyntax
 });
+haxe.ui.richtext.syntax.HaxeUIXMLSyntax = function() {
+	haxe.ui.richtext.syntax.XMLSyntax.call(this);
+	this.addRule("(#|\\w|.)(.*?){|}",3120138,false);
+	this.addRule("(\\w*)\\:",13184044,false);
+	this.addRule(":(.*?)\\;",10911577);
+	this.addRule("\"(.*?)\"",8912896);
+	this.addRule("(?<=<script>)[\\s\\S]*?(?=</script>)",0);
+};
+$hxClasses["haxe.ui.richtext.syntax.HaxeUIXMLSyntax"] = haxe.ui.richtext.syntax.HaxeUIXMLSyntax;
+haxe.ui.richtext.syntax.HaxeUIXMLSyntax.__name__ = ["haxe","ui","richtext","syntax","HaxeUIXMLSyntax"];
+haxe.ui.richtext.syntax.HaxeUIXMLSyntax.__super__ = haxe.ui.richtext.syntax.XMLSyntax;
+haxe.ui.richtext.syntax.HaxeUIXMLSyntax.prototype = $extend(haxe.ui.richtext.syntax.XMLSyntax.prototype,{
+	__class__: haxe.ui.richtext.syntax.HaxeUIXMLSyntax
+});
 haxe.ui.toolkit.core.Controller = function(view,options) {
+	var _g = this;
 	if(js.Boot.__instanceof(view,haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer)) this._view = js.Boot.__cast(view , haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer); else if(js.Boot.__instanceof(view,Class)) {
 		var cls;
 		cls = js.Boot.__cast(view , Class);
@@ -34143,20 +35371,25 @@ haxe.ui.toolkit.core.Controller = function(view,options) {
 	} else if(view != null) options = view;
 	if(this._view == null) this._view = new haxe.ui.toolkit.core.Component();
 	if(options != null) {
-		var _g = 0;
-		var _g1 = Reflect.fields(options);
-		while(_g < _g1.length) {
-			var f = _g1[_g];
-			++_g;
+		var _g1 = 0;
+		var _g11 = Reflect.fields(options);
+		while(_g1 < _g11.length) {
+			var f = _g11[_g1];
+			++_g1;
 			if(Reflect.getProperty(this._view,"set_" + f) != null) Reflect.setProperty(this._view,f,Reflect.field(options,f));
 		}
 	}
 	this.refereshNamedComponents();
+	this._view.addEventListener("haxeui_" + "addedToStage",function(e) {
+		if(_g._view.get_width() != 0 && _g._view.get_height() != 0) _g.onReady();
+	});
 };
 $hxClasses["haxe.ui.toolkit.core.Controller"] = haxe.ui.toolkit.core.Controller;
 haxe.ui.toolkit.core.Controller.__name__ = ["haxe","ui","toolkit","core","Controller"];
 haxe.ui.toolkit.core.Controller.prototype = {
-	addChild: function(child,options) {
+	onReady: function() {
+	}
+	,addChild: function(child,options) {
 		var childObject = null;
 		if(js.Boot.__instanceof(child,haxe.ui.toolkit.core.interfaces.IDisplayObject)) childObject = js.Boot.__cast(child , haxe.ui.toolkit.core.interfaces.IDisplayObject); else if(js.Boot.__instanceof(child,Class)) {
 			var cls;
@@ -34176,6 +35409,10 @@ haxe.ui.toolkit.core.Controller.prototype = {
 		var retVal = this._view.addChild(childObject);
 		this.refereshNamedComponents();
 		return retVal;
+	}
+	,attachView: function(newView) {
+		this._view = newView;
+		this.refereshNamedComponents();
 	}
 	,attachEvent: function(id,type,listener) {
 		var c = this.getComponent(id);
@@ -34248,7 +35485,18 @@ haxe.ui.toolkit.core.Controller.prototype = {
 	}
 	,showBusyPopup: function(text,delay,title,config,fn) {
 		if(delay == null) delay = -1;
-		return haxe.ui.toolkit.core.PopupManager.get_instance().showBusy(text,delay,title,config,fn);
+		this.hideBusy();
+		return this._currentBusyPopup = haxe.ui.toolkit.core.PopupManager.get_instance().showBusy(text,delay,title,config,fn);
+	}
+	,showBusy: function(text,delay,title,config,fn) {
+		if(delay == null) delay = -1;
+		return this.showBusyPopup(text,delay,title,config,fn);
+	}
+	,hideBusy: function() {
+		if(this._currentBusyPopup != null) {
+			haxe.ui.toolkit.core.PopupManager.get_instance().hidePopup(this._currentBusyPopup);
+			this._currentBusyPopup = null;
+		}
 	}
 	,showCalendarPopup: function(title,fn) {
 		return haxe.ui.toolkit.core.PopupManager.get_instance().showCalendar(title,fn);
@@ -36388,7 +37636,6 @@ haxe.ui.toolkit.containers.Accordion.prototype = $extend(haxe.ui.toolkit.contain
 		}
 	}
 	,addChild: function(child) {
-		if(this._ready == false) return haxe.ui.toolkit.containers.VBox.prototype.addChild.call(this,child);
 		var r = null;
 		if(js.Boot.__instanceof(child,haxe.ui.toolkit.containers.AccordionButton)) r = haxe.ui.toolkit.containers.VBox.prototype.addChild.call(this,child); else {
 			if(js.Boot.__instanceof(child,haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer)) (js.Boot.__cast(child , haxe.ui.toolkit.core.interfaces.IDisplayObjectContainer)).set_autoSize(false);
@@ -36796,10 +38043,142 @@ haxe.ui.toolkit.containers.HBox.prototype = $extend(haxe.ui.toolkit.containers.C
 	}
 	,__class__: haxe.ui.toolkit.containers.HBox
 });
+haxe.ui.toolkit.containers.HSplitter = function() {
+	haxe.ui.toolkit.containers.HBox.call(this);
+};
+$hxClasses["haxe.ui.toolkit.containers.HSplitter"] = haxe.ui.toolkit.containers.HSplitter;
+haxe.ui.toolkit.containers.HSplitter.__name__ = ["haxe","ui","toolkit","containers","HSplitter"];
+haxe.ui.toolkit.containers.HSplitter.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable];
+haxe.ui.toolkit.containers.HSplitter.__super__ = haxe.ui.toolkit.containers.HBox;
+haxe.ui.toolkit.containers.HSplitter.prototype = $extend(haxe.ui.toolkit.containers.HBox.prototype,{
+	addChild: function(child) {
+		var r = null;
+		if(js.Boot.__instanceof(child,haxe.ui.toolkit.containers.HSplitterGripper)) r = haxe.ui.toolkit.containers.HBox.prototype.addChild.call(this,child); else {
+			if(this.get_numChildren() > 0) {
+				var gripper = new haxe.ui.toolkit.containers.HSplitterGripper();
+				gripper.addEventListener("haxeui_" + "mouseDown",$bind(this,this._onMouseDown));
+				this.addChild(gripper);
+			}
+			r = haxe.ui.toolkit.containers.HBox.prototype.addChild.call(this,child);
+		}
+		return r;
+	}
+	,addChildAt: function(child,index) {
+		var r = null;
+		if(js.Boot.__instanceof(child,haxe.ui.toolkit.containers.HSplitterGripper)) r = haxe.ui.toolkit.containers.HBox.prototype.addChildAt.call(this,child,index); else {
+			if(this.get_numChildren() > 0) {
+				var gripper = new haxe.ui.toolkit.containers.HSplitterGripper();
+				gripper.addEventListener("haxeui_" + "mouseDown",$bind(this,this._onMouseDown));
+				this.addChildAt(gripper,index);
+			}
+			r = haxe.ui.toolkit.containers.HBox.prototype.addChildAt.call(this,child,index + 1);
+		}
+		return r;
+	}
+	,removeChild: function(child,dispose) {
+		if(dispose == null) dispose = true;
+		var r = null;
+		if(js.Boot.__instanceof(child,haxe.ui.toolkit.containers.HSplitterGripper)) r = haxe.ui.toolkit.containers.HBox.prototype.removeChild.call(this,child,dispose); else {
+			if(this.get_numChildren() > 1) this.removeChild(this.getChildAt(this.indexOfChild(child) - 1),dispose);
+			r = haxe.ui.toolkit.containers.HBox.prototype.removeChild.call(this,child,dispose);
+		}
+		return r;
+	}
+	,_onMouseDown: function(event) {
+		this._percents = new haxe.ds.ObjectMap();
+		this._gripper = event.get_component();
+		this._mouseDownOffset = event.stageX - this._gripper.get_x();
+		this._invalidating = true;
+		var _g = 0;
+		var _g1 = this.get_children();
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			if(js.Boot.__instanceof(c,haxe.ui.toolkit.containers.HSplitterGripper) == false) {
+				if(c.get_percentWidth() != -1) {
+					var value = c.get_percentWidth();
+					this._percents.set(c,value);
+					c.set_percentWidth(-1);
+				}
+			}
+		}
+		this._invalidating = false;
+		this.invalidate(1);
+		haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.MouseEvent.MOUSE_MOVE,$bind(this,this._onMouseMove));
+		haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.MouseEvent.MOUSE_UP,$bind(this,this._onMouseUp));
+	}
+	,_onMouseMove: function(event) {
+		if(this._gripper != null) {
+			var delta = event.stageX - this._gripper.get_x() - this._mouseDownOffset;
+			var index = this.indexOfChild(this._gripper);
+			var before = this.getChildAt(index - 1);
+			var after = this.getChildAt(index + 1);
+			var newBefore = before.get_width() + delta;
+			var newAfter = after.get_width() - delta;
+			if(newBefore > before.get_minWidth() && newAfter > after.get_minWidth() && newBefore - (before.get_layout().get_padding().get_left() + before.get_layout().get_padding().get_right()) > 0 && newAfter - (after.get_layout().get_padding().get_left() + after.get_layout().get_padding().get_right()) > 0) {
+				before.set_width(newBefore);
+				after.set_width(newAfter);
+			}
+		}
+	}
+	,_onMouseUp: function(event) {
+		haxe.ui.toolkit.core.Screen.get_instance().removeEventListener(openfl.events.MouseEvent.MOUSE_MOVE,$bind(this,this._onMouseMove));
+		haxe.ui.toolkit.core.Screen.get_instance().removeEventListener(openfl.events.MouseEvent.MOUSE_UP,$bind(this,this._onMouseUp));
+		this._gripper = null;
+		var ucx = this.get_width();
+		ucx -= (this.get_numChildren() - 1) / 2 * (2 * this.get_layout().get_spacingX());
+		var _g = 0;
+		var _g1 = this.get_children();
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			if(this._percents.h.__keys__[c.__id__] != null == false) ucx -= c.get_width();
+		}
+		this._invalidating = true;
+		var $it0 = this._percents.keys();
+		while( $it0.hasNext() ) {
+			var c1 = $it0.next();
+			var newPercent = c1.get_width() / ucx * 100;
+			c1.set_percentWidth(newPercent);
+		}
+		this._invalidating = false;
+		this.invalidate(1);
+		this._percents = null;
+	}
+	,clone: function() {
+		var c = haxe.ui.toolkit.containers.HBox.prototype.clone.call(this);
+		return c;
+	}
+	,self: function() {
+		return new haxe.ui.toolkit.containers.HSplitter();
+	}
+	,__class__: haxe.ui.toolkit.containers.HSplitter
+});
+haxe.ui.toolkit.containers.HSplitterGripper = function() {
+	haxe.ui.toolkit.controls.Button.call(this);
+	this.set_remainPressed(true);
+	this.set_useHandCursor(true);
+};
+$hxClasses["haxe.ui.toolkit.containers.HSplitterGripper"] = haxe.ui.toolkit.containers.HSplitterGripper;
+haxe.ui.toolkit.containers.HSplitterGripper.__name__ = ["haxe","ui","toolkit","containers","HSplitterGripper"];
+haxe.ui.toolkit.containers.HSplitterGripper.__super__ = haxe.ui.toolkit.controls.Button;
+haxe.ui.toolkit.containers.HSplitterGripper.prototype = $extend(haxe.ui.toolkit.controls.Button.prototype,{
+	clone: function() {
+		var c = haxe.ui.toolkit.controls.Button.prototype.clone.call(this);
+		return c;
+	}
+	,self: function() {
+		return new haxe.ui.toolkit.containers.HSplitterGripper();
+	}
+	,__class__: haxe.ui.toolkit.containers.HSplitterGripper
+});
 haxe.ui.toolkit.containers.ScrollView = function() {
 	this._virtualScrolling = false;
 	this._autoHideScrolls = false;
 	this._scrollSensitivity = 1;
+	this._inertialScrolling = false;
+	this._inertiaSensitivity = 5;
+	this._inertiaSpeed = new openfl.geom.Point(0,0);
 	this._showVScroll = true;
 	this._showHScroll = true;
 	haxe.ui.toolkit.core.StateComponent.call(this);
@@ -36857,6 +38236,13 @@ haxe.ui.toolkit.containers.ScrollView.prototype = $extend(haxe.ui.toolkit.core.S
 	,dispose: function() {
 		this.get_sprite().removeChild(this._eventTarget);
 		haxe.ui.toolkit.core.StateComponent.prototype.dispose.call(this);
+	}
+	,get_inertialScrolling: function() {
+		return this._inertialScrolling;
+	}
+	,set_inertialScrolling: function(value) {
+		this._inertialScrolling = value;
+		return value;
 	}
 	,get_virtualScrolling: function() {
 		return this._virtualScrolling;
@@ -36968,6 +38354,29 @@ haxe.ui.toolkit.containers.ScrollView.prototype = $extend(haxe.ui.toolkit.core.S
 		}
 		this._invalidating = false;
 	}
+	,_onInertiaEnterFrame: function(event) {
+		this._eventTarget.set_visible(true);
+		var content = this._container.getChildAt(0);
+		if(content != null) {
+			this._inertiaSpeed.x *= 0.8;
+			this._inertiaSpeed.y *= 0.8;
+			if(content.get_width() > this.get_layout().get_usableWidth() || this._virtualScrolling == true) {
+				if(this._showHScroll == true && this._autoHideScrolls == true) this._hscroll.set_visible(true);
+				if(this._hscroll != null) {
+					var _g = this._hscroll;
+					_g.set_pos(_g.get_pos() - this._inertiaSpeed.x);
+				}
+			}
+			if(content.get_height() > this.get_layout().get_usableHeight() || this._virtualScrolling == true) {
+				if(this._showVScroll == true && this._autoHideScrolls == true) this._vscroll.set_visible(true);
+				if(this._vscroll != null) {
+					var _g1 = this._vscroll;
+					_g1.set_pos(_g1.get_pos() - this._inertiaSpeed.y);
+				}
+			}
+			if(Math.abs(this._inertiaSpeed.x) < 0.1 && Math.abs(this._inertiaSpeed.y) < 0.1) haxe.ui.toolkit.core.Screen.get_instance().removeEventListener(openfl.events.Event.ENTER_FRAME,$bind(this,this._onInertiaEnterFrame));
+		}
+	}
 	,_onHScrollChange: function(event) {
 		this.updateScrollRect();
 		var event1 = new haxe.ui.toolkit.events.UIEvent("haxeui_" + "scroll");
@@ -36996,6 +38405,10 @@ haxe.ui.toolkit.containers.ScrollView.prototype = $extend(haxe.ui.toolkit.core.S
 		var inScroll = false;
 		if(this._vscroll != null && this._vscroll.get_visible() == true) inScroll = this._vscroll.hitTest(event.stageX,event.stageY);
 		if(this._hscroll != null && this._hscroll.get_visible() == true && inScroll == false) inScroll = this._hscroll.hitTest(event.stageX,event.stageY);
+		if(this._inertialScrolling == true) {
+			haxe.ui.toolkit.core.Screen.get_instance().removeEventListener(openfl.events.Event.ENTER_FRAME,$bind(this,this._onInertiaEnterFrame));
+			this._inertiaTime = openfl.Lib.getTimer();
+		}
 		var content = this._container.getChildAt(0);
 		if(content != null && inScroll == false && this._virtualScrolling == false) {
 			if(content.get_width() > this.get_layout().get_usableWidth() || content.get_height() > this.get_layout().get_usableHeight()) {
@@ -37019,6 +38432,11 @@ haxe.ui.toolkit.containers.ScrollView.prototype = $extend(haxe.ui.toolkit.core.S
 				xpos /= target.get_scaleX();
 				ypos /= target.get_scaleY();
 				target = target.parent;
+			}
+			if(this._inertialScrolling == true) {
+				var time = (openfl.Lib.getTimer() - this._inertiaTime) / 100;
+				this._inertiaSpeed = new openfl.geom.Point(xpos / time,ypos / time);
+				this._inertiaTime = openfl.Lib.getTimer();
 			}
 			if(Math.abs(xpos) >= this._scrollSensitivity || Math.abs(ypos) >= this._scrollSensitivity) {
 				this._eventTarget.set_visible(true);
@@ -37044,6 +38462,9 @@ haxe.ui.toolkit.containers.ScrollView.prototype = $extend(haxe.ui.toolkit.core.S
 		}
 	}
 	,_onScreenMouseUp: function(event) {
+		if(this._inertialScrolling == true && openfl.Lib.getTimer() - this._inertiaTime < 100) {
+			if(Math.abs(this._inertiaSpeed.x) > this._inertiaSensitivity || Math.abs(this._inertiaSpeed.y) > this._inertiaSensitivity) haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.Event.ENTER_FRAME,$bind(this,this._onInertiaEnterFrame));
+		}
 		this._eventTarget.set_visible(false);
 		this._downPos = null;
 		haxe.ui.toolkit.core.Screen.get_instance().removeEventListener(openfl.events.MouseEvent.MOUSE_UP,$bind(this,this._onScreenMouseUp));
@@ -37117,14 +38538,16 @@ haxe.ui.toolkit.containers.ScrollView.prototype = $extend(haxe.ui.toolkit.core.S
 		var created = false;
 		if(this._hscroll == null) {
 			this._hscroll = new haxe.ui.toolkit.controls.HScroll();
+			this._hscroll.set_id("hscroll");
 			this._hscroll.set_percentWidth(100);
 			this._hscroll.addEventListener(openfl.events.Event.CHANGE,$bind(this,this._onHScrollChange));
 			if(this._showHScroll == false) this._hscroll.set_visible(false); else if(this._autoHideScrolls == true) this._hscroll.set_visible(false); else this._hscroll.set_visible(true);
+			invalidateLayout = true;
 			this.addChild(this._hscroll);
 			created = true;
 		}
 		if(invalidateLayout) {
-			this._invalidating = false;
+			if(this.get_percentWidth() == -1) this._invalidating = false;
 			this.invalidate(1);
 		}
 		return created;
@@ -37134,13 +38557,16 @@ haxe.ui.toolkit.containers.ScrollView.prototype = $extend(haxe.ui.toolkit.core.S
 		var created = false;
 		if(this._vscroll == null) {
 			this._vscroll = new haxe.ui.toolkit.controls.VScroll();
+			this._vscroll.set_id("vscroll");
 			this._vscroll.set_percentHeight(100);
 			this._vscroll.addEventListener(openfl.events.Event.CHANGE,$bind(this,this._onVScrollChange));
 			if(this._showVScroll == false) this._vscroll.set_visible(false); else if(this._autoHideScrolls == true) this._vscroll.set_visible(false); else this._vscroll.set_visible(true);
+			invalidateLayout = true;
 			this.addChild(this._vscroll);
+			created = true;
 		}
 		if(invalidateLayout) {
-			this._invalidating = false;
+			if(this.get_percentHeight() == -1) this._invalidating = false;
 			this.invalidate(1);
 		}
 		return created;
@@ -37182,7 +38608,7 @@ haxe.ui.toolkit.containers.ScrollView.prototype = $extend(haxe.ui.toolkit.core.S
 		return new haxe.ui.toolkit.containers.ScrollView();
 	}
 	,__class__: haxe.ui.toolkit.containers.ScrollView
-	,__properties__: $extend(haxe.ui.toolkit.core.StateComponent.prototype.__properties__,{set_vscrollPageSize:"set_vscrollPageSize",get_vscrollPageSize:"get_vscrollPageSize",set_vscrollMax:"set_vscrollMax",get_vscrollMax:"get_vscrollMax",set_vscrollMin:"set_vscrollMin",get_vscrollMin:"get_vscrollMin",set_vscrollPos:"set_vscrollPos",get_vscrollPos:"get_vscrollPos",set_hscrollPageSize:"set_hscrollPageSize",get_hscrollPageSize:"get_hscrollPageSize",set_hscrollMax:"set_hscrollMax",get_hscrollMax:"get_hscrollMax",set_hscrollMin:"set_hscrollMin",get_hscrollMin:"get_hscrollMin",set_hscrollPos:"set_hscrollPos",get_hscrollPos:"get_hscrollPos",set_showVScroll:"set_showVScroll",get_showVScroll:"get_showVScroll",set_showHScroll:"set_showHScroll",get_showHScroll:"get_showHScroll",set_virtualScrolling:"set_virtualScrolling",get_virtualScrolling:"get_virtualScrolling"})
+	,__properties__: $extend(haxe.ui.toolkit.core.StateComponent.prototype.__properties__,{set_vscrollPageSize:"set_vscrollPageSize",get_vscrollPageSize:"get_vscrollPageSize",set_vscrollMax:"set_vscrollMax",get_vscrollMax:"get_vscrollMax",set_vscrollMin:"set_vscrollMin",get_vscrollMin:"get_vscrollMin",set_vscrollPos:"set_vscrollPos",get_vscrollPos:"get_vscrollPos",set_hscrollPageSize:"set_hscrollPageSize",get_hscrollPageSize:"get_hscrollPageSize",set_hscrollMax:"set_hscrollMax",get_hscrollMax:"get_hscrollMax",set_hscrollMin:"set_hscrollMin",get_hscrollMin:"get_hscrollMin",set_hscrollPos:"set_hscrollPos",get_hscrollPos:"get_hscrollPos",set_showVScroll:"set_showVScroll",get_showVScroll:"get_showVScroll",set_showHScroll:"set_showHScroll",get_showHScroll:"get_showHScroll",set_virtualScrolling:"set_virtualScrolling",get_virtualScrolling:"get_virtualScrolling",set_inertialScrolling:"set_inertialScrolling",get_inertialScrolling:"get_inertialScrolling"})
 });
 haxe.ui.toolkit.core.interfaces.IDataComponent = function() { };
 $hxClasses["haxe.ui.toolkit.core.interfaces.IDataComponent"] = haxe.ui.toolkit.core.interfaces.IDataComponent;
@@ -37191,6 +38617,7 @@ haxe.ui.toolkit.core.interfaces.IDataComponent.prototype = {
 	__class__: haxe.ui.toolkit.core.interfaces.IDataComponent
 };
 haxe.ui.toolkit.containers.ListView = function() {
+	this._allowSelection = true;
 	this._lastSelection = -1;
 	haxe.ui.toolkit.containers.ScrollView.call(this);
 	this.set_autoSize(false);
@@ -37296,6 +38723,13 @@ haxe.ui.toolkit.containers.ListView.prototype = $extend(haxe.ui.toolkit.containe
 		this._itemRenderer = value;
 		return value;
 	}
+	,get_allowSelection: function() {
+		return this._allowSelection;
+	}
+	,set_allowSelection: function(value) {
+		this._allowSelection = value;
+		return value;
+	}
 	,get_dataSource: function() {
 		return this._dataSource;
 	}
@@ -37341,25 +38775,51 @@ haxe.ui.toolkit.containers.ListView.prototype = $extend(haxe.ui.toolkit.containe
 			var n = _g1++;
 			this.removeListViewItem(n);
 		}
+		var n1 = 0;
+		var _g2 = 0;
+		var _g11 = this._content.get_children();
+		while(_g2 < _g11.length) {
+			var child = _g11[_g2];
+			++_g2;
+			var item1;
+			item1 = js.Boot.__cast(child , haxe.ui.toolkit.core.interfaces.IItemRenderer);
+			if(js.Boot.__instanceof(item1,haxe.ui.toolkit.core.StyleableDisplayObject) == true && js.Boot.__instanceof(item1,haxe.ui.toolkit.controls.Divider) == false) {
+				var styleName;
+				if(n1 % 2 == 0) styleName = "even"; else styleName = "odd";
+				if(!this.isSelected(item1) && (js.Boot.__cast(item1 , haxe.ui.toolkit.core.StyleableDisplayObject)).get_styleName() != styleName) (js.Boot.__cast(item1 , haxe.ui.toolkit.core.StyleableDisplayObject)).set_styleName(styleName);
+			}
+			n1++;
+		}
 	}
 	,addListViewItem: function(dataHash,data,index) {
 		if(index == null) index = -1;
 		if(data == null) return;
-		var item = this.createRendererInstance();
-		item.set_autoSize(true);
-		item.hash = dataHash;
-		item.set_percentWidth(100);
-		item.set_data(data);
-		if(js.Boot.__instanceof(item,haxe.ui.toolkit.core.StyleableDisplayObject)) {
-			var styleName;
-			if(this._content.get_numChildren() % 2 == 0) styleName = "even"; else styleName = "odd";
-			(js.Boot.__cast(item , haxe.ui.toolkit.core.StyleableDisplayObject)).set_styleName(styleName);
+		var item = null;
+		if(data.divider == true) {
+			item = new haxe.ui.toolkit.controls.Divider();
+			item.hash = dataHash;
+			item.set_data(data);
+		} else {
+			item = this.createRendererInstance();
+			item.set_autoSize(true);
+			item.hash = dataHash;
+			item.set_percentWidth(100);
+			item.set_data(data);
+			if(js.Boot.__instanceof(item,haxe.ui.toolkit.core.StyleableDisplayObject)) {
+				var styleName;
+				if(this._content.get_numChildren() % 2 == 0) styleName = "even"; else styleName = "odd";
+				(js.Boot.__cast(item , haxe.ui.toolkit.core.StyleableDisplayObject)).set_styleName(styleName);
+			}
 		}
-		if(index == -1) this._content.addChild(item); else this._content.addChildAt(item,index);
+		if(item != null) {
+			if(index == -1) this._content.addChild(item); else this._content.addChildAt(item,index);
+		}
 		this.invalidate(256);
-		(js.Boot.__cast(item , haxe.ui.toolkit.core.interfaces.IDisplayObject)).addEventListener("haxeui_" + "mouseOver",$bind(this,this._onListItemMouseOver));
-		(js.Boot.__cast(item , haxe.ui.toolkit.core.interfaces.IDisplayObject)).addEventListener("haxeui_" + "mouseOut",$bind(this,this._onListItemMouseOut));
-		(js.Boot.__cast(item , haxe.ui.toolkit.core.interfaces.IDisplayObject)).addEventListener("haxeui_" + "click",$bind(this,this._onListItemClick));
+		if(data.divider == null || data.divider == false) {
+			(js.Boot.__cast(item , haxe.ui.toolkit.core.interfaces.IDisplayObject)).addEventListener("haxeui_" + "mouseOver",$bind(this,this._onListItemMouseOver));
+			(js.Boot.__cast(item , haxe.ui.toolkit.core.interfaces.IDisplayObject)).addEventListener("haxeui_" + "mouseOut",$bind(this,this._onListItemMouseOut));
+			(js.Boot.__cast(item , haxe.ui.toolkit.core.interfaces.IDisplayObject)).addEventListener("haxeui_" + "click",$bind(this,this._onListItemClick));
+		}
 	}
 	,removeListViewItem: function(index) {
 		var item;
@@ -37372,15 +38832,18 @@ haxe.ui.toolkit.containers.ListView.prototype = $extend(haxe.ui.toolkit.containe
 		}
 	}
 	,_onListItemMouseOver: function(event) {
+		if(this._allowSelection == false) return;
 		if(Std["is"](event.get_component(),haxe.ui.toolkit.core.interfaces.IStateComponent)) (js.Boot.__cast(event.get_component() , haxe.ui.toolkit.core.interfaces.IStateComponent)).set_state("over");
 	}
 	,_onListItemMouseOut: function(event) {
+		if(this._allowSelection == false) return;
 		if(Std["is"](event.get_component(),haxe.ui.toolkit.core.interfaces.IStateComponent)) {
 			var item = event.get_component();
 			if(this.isSelected(item)) (js.Boot.__cast(item , haxe.ui.toolkit.core.interfaces.IStateComponent)).set_state("selected"); else (js.Boot.__cast(item , haxe.ui.toolkit.core.interfaces.IStateComponent)).set_state("normal");
 		}
 	}
 	,_onListItemClick: function(event) {
+		if(this._allowSelection == false) return;
 		if(Std["is"](event.get_component(),haxe.ui.toolkit.core.interfaces.IItemRenderer)) {
 			var item = event.get_component();
 			if(item.allowSelection(event.stageX,event.stageY)) {
@@ -37455,7 +38918,7 @@ haxe.ui.toolkit.containers.ListView.prototype = $extend(haxe.ui.toolkit.containe
 		if(item == null) return;
 		var vpos = 0;
 		if(this._vscroll != null) vpos = this._vscroll.get_pos();
-		if(item.get_y() + item.get_height() > vpos + this._content.get_clipHeight()) this._vscroll.set_pos(item.get_y() + item.get_height() - this._content.get_clipHeight()); else if(item.get_y() < vpos) this._vscroll.set_pos(item.get_y());
+		if(item.get_y() + item.get_height() > vpos + this._container.get_clipHeight()) this._vscroll.set_pos(item.get_y() + item.get_height() - this._container.get_clipHeight()); else if(item.get_y() < vpos) this._vscroll.set_pos(item.get_y());
 	}
 	,createRendererInstance: function() {
 		var r = null;
@@ -37471,6 +38934,7 @@ haxe.ui.toolkit.containers.ListView.prototype = $extend(haxe.ui.toolkit.containe
 			r = Type.createInstance(cls1,[]);
 		}
 		if(r != null) r.eventDispatcher = this;
+		r.set_useHandCursor(this._allowSelection);
 		return r;
 	}
 	,clone: function() {
@@ -37486,7 +38950,7 @@ haxe.ui.toolkit.containers.ListView.prototype = $extend(haxe.ui.toolkit.containe
 		return value;
 	}
 	,__class__: haxe.ui.toolkit.containers.ListView
-	,__properties__: $extend(haxe.ui.toolkit.containers.ScrollView.prototype.__properties__,{set_onComponentEvent:"set_onComponentEvent",set_dataSource:"set_dataSource",get_dataSource:"get_dataSource",set_itemRenderer:"set_itemRenderer",get_itemRenderer:"get_itemRenderer",get_content:"get_content",set_selectedIndex:"set_selectedIndex",get_selectedIndex:"get_selectedIndex",get_selectedItems:"get_selectedItems",get_itemHeight:"get_itemHeight",get_listSize:"get_listSize"})
+	,__properties__: $extend(haxe.ui.toolkit.containers.ScrollView.prototype.__properties__,{set_onComponentEvent:"set_onComponentEvent",set_dataSource:"set_dataSource",get_dataSource:"get_dataSource",set_allowSelection:"set_allowSelection",get_allowSelection:"get_allowSelection",set_itemRenderer:"set_itemRenderer",get_itemRenderer:"get_itemRenderer",get_content:"get_content",set_selectedIndex:"set_selectedIndex",get_selectedIndex:"get_selectedIndex",get_selectedItems:"get_selectedItems",get_itemHeight:"get_itemHeight",get_listSize:"get_listSize"})
 });
 haxe.ui.toolkit.containers.MenuBar = function() {
 	haxe.ui.toolkit.containers.HBox.call(this);
@@ -37564,6 +39028,18 @@ haxe.ui.toolkit.layout.Layout.prototype = {
 	}
 	,repositionChildren: function() {
 	}
+	,autoSize: function(totalWidth,totalHeight) {
+		if(this.get_container().get_autoSize()) {
+			if(totalWidth > 0 && totalWidth != this.get_innerWidth() && this.get_container().get_percentWidth() == -1) this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
+			if(totalHeight > 0 && totalHeight != this.get_innerHeight() && this.get_container().get_percentHeight() == -1) this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
+		} else if(totalWidth > 0 && this.get_container().get_height() == 0 && this.get_container().get_percentWidth() > -1) {
+			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
+			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
+		} else if(totalHeight > 0 && this.get_container().get_width() == 0 && this.get_container().get_percentHeight() > -1) {
+			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
+			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
+		} else if(totalWidth > 0 && this.get_container().get_height() == 0) this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom())); else if(totalHeight > 0 && this.get_container().get_width() == 0) this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
+	}
 	,get_innerWidth: function() {
 		if(this.get_container() == null) return 0;
 		var icx = this.get_container().get_width() - (this.get_padding().get_left() + this.get_padding().get_right());
@@ -37613,17 +39089,13 @@ haxe.ui.toolkit.layout.DefaultLayout.prototype = $extend(haxe.ui.toolkit.layout.
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			if(child.get_percentWidth() > -1) child.set_width(ucx * child.get_percentWidth() / 100);
 			if(child.get_percentHeight() > -1) child.set_height(ucy * child.get_percentHeight() / 100);
 			if(child.get_width() > totalWidth) totalWidth = child.get_width();
 			if(child.get_height() > totalHeight) totalHeight = child.get_height();
 		}
-		if(this.get_container().get_autoSize()) {
-			if(totalWidth > 0 && totalWidth != this.get_innerWidth() && this.get_container().get_percentWidth() == -1) this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			if(totalHeight > 0 && totalHeight != this.get_innerHeight() && this.get_container().get_percentHeight() == -1) this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		} else {
-		}
+		this.autoSize(totalWidth,totalHeight);
 	}
 	,repositionChildren: function() {
 		haxe.ui.toolkit.layout.Layout.prototype.repositionChildren.call(this);
@@ -37634,7 +39106,7 @@ haxe.ui.toolkit.layout.DefaultLayout.prototype = $extend(haxe.ui.toolkit.layout.
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			child.set_x(xpos);
 			child.set_y(ypos);
 		}
@@ -37694,6 +39166,109 @@ haxe.ui.toolkit.containers.ScrollViewLayout.prototype = $extend(haxe.ui.toolkit.
 	}
 	,__class__: haxe.ui.toolkit.containers.ScrollViewLayout
 	,__properties__: $extend(haxe.ui.toolkit.layout.DefaultLayout.prototype.__properties__,{set_inlineScrolls:"set_inlineScrolls",get_inlineScrolls:"get_inlineScrolls"})
+});
+haxe.ui.toolkit.containers.SpriteContainer = function(childSprite) {
+	haxe.ui.toolkit.core.Component.call(this);
+	this.set_childSprite(childSprite);
+	this.set_autoSize(true);
+};
+$hxClasses["haxe.ui.toolkit.containers.SpriteContainer"] = haxe.ui.toolkit.containers.SpriteContainer;
+haxe.ui.toolkit.containers.SpriteContainer.__name__ = ["haxe","ui","toolkit","containers","SpriteContainer"];
+haxe.ui.toolkit.containers.SpriteContainer.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable];
+haxe.ui.toolkit.containers.SpriteContainer.__super__ = haxe.ui.toolkit.core.Component;
+haxe.ui.toolkit.containers.SpriteContainer.prototype = $extend(haxe.ui.toolkit.core.Component.prototype,{
+	initialize: function() {
+		haxe.ui.toolkit.core.Component.prototype.initialize.call(this);
+		if(this._childSprite != null) {
+			if(this.get_autoSize() == true) {
+				this._childSprite.set_x(this.get_layout().get_padding().get_left());
+				this._childSprite.set_y(this.get_layout().get_padding().get_top());
+				this.set_width(this._childSprite.get_width() + (this.get_layout().get_padding().get_left() + this.get_layout().get_padding().get_right()));
+				this.set_height(this._childSprite.get_height() + (this.get_layout().get_padding().get_top() + this.get_layout().get_padding().get_bottom()));
+			}
+		}
+	}
+	,dispose: function() {
+		if(this._childSprite != null) this.get_sprite().removeChild(this._childSprite);
+		haxe.ui.toolkit.core.Component.prototype.dispose.call(this);
+	}
+	,invalidate: function(type,recursive) {
+		if(recursive == null) recursive = false;
+		if(type == null) type = 1118481;
+		haxe.ui.toolkit.core.Component.prototype.invalidate.call(this,type,recursive);
+		if((type & 256) == 256) {
+			if(this._stretch == true && this._childSprite != null) {
+				this._childSprite.set_x(this.get_layout().get_padding().get_left());
+				this._childSprite.set_y(this.get_layout().get_padding().get_top());
+				this._childSprite.set_width(this.get_width() - (this.get_layout().get_padding().get_left() + this.get_layout().get_padding().get_right()));
+				this._childSprite.set_height(this.get_height() - (this.get_layout().get_padding().get_top() + this.get_layout().get_padding().get_bottom()));
+			}
+		}
+	}
+	,get_childSprite: function() {
+		return this._childSprite;
+	}
+	,set_childSprite: function(value) {
+		if(value == null && this._childSprite != null) {
+			this.get_sprite().removeChild(this._childSprite);
+			this._childSprite = null;
+		}
+		if(value != this._childSprite) {
+			if(this._childSprite != null) this.get_sprite().removeChild(this._childSprite);
+			this._childSprite = value;
+			this.get_sprite().addChild(this._childSprite);
+			if(this.get_autoSize() == true && this.get_ready()) {
+				this._childSprite.set_x(this.get_layout().get_padding().get_left());
+				this._childSprite.set_y(this.get_layout().get_padding().get_top());
+				this.set_width(this._childSprite.get_width() + (this.get_layout().get_padding().get_left() + this.get_layout().get_padding().get_right()));
+				this.set_height(this._childSprite.get_height() + (this.get_layout().get_padding().get_top() + this.get_layout().get_padding().get_bottom()));
+			}
+		}
+		return value;
+	}
+	,get_spriteClass: function() {
+		return this._spriteClass;
+	}
+	,set_spriteClass: function(value) {
+		if(value == null) {
+			this.set_childSprite(null);
+			this._spriteClass = null;
+			return value;
+		}
+		if(value != this._spriteClass) {
+			var cls = Type.resolveClass(value);
+			if(cls != null) {
+				var inst = Type.createInstance(cls,[]);
+				if(inst != null && js.Boot.__instanceof(inst,openfl.display.Sprite)) {
+					this.set_childSprite(inst);
+					this._spriteClass = value;
+				}
+			}
+		}
+		return value;
+	}
+	,get_stretch: function() {
+		return this._stretch;
+	}
+	,set_stretch: function(value) {
+		if(this._stretch == value) return value;
+		this._autoSize = !value;
+		this._stretch = value;
+		this.invalidate(256);
+		return value;
+	}
+	,clone: function() {
+		var c = haxe.ui.toolkit.core.Component.prototype.clone.call(this);
+		c.set_childSprite(this.get_childSprite());
+		c.set_spriteClass(this.get_spriteClass());
+		c.set_stretch(this.get_stretch());
+		return c;
+	}
+	,self: function() {
+		return new haxe.ui.toolkit.containers.SpriteContainer();
+	}
+	,__class__: haxe.ui.toolkit.containers.SpriteContainer
+	,__properties__: $extend(haxe.ui.toolkit.core.Component.prototype.__properties__,{set_stretch:"set_stretch",get_stretch:"get_stretch",set_spriteClass:"set_spriteClass",get_spriteClass:"get_spriteClass",set_childSprite:"set_childSprite",get_childSprite:"get_childSprite"})
 });
 haxe.ui.toolkit.containers.Stack = function() {
 	this._history = new List();
@@ -37870,6 +39445,9 @@ haxe.ui.toolkit.containers.TabView.prototype = $extend(haxe.ui.toolkit.core.Comp
 	,get_pageCount: function() {
 		return this._stack.get_numChildren();
 	}
+	,get_selectedPage: function() {
+		return this.getTabPage(this.get_selectedIndex());
+	}
 	,setTabText: function(index,text) {
 		this._tabs.setTabText(index,text);
 	}
@@ -37879,6 +39457,9 @@ haxe.ui.toolkit.containers.TabView.prototype = $extend(haxe.ui.toolkit.core.Comp
 	}
 	,getTabButton: function(index) {
 		return this._tabs.getTabButton(index);
+	}
+	,getTabPage: function(index) {
+		return this._stack.getChildAt(index);
 	}
 	,removeAllTabs: function() {
 		this._stack.removeAllChildren();
@@ -37892,7 +39473,7 @@ haxe.ui.toolkit.containers.TabView.prototype = $extend(haxe.ui.toolkit.core.Comp
 		return new haxe.ui.toolkit.containers.TabView();
 	}
 	,__class__: haxe.ui.toolkit.containers.TabView
-	,__properties__: $extend(haxe.ui.toolkit.core.Component.prototype.__properties__,{get_pageCount:"get_pageCount",set_selectedIndex:"set_selectedIndex",get_selectedIndex:"get_selectedIndex"})
+	,__properties__: $extend(haxe.ui.toolkit.core.Component.prototype.__properties__,{get_selectedPage:"get_selectedPage",get_pageCount:"get_pageCount",set_selectedIndex:"set_selectedIndex",get_selectedIndex:"get_selectedIndex"})
 });
 haxe.ui.toolkit.containers.TableView = function() {
 	this._lastSelection = -1;
@@ -38308,6 +39889,135 @@ haxe.ui.toolkit.containers.TableViewRow.prototype = $extend(haxe.ui.toolkit.cont
 	,__class__: haxe.ui.toolkit.containers.TableViewRow
 	,__properties__: $extend(haxe.ui.toolkit.containers.HBox.prototype.__properties__,{get_states:"get_states",set_state:"set_state",get_state:"get_state",set_data:"set_data",get_data:"get_data"})
 });
+haxe.ui.toolkit.containers.VSplitter = function() {
+	haxe.ui.toolkit.containers.VBox.call(this);
+};
+$hxClasses["haxe.ui.toolkit.containers.VSplitter"] = haxe.ui.toolkit.containers.VSplitter;
+haxe.ui.toolkit.containers.VSplitter.__name__ = ["haxe","ui","toolkit","containers","VSplitter"];
+haxe.ui.toolkit.containers.VSplitter.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable];
+haxe.ui.toolkit.containers.VSplitter.__super__ = haxe.ui.toolkit.containers.VBox;
+haxe.ui.toolkit.containers.VSplitter.prototype = $extend(haxe.ui.toolkit.containers.VBox.prototype,{
+	addChild: function(child) {
+		var r = null;
+		if(js.Boot.__instanceof(child,haxe.ui.toolkit.containers.VSplitterGripper)) r = haxe.ui.toolkit.containers.VBox.prototype.addChild.call(this,child); else {
+			if(this.get_numChildren() > 0) {
+				var gripper = new haxe.ui.toolkit.containers.VSplitterGripper();
+				gripper.addEventListener("haxeui_" + "mouseDown",$bind(this,this._onMouseDown));
+				this.addChild(gripper);
+			}
+			r = haxe.ui.toolkit.containers.VBox.prototype.addChild.call(this,child);
+		}
+		return r;
+	}
+	,addChildAt: function(child,index) {
+		var r = null;
+		if(js.Boot.__instanceof(child,haxe.ui.toolkit.containers.VSplitterGripper)) r = haxe.ui.toolkit.containers.VBox.prototype.addChildAt.call(this,child,index); else {
+			if(this.get_numChildren() > 0) {
+				var gripper = new haxe.ui.toolkit.containers.VSplitterGripper();
+				gripper.addEventListener("haxeui_" + "mouseDown",$bind(this,this._onMouseDown));
+				this.addChildAt(gripper,index);
+			}
+			r = haxe.ui.toolkit.containers.VBox.prototype.addChildAt.call(this,child,index + 1);
+		}
+		return r;
+	}
+	,removeChild: function(child,dispose) {
+		if(dispose == null) dispose = true;
+		var r = null;
+		if(js.Boot.__instanceof(child,haxe.ui.toolkit.containers.VSplitterGripper)) r = haxe.ui.toolkit.containers.VBox.prototype.removeChild.call(this,child,dispose); else {
+			if(this.get_numChildren() > 1) this.removeChild(this.getChildAt(this.indexOfChild(child) - 1),dispose);
+			r = haxe.ui.toolkit.containers.VBox.prototype.removeChild.call(this,child,dispose);
+		}
+		return r;
+	}
+	,_onMouseDown: function(event) {
+		this._percents = new haxe.ds.ObjectMap();
+		this._gripper = event.get_component();
+		this._mouseDownOffset = event.stageY - this._gripper.get_y();
+		this._invalidating = true;
+		var _g = 0;
+		var _g1 = this.get_children();
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			if(js.Boot.__instanceof(c,haxe.ui.toolkit.containers.VSplitterGripper) == false) {
+				if(c.get_percentHeight() != -1) {
+					var value = c.get_percentHeight();
+					this._percents.set(c,value);
+					c.set_percentHeight(-1);
+				}
+			}
+		}
+		this._invalidating = false;
+		this.invalidate(1);
+		haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.MouseEvent.MOUSE_MOVE,$bind(this,this._onMouseMove));
+		haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.MouseEvent.MOUSE_UP,$bind(this,this._onMouseUp));
+	}
+	,_onMouseMove: function(event) {
+		if(this._gripper != null) {
+			var delta = event.stageY - this._gripper.get_y() - this._mouseDownOffset;
+			var index = this.indexOfChild(this._gripper);
+			var before = this.getChildAt(index - 1);
+			var after = this.getChildAt(index + 1);
+			var newBefore = before.get_height() + delta;
+			var newAfter = after.get_height() - delta;
+			if(newBefore > before.get_minHeight() && newAfter > after.get_minHeight() && newBefore - (before.get_layout().get_padding().get_top() + before.get_layout().get_padding().get_bottom()) > 0 && newAfter - (after.get_layout().get_padding().get_top() + after.get_layout().get_padding().get_bottom()) > 0) {
+				before.set_height(newBefore);
+				after.set_height(newAfter);
+			}
+		}
+	}
+	,_onMouseUp: function(event) {
+		haxe.ui.toolkit.core.Screen.get_instance().removeEventListener(openfl.events.MouseEvent.MOUSE_MOVE,$bind(this,this._onMouseMove));
+		haxe.ui.toolkit.core.Screen.get_instance().removeEventListener(openfl.events.MouseEvent.MOUSE_UP,$bind(this,this._onMouseUp));
+		this._gripper = null;
+		var ucy = this.get_height();
+		ucy -= (this.get_numChildren() - 1) / 2 * (2 * this.get_layout().get_spacingY());
+		var _g = 0;
+		var _g1 = this.get_children();
+		while(_g < _g1.length) {
+			var c = _g1[_g];
+			++_g;
+			if(this._percents.h.__keys__[c.__id__] != null == false) ucy -= c.get_height();
+		}
+		this._invalidating = true;
+		var $it0 = this._percents.keys();
+		while( $it0.hasNext() ) {
+			var c1 = $it0.next();
+			var newPercent = c1.get_height() / ucy * 100;
+			c1.set_percentHeight(newPercent);
+		}
+		this._invalidating = false;
+		this.invalidate(1);
+		this._percents = null;
+	}
+	,clone: function() {
+		var c = haxe.ui.toolkit.containers.VBox.prototype.clone.call(this);
+		return c;
+	}
+	,self: function() {
+		return new haxe.ui.toolkit.containers.VSplitter();
+	}
+	,__class__: haxe.ui.toolkit.containers.VSplitter
+});
+haxe.ui.toolkit.containers.VSplitterGripper = function() {
+	haxe.ui.toolkit.controls.Button.call(this);
+	this.set_remainPressed(true);
+	this.set_useHandCursor(true);
+};
+$hxClasses["haxe.ui.toolkit.containers.VSplitterGripper"] = haxe.ui.toolkit.containers.VSplitterGripper;
+haxe.ui.toolkit.containers.VSplitterGripper.__name__ = ["haxe","ui","toolkit","containers","VSplitterGripper"];
+haxe.ui.toolkit.containers.VSplitterGripper.__super__ = haxe.ui.toolkit.controls.Button;
+haxe.ui.toolkit.containers.VSplitterGripper.prototype = $extend(haxe.ui.toolkit.controls.Button.prototype,{
+	clone: function() {
+		var c = haxe.ui.toolkit.controls.Button.prototype.clone.call(this);
+		return c;
+	}
+	,self: function() {
+		return new haxe.ui.toolkit.containers.VSplitterGripper();
+	}
+	,__class__: haxe.ui.toolkit.containers.VSplitterGripper
+});
 haxe.ui.toolkit.controls.Calendar = function() {
 	haxe.ui.toolkit.core.Component.call(this);
 	this._layout = new haxe.ui.toolkit.controls.CalendarLayout();
@@ -38658,6 +40368,65 @@ haxe.ui.toolkit.controls.CheckBoxValue.prototype = $extend(haxe.ui.toolkit.contr
 		return new haxe.ui.toolkit.controls.CheckBoxValue();
 	}
 	,__class__: haxe.ui.toolkit.controls.CheckBoxValue
+});
+haxe.ui.toolkit.core.interfaces.IItemRenderer = function() { };
+$hxClasses["haxe.ui.toolkit.core.interfaces.IItemRenderer"] = haxe.ui.toolkit.core.interfaces.IItemRenderer;
+haxe.ui.toolkit.core.interfaces.IItemRenderer.__name__ = ["haxe","ui","toolkit","core","interfaces","IItemRenderer"];
+haxe.ui.toolkit.core.interfaces.IItemRenderer.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable,haxe.ui.toolkit.core.interfaces.IStateComponent];
+haxe.ui.toolkit.core.interfaces.IItemRenderer.prototype = {
+	__class__: haxe.ui.toolkit.core.interfaces.IItemRenderer
+};
+haxe.ui.toolkit.controls.Divider = function() {
+	haxe.ui.toolkit.core.StateComponent.call(this);
+	this.set_autoSize(true);
+	this.set_layout(new haxe.ui.toolkit.layout.VerticalLayout());
+};
+$hxClasses["haxe.ui.toolkit.controls.Divider"] = haxe.ui.toolkit.controls.Divider;
+haxe.ui.toolkit.controls.Divider.__name__ = ["haxe","ui","toolkit","controls","Divider"];
+haxe.ui.toolkit.controls.Divider.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable,haxe.ui.toolkit.core.interfaces.IItemRenderer];
+haxe.ui.toolkit.controls.Divider.__super__ = haxe.ui.toolkit.core.StateComponent;
+haxe.ui.toolkit.controls.Divider.prototype = $extend(haxe.ui.toolkit.core.StateComponent.prototype,{
+	initialize: function() {
+		haxe.ui.toolkit.core.StateComponent.prototype.initialize.call(this);
+		this._line = new haxe.ui.toolkit.core.Component();
+		this._line.set_id("line");
+		this._line.set_percentWidth(100);
+		this.addChild(this._line);
+	}
+	,get_text: function() {
+		if(this._label == null) return null;
+		return this._label.get_text();
+	}
+	,set_text: function(value) {
+		if(this._label == null) {
+			this._label = new haxe.ui.toolkit.controls.Text();
+			this._label.set_id("text");
+			this.addChildAt(this._label,0);
+		}
+		return this._label.set_text(value);
+	}
+	,get_data: function() {
+		return this._data;
+	}
+	,set_data: function(value) {
+		this._data = value;
+		if(this.get_data().text != null) this.set_text(this.get_data().text);
+		return value;
+	}
+	,allowSelection: function(stageX,stageY) {
+		return false;
+	}
+	,update: function() {
+	}
+	,clone: function() {
+		var c = haxe.ui.toolkit.core.StateComponent.prototype.clone.call(this);
+		return c;
+	}
+	,self: function() {
+		return new haxe.ui.toolkit.controls.Divider();
+	}
+	,__class__: haxe.ui.toolkit.controls.Divider
+	,__properties__: $extend(haxe.ui.toolkit.core.StateComponent.prototype.__properties__,{set_data:"set_data",get_data:"get_data"})
 });
 haxe.ui.toolkit.core.interfaces.IDirectional = function() { };
 $hxClasses["haxe.ui.toolkit.core.interfaces.IDirectional"] = haxe.ui.toolkit.core.interfaces.IDirectional;
@@ -39039,7 +40808,7 @@ haxe.ui.toolkit.controls.HScrollLayout.prototype = $extend(haxe.ui.toolkit.layou
 			var ucx = this.get_usableWidth();
 			var thumbWidth = scroll.get_pageSize() / m * ucx;
 			if(thumbWidth < this.get_innerHeight()) thumbWidth = this.get_innerHeight(); else if(thumbWidth > ucx) thumbWidth = ucx;
-			thumb.set_width(thumbWidth);
+			if(thumbWidth > 0 && Math.isNaN(thumbWidth) == false) thumb.set_width(thumbWidth);
 		}
 	}
 	,repositionChildren: function() {
@@ -39212,8 +40981,11 @@ haxe.ui.toolkit.controls.Image.prototype = $extend(haxe.ui.toolkit.core.Componen
 	initialize: function() {
 		haxe.ui.toolkit.core.Component.prototype.initialize.call(this);
 		if(this._bmp != null) {
-			this.get_sprite().addChild(this._bmp);
 			if(this.get_height() > this._bmp.get_height()) this._bmp.set_y(Std["int"](this.get_height() / 2 - this._bmp.get_height() / 2));
+			if(this.get_autoSize() == true) {
+				this.set_width(this._bmp.bitmapData.get_width());
+				this.set_height(this._bmp.bitmapData.get_height());
+			}
 		}
 	}
 	,dispose: function() {
@@ -39256,9 +41028,9 @@ haxe.ui.toolkit.controls.Image.prototype = $extend(haxe.ui.toolkit.core.Componen
 		if(bmpData != null) {
 			this._bmp = new openfl.display.Bitmap(bmpData);
 			this.get_sprite().addChild(this._bmp);
-			if(this.get_autoSize() == true) {
-				this.set_width(bmpData.___textureBuffer != null?bmpData.___textureBuffer.width:0);
-				this.set_height(bmpData.___textureBuffer != null?bmpData.___textureBuffer.height:0);
+			if(this.get_autoSize() == true && this.get_ready()) {
+				this.set_width(this._bmp.bitmapData.get_width());
+				this.set_height(this._bmp.bitmapData.get_height());
 			}
 		}
 		this._resource = value;
@@ -39269,6 +41041,7 @@ haxe.ui.toolkit.controls.Image.prototype = $extend(haxe.ui.toolkit.core.Componen
 	}
 	,set_stretch: function(value) {
 		if(this._stretch == value) return value;
+		this._autoSize = !value;
 		this._stretch = value;
 		this.invalidate(256);
 		return value;
@@ -39292,6 +41065,176 @@ haxe.ui.toolkit.controls.Image.prototype = $extend(haxe.ui.toolkit.core.Componen
 	}
 	,__class__: haxe.ui.toolkit.controls.Image
 	,__properties__: $extend(haxe.ui.toolkit.core.Component.prototype.__properties__,{set_autoDisposeBitmapData:"set_autoDisposeBitmapData",get_autoDisposeBitmapData:"get_autoDisposeBitmapData",set_stretch:"set_stretch",get_stretch:"get_stretch",set_resource:"set_resource",get_resource:"get_resource"})
+});
+haxe.ui.toolkit.controls.Text = function() {
+	haxe.ui.toolkit.core.StateComponent.call(this);
+	this._valign = "center";
+	this.set_autoSize(true);
+	this._textDisplay = new haxe.ui.toolkit.text.TextDisplay();
+	this._textDisplay.set_text("");
+};
+$hxClasses["haxe.ui.toolkit.controls.Text"] = haxe.ui.toolkit.controls.Text;
+haxe.ui.toolkit.controls.Text.__name__ = ["haxe","ui","toolkit","controls","Text"];
+haxe.ui.toolkit.controls.Text.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable];
+haxe.ui.toolkit.controls.Text.__super__ = haxe.ui.toolkit.core.StateComponent;
+haxe.ui.toolkit.controls.Text.prototype = $extend(haxe.ui.toolkit.core.StateComponent.prototype,{
+	initialize: function() {
+		haxe.ui.toolkit.core.StateComponent.prototype.initialize.call(this);
+		this.get_sprite().addChild(this._textDisplay.get_display());
+		this._textDisplay.set_autoSize(this.get_autoSize());
+		this._textDisplay.set_text(this.get_text());
+		if(this.get_autoSize() == true) {
+			if(this.get_width() == 0) this.set_width(this._textDisplay.get_display().get_width());
+			if(this.get_height() == 0) this.set_height(this._textDisplay.get_display().get_height());
+		}
+	}
+	,dispose: function() {
+		if(this.get_sprite().contains(this._textDisplay.get_display())) this.get_sprite().removeChild(this._textDisplay.get_display());
+		haxe.ui.toolkit.core.StateComponent.prototype.dispose.call(this);
+	}
+	,invalidate: function(type,recursive) {
+		if(recursive == null) recursive = false;
+		if(type == null) type = 1118481;
+		if(!this._ready || this._invalidating) return;
+		haxe.ui.toolkit.core.StateComponent.prototype.invalidate.call(this,type,recursive);
+		this._invalidating = true;
+		if((type & 256) == 256 && this._autoSize == false) {
+			this._textDisplay.get_display().set_width(this.get_layout().get_innerWidth());
+			this._textDisplay.get_display().set_height(this.get_layout().get_innerHeight());
+		}
+		this._invalidating = false;
+	}
+	,get_text: function() {
+		return this._textDisplay.get_text();
+	}
+	,set_text: function(value) {
+		value = haxe.ui.toolkit.core.StateComponent.prototype.set_text.call(this,value);
+		this._textDisplay.set_text(value);
+		if(this.get_autoSize() == true) {
+			this.set_width(this._textDisplay.get_display().get_width());
+			this.set_height(this._textDisplay.get_display().get_height());
+		}
+		return value;
+	}
+	,set_autoSize: function(value) {
+		value = haxe.ui.toolkit.core.StateComponent.prototype.set_autoSize.call(this,value);
+		if(this._textDisplay != null) this._textDisplay.set_autoSize(value);
+		return value;
+	}
+	,set_width: function(value) {
+		haxe.ui.toolkit.core.StateComponent.prototype.set_width.call(this,value);
+		this._textDisplay.get_display().set_width(value);
+		this._textDisplay.set_text(this.get_text());
+		this.set_height(this._textDisplay.get_display().get_height());
+		return value;
+	}
+	,applyStyle: function() {
+		haxe.ui.toolkit.core.StateComponent.prototype.applyStyle.call(this);
+		if(this._textDisplay != null) {
+			this._textDisplay.set_style(this._baseStyle);
+			if(this.get_autoSize() == true) {
+				this.set_width(this._textDisplay.get_display().get_width());
+				this.set_height(this._textDisplay.get_display().get_height());
+			}
+		}
+	}
+	,get_multiline: function() {
+		return this._textDisplay.get_multiline();
+	}
+	,set_multiline: function(value) {
+		this._textDisplay.set_multiline(value);
+		return value;
+	}
+	,get_wrapLines: function() {
+		return this._textDisplay.get_wrapLines();
+	}
+	,set_wrapLines: function(value) {
+		this._textDisplay.set_wrapLines(value);
+		return value;
+	}
+	,get_selectable: function() {
+		return this._textDisplay.get_selectable();
+	}
+	,set_selectable: function(value) {
+		return this._textDisplay.set_selectable(value);
+	}
+	,get_textAlign: function() {
+		if(this._textDisplay == null) return null;
+		return this._textDisplay.get_textAlign();
+	}
+	,set_textAlign: function(value) {
+		if(this._textDisplay != null) this._textDisplay.set_textAlign(value);
+		return value;
+	}
+	,clone: function() {
+		var c = haxe.ui.toolkit.core.StateComponent.prototype.clone.call(this);
+		c.set_multiline(this.get_multiline());
+		c.set_wrapLines(this.get_wrapLines());
+		c.set_selectable(this.get_selectable());
+		c.set_textAlign(this.get_textAlign());
+		return c;
+	}
+	,self: function() {
+		return new haxe.ui.toolkit.controls.Text();
+	}
+	,__class__: haxe.ui.toolkit.controls.Text
+	,__properties__: $extend(haxe.ui.toolkit.core.StateComponent.prototype.__properties__,{set_textAlign:"set_textAlign",get_textAlign:"get_textAlign",set_selectable:"set_selectable",get_selectable:"get_selectable",set_wrapLines:"set_wrapLines",get_wrapLines:"get_wrapLines",set_multiline:"set_multiline",get_multiline:"get_multiline"})
+});
+haxe.ui.toolkit.controls.Link = function() {
+	this._isOver = false;
+	this._isDown = false;
+	haxe.ui.toolkit.controls.Text.call(this);
+	this.set_useHandCursor(true);
+};
+$hxClasses["haxe.ui.toolkit.controls.Link"] = haxe.ui.toolkit.controls.Link;
+haxe.ui.toolkit.controls.Link.__name__ = ["haxe","ui","toolkit","controls","Link"];
+haxe.ui.toolkit.controls.Link.__super__ = haxe.ui.toolkit.controls.Text;
+haxe.ui.toolkit.controls.Link.prototype = $extend(haxe.ui.toolkit.controls.Text.prototype,{
+	initialize: function() {
+		haxe.ui.toolkit.controls.Text.prototype.initialize.call(this);
+		haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.MouseEvent.MOUSE_DOWN,$bind(this,this._onScreenMouseDown));
+		haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.MouseEvent.MOUSE_MOVE,$bind(this,this._onScreenMouseMove));
+	}
+	,_onScreenMouseDown: function(e) {
+		if(this.hitTest(e.stageX,e.stageY) == true) {
+			this._isDown = true;
+			this.set_state("down");
+			haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.MouseEvent.MOUSE_UP,$bind(this,this._onScreenMouseUp));
+		}
+	}
+	,_onScreenMouseMove: function(e) {
+		if(this.hitTest(e.stageX,e.stageY) == true) {
+			if(this._isDown == true) this.set_state("down"); else this.set_state("over");
+			this._isOver = true;
+		} else if(this._isOver == true) {
+			this.set_state("normal");
+			this._isOver = false;
+		}
+	}
+	,_onScreenMouseUp: function(e) {
+		haxe.ui.toolkit.core.Screen.get_instance().removeEventListener(openfl.events.MouseEvent.MOUSE_UP,$bind(this,this._onScreenMouseUp));
+		if(this.hitTest(e.stageX,e.stageY) == true && this._isDown == true) {
+			this._isDown = false;
+			this.set_state("over");
+			var uiEvent = new haxe.ui.toolkit.events.UIEvent("haxeui_" + "click");
+			this.dispatchEvent(uiEvent);
+			if(this.url != null) openfl.Lib.getURL(new openfl.net.URLRequest(this.url));
+		} else if(this._isOver == false) {
+			this._isDown = false;
+			this.set_state("normal");
+		}
+	}
+	,get_states: function() {
+		return ["normal","over","down"];
+	}
+	,clone: function() {
+		var c = haxe.ui.toolkit.controls.Text.prototype.clone.call(this);
+		return c;
+	}
+	,self: function() {
+		return new haxe.ui.toolkit.controls.Link();
+	}
+	,__class__: haxe.ui.toolkit.controls.Link
 });
 haxe.ui.toolkit.controls.Menu = function() {
 	haxe.ui.toolkit.containers.VBox.call(this);
@@ -39464,6 +41407,7 @@ haxe.ui.toolkit.controls.MenuButton = function() {
 };
 $hxClasses["haxe.ui.toolkit.controls.MenuButton"] = haxe.ui.toolkit.controls.MenuButton;
 haxe.ui.toolkit.controls.MenuButton.__name__ = ["haxe","ui","toolkit","controls","MenuButton"];
+haxe.ui.toolkit.controls.MenuButton._currentMenuButton = null;
 haxe.ui.toolkit.controls.MenuButton.__super__ = haxe.ui.toolkit.controls.Button;
 haxe.ui.toolkit.controls.MenuButton.prototype = $extend(haxe.ui.toolkit.controls.Button.prototype,{
 	initialize: function() {
@@ -39626,6 +41570,7 @@ haxe.ui.toolkit.controls.OptionBox = function() {
 $hxClasses["haxe.ui.toolkit.controls.OptionBox"] = haxe.ui.toolkit.controls.OptionBox;
 haxe.ui.toolkit.controls.OptionBox.__name__ = ["haxe","ui","toolkit","controls","OptionBox"];
 haxe.ui.toolkit.controls.OptionBox.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable];
+haxe.ui.toolkit.controls.OptionBox._groups = null;
 haxe.ui.toolkit.controls.OptionBox.optionInGroup = function(value,option) {
 	var exists = false;
 	var arr = haxe.ui.toolkit.controls.OptionBox._groups.get(value);
@@ -39984,120 +41929,6 @@ haxe.ui.toolkit.controls.TabBar.prototype = $extend(haxe.ui.toolkit.containers.S
 	,__class__: haxe.ui.toolkit.controls.TabBar
 	,__properties__: $extend(haxe.ui.toolkit.containers.ScrollView.prototype.__properties__,{get_numTabs:"get_numTabs",set_selectedIndex:"set_selectedIndex",get_selectedIndex:"get_selectedIndex"})
 });
-haxe.ui.toolkit.controls.Text = function() {
-	haxe.ui.toolkit.core.StateComponent.call(this);
-	this._valign = "center";
-	this.set_autoSize(true);
-	this._textDisplay = new haxe.ui.toolkit.text.TextDisplay();
-	this._textDisplay.set_text("");
-};
-$hxClasses["haxe.ui.toolkit.controls.Text"] = haxe.ui.toolkit.controls.Text;
-haxe.ui.toolkit.controls.Text.__name__ = ["haxe","ui","toolkit","controls","Text"];
-haxe.ui.toolkit.controls.Text.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable];
-haxe.ui.toolkit.controls.Text.__super__ = haxe.ui.toolkit.core.StateComponent;
-haxe.ui.toolkit.controls.Text.prototype = $extend(haxe.ui.toolkit.core.StateComponent.prototype,{
-	initialize: function() {
-		haxe.ui.toolkit.core.StateComponent.prototype.initialize.call(this);
-		this.get_sprite().addChild(this._textDisplay.get_display());
-		this._textDisplay.set_autoSize(this.get_autoSize());
-		this._textDisplay.set_text(this.get_text());
-		if(this.get_autoSize() == true) {
-			if(this.get_width() == 0) this.set_width(this._textDisplay.get_display().get_width());
-			if(this.get_height() == 0) this.set_height(this._textDisplay.get_display().get_height());
-		}
-	}
-	,dispose: function() {
-		if(this.get_sprite().contains(this._textDisplay.get_display())) this.get_sprite().removeChild(this._textDisplay.get_display());
-		haxe.ui.toolkit.core.StateComponent.prototype.dispose.call(this);
-	}
-	,invalidate: function(type,recursive) {
-		if(recursive == null) recursive = false;
-		if(type == null) type = 1118481;
-		if(!this._ready || this._invalidating) return;
-		haxe.ui.toolkit.core.StateComponent.prototype.invalidate.call(this,type,recursive);
-		this._invalidating = true;
-		if((type & 256) == 256 && this._autoSize == false) {
-			this._textDisplay.get_display().set_width(this.get_layout().get_innerWidth());
-			this._textDisplay.get_display().set_height(this.get_layout().get_innerHeight());
-		}
-		this._invalidating = false;
-	}
-	,get_text: function() {
-		return this._textDisplay.get_text();
-	}
-	,set_text: function(value) {
-		value = haxe.ui.toolkit.core.StateComponent.prototype.set_text.call(this,value);
-		this._textDisplay.set_text(value);
-		if(this.get_autoSize() == true) {
-			this.set_width(this._textDisplay.get_display().get_width());
-			this.set_height(this._textDisplay.get_display().get_height());
-		}
-		return value;
-	}
-	,set_autoSize: function(value) {
-		value = haxe.ui.toolkit.core.StateComponent.prototype.set_autoSize.call(this,value);
-		if(this._textDisplay != null) this._textDisplay.set_autoSize(value);
-		return value;
-	}
-	,set_width: function(value) {
-		haxe.ui.toolkit.core.StateComponent.prototype.set_width.call(this,value);
-		this._textDisplay.get_display().set_width(value);
-		this._textDisplay.set_text(this.get_text());
-		this.set_height(this._textDisplay.get_display().get_height());
-		return value;
-	}
-	,applyStyle: function() {
-		haxe.ui.toolkit.core.StateComponent.prototype.applyStyle.call(this);
-		if(this._textDisplay != null) {
-			this._textDisplay.set_style(this._baseStyle);
-			if(this.get_autoSize() == true) {
-				this.set_width(this._textDisplay.get_display().get_width());
-				this.set_height(this._textDisplay.get_display().get_height());
-			}
-		}
-	}
-	,get_multiline: function() {
-		return this._textDisplay.get_multiline();
-	}
-	,set_multiline: function(value) {
-		this._textDisplay.set_multiline(value);
-		return value;
-	}
-	,get_wrapLines: function() {
-		return this._textDisplay.get_wrapLines();
-	}
-	,set_wrapLines: function(value) {
-		this._textDisplay.set_wrapLines(value);
-		return value;
-	}
-	,get_selectable: function() {
-		return this._textDisplay.get_selectable();
-	}
-	,set_selectable: function(value) {
-		return this._textDisplay.set_selectable(value);
-	}
-	,get_textAlign: function() {
-		if(this._textDisplay == null) return null;
-		return this._textDisplay.get_textAlign();
-	}
-	,set_textAlign: function(value) {
-		if(this._textDisplay != null) this._textDisplay.set_textAlign(value);
-		return value;
-	}
-	,clone: function() {
-		var c = haxe.ui.toolkit.core.StateComponent.prototype.clone.call(this);
-		c.set_multiline(this.get_multiline());
-		c.set_wrapLines(this.get_wrapLines());
-		c.set_selectable(this.get_selectable());
-		c.set_textAlign(this.get_textAlign());
-		return c;
-	}
-	,self: function() {
-		return new haxe.ui.toolkit.controls.Text();
-	}
-	,__class__: haxe.ui.toolkit.controls.Text
-	,__properties__: $extend(haxe.ui.toolkit.core.StateComponent.prototype.__properties__,{set_textAlign:"set_textAlign",get_textAlign:"get_textAlign",set_selectable:"set_selectable",get_selectable:"get_selectable",set_wrapLines:"set_wrapLines",get_wrapLines:"get_wrapLines",set_multiline:"set_multiline",get_multiline:"get_multiline"})
-});
 haxe.ui.toolkit.controls.TextInputLayout = function() {
 	haxe.ui.toolkit.layout.DefaultLayout.call(this);
 };
@@ -40415,7 +42246,7 @@ haxe.ui.toolkit.controls.VScrollLayout.prototype = $extend(haxe.ui.toolkit.layou
 			var ucy = this.get_usableHeight();
 			var thumbHeight = scroll.get_pageSize() / m * ucy;
 			if(thumbHeight < this.get_innerWidth()) thumbHeight = this.get_innerWidth(); else if(thumbHeight > ucy) thumbHeight = ucy;
-			thumb.set_height(thumbHeight);
+			if(thumbHeight > 0 && Math.isNaN(thumbHeight) == false) thumb.set_height(thumbHeight);
 		}
 	}
 	,repositionChildren: function() {
@@ -40718,7 +42549,6 @@ haxe.ui.toolkit.controls.popups.Popup = function(title,content,config,fn) {
 	}
 	this._buttonBar = new haxe.ui.toolkit.containers.Box();
 	this._buttonBar.set_id("buttonBar");
-	this._buttonBar.set_percentWidth(100);
 	this._buttonBar.set_horizontalAlign("center");
 	this._config = config;
 	if(this._config == null) {
@@ -40735,11 +42565,21 @@ haxe.ui.toolkit.controls.popups.Popup.__interfaces__ = [haxe.ui.toolkit.core.int
 haxe.ui.toolkit.controls.popups.Popup.__super__ = haxe.ui.toolkit.containers.VBox;
 haxe.ui.toolkit.controls.popups.Popup.prototype = $extend(haxe.ui.toolkit.containers.VBox.prototype,{
 	initialize: function() {
-		var _g1 = this;
+		var _g = this;
 		haxe.ui.toolkit.containers.VBox.prototype.initialize.call(this);
 		if(this._titleBar != null) {
 			this._titleBar.set_percentWidth(100);
 			this._titleBar.addChild(this._title);
+			if(this._config.closeButton == true) {
+				this._exitButton = new haxe.ui.toolkit.controls.Button();
+				this._exitButton.set_text("x");
+				this._exitButton.set_id("close");
+				this._exitButton.set_styleName("close");
+				this._exitButton.addEventListener(openfl.events.MouseEvent.CLICK,function(e) {
+					haxe.ui.toolkit.core.PopupManager.get_instance().hidePopup(_g);
+				});
+				this._titleBar.addChild(this._exitButton);
+			}
 			this._titleBar.get_sprite().buttonMode = true;
 			this._titleBar.get_sprite().set_useHandCursor(true);
 			this.addChild(this._titleBar);
@@ -40753,10 +42593,10 @@ haxe.ui.toolkit.controls.popups.Popup.prototype = $extend(haxe.ui.toolkit.contai
 			box.set_horizontalAlign(this._buttonBar.get_horizontalAlign());
 			var buttons = this._config.buttons;
 			this._buttonBar.addChild(box);
-			var _g = 0;
-			while(_g < buttons.length) {
-				var info = [buttons[_g]];
-				++_g;
+			var _g1 = 0;
+			while(_g1 < buttons.length) {
+				var info = [buttons[_g1]];
+				++_g1;
 				if((info[0].type & 16777216) != 16777216) {
 					var button = this.createStandardButton(info[0].type);
 					if(button != null) box.addChild(button);
@@ -40764,8 +42604,8 @@ haxe.ui.toolkit.controls.popups.Popup.prototype = $extend(haxe.ui.toolkit.contai
 					var button1 = new haxe.ui.toolkit.controls.Button();
 					button1.set_text(info[0].text);
 					button1.addEventListener(openfl.events.MouseEvent.CLICK,(function(info) {
-						return function(e) {
-							_g1.clickButton(info[0].type);
+						return function(e1) {
+							_g.clickButton(info[0].type);
 						};
 					})(info));
 					box.addChild(button1);
@@ -40888,6 +42728,8 @@ haxe.ui.toolkit.controls.selection.DateSelector.prototype = $extend(haxe.ui.tool
 		}); else {
 			if(this._cal == null) {
 				this._cal = new haxe.ui.toolkit.containers.CalendarView();
+				this._cal.set_styleName("dropDown");
+				if(this.get_id() != null) this._cal.set_id(this.get_id() + "_dropDown");
 				this._cal.addEventListener(openfl.events.Event.CHANGE,$bind(this,this.onDateChange));
 				this._cal.addEventListener(openfl.events.Event.ADDED_TO_STAGE,function(e) {
 					_g.showCalendar();
@@ -40899,7 +42741,6 @@ haxe.ui.toolkit.controls.selection.DateSelector.prototype = $extend(haxe.ui.tool
 			this.get_root().addEventListener(openfl.events.MouseEvent.MOUSE_WHEEL,$bind(this,this._onRootMouseDown));
 			this._cal.set_x(this.get_stageX() - this.get_root().get_stageX());
 			this._cal.set_y(this.get_stageY() + this.get_height() - this.get_root().get_stageY());
-			this._cal.get_sprite().set_filters([new openfl.filters.DropShadowFilter(4,45,8421504,1,4,4,1,3)]);
 			if(this._cal.get_stageY() + this._cal.get_height() > haxe.ui.toolkit.core.Screen.get_instance().get_height()) {
 				this._cal.set_y(this.get_stageY() - this._cal.get_height());
 				this.set_styleName("dropUp");
@@ -40991,6 +42832,7 @@ haxe.ui.toolkit.controls.selection.ListSelector = function() {
 	this.set_toggle(true);
 	this.set_allowSelection(false);
 	this.dispatchChangeEvents = false;
+	this.set_autoSize(false);
 };
 $hxClasses["haxe.ui.toolkit.controls.selection.ListSelector"] = haxe.ui.toolkit.controls.selection.ListSelector;
 haxe.ui.toolkit.controls.selection.ListSelector.__name__ = ["haxe","ui","toolkit","controls","selection","ListSelector"];
@@ -41005,7 +42847,6 @@ haxe.ui.toolkit.controls.selection.ListSelector.prototype = $extend(haxe.ui.tool
 	}
 	,initialize: function() {
 		haxe.ui.toolkit.controls.Button.prototype.initialize.call(this);
-		this.set_autoSize(false);
 	}
 	,_onMouseClick: function(event) {
 		if(this._list == null || this._list.get_visible() == false) this.showList(); else this.hideList();
@@ -41037,6 +42878,8 @@ haxe.ui.toolkit.controls.selection.ListSelector.prototype = $extend(haxe.ui.tool
 		}); else {
 			if(this._list == null) {
 				this._list = new haxe.ui.toolkit.containers.ListView();
+				this._list.set_styleName("dropDown");
+				if(this.get_id() != null) this._list.set_id(this.get_id() + "_dropDown");
 				this._list.addEventListener("haxeui_" + "change",$bind(this,this._onListChange));
 				this._list.get_content().addEventListener(openfl.events.Event.ADDED_TO_STAGE,function(e) {
 					_g.showList();
@@ -41049,7 +42892,7 @@ haxe.ui.toolkit.controls.selection.ListSelector.prototype = $extend(haxe.ui.tool
 			this.get_root().addEventListener(openfl.events.MouseEvent.MOUSE_WHEEL,$bind(this,this._onRootMouseDown));
 			this._list.set_x(this.get_stageX() - this.get_root().get_stageX());
 			this._list.set_y(this.get_stageY() + this.get_height() - this.get_root().get_stageY());
-			if(this._list.get_width() == 0) this._list.set_width(this.get_width());
+			this._list.set_width(this.get_width());
 			var n = this._maxListSize;
 			if(n > this._list.get_listSize()) n = this._list.get_listSize();
 			var listHeight = n * this._list.get_itemHeight() + (this._list.get_layout().get_padding().get_top() + this._list.get_layout().get_padding().get_bottom());
@@ -41105,6 +42948,13 @@ haxe.ui.toolkit.controls.selection.ListSelector.prototype = $extend(haxe.ui.tool
 		this._method = value;
 		return value;
 	}
+	,get_listSize: function() {
+		return this._maxListSize;
+	}
+	,set_listSize: function(value) {
+		this._maxListSize = value;
+		return value;
+	}
 	,get_selectedItems: function() {
 		return this._selectedItems;
 	}
@@ -41157,7 +43007,7 @@ haxe.ui.toolkit.controls.selection.ListSelector.prototype = $extend(haxe.ui.tool
 		return new haxe.ui.toolkit.controls.selection.ListSelector();
 	}
 	,__class__: haxe.ui.toolkit.controls.selection.ListSelector
-	,__properties__: $extend(haxe.ui.toolkit.controls.Button.prototype.__properties__,{set_selectedIndex:"set_selectedIndex",get_selectedIndex:"get_selectedIndex",get_selectedItems:"get_selectedItems",set_method:"set_method",get_method:"get_method",set_dataSource:"set_dataSource",get_dataSource:"get_dataSource"})
+	,__properties__: $extend(haxe.ui.toolkit.controls.Button.prototype.__properties__,{set_selectedIndex:"set_selectedIndex",get_selectedIndex:"get_selectedIndex",get_selectedItems:"get_selectedItems",set_listSize:"set_listSize",get_listSize:"get_listSize",set_method:"set_method",get_method:"get_method",set_dataSource:"set_dataSource",get_dataSource:"get_dataSource"})
 });
 haxe.ui.toolkit.controls.selection.DropDownList = function() {
 	haxe.ui.toolkit.containers.ListView.call(this);
@@ -41181,6 +43031,8 @@ haxe.ui.toolkit.core.ClassManager = function() {
 $hxClasses["haxe.ui.toolkit.core.ClassManager"] = haxe.ui.toolkit.core.ClassManager;
 haxe.ui.toolkit.core.ClassManager.__name__ = ["haxe","ui","toolkit","core","ClassManager"];
 haxe.ui.toolkit.core.ClassManager.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.core.ClassManager._instance = null;
+haxe.ui.toolkit.core.ClassManager.instance = null;
 haxe.ui.toolkit.core.ClassManager.get_instance = function() {
 	if(haxe.ui.toolkit.core.ClassManager._instance == null) haxe.ui.toolkit.core.ClassManager._instance = new haxe.ui.toolkit.core.ClassManager();
 	return haxe.ui.toolkit.core.ClassManager._instance;
@@ -41260,6 +43112,8 @@ haxe.ui.toolkit.core.Client = function() {
 $hxClasses["haxe.ui.toolkit.core.Client"] = haxe.ui.toolkit.core.Client;
 haxe.ui.toolkit.core.Client.__name__ = ["haxe","ui","toolkit","core","Client"];
 haxe.ui.toolkit.core.Client.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.core.Client._instance = null;
+haxe.ui.toolkit.core.Client.instance = null;
 haxe.ui.toolkit.core.Client.get_instance = function() {
 	if(haxe.ui.toolkit.core.Client._instance == null) {
 		haxe.ui.toolkit.core.Client._instance = new haxe.ui.toolkit.core.Client();
@@ -41307,6 +43161,8 @@ haxe.ui.toolkit.core.FocusManager = function() {
 $hxClasses["haxe.ui.toolkit.core.FocusManager"] = haxe.ui.toolkit.core.FocusManager;
 haxe.ui.toolkit.core.FocusManager.__name__ = ["haxe","ui","toolkit","core","FocusManager"];
 haxe.ui.toolkit.core.FocusManager.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.core.FocusManager._instance = null;
+haxe.ui.toolkit.core.FocusManager.instance = null;
 haxe.ui.toolkit.core.FocusManager.get_instance = function() {
 	if(haxe.ui.toolkit.core.FocusManager._instance == null) haxe.ui.toolkit.core.FocusManager._instance = new haxe.ui.toolkit.core.FocusManager();
 	return haxe.ui.toolkit.core.FocusManager._instance;
@@ -41327,7 +43183,7 @@ haxe.ui.toolkit.core.Macros.processNode = function(node,types,paths) {
 	var id = node.get("id");
 	if(id != null && id.length > 0) {
 		var cls = haxe.ui.toolkit.core.Macros.componentClasses.get(nodeName);
-		if(cls != null) types.set(id,cls); else haxe.Log.trace("WARNING: '" + nodeName + "' hasnt been registered",{ fileName : "Macros.hx", lineNumber : 448, className : "haxe.ui.toolkit.core.Macros", methodName : "processNode"});
+		if(cls != null) types.set(id,cls); else haxe.Log.trace("WARNING: '" + nodeName + "' hasnt been registered",{ fileName : "Macros.hx", lineNumber : 466, className : "haxe.ui.toolkit.core.Macros", methodName : "processNode"});
 	}
 	var $it0 = node.elements();
 	while( $it0.hasNext() ) {
@@ -41425,10 +43281,10 @@ haxe.ui.toolkit.core.Macros.insertLine = function(fn,e,location) {
 		switch(_g[1]) {
 		case 12:
 			var el = _g[2];
-			fn.expr = { expr : haxe.macro.ExprDef.EBlock(haxe.ui.toolkit.core.Macros.insertExpr(el,location,e)), pos : { file : "/usr/lib/haxe/lib/haxeui/1,5,1/haxe/ui/toolkit/core/Macros.hx", min : 16770, max : 16799}};
+			fn.expr = { expr : haxe.macro.ExprDef.EBlock(haxe.ui.toolkit.core.Macros.insertExpr(el,location,e)), pos : { file : "/usr/lib/haxe/lib/haxeui/1,6,12/haxe/ui/toolkit/core/Macros.hx", min : 17531, max : 17560}};
 			break;
 		default:
-			fn.expr = { expr : haxe.macro.ExprDef.EBlock(haxe.ui.toolkit.core.Macros.insertExpr([fn.expr],location,e)), pos : { file : "/usr/lib/haxe/lib/haxeui/1,5,1/haxe/ui/toolkit/core/Macros.hx", min : 16822, max : 16860}};
+			fn.expr = { expr : haxe.macro.ExprDef.EBlock(haxe.ui.toolkit.core.Macros.insertExpr([fn.expr],location,e)), pos : { file : "/usr/lib/haxe/lib/haxeui/1,6,12/haxe/ui/toolkit/core/Macros.hx", min : 17583, max : 17621}};
 		}
 	}
 };
@@ -41585,6 +43441,8 @@ haxe.ui.toolkit.core.PopupManager = function() {
 $hxClasses["haxe.ui.toolkit.core.PopupManager"] = haxe.ui.toolkit.core.PopupManager;
 haxe.ui.toolkit.core.PopupManager.__name__ = ["haxe","ui","toolkit","core","PopupManager"];
 haxe.ui.toolkit.core.PopupManager.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.core.PopupManager._instance = null;
+haxe.ui.toolkit.core.PopupManager.instance = null;
 haxe.ui.toolkit.core.PopupManager.get_instance = function() {
 	if(haxe.ui.toolkit.core.PopupManager._instance == null) haxe.ui.toolkit.core.PopupManager._instance = new haxe.ui.toolkit.core.PopupManager();
 	return haxe.ui.toolkit.core.PopupManager._instance;
@@ -41699,7 +43557,7 @@ haxe.ui.toolkit.core.PopupManager.prototype = {
 		return p;
 	}
 	,buildConfig: function(config) {
-		var c = { };
+		var c = Reflect.copy(config);
 		c.id = null;
 		c.styleName = null;
 		c.modal = true;
@@ -41769,7 +43627,7 @@ haxe.ui.toolkit.core.Root = function() {
 	this._modalOverlayCounter = 0;
 	haxe.ui.toolkit.core.Component.call(this);
 	this._layout = new haxe.ui.toolkit.layout.AbsoluteLayout();
-	this._clipContent = true;
+	this._clipContent = false;
 	this._mousePos = new openfl.geom.Point(0,0);
 	haxe.ui.toolkit.core.Screen.get_instance().addEventListener(openfl.events.Event.RESIZE,$bind(this,this._onScreenResize));
 };
@@ -41793,7 +43651,7 @@ haxe.ui.toolkit.core.Root.prototype = $extend(haxe.ui.toolkit.core.Component.pro
 	}
 	,add: function(item) {
 		var r = null;
-		if(typeof(item) == "string") r = this.addChild(haxe.ui.toolkit.core.Toolkit.processXmlResource(item)); else if(js.Boot.__instanceof(item,haxe.ui.toolkit.core.Controller)) r = this.addChild((js.Boot.__cast(item , haxe.ui.toolkit.core.Controller)).get_view()); else haxe.Log.trace(Std.string(item) + " item not supported in Root.add",{ fileName : "Root.hx", lineNumber : 62, className : "haxe.ui.toolkit.core.Root", methodName : "add"});
+		if(typeof(item) == "string") r = this.addChild(haxe.ui.toolkit.core.Toolkit.processXmlResource(item)); else if(js.Boot.__instanceof(item,haxe.ui.toolkit.core.Controller)) r = this.addChild((js.Boot.__cast(item , haxe.ui.toolkit.core.Controller)).get_view()); else haxe.Log.trace(Std.string(item) + " item not supported in Root.add",{ fileName : "Root.hx", lineNumber : 66, className : "haxe.ui.toolkit.core.Root", methodName : "add"});
 		return r;
 	}
 	,resizeRoot: function() {
@@ -41853,6 +43711,8 @@ haxe.ui.toolkit.core.RootManager = function() {
 $hxClasses["haxe.ui.toolkit.core.RootManager"] = haxe.ui.toolkit.core.RootManager;
 haxe.ui.toolkit.core.RootManager.__name__ = ["haxe","ui","toolkit","core","RootManager"];
 haxe.ui.toolkit.core.RootManager.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.core.RootManager._instance = null;
+haxe.ui.toolkit.core.RootManager.instance = null;
 haxe.ui.toolkit.core.RootManager.get_instance = function() {
 	if(haxe.ui.toolkit.core.RootManager._instance == null) haxe.ui.toolkit.core.RootManager._instance = new haxe.ui.toolkit.core.RootManager();
 	return haxe.ui.toolkit.core.RootManager._instance;
@@ -41862,9 +43722,13 @@ haxe.ui.toolkit.core.RootManager.prototype = {
 		if(options == null) options = { };
 		if(options.parent != null) options.parent = options.parent; else options.parent = openfl.Lib.get_current().get_stage();
 		var root = new haxe.ui.toolkit.core.Root();
+		root.get_sprite().set_scaleX(root.get_sprite().set_scaleY(haxe.ui.toolkit.core.Toolkit.get_scaleFactor()));
 		this._roots.push(root);
 		root.addEventListener(openfl.events.Event.ADDED_TO_STAGE,function(e) {
-			if(fn != null) fn(root);
+			if(fn != null) {
+				fn(root);
+				root.invalidate(1048576);
+			}
 			root.removeEventListenerType(openfl.events.Event.ADDED_TO_STAGE);
 		});
 		root.set_root(root);
@@ -41908,6 +43772,8 @@ haxe.ui.toolkit.core.Screen = function() {
 $hxClasses["haxe.ui.toolkit.core.Screen"] = haxe.ui.toolkit.core.Screen;
 haxe.ui.toolkit.core.Screen.__name__ = ["haxe","ui","toolkit","core","Screen"];
 haxe.ui.toolkit.core.Screen.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.core.Screen._instance = null;
+haxe.ui.toolkit.core.Screen.instance = null;
 haxe.ui.toolkit.core.Screen.get_instance = function() {
 	if(haxe.ui.toolkit.core.Screen._instance == null) haxe.ui.toolkit.core.Screen._instance = new haxe.ui.toolkit.core.Screen();
 	return haxe.ui.toolkit.core.Screen._instance;
@@ -41939,7 +43805,9 @@ haxe.ui.toolkit.core.Toolkit = function() {
 };
 $hxClasses["haxe.ui.toolkit.core.Toolkit"] = haxe.ui.toolkit.core.Toolkit;
 haxe.ui.toolkit.core.Toolkit.__name__ = ["haxe","ui","toolkit","core","Toolkit"];
-haxe.ui.toolkit.core.Toolkit.__properties__ = {set_defaultTransition:"set_defaultTransition",get_defaultTransition:"get_defaultTransition",get_instance:"get_instance"}
+haxe.ui.toolkit.core.Toolkit.__properties__ = {set_scaleFactor:"set_scaleFactor",get_scaleFactor:"get_scaleFactor",set_defaultTransition:"set_defaultTransition",get_defaultTransition:"get_defaultTransition",get_versionString:"get_versionString",get_versionInfo:"get_versionInfo",get_instance:"get_instance"}
+haxe.ui.toolkit.core.Toolkit._instance = null;
+haxe.ui.toolkit.core.Toolkit.instance = null;
 haxe.ui.toolkit.core.Toolkit.get_instance = function() {
 	if(haxe.ui.toolkit.core.Toolkit._instance == null) {
 		openfl.Lib.get_current().get_stage().align = openfl.display.StageAlign.TOP_LEFT;
@@ -41949,66 +43817,95 @@ haxe.ui.toolkit.core.Toolkit.get_instance = function() {
 	return haxe.ui.toolkit.core.Toolkit._instance;
 };
 haxe.ui.toolkit.core.Toolkit.init = function() {
+	(function() {
+		var value = JSON.parse("{\n  \"name\": \"openfl-snapsvg\",\n  \"url\": \"\",\n  \"license\": \"MIT\",\n  \"tags\": [ \"html5\", \"svg\", \"snap.svg\"],\n  \"description\": \"\",\n  \"version\": \"0.0.1\",\n  \"releasenote\": \"Initial release\",\n  \"contributors\": [ \"grebenshikov.n\" ],\n  \"dependencies\": {}\n}\n");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("openfl-snapsvg",value);
+		var value1 = JSON.parse("{\r\n  \"name\": \"svg\",\r\n  \"url\": \"http://github.com/haxenme/svg\",\r\n  \"license\": \"MIT\",\r\n  \"tags\": [ \"cpp\", \"flash\" ],\r\n  \"description\": \"Provides support for parsing and rendering SVG content\",\r\n  \"version\": \"1.0.8\",\r\n  \"releasenote\": \"Compile fix\",\r\n  \"contributors\": [ \"singmajesty\", \"gamehaxe\" ],\r\n  \"dependencies\": {}\r\n}");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("svg",value1);
+		var value2 = JSON.parse("{\r\n    \"name\"         : \"haxeui\",\r\n    \"url\"          : \"https://github.com/ianharrigan/haxeui\",\r\n    \"license\"      : \"MIT\",\r\n    \"tags\"         : [\"rich\", \"ui\"],\r\n    \"description\"  : \"Styleable application centric rich UI\",\r\n    \"version\"      : \"1.6.12\",\r\n    \"releasenote\"  : \"Added link component\",\r\n    \"contributors\" : [\"ianharrigan\"],\r\n    \"dependencies\" : {\r\n        \"openfl\"        : \"\",\r\n        \"actuate\"       : \"\",\r\n        \"hscript\"       : \"\",\r\n        \"svg\"           : \"\"\r\n    }\r\n}\r\n");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("haxeui",value2);
+		var value3 = JSON.parse("{\r\n  \"name\": \"hscript\",\r\n  \"url\": \"https://github.com/HaxeFoundation/hscript\",\r\n  \"license\": \"MIT\",\r\n  \"description\": \"Haxe Script is a scripting engine for a subset of the Haxe language\",\r\n  \"version\": \"2.0.4\",\r\n  \"releasenote\": \"switch and array comprehension support\",\r\n  \"contributors\": [\"ncannasse\"]\r\n}");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("hscript",value3);
+		var value4 = JSON.parse("{\r\n  \"name\": \"cocktail\",\r\n  \"url\": \"http://www.silexlabs.org/haxe/cocktail/\",\r\n  \"license\": \"MIT\",\r\n  \"tags\": [\"cross\",\"js\",\"flash\",\"javascript\",\"nme\",\"html\",\"css\"],\r\n  \"description\": \"HTML/CSS rendering engine\",\r\n  \"version\": \"1.0.0-beta.5\",\r\n  \"releasenote\": \"See changes.md\",\r\n  \"contributors\": [\"silexlabs\"],\r\n  \"dependencies\": {\r\n\r\n  }\r\n}\r\n");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("cocktail",value4);
+		var value5 = JSON.parse("{\n\t\"name\": \"openfl\",\n\t\"url\": \"http://www.openfl.org\",\n\t\"license\": \"MIT\",\n\t\"tags\": [],\n\t\"description\": \"The \\\"Open Flash Library\\\" for fast 2D development\",\n\t\"version\": \"2.1.7\",\n\t\"releasenote\": \"Graphic improvement, right-click on HTML5, compile guards\",\n\t\"contributors\": [ \"singmajesty\" ],\n\t\"dependencies\": {}\n}\n");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("openfl",value5);
+		var value6 = JSON.parse("{\n  \"name\": \"actuate\",\n  \"url\": \"http://github.com/openfl/actuate\",\n  \"license\": \"MIT\",\n  \"tags\": [ \"flash\", \"cpp\", \"neko\", \"js\" ],\n  \"description\": \"Actuate is a fast and flexible tween library that uses a jQuery-style \\\"chaining\\\" syntax. It out-performs other libraries (such as TweenLite) and is easy to extend with custom actuators.\",\n  \"version\": \"1.7.5\",\n  \"releasenote\": \"Fix for (default, set) fields for HTML5\",\n  \"contributors\": [ \"singmajesty\" ],\n  \"dependencies\": {}\n}\n");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("actuate",value6);
+		var value7 = JSON.parse("{\r\n    \"name\"         : \"haxeui-webview\",\r\n    \"url\"          : \"https://github.com/ianharrigan/haxeui-webview\",\r\n    \"license\"      : \"MIT\",\r\n    \"tags\"         : [\"rich\", \"ui\", \"haxeui\"],\r\n    \"description\"  : \"Webview for HaxeUI\",\r\n    \"version\"      : \"0.1.1\",\r\n    \"releasenote\"  : \"\",\r\n    \"contributors\" : [\"ianharrigan\"],\r\n    \"dependencies\" : {\r\n        \"openfl\"        : \"\",\r\n        \"actuate\"       : \"\",\r\n        \"hscript\"       : \"\",\r\n        \"haxeui\"        : \"\",\r\n        \"cocktail\"      : \"\"\r\n    }\r\n}\r\n");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("haxeui-webview",value7);
+		var value8 = JSON.parse("{\r\n    \"name\"         : \"haxeui-rich-text\",\r\n    \"url\"          : \"https://github.com/ianharrigan/haxeui-rich-text\",\r\n    \"license\"      : \"MIT\",\r\n    \"tags\"         : [\"rich\", \"ui\", \"haxeui\"],\r\n    \"description\"  : \"Rich text for HaxeUI\",\r\n    \"version\"      : \"0.1.2\",\r\n    \"releasenote\"  : \"Improved RegExp syntax rules\",\r\n    \"contributors\" : [\"ianharrigan\"],\r\n    \"dependencies\" : {\r\n        \"openfl\"        : \"\",\r\n        \"actuate\"       : \"\",\r\n        \"hscript\"       : \"\",\r\n        \"haxeui\"       : \"\"\r\n    }\r\n}\r\n");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("haxeui-rich-text",value8);
+		var value9 = JSON.parse("{\n\t\"name\": \"lime\",\n\t\"url\": \"https://github.com/openfl/lime\",\n\t\"license\": \"MIT\",\n\t\"tags\": [],\n\t\"description\": \"A flexible lightweight layer for Haxe cross-platform developers\",\n\t\"version\": \"2.0.1\",\n\t\"releasenote\": \"Minor fixes to touch events and Android handling\",\n\t\"contributors\": [ \"singmajesty\" ],\n\t\"dependencies\": {}\n}\n");
+		haxe.ui.toolkit.core.Toolkit._versionInfo.set("lime",value9);
+	})();
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.ScrollView","scrollview");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.VSlider","vslider");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.webview.WebView","webview");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Text","text");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.CalendarDay","calendarday");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.VProgress","vprogress");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.ContinuousVBox","continuousvbox");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.webview.WebView","webview");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.TextInput","textinput");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.richtext.RTFView","rtfview");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.Absolute","absolute");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.TabBar","tabbar");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Image","image");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.ListView","listview");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.OptionBoxValue","optionboxvalue");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.VBox","vbox");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.HSlider","hslider");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Menu","menu");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.ContinuousHBox","continuoushbox");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.renderers.ComponentItemRenderer","componentitemrenderer");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.renderers.ItemRenderer","itemrenderer");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.richtext.Code","code");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.TableView","tableview");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.Component","component");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.HBox","hbox");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.HSplitter","hsplitter");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.MenuItem","menuitem");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.Container","container");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.CheckBox","checkbox");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Spacer","spacer");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.TableViewRow","tableviewrow");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.VSplitterGripper","vsplittergripper");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.VScroll","vscroll");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.DisplayObject","displayobject");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.OptionBox","optionbox");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.MenuBar","menubar");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Value","value");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.Root","root");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.DisplayObjectContainer","displayobjectcontainer");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.Box","box");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.CheckBoxValue","checkboxvalue");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.HScroll","hscroll");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.HProgress","hprogress");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.StyleableDisplayObject","styleabledisplayobject");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.AccordionButton","accordionbutton");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.Grid","grid");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.Stack","stack");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.TabView","tabview");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Progress","progress");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.ExpandablePanel","expandablepanel");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Slider","slider");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.MenuButton","menubutton");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.VSplitter","vsplitter");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.selection.DropDownList","dropdownlist");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.CalendarView","calendarview");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.ExpandableButton","expandablebutton");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Link","link");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.StateComponent","statecomponent");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.VSlider","vslider");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.CalendarDay","calendarday");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.VProgress","vprogress");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.ContinuousVBox","continuousvbox");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.richtext.RTFView","rtfview");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.TabBar","tabbar");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Image","image");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.OptionBoxValue","optionboxvalue");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.HSlider","hslider");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.TableView","tableview");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.richtext.Code","code");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.CheckBox","checkbox");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.TableViewRow","tableviewrow");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.DisplayObject","displayobject");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.OptionBox","optionbox");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.Root","root");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.DisplayObjectContainer","displayobjectcontainer");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.Box","box");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.HProgress","hprogress");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.StyleableDisplayObject","styleabledisplayobject");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.AccordionButton","accordionbutton");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.Grid","grid");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.HSplitterGripper","hsplittergripper");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.Stack","stack");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.SpriteContainer","spritecontainer");
+	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Divider","divider");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.selection.ListSelector","listselector");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.Accordion","accordion");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Button","button");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Scroll","scroll");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.selection.DropDownList","dropdownlist");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.renderers.BasicItemRenderer","basicitemrenderer");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.CalendarView","calendarview");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.containers.ExpandableButton","expandablebutton");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.Calendar","calendar");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.controls.selection.DateSelector","dateselector");
-	haxe.ui.toolkit.core.ClassManager.get_instance().registerComponentClassName("haxe.ui.toolkit.core.StateComponent","statecomponent");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerDataSourceClassName("haxe.ui.toolkit.data.ArrayDataSource","array");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerDataSourceClassName("haxe.ui.toolkit.data.XMLDataSource","xml");
 	haxe.ui.toolkit.core.ClassManager.get_instance().registerDataSourceClassName("haxe.ui.toolkit.data.JSONDataSource","json");
@@ -42017,10 +43914,10 @@ haxe.ui.toolkit.core.Toolkit.init = function() {
 	haxe.ui.toolkit.themes.Theme.addAsset("__PUBLIC__","css/webview.css");
 	haxe.ui.toolkit.themes.Theme.addAsset("__PUBLIC__","css/rtf.css");
 	haxe.ui.toolkit.themes.Theme.addAsset("__PUBLIC__","css/code.css");
-	haxe.ui.toolkit.themes.Theme.addAsset("gradient","css/gradient/webview.css");
 	haxe.ui.toolkit.themes.Theme.addAsset("gradient","styles/gradient/gradient.css");
-	haxe.ui.toolkit.themes.Theme.addAsset("default","css/default/webview.css");
+	haxe.ui.toolkit.themes.Theme.addAsset("gradient","css/gradient/webview.css");
 	haxe.ui.toolkit.themes.Theme.addAsset("default",haxe.ui.toolkit.style.DefaultStyles);
+	haxe.ui.toolkit.themes.Theme.addAsset("default","css/default/webview.css");
 	haxe.ui.toolkit.themes.Theme.addAsset("gradient_mobile","styles/gradient/gradient_mobile.css");
 	haxe.ui.toolkit.themes.Theme.addAsset("windows","styles/windows/windows.css");
 	haxe.ui.toolkit.themes.Theme.addAsset("windows","styles/windows/buttons.css");
@@ -42046,12 +43943,27 @@ haxe.ui.toolkit.core.Toolkit.init = function() {
 	}
 	if(t == null && haxe.ui.toolkit.core.Toolkit.useDefaultTheme == true) t = new haxe.ui.toolkit.themes.DefaultTheme();
 	if(t != null) t.apply();
-	null;
 };
+haxe.ui.toolkit.core.Toolkit.versionInfo = null;
+haxe.ui.toolkit.core.Toolkit.get_versionInfo = function() {
+	return haxe.ui.toolkit.core.Toolkit._versionInfo;
+};
+haxe.ui.toolkit.core.Toolkit.versionString = null;
+haxe.ui.toolkit.core.Toolkit.get_versionString = function() {
+	var s = "";
+	var $it0 = haxe.ui.toolkit.core.Toolkit._versionInfo.keys();
+	while( $it0.hasNext() ) {
+		var lib = $it0.next();
+		s += lib + " [" + Std.string(haxe.ui.toolkit.core.Toolkit._versionInfo.get(lib).version) + "]\n";
+	}
+	return s;
+};
+haxe.ui.toolkit.core.Toolkit._registeredProcessors = null;
 haxe.ui.toolkit.core.Toolkit.registerXMLProcessor = function(cls,prefix) {
 	if(haxe.ui.toolkit.core.Toolkit._registeredProcessors == null) haxe.ui.toolkit.core.Toolkit._registeredProcessors = new haxe.ds.StringMap();
 	haxe.ui.toolkit.core.Toolkit._registeredProcessors.set(prefix,Type.getClassName(cls));
 };
+haxe.ui.toolkit.core.Toolkit.theme = null;
 haxe.ui.toolkit.core.Toolkit.processXmlResource = function(resourceId) {
 	return haxe.ui.toolkit.core.Toolkit.processXml(haxe.ui.toolkit.resources.ResourceManager.get_instance().getXML(resourceId));
 };
@@ -42097,7 +44009,7 @@ haxe.ui.toolkit.core.Toolkit.processXmlNode = function(node) {
 	} else {
 		var p2 = new haxe.ui.toolkit.core.xml.UIProcessor();
 		result = p2.process(node);
-		if(result == null) haxe.Log.trace("WARNING: Could not find processor for '" + nodeName + "'",{ fileName : "Toolkit.hx", lineNumber : 146, className : "haxe.ui.toolkit.core.Toolkit", methodName : "processXmlNode"});
+		if(result == null) haxe.Log.trace("WARNING: Could not find processor for '" + nodeName + "'",{ fileName : "Toolkit.hx", lineNumber : 173, className : "haxe.ui.toolkit.core.Toolkit", methodName : "processXmlNode"});
 	}
 	var $it0 = node.elements();
 	while( $it0.hasNext() ) {
@@ -42146,6 +44058,7 @@ haxe.ui.toolkit.core.Toolkit.postProcessXmlNode = function(node,parentObject) {
 	}
 	return result;
 };
+haxe.ui.toolkit.core.Toolkit._transitionRegister = null;
 haxe.ui.toolkit.core.Toolkit.get_defaultTransition = function() {
 	return haxe.ui.toolkit.core.Toolkit._defaultTransition;
 };
@@ -42167,8 +44080,15 @@ haxe.ui.toolkit.core.Toolkit.setTransitionForClass = function(cls,transition) {
 haxe.ui.toolkit.core.Toolkit.addScriptletClass = function(name,cls) {
 	haxe.ui.toolkit.hscript.ScriptManager.get_instance().addClass(name,cls);
 };
+haxe.ui.toolkit.core.Toolkit.addStyleSheet = function(resourceId) {
+	haxe.ui.toolkit.style.StyleManager.get_instance().addStyles(haxe.ui.toolkit.style.StyleParser.fromString(haxe.ui.toolkit.resources.ResourceManager.get_instance().getText(resourceId)));
+};
+haxe.ui.toolkit.core.Toolkit.open = function(fn,options) {
+	if(options != null) return haxe.ui.toolkit.core.Toolkit.openPopup(options,fn);
+	return haxe.ui.toolkit.core.Toolkit.openFullscreen(fn);
+};
 haxe.ui.toolkit.core.Toolkit.openFullscreen = function(fn) {
-	var root = haxe.ui.toolkit.core.RootManager.get_instance().createRoot({ x : 0, y : 0, percentWidth : 100, percentHeight : 100},fn);
+	var root = haxe.ui.toolkit.core.RootManager.get_instance().createRoot({ x : 0, y : 0, percentWidth : 100, percentHeight : 100, styleName : "fullscreen"},fn);
 	return root;
 };
 haxe.ui.toolkit.core.Toolkit.openPopup = function(options,fn) {
@@ -42178,6 +44098,19 @@ haxe.ui.toolkit.core.Toolkit.openPopup = function(options,fn) {
 	if(options.styleName != null) options.styleName = options.styleName; else options.styleName = "popup";
 	var root = haxe.ui.toolkit.core.RootManager.get_instance().createRoot(options,fn);
 	return root;
+};
+haxe.ui.toolkit.core.Toolkit.get_scaleFactor = function() {
+	if(haxe.ui.toolkit.core.Toolkit._scaleFactor == 0) {
+		if(haxe.ui.toolkit.core.Toolkit.autoScale == true) {
+			haxe.ui.toolkit.core.Toolkit.set_scaleFactor(openfl.system.Capabilities.get_screenDPI());
+			if(haxe.ui.toolkit.core.Toolkit._scaleFactor > 120) haxe.ui.toolkit.core.Toolkit._scaleFactor /= 120; else haxe.ui.toolkit.core.Toolkit._scaleFactor = 1;
+		} else haxe.ui.toolkit.core.Toolkit._scaleFactor = 1;
+	}
+	return haxe.ui.toolkit.core.Toolkit._scaleFactor;
+};
+haxe.ui.toolkit.core.Toolkit.set_scaleFactor = function(value) {
+	haxe.ui.toolkit.core.Toolkit._scaleFactor = value;
+	return value;
 };
 haxe.ui.toolkit.core.Toolkit.prototype = {
 	initInstance: function() {
@@ -42198,13 +44131,6 @@ haxe.ui.toolkit.core.base.VerticalAlign.__name__ = ["haxe","ui","toolkit","core"
 haxe.ui.toolkit.core.interfaces.Direction = function() { };
 $hxClasses["haxe.ui.toolkit.core.interfaces.Direction"] = haxe.ui.toolkit.core.interfaces.Direction;
 haxe.ui.toolkit.core.interfaces.Direction.__name__ = ["haxe","ui","toolkit","core","interfaces","Direction"];
-haxe.ui.toolkit.core.interfaces.IItemRenderer = function() { };
-$hxClasses["haxe.ui.toolkit.core.interfaces.IItemRenderer"] = haxe.ui.toolkit.core.interfaces.IItemRenderer;
-haxe.ui.toolkit.core.interfaces.IItemRenderer.__name__ = ["haxe","ui","toolkit","core","interfaces","IItemRenderer"];
-haxe.ui.toolkit.core.interfaces.IItemRenderer.__interfaces__ = [haxe.ui.toolkit.core.interfaces.IClonable,haxe.ui.toolkit.core.interfaces.IStateComponent];
-haxe.ui.toolkit.core.interfaces.IItemRenderer.prototype = {
-	__class__: haxe.ui.toolkit.core.interfaces.IItemRenderer
-};
 haxe.ui.toolkit.core.interfaces.InvalidationFlag = function() { };
 $hxClasses["haxe.ui.toolkit.core.interfaces.InvalidationFlag"] = haxe.ui.toolkit.core.interfaces.InvalidationFlag;
 haxe.ui.toolkit.core.interfaces.InvalidationFlag.__name__ = ["haxe","ui","toolkit","core","interfaces","InvalidationFlag"];
@@ -42276,6 +44202,9 @@ haxe.ui.toolkit.core.renderers.ItemRenderer.prototype = $extend(haxe.ui.toolkit.
 		} else if(js.Boot.__instanceof(c,haxe.ui.toolkit.controls.Button)) {
 			c.removeEventListener("haxeui_" + "click",$bind(this,this._onComponentEvent));
 			c.addEventListener("haxeui_" + "click",$bind(this,this._onComponentEvent));
+		} else if(js.Boot.__instanceof(c,haxe.ui.toolkit.controls.TextInput)) {
+			c.removeEventListener("haxeui_" + "change",$bind(this,this._onComponentEvent));
+			c.addEventListener("haxeui_" + "change",$bind(this,this._onComponentEvent));
 		}
 	}
 	,_onComponentEvent: function(event) {
@@ -42289,6 +44218,7 @@ haxe.ui.toolkit.core.renderers.ItemRenderer.prototype = $extend(haxe.ui.toolkit.
 			var uiEvent = new haxe.ui.toolkit.events.UIEvent(type,c);
 			uiEvent.data = this._data;
 			uiEvent.data.update = $bind(this,this.update);
+			uiEvent.data.itemRenderer = this;
 			this.eventDispatcher.dispatchEvent(uiEvent);
 		}
 	}
@@ -42326,7 +44256,7 @@ haxe.ui.toolkit.core.renderers.ItemRenderer.prototype = $extend(haxe.ui.toolkit.
 		}
 	}
 	,isInteractive: function(c) {
-		if(js.Boot.__instanceof(c,haxe.ui.toolkit.controls.Button) || js.Boot.__instanceof(c,haxe.ui.toolkit.controls.Slider)) return true;
+		if(js.Boot.__instanceof(c,haxe.ui.toolkit.controls.Button) || js.Boot.__instanceof(c,haxe.ui.toolkit.controls.Slider) || js.Boot.__instanceof(c,haxe.ui.toolkit.controls.TextInput)) return true;
 		return false;
 	}
 	,clone: function() {
@@ -42406,7 +44336,10 @@ $hxClasses["haxe.ui.toolkit.core.renderers.ComponentItemRenderer"] = haxe.ui.too
 haxe.ui.toolkit.core.renderers.ComponentItemRenderer.__name__ = ["haxe","ui","toolkit","core","renderers","ComponentItemRenderer"];
 haxe.ui.toolkit.core.renderers.ComponentItemRenderer.__super__ = haxe.ui.toolkit.core.renderers.BasicItemRenderer;
 haxe.ui.toolkit.core.renderers.ComponentItemRenderer.prototype = $extend(haxe.ui.toolkit.core.renderers.BasicItemRenderer.prototype,{
-	set_data: function(value) {
+	get_component: function() {
+		return this._component;
+	}
+	,set_data: function(value) {
 		var type = value.componentType;
 		if(type != null) {
 			var cls = this.getClassFromType(type);
@@ -42415,7 +44348,7 @@ haxe.ui.toolkit.core.renderers.ComponentItemRenderer.prototype = $extend(haxe.ui
 				this._component = Type.createInstance(cls,[]);
 				this._component.set_verticalAlign("center");
 				this._component.set_id("componentValue");
-				this._component.set_styleName(value.controlId);
+				this._component.set_styleName(value.componentStyleName);
 				if(value.componentSize != null) {
 					var cx = value.componentSize;
 					this._component.set_autoSize(false);
@@ -42428,7 +44361,7 @@ haxe.ui.toolkit.core.renderers.ComponentItemRenderer.prototype = $extend(haxe.ui
 	}
 	,getClassFromType: function(type) {
 		type = type.toLowerCase();
-		if(type == "button") return haxe.ui.toolkit.controls.Button; else if(type == "slider") return haxe.ui.toolkit.controls.HSlider; else if(type == "image") return haxe.ui.toolkit.controls.Image;
+		if(type == "button") return haxe.ui.toolkit.controls.Button; else if(type == "slider") return haxe.ui.toolkit.controls.HSlider; else if(type == "image") return haxe.ui.toolkit.controls.Image; else if(type == "textinput") return haxe.ui.toolkit.controls.TextInput;
 		return null;
 	}
 	,clone: function() {
@@ -42439,6 +44372,7 @@ haxe.ui.toolkit.core.renderers.ComponentItemRenderer.prototype = $extend(haxe.ui
 		return new haxe.ui.toolkit.core.renderers.ComponentItemRenderer();
 	}
 	,__class__: haxe.ui.toolkit.core.renderers.ComponentItemRenderer
+	,__properties__: $extend(haxe.ui.toolkit.core.renderers.BasicItemRenderer.prototype.__properties__,{get_component:"get_component"})
 });
 haxe.ui.toolkit.core.xml = {};
 haxe.ui.toolkit.core.xml.IXMLProcessor = function() { };
@@ -42550,7 +44484,10 @@ haxe.ui.toolkit.core.xml.UIProcessor.createComponent = function(className,config
 					var inlineStyles = haxe.ui.toolkit.style.StyleParser.fromString("_temp {" + value + "}");
 					if(inlineStyles != null) {
 						var style = inlineStyles.getStyle("_temp");
-						if(style != null) (js.Boot.__cast(c , haxe.ui.toolkit.core.StyleableDisplayObject)).set_style(style);
+						if(style != null) {
+							(js.Boot.__cast(c , haxe.ui.toolkit.core.StyleableDisplayObject)).set_style(style);
+							(js.Boot.__cast(c , haxe.ui.toolkit.core.StyleableDisplayObject)).set_styleString(value);
+						}
 					}
 				}
 			} else if(attr == "condition") {
@@ -42612,7 +44549,7 @@ haxe.ui.toolkit.core.xml.UIProcessor.createComponent = function(className,config
 			} else try {
 				if(Std.parseInt(value) != null) Reflect.setProperty(c,attr,Std.parseInt(value)); else if(value == "true" || value == "yes" || value == "false" || value == "no") Reflect.setProperty(c,attr,haxe.ui.toolkit.util.TypeParser.parseBool(value)); else Reflect.setProperty(c,attr,value);
 			} catch( e ) {
-				haxe.Log.trace("Exception setting component property: " + attr + " (" + Std.string(e) + ")",{ fileName : "UIProcessor.hx", lineNumber : 162, className : "haxe.ui.toolkit.core.xml.UIProcessor", methodName : "createComponent"});
+				haxe.Log.trace("Exception setting component property: " + attr + " (" + Std.string(e) + ")",{ fileName : "UIProcessor.hx", lineNumber : 163, className : "haxe.ui.toolkit.core.xml.UIProcessor", methodName : "createComponent"});
 			}
 		}
 	} catch( e ) { if( e != "__break__" ) throw e; }
@@ -42882,6 +44819,8 @@ haxe.ui.toolkit.data.DataManager = function() {
 $hxClasses["haxe.ui.toolkit.data.DataManager"] = haxe.ui.toolkit.data.DataManager;
 haxe.ui.toolkit.data.DataManager.__name__ = ["haxe","ui","toolkit","data","DataManager"];
 haxe.ui.toolkit.data.DataManager.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.data.DataManager._instance = null;
+haxe.ui.toolkit.data.DataManager.instance = null;
 haxe.ui.toolkit.data.DataManager.get_instance = function() {
 	if(haxe.ui.toolkit.data.DataManager._instance == null) haxe.ui.toolkit.data.DataManager._instance = new haxe.ui.toolkit.data.DataManager();
 	return haxe.ui.toolkit.data.DataManager._instance;
@@ -43138,6 +45077,7 @@ haxe.ui.toolkit.hscript.ClientWrapper.prototype = {
 var hscript = {};
 hscript.Interp = function() {
 	this.variables = new haxe.ds.StringMap();
+	this.locals = new haxe.ds.StringMap();
 	this.variables.set("null",null);
 	this.variables.set("true",true);
 	this.variables.set("false",false);
@@ -43778,13 +45718,8 @@ haxe.ui.toolkit.hscript.ScriptInterp = function() {
 	while( $it0.hasNext() ) {
 		var name = $it0.next();
 		var c = defaultClasses.get(name);
-		try {
-			var inst = Type.createInstance(c,[]);
-			if(js.Boot.__instanceof(inst,Std)) throw "Not sure why";
-			this.variables.set(name,inst);
-		} catch( e ) {
-			this.variables.set(name,c);
-		}
+		var value = c;
+		this.variables.set(name,value);
 	}
 };
 $hxClasses["haxe.ui.toolkit.hscript.ScriptInterp"] = haxe.ui.toolkit.hscript.ScriptInterp;
@@ -43811,6 +45746,8 @@ haxe.ui.toolkit.hscript.ScriptManager = function() {
 $hxClasses["haxe.ui.toolkit.hscript.ScriptManager"] = haxe.ui.toolkit.hscript.ScriptManager;
 haxe.ui.toolkit.hscript.ScriptManager.__name__ = ["haxe","ui","toolkit","hscript","ScriptManager"];
 haxe.ui.toolkit.hscript.ScriptManager.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.hscript.ScriptManager._instance = null;
+haxe.ui.toolkit.hscript.ScriptManager.instance = null;
 haxe.ui.toolkit.hscript.ScriptManager.get_instance = function() {
 	if(haxe.ui.toolkit.hscript.ScriptManager._instance == null) haxe.ui.toolkit.hscript.ScriptManager._instance = new haxe.ui.toolkit.hscript.ScriptManager();
 	return haxe.ui.toolkit.hscript.ScriptManager._instance;
@@ -43820,7 +45757,8 @@ haxe.ui.toolkit.hscript.ScriptManager.prototype = {
 		return this._defaultClasses;
 	}
 	,addClass: function(name,cls) {
-		this._defaultClasses.set(name,cls);
+		var value = cls;
+		this._defaultClasses.set(name,value);
 	}
 	,executeScript: function(script) {
 		var fullScript = "";
@@ -43866,7 +45804,7 @@ haxe.ui.toolkit.layout.AbsoluteLayout.prototype = $extend(haxe.ui.toolkit.layout
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			if(child.get_percentWidth() > -1) child.set_width(ucx * child.get_percentWidth() / 100);
 			if(child.get_percentHeight() > -1) child.set_height(ucy * child.get_percentHeight() / 100);
 		}
@@ -43898,22 +45836,13 @@ haxe.ui.toolkit.layout.BoxLayout.prototype = $extend(haxe.ui.toolkit.layout.Layo
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			if(child.get_percentWidth() > -1) child.set_width(ucx * child.get_percentWidth() / 100);
 			if(child.get_percentHeight() > -1) child.set_height(ucy * child.get_percentHeight() / 100);
 			if(child.get_width() > totalWidth) totalWidth = child.get_width();
 			if(child.get_height() > totalHeight) totalHeight = child.get_height();
 		}
-		if(this.get_container().get_autoSize()) {
-			if(totalWidth > 0 && totalWidth != this.get_innerWidth() && this.get_container().get_percentWidth() == -1) this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			if(totalHeight > 0 && totalHeight != this.get_innerHeight() && this.get_container().get_percentHeight() == -1) this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		} else if(totalWidth > 0 && this.get_container().get_height() == 0) {
-			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		} else if(totalHeight > 0 && this.get_container().get_width() == 0) {
-			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		}
+		this.autoSize(totalWidth,totalHeight);
 	}
 	,repositionChildren: function() {
 		haxe.ui.toolkit.layout.Layout.prototype.repositionChildren.call(this);
@@ -43922,7 +45851,7 @@ haxe.ui.toolkit.layout.BoxLayout.prototype = $extend(haxe.ui.toolkit.layout.Layo
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			var xpos = this.get_padding().get_left();
 			var ypos = this.get_padding().get_top();
 			var halign = child.get_horizontalAlign();
@@ -43995,7 +45924,7 @@ haxe.ui.toolkit.layout.GridLayout.prototype = $extend(haxe.ui.toolkit.layout.Lay
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			if(child.get_percentWidth() > -1) {
 				var ucx = columnWidths[columnIndex];
 				child.set_width(ucx * child.get_percentWidth() / 100);
@@ -44024,16 +45953,7 @@ haxe.ui.toolkit.layout.GridLayout.prototype = $extend(haxe.ui.toolkit.layout.Lay
 			totalHeight += cy;
 		}
 		if(rowHeights.length > 1) totalHeight += this.get_spacingY() * (rowHeights.length - 1);
-		if(this.get_container().get_autoSize()) {
-			if(totalWidth > 0 && totalWidth != this.get_innerWidth() && this.get_container().get_percentWidth() == -1) this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			if(totalHeight > 0 && totalHeight != this.get_innerHeight() && this.get_container().get_percentHeight() == -1) this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		} else if(totalWidth > 0 && this.get_container().get_height() == 0) {
-			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		} else if(totalHeight > 0 && this.get_container().get_width() == 0) {
-			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		}
+		this.autoSize(totalWidth,totalHeight);
 	}
 	,repositionChildren: function() {
 		haxe.ui.toolkit.layout.Layout.prototype.repositionChildren.call(this);
@@ -44048,7 +45968,7 @@ haxe.ui.toolkit.layout.GridLayout.prototype = $extend(haxe.ui.toolkit.layout.Lay
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			var halign = child.get_horizontalAlign();
 			var valign = child.get_verticalAlign();
 			switch(halign) {
@@ -44104,7 +46024,7 @@ haxe.ui.toolkit.layout.GridLayout.prototype = $extend(haxe.ui.toolkit.layout.Lay
 		while(_g2 < _g11.length) {
 			var child = _g11[_g2];
 			++_g2;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			if(child.get_percentWidth() <= 0) {
 				if(child.get_width() > columnWidths[columnIndex]) columnWidths[columnIndex] = child.get_width();
 			}
@@ -44121,7 +46041,7 @@ haxe.ui.toolkit.layout.GridLayout.prototype = $extend(haxe.ui.toolkit.layout.Lay
 		while(_g3 < _g12.length) {
 			var child1 = _g12[_g3];
 			++_g3;
-			if(child1.get_visible() == false) continue;
+			if(child1.get_visible() == false || child1.get_includeInLayout() == false) continue;
 			if(child1.get_percentWidth() > 0) {
 				var ucx = this.get_usableWidth() - (this.get_columns() - 1) * this.get_spacingX();
 				var _g31 = 0;
@@ -44165,7 +46085,7 @@ haxe.ui.toolkit.layout.GridLayout.prototype = $extend(haxe.ui.toolkit.layout.Lay
 		while(_g3 < _g11.length) {
 			var child = _g11[_g3];
 			++_g3;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			if(child.get_percentHeight() <= 0) {
 				if(child.get_height() > rowHeights[rowIndex]) rowHeights[rowIndex] = child.get_height();
 			}
@@ -44182,7 +46102,7 @@ haxe.ui.toolkit.layout.GridLayout.prototype = $extend(haxe.ui.toolkit.layout.Lay
 		while(_g4 < _g12.length) {
 			var child1 = _g12[_g4];
 			++_g4;
-			if(child1.get_visible() == false) continue;
+			if(child1.get_visible() == false || child1.get_includeInLayout() == false) continue;
 			if(child1.get_percentHeight() > 0) {
 				var ucy = this.get_usableHeight() - (rowCount - 1) * this.get_spacingY();
 				var _g31 = 0;
@@ -44238,7 +46158,7 @@ haxe.ui.toolkit.layout.HorizontalContinuousLayout.prototype = $extend(haxe.ui.to
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			rowChildren.push(child);
 			if(child.get_percentWidth() > -1) child.set_width((maxCX - this.get_spacingX()) * child.get_percentWidth() / 100);
 			usedCX += child.get_width() + this.get_spacingX();
@@ -44329,7 +46249,7 @@ haxe.ui.toolkit.layout.HorizontalLayout.prototype = $extend(haxe.ui.toolkit.layo
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			numChildren++;
 			if(child.get_percentWidth() > -1) child.set_width(ucx * child.get_percentWidth() / 100);
 			if(child.get_percentHeight() > -1) child.set_height(ucy * child.get_percentHeight() / 100);
@@ -44337,16 +46257,7 @@ haxe.ui.toolkit.layout.HorizontalLayout.prototype = $extend(haxe.ui.toolkit.layo
 			if(child.get_height() > totalHeight) totalHeight = child.get_height();
 		}
 		if(numChildren > 1) totalWidth += this.get_spacingX() * (numChildren - 1);
-		if(this.get_container().get_autoSize()) {
-			if(totalWidth > 0 && totalWidth != this.get_innerWidth() && this.get_container().get_percentWidth() == -1) this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			if(totalHeight > 0 && totalHeight != this.get_innerHeight() && this.get_container().get_percentHeight() == -1) this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		} else if(totalWidth > 0 && this.get_container().get_height() == 0) {
-			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		} else if(totalHeight > 0 && this.get_container().get_width() == 0) {
-			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		}
+		this.autoSize(totalWidth,totalHeight);
 	}
 	,repositionChildren: function() {
 		haxe.ui.toolkit.layout.Layout.prototype.repositionChildren.call(this);
@@ -44356,7 +46267,7 @@ haxe.ui.toolkit.layout.HorizontalLayout.prototype = $extend(haxe.ui.toolkit.layo
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			var ypos = this.get_padding().get_top();
 			var valign = child.get_verticalAlign();
 			switch(valign) {
@@ -44389,7 +46300,7 @@ haxe.ui.toolkit.layout.HorizontalLayout.prototype = $extend(haxe.ui.toolkit.layo
 		while(_g2 < _g11.length) {
 			var child = _g11[_g2];
 			++_g2;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			if(child.get_width() > 0 && child.get_percentWidth() < 0) ucx -= child.get_width();
 		}
 		if(ucx < 0) ucx = 0;
@@ -44429,7 +46340,7 @@ haxe.ui.toolkit.layout.VerticalContinuousLayout.prototype = $extend(haxe.ui.tool
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			colChildren.push(child);
 			usedCY += child.get_height() + this.get_spacingY();
 			if(usedCY - this.get_spacingY() > maxCY) {
@@ -44519,7 +46430,7 @@ haxe.ui.toolkit.layout.VerticalLayout.prototype = $extend(haxe.ui.toolkit.layout
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			numChildren++;
 			if(child.get_percentWidth() > -1) child.set_width(ucx * child.get_percentWidth() / 100);
 			if(child.get_percentHeight() > -1) child.set_height(ucy * child.get_percentHeight() / 100);
@@ -44527,16 +46438,7 @@ haxe.ui.toolkit.layout.VerticalLayout.prototype = $extend(haxe.ui.toolkit.layout
 			if(child.get_width() > totalWidth) totalWidth = child.get_width();
 		}
 		if(numChildren > 1) totalHeight += this.get_spacingY() * (numChildren - 1);
-		if(this.get_container().get_autoSize()) {
-			if(totalWidth > 0 && totalWidth != this.get_innerWidth() && this.get_container().get_percentWidth() == -1) this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			if(totalHeight > 0 && totalHeight != this.get_innerHeight() && this.get_container().get_percentHeight() == -1) this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		} else if(totalWidth > 0 && this.get_container().get_height() == 0) {
-			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		} else if(totalHeight > 0 && this.get_container().get_width() == 0) {
-			this.get_container().set_width(totalWidth + (this.get_padding().get_left() + this.get_padding().get_right()));
-			this.get_container().set_height(totalHeight + (this.get_padding().get_top() + this.get_padding().get_bottom()));
-		}
+		this.autoSize(totalWidth,totalHeight);
 	}
 	,repositionChildren: function() {
 		haxe.ui.toolkit.layout.Layout.prototype.repositionChildren.call(this);
@@ -44546,7 +46448,7 @@ haxe.ui.toolkit.layout.VerticalLayout.prototype = $extend(haxe.ui.toolkit.layout
 		while(_g < _g1.length) {
 			var child = _g1[_g];
 			++_g;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			var xpos = this.get_padding().get_left();
 			var halign = child.get_horizontalAlign();
 			switch(halign) {
@@ -44579,7 +46481,7 @@ haxe.ui.toolkit.layout.VerticalLayout.prototype = $extend(haxe.ui.toolkit.layout
 		while(_g2 < _g11.length) {
 			var child = _g11[_g2];
 			++_g2;
-			if(child.get_visible() == false) continue;
+			if(child.get_visible() == false || child.get_includeInLayout() == false) continue;
 			if(child.get_height() > 0 && child.get_percentHeight() < 0) ucy -= child.get_height();
 		}
 		if(ucy < 0) ucy = 0;
@@ -44600,6 +46502,8 @@ haxe.ui.toolkit.resources.ResourceManager = function() {
 $hxClasses["haxe.ui.toolkit.resources.ResourceManager"] = haxe.ui.toolkit.resources.ResourceManager;
 haxe.ui.toolkit.resources.ResourceManager.__name__ = ["haxe","ui","toolkit","resources","ResourceManager"];
 haxe.ui.toolkit.resources.ResourceManager.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.resources.ResourceManager._instance = null;
+haxe.ui.toolkit.resources.ResourceManager.instance = null;
 haxe.ui.toolkit.resources.ResourceManager.get_instance = function() {
 	if(haxe.ui.toolkit.resources.ResourceManager._instance == null) haxe.ui.toolkit.resources.ResourceManager._instance = new haxe.ui.toolkit.resources.ResourceManager();
 	return haxe.ui.toolkit.resources.ResourceManager._instance;
@@ -44682,16 +46586,20 @@ haxe.ui.toolkit.style.DefaultStyles = function() {
 	haxe.ui.toolkit.style.Styles.call(this);
 	var f = openfl.Assets.getFont("fonts/Oxygen.ttf");
 	var fb = openfl.Assets.getFont("fonts/Oxygen-Bold.ttf");
+	this.addStyle("Root",new haxe.ui.toolkit.style.Style({ padding : 0}));
+	this.addStyle("Root.popup",new haxe.ui.toolkit.style.Style({ padding : 0}));
+	this.addStyle("Root.fullscreen",new haxe.ui.toolkit.style.Style({ padding : 0, backgroundColor : 8947848}));
 	this.addStyle("Component",new haxe.ui.toolkit.style.Style({ padding : 0, backgroundColor : 8947848}));
 	this.addStyle("#modalOverlay",new haxe.ui.toolkit.style.Style({ backgroundColor : 8947848, alpha : .7}));
 	this.addStyle("Text",new haxe.ui.toolkit.style.Style({ fontSize : 14, fontName : f.fontName, fontEmbedded : true, color : 4473924}));
 	this.addStyle("Code",new haxe.ui.toolkit.style.Style({ fontSize : 14, fontName : "_sans", fontEmbedded : false, color : 4473924}));
-	this.addStyle("Container",new haxe.ui.toolkit.style.Style({ spacing : 5, backgroundColor : 8947848}));
+	this.addStyle("Container",new haxe.ui.toolkit.style.Style({ spacing : 5}));
 	this.addStyle("Accordion",new haxe.ui.toolkit.style.Style({ spacing : 0}));
-	this.addStyle(".page",new haxe.ui.toolkit.style.Style({ padding : 5, backgroundColor : -2}));
+	this.addStyle(".page",new haxe.ui.toolkit.style.Style({ padding : 5, backgroundColor : -1}));
 	this.addStyle("Button",new haxe.ui.toolkit.style.Style({ fontSize : 14, fontName : f.fontName, fontEmbedded : true, backgroundColor : 16754764, backgroundColorGradientEnd : 16743181, color : 2236962, padding : 10, borderColor : 4473924, borderSize : 1, cornerRadius : 2, filter : new openfl.filters.DropShadowFilter(2,45,4473924,1,2,2,1,3), spacing : 5}));
 	this.addStyle("Button:over",new haxe.ui.toolkit.style.Style({ backgroundColor : 16758635, backgroundColorGradientEnd : 16744196, color : 2236962}));
 	this.addStyle("Button:down",new haxe.ui.toolkit.style.Style({ backgroundColor : 16754764, backgroundColorGradientEnd : 16743181, color : 4473924}));
+	this.addStyle("Button:disabled",new haxe.ui.toolkit.style.Style({ backgroundColor : 9211020, backgroundColorGradientEnd : 7105644, color : 13421772, borderColor : 6710886}));
 	this.addStyle("Button.expandable",new haxe.ui.toolkit.style.Style({ icon : "styles/default/expand.png"}));
 	this.addStyle("Button.expandable:down",new haxe.ui.toolkit.style.Style({ icon : "styles/default/collapse.png"}));
 	this.addStyle("CheckBox, OptionBox",new haxe.ui.toolkit.style.Style({ spacingX : 2, fontSize : 14, fontName : f.fontName, fontEmbedded : true, color : 4473924}));
@@ -44753,10 +46661,11 @@ haxe.ui.toolkit.style.DefaultStyles = function() {
 	this.addStyle("MenuBar",new haxe.ui.toolkit.style.Style({ backgroundColor : 14671325, percentWidth : 100, height : 10, padding : 5, borderColor : -1, cornerRadius : 0, filter : new openfl.filters.DropShadowFilter(2,45,4473924,1,2,2,1,3), autoSize : true}));
 	this.addStyle("MenuBar Container",new haxe.ui.toolkit.style.Style({ backgroundColor : 14671325}));
 	this.addStyle("Popup",new haxe.ui.toolkit.style.Style({ backgroundColor : 8947848, filter : new openfl.filters.DropShadowFilter(2,45,4473924,1,2,2,1,3), borderColor : 8947848, borderSize : 1, cornerRadius : 2, padding : 1, spacing : 1, width : 400}));
-	this.addStyle("Popup Container",new haxe.ui.toolkit.style.Style({ backgroundColor : -2}));
+	this.addStyle("Popup Container",new haxe.ui.toolkit.style.Style({ backgroundColor : 13421772}));
 	this.addStyle("Popup #titleBar",new haxe.ui.toolkit.style.Style({ backgroundColor : 13421772, height : 45, paddingTop : 5, paddingBottom : 5, paddingLeft : 5, paddingRight : 5}));
+	this.addStyle("Popup #titleBar Button.close",new haxe.ui.toolkit.style.Style({ autoSize : false, width : 23, height : 24, horizontalAlignment : "left", verticalAlignment : "center", filter : null, backgroundImage : "styles/default/cross.png", backgroundColor : 13421772, borderColor : 13421772}));
 	this.addStyle("Popup #popupContent",new haxe.ui.toolkit.style.Style({ padding : 5, backgroundColor : 13421772}));
-	this.addStyle("Popup #buttonBar",new haxe.ui.toolkit.style.Style({ paddingTop : 5, paddingBottom : 5, height : 55, backgroundColor : 13421772}));
+	this.addStyle("Popup #buttonBar",new haxe.ui.toolkit.style.Style({ paddingTop : 5, paddingBottom : 5, height : 55, backgroundColor : 13421772, percentWidth : 100}));
 	this.addStyle("Popup #titleBar #title",new haxe.ui.toolkit.style.Style({ fontName : fb.fontName, fontEmbedded : true, fontSize : 24, color : 8947848, horizontalAlignment : "right"}));
 	this.addStyle("ListPopupContent ListView, ListPopupContent #popupContent",new haxe.ui.toolkit.style.Style({ padding : 2, borderSize : 0}));
 	this.addStyle("Menu",new haxe.ui.toolkit.style.Style({ backgroundColor : 8947848, filter : new openfl.filters.DropShadowFilter(2,45,4473924,1,2,2,1,3), borderColor : 4473924, borderSize : 1, cornerRadius : 1, padding : 1, width : 175, spacing : 1}));
@@ -44767,6 +46676,9 @@ haxe.ui.toolkit.style.DefaultStyles = function() {
 	this.addStyle("MenuItem:over",new haxe.ui.toolkit.style.Style({ backgroundColor : 16758635, backgroundColorGradientEnd : 16744196, color : 2236962}));
 	this.addStyle("MenuItem:down",new haxe.ui.toolkit.style.Style({ backgroundColor : 16754764, backgroundColorGradientEnd : 16743181, color : 4473924}));
 	this.addStyle("MenuItem.expandable",new haxe.ui.toolkit.style.Style({ icon : "styles/default/expand.png"}));
+	this.addStyle("Divider",new haxe.ui.toolkit.style.Style({ paddingTop : 5, percentWidth : 100}));
+	this.addStyle("Divider #text",new haxe.ui.toolkit.style.Style({ fontSize : 16, fontBold : true, color : 6710886}));
+	this.addStyle("Divider #line",new haxe.ui.toolkit.style.Style({ height : 2, backgroundColor : 6710886}));
 };
 $hxClasses["haxe.ui.toolkit.style.DefaultStyles"] = haxe.ui.toolkit.style.DefaultStyles;
 haxe.ui.toolkit.style.DefaultStyles.__name__ = ["haxe","ui","toolkit","style","DefaultStyles"];
@@ -44797,8 +46709,10 @@ haxe.ui.toolkit.style.Style = function(defaults) {
 	this._paddingRight = -1;
 	this._paddingLeft = -1;
 	this._color = -1;
+	this._borderAlpha = -1;
 	this._borderSize = -1;
 	this._borderColor = -1;
+	this._backgroundAlpha = -1;
 	this._backgroundColorGradientEnd = -1;
 	this._backgroundColor = -1;
 	this._autoSize = -1;
@@ -44948,6 +46862,17 @@ haxe.ui.toolkit.style.Style.prototype = {
 		}
 		return value;
 	}
+	,get_backgroundAlpha: function() {
+		if(this.hasDynamicValue("backgroundAlpha")) return this.getDynamicValue("backgroundAlpha");
+		return this._backgroundAlpha;
+	}
+	,set_backgroundAlpha: function(value) {
+		if(value != this._backgroundAlpha) {
+			this._backgroundAlpha = value;
+			this.apply();
+		}
+		return value;
+	}
 	,get_borderColor: function() {
 		if(this.hasDynamicValue("borderColor")) return this.getDynamicValue("borderColor");
 		return this._borderColor;
@@ -44966,6 +46891,17 @@ haxe.ui.toolkit.style.Style.prototype = {
 	,set_borderSize: function(value) {
 		if(value != this._borderSize) {
 			this._borderSize = value;
+			this.apply();
+		}
+		return value;
+	}
+	,get_borderAlpha: function() {
+		if(this.hasDynamicValue("borderAlpha")) return this.getDynamicValue("borderAlpha");
+		return this._borderAlpha;
+	}
+	,set_borderAlpha: function(value) {
+		if(value != this._borderAlpha) {
+			this._borderAlpha = value;
 			this.apply();
 		}
 		return value;
@@ -45164,15 +47100,16 @@ haxe.ui.toolkit.style.Style.prototype = {
 		return value;
 	}
 	,get_filter: function() {
-		if(this.hasDynamicValue("filter")) return this.getDynamicValue("filter");
-		return this._filter;
+		var filter = null;
+		if(this.hasDynamicValue("filter")) filter = this.getDynamicValue("filter"); else filter = this._filter;
+		var overrideQuality = -1;
+		if(overrideQuality != -1) filter = haxe.ui.toolkit.util.FilterParser.changeFilterQuality(filter,overrideQuality);
+		return filter;
 	}
 	,set_filter: function(value) {
 		this._filterSet = true;
-		if(value != this._filter) {
-			this._filter = value;
-			this.apply();
-		}
+		this._filter = value;
+		this.apply();
 		return this._filter;
 	}
 	,get_alpha: function() {
@@ -45378,16 +47315,13 @@ haxe.ui.toolkit.style.Style.prototype = {
 		}
 		if($with._backgroundImageScale9 != null) this._backgroundImageScale9 = $with._backgroundImageScale9;
 		if($with._backgroundImageRect != null) this._backgroundImageRect = $with._backgroundImageRect;
-		if($with._backgroundColor == -2) {
-			this._backgroundColor = -1;
-			this._backgroundColorGradientEnd = -1;
-		} else if($with._backgroundColor != -1) {
-			this._backgroundColor = $with._backgroundColor;
-			this._backgroundColorGradientEnd = -1;
-		}
+		if($with._backgroundColor != -1) this._backgroundColor = $with._backgroundColor;
+		if($with._backgroundColor != -1) this._backgroundColorGradientEnd = $with._backgroundColor;
 		if($with._backgroundColorGradientEnd != -1) this._backgroundColorGradientEnd = $with._backgroundColorGradientEnd;
+		if($with._backgroundAlpha != -1) this._backgroundAlpha = $with._backgroundAlpha;
 		if($with._borderColor != -1) this._borderColor = $with._borderColor;
 		if($with._borderSize != -1) this._borderSize = $with._borderSize;
+		if($with._borderAlpha != -1) this._borderAlpha = $with._borderAlpha;
 		if($with._color != -1) this._color = $with._color;
 		if($with._paddingLeft != -1) this._paddingLeft = $with._paddingLeft;
 		if($with._paddingRight != -1) this._paddingRight = $with._paddingRight;
@@ -45401,7 +47335,10 @@ haxe.ui.toolkit.style.Style.prototype = {
 		if($with._cornerRadiusTopRight != -1) this._cornerRadiusTopRight = $with._cornerRadiusTopRight;
 		if($with._cornerRadiusBottomLeft != -1) this._cornerRadiusBottomLeft = $with._cornerRadiusBottomLeft;
 		if($with._cornerRadiusBottomRight != -1) this._cornerRadiusBottomRight = $with._cornerRadiusBottomRight;
-		if($with._filterSet == true) this._filter = $with._filter;
+		if($with._filterSet == true) {
+			this._filter = $with._filter;
+			this._filterSet = $with._filterSet;
+		}
 		if($with._alpha != -1) this._alpha = $with._alpha;
 		if($with._fontName != null) this._fontName = $with._fontName;
 		if($with._fontSize != -1) this._fontSize = $with._fontSize;
@@ -45439,6 +47376,13 @@ haxe.ui.toolkit.style.Style.prototype = {
 		if(this._backgroundColorGradientEnd != -1 || this.hasDynamicValue("backgroundColorGradientEnd")) s += "backgroundColorGradientEnd: #" + (this._backgroundColorGradientEnd != -1?StringTools.hex(this._backgroundColorGradientEnd,6):this._dynamicValues.get("backgroundColorGradientEnd")) + ";\n";
 		return s;
 	}
+	,addRawProperty: function(prop) {
+		if(this._rawProperties == null) this._rawProperties = new Array();
+		this._rawProperties.push(prop);
+	}
+	,get_rawProperties: function() {
+		return this._rawProperties;
+	}
 	,self: function() {
 		return new haxe.ui.toolkit.style.Style();
 	}
@@ -45448,11 +47392,12 @@ haxe.ui.toolkit.style.Style.prototype = {
 		return c;
 	}
 	,__class__: haxe.ui.toolkit.style.Style
-	,__properties__: {set_autoApply:"set_autoApply",get_autoApply:"get_autoApply",set_target:"set_target",get_target:"get_target",set_inlineScrolls:"set_inlineScrolls",get_inlineScrolls:"get_inlineScrolls",set_autoHideScrolls:"set_autoHideScrolls",get_autoHideScrolls:"get_autoHideScrolls",set_selectionMethod:"set_selectionMethod",get_selectionMethod:"get_selectionMethod",set_gradientType:"set_gradientType",get_gradientType:"get_gradientType",set_hasButtons:"set_hasButtons",get_hasButtons:"get_hasButtons",set_icon:"set_icon",get_icon:"get_icon",set_iconPosition:"set_iconPosition",get_iconPosition:"get_iconPosition",set_textAlign:"set_textAlign",get_textAlign:"get_textAlign",set_fontUnderline:"set_fontUnderline",get_fontUnderline:"get_fontUnderline",set_fontItalic:"set_fontItalic",get_fontItalic:"get_fontItalic",set_fontBold:"set_fontBold",get_fontBold:"get_fontBold",set_fontEmbedded:"set_fontEmbedded",get_fontEmbedded:"get_fontEmbedded",set_fontScale:"set_fontScale",get_fontScale:"get_fontScale",set_fontSize:"set_fontSize",get_fontSize:"get_fontSize",set_fontName:"set_fontName",get_fontName:"get_fontName",set_alpha:"set_alpha",get_alpha:"get_alpha",set_filter:"set_filter",get_filter:"get_filter",set_cornerRadius:"set_cornerRadius",get_cornerRadius:"get_cornerRadius",set_cornerRadiusBottomRight:"set_cornerRadiusBottomRight",get_cornerRadiusBottomRight:"get_cornerRadiusBottomRight",set_cornerRadiusBottomLeft:"set_cornerRadiusBottomLeft",get_cornerRadiusBottomLeft:"get_cornerRadiusBottomLeft",set_cornerRadiusTopRight:"set_cornerRadiusTopRight",get_cornerRadiusTopRight:"get_cornerRadiusTopRight",set_cornerRadiusTopLeft:"set_cornerRadiusTopLeft",get_cornerRadiusTopLeft:"get_cornerRadiusTopLeft",set_horizontalAlignment:"set_horizontalAlignment",get_horizontalAlignment:"get_horizontalAlignment",set_verticalAlignment:"set_verticalAlignment",get_verticalAlignment:"get_verticalAlignment",set_spacing:"set_spacing",get_spacing:"get_spacing",set_spacingY:"set_spacingY",get_spacingY:"get_spacingY",set_spacingX:"set_spacingX",get_spacingX:"get_spacingX",set_padding:"set_padding",get_padding:"get_padding",set_paddingBottom:"set_paddingBottom",get_paddingBottom:"get_paddingBottom",set_paddingTop:"set_paddingTop",get_paddingTop:"get_paddingTop",set_paddingRight:"set_paddingRight",get_paddingRight:"get_paddingRight",set_paddingLeft:"set_paddingLeft",get_paddingLeft:"get_paddingLeft",set_color:"set_color",get_color:"get_color",set_borderSize:"set_borderSize",get_borderSize:"get_borderSize",set_borderColor:"set_borderColor",get_borderColor:"get_borderColor",set_backgroundColorGradientEnd:"set_backgroundColorGradientEnd",get_backgroundColorGradientEnd:"get_backgroundColorGradientEnd",set_backgroundColor:"set_backgroundColor",get_backgroundColor:"get_backgroundColor",set_backgroundImageRect:"set_backgroundImageRect",get_backgroundImageRect:"get_backgroundImageRect",set_backgroundImageScale9:"set_backgroundImageScale9",get_backgroundImageScale9:"get_backgroundImageScale9",set_backgroundImage:"set_backgroundImage",get_backgroundImage:"get_backgroundImage",get_autoSizeSet:"get_autoSizeSet",set_autoSize:"set_autoSize",get_autoSize:"get_autoSize",set_percentHeight:"set_percentHeight",get_percentHeight:"get_percentHeight",set_percentWidth:"set_percentWidth",get_percentWidth:"get_percentWidth",set_height:"set_height",get_height:"get_height",set_width:"set_width",get_width:"get_width"}
+	,__properties__: {get_rawProperties:"get_rawProperties",set_autoApply:"set_autoApply",get_autoApply:"get_autoApply",set_target:"set_target",get_target:"get_target",set_inlineScrolls:"set_inlineScrolls",get_inlineScrolls:"get_inlineScrolls",set_autoHideScrolls:"set_autoHideScrolls",get_autoHideScrolls:"get_autoHideScrolls",set_selectionMethod:"set_selectionMethod",get_selectionMethod:"get_selectionMethod",set_gradientType:"set_gradientType",get_gradientType:"get_gradientType",set_hasButtons:"set_hasButtons",get_hasButtons:"get_hasButtons",set_icon:"set_icon",get_icon:"get_icon",set_iconPosition:"set_iconPosition",get_iconPosition:"get_iconPosition",set_textAlign:"set_textAlign",get_textAlign:"get_textAlign",set_fontUnderline:"set_fontUnderline",get_fontUnderline:"get_fontUnderline",set_fontItalic:"set_fontItalic",get_fontItalic:"get_fontItalic",set_fontBold:"set_fontBold",get_fontBold:"get_fontBold",set_fontEmbedded:"set_fontEmbedded",get_fontEmbedded:"get_fontEmbedded",set_fontScale:"set_fontScale",get_fontScale:"get_fontScale",set_fontSize:"set_fontSize",get_fontSize:"get_fontSize",set_fontName:"set_fontName",get_fontName:"get_fontName",set_alpha:"set_alpha",get_alpha:"get_alpha",set_filter:"set_filter",get_filter:"get_filter",set_cornerRadius:"set_cornerRadius",get_cornerRadius:"get_cornerRadius",set_cornerRadiusBottomRight:"set_cornerRadiusBottomRight",get_cornerRadiusBottomRight:"get_cornerRadiusBottomRight",set_cornerRadiusBottomLeft:"set_cornerRadiusBottomLeft",get_cornerRadiusBottomLeft:"get_cornerRadiusBottomLeft",set_cornerRadiusTopRight:"set_cornerRadiusTopRight",get_cornerRadiusTopRight:"get_cornerRadiusTopRight",set_cornerRadiusTopLeft:"set_cornerRadiusTopLeft",get_cornerRadiusTopLeft:"get_cornerRadiusTopLeft",set_horizontalAlignment:"set_horizontalAlignment",get_horizontalAlignment:"get_horizontalAlignment",set_verticalAlignment:"set_verticalAlignment",get_verticalAlignment:"get_verticalAlignment",set_spacing:"set_spacing",get_spacing:"get_spacing",set_spacingY:"set_spacingY",get_spacingY:"get_spacingY",set_spacingX:"set_spacingX",get_spacingX:"get_spacingX",set_padding:"set_padding",get_padding:"get_padding",set_paddingBottom:"set_paddingBottom",get_paddingBottom:"get_paddingBottom",set_paddingTop:"set_paddingTop",get_paddingTop:"get_paddingTop",set_paddingRight:"set_paddingRight",get_paddingRight:"get_paddingRight",set_paddingLeft:"set_paddingLeft",get_paddingLeft:"get_paddingLeft",set_color:"set_color",get_color:"get_color",set_borderAlpha:"set_borderAlpha",get_borderAlpha:"get_borderAlpha",set_borderSize:"set_borderSize",get_borderSize:"get_borderSize",set_borderColor:"set_borderColor",get_borderColor:"get_borderColor",set_backgroundAlpha:"set_backgroundAlpha",get_backgroundAlpha:"get_backgroundAlpha",set_backgroundColorGradientEnd:"set_backgroundColorGradientEnd",get_backgroundColorGradientEnd:"get_backgroundColorGradientEnd",set_backgroundColor:"set_backgroundColor",get_backgroundColor:"get_backgroundColor",set_backgroundImageRect:"set_backgroundImageRect",get_backgroundImageRect:"get_backgroundImageRect",set_backgroundImageScale9:"set_backgroundImageScale9",get_backgroundImageScale9:"get_backgroundImageScale9",set_backgroundImage:"set_backgroundImage",get_backgroundImage:"get_backgroundImage",get_autoSizeSet:"get_autoSizeSet",set_autoSize:"set_autoSize",get_autoSize:"get_autoSize",set_percentHeight:"set_percentHeight",get_percentHeight:"get_percentHeight",set_percentWidth:"set_percentWidth",get_percentWidth:"get_percentWidth",set_height:"set_height",get_height:"get_height",set_width:"set_width",get_width:"get_width"}
 };
 haxe.ui.toolkit.style.StyleHelper = function() { };
 $hxClasses["haxe.ui.toolkit.style.StyleHelper"] = haxe.ui.toolkit.style.StyleHelper;
 haxe.ui.toolkit.style.StyleHelper.__name__ = ["haxe","ui","toolkit","style","StyleHelper"];
+haxe.ui.toolkit.style.StyleHelper.sectionCache = null;
 haxe.ui.toolkit.style.StyleHelper.clearCache = function() {
 	haxe.ui.toolkit.style.StyleHelper.sectionCache = new haxe.ds.StringMap();
 };
@@ -45464,32 +47409,40 @@ haxe.ui.toolkit.style.StyleHelper.paintStyle = function(g,style,rc) {
 			var borderSize = 1;
 			if(style.get_borderSize() != -1) borderSize = style.get_borderSize();
 			if(borderSize > 0) {
-				g.lineStyle(borderSize,style.get_borderColor());
+				var borderAlpha = 1;
+				if(style.get_borderAlpha() != -1) borderAlpha = style.get_borderAlpha();
+				g.lineStyle(borderSize,style.get_borderColor(),borderAlpha);
 				rc.inflate(-(borderSize / 2),-(borderSize / 2));
-				rc.x = rc.x | 0;
-				rc.y = rc.y | 0;
 			}
 		}
 		if(style.get_backgroundColor() != -1) {
+			var backgroundAlpha = 1;
+			if(style.get_backgroundAlpha() != -1) backgroundAlpha = style.get_backgroundAlpha();
 			if(style.get_backgroundColorGradientEnd() != -1) {
 				var w = rc.width | 0;
 				var h = rc.height | 0;
-				var colors = [style.get_backgroundColor(),style.get_backgroundColorGradientEnd()];
-				var alphas = [1,1];
-				var ratios = [0,255];
+				var colors_0 = style.get_backgroundColor();
+				var colors_1 = style.get_backgroundColorGradientEnd();
+				var alphas_0 = backgroundAlpha;
+				var alphas_1 = backgroundAlpha;
+				var ratios_0 = 0;
+				var ratios_1 = 255;
 				var matrix = new openfl.geom.Matrix();
 				var gradientType = "vertical";
 				if(style.get_gradientType() != null) gradientType = style.get_gradientType();
 				if(gradientType == "vertical") matrix.createGradientBox(w - 2,h - 2,Math.PI / 2,0,0); else if(gradientType == "horizontal") matrix.createGradientBox(w - 2,h - 2,0,0,0);
-				g.beginGradientFill(openfl.display.GradientType.LINEAR,colors,alphas,ratios,matrix,openfl.display.SpreadMethod.PAD,openfl.display.InterpolationMethod.LINEAR_RGB,0);
-			} else g.beginFill(style.get_backgroundColor());
+				g.beginFill(style.get_backgroundColor(),backgroundAlpha);
+			} else g.beginFill(style.get_backgroundColor(),backgroundAlpha);
 		}
 		if(style.get_cornerRadiusTopLeft() != -1 || style.get_cornerRadiusTopRight() != -1 || style.get_cornerRadiusBottomLeft() != -1 || style.get_cornerRadiusBottomRight() != -1) {
 			var radiusTopLeft = style.get_cornerRadiusTopLeft();
 			var radiusTopRight = style.get_cornerRadiusTopRight();
 			var radiusBottomLeft = style.get_cornerRadiusBottomLeft();
 			var radiusBottomRight = style.get_cornerRadiusBottomRight();
-			if(((radiusTopLeft | 0) & (radiusTopRight | 0) & (radiusBottomLeft | 0) & (radiusBottomRight | 0)) == radiusTopLeft) g.drawRoundRect(rc.get_left(),rc.get_top(),rc.width,rc.height,radiusTopLeft + 2,radiusTopLeft + 2); else g.drawRect(rc.get_left(),rc.get_top(),rc.width,rc.height);
+			if(((radiusTopLeft | 0) & (radiusTopRight | 0) & (radiusBottomLeft | 0) & (radiusBottomRight | 0)) == radiusTopLeft) {
+				radiusTopLeft -= 2;
+				g.drawRoundRect(rc.get_left(),rc.get_top(),rc.width,rc.height,radiusTopLeft + 2,radiusTopLeft + 2);
+			} else g.drawRect(rc.get_left(),rc.get_top(),rc.width,rc.height);
 		} else g.drawRect(rc.get_left(),rc.get_top(),rc.width,rc.height);
 		g.endFill();
 	}
@@ -45515,7 +47468,6 @@ haxe.ui.toolkit.style.StyleHelper.paintStyle = function(g,style,rc) {
 			svg.render(g,rc.get_left(),rc.get_top(),rc.width,rc.height);
 		}
 	}
-	null;
 };
 haxe.ui.toolkit.style.StyleHelper.paintScale9 = function(g,resourceId,resourceRect,scale9,rc) {
 	if(scale9 != null) {
@@ -45625,6 +47577,8 @@ haxe.ui.toolkit.style.StyleManager = function() {
 $hxClasses["haxe.ui.toolkit.style.StyleManager"] = haxe.ui.toolkit.style.StyleManager;
 haxe.ui.toolkit.style.StyleManager.__name__ = ["haxe","ui","toolkit","style","StyleManager"];
 haxe.ui.toolkit.style.StyleManager.__properties__ = {get_instance:"get_instance"}
+haxe.ui.toolkit.style.StyleManager._instance = null;
+haxe.ui.toolkit.style.StyleManager.instance = null;
 haxe.ui.toolkit.style.StyleManager.get_instance = function() {
 	if(haxe.ui.toolkit.style.StyleManager._instance == null) haxe.ui.toolkit.style.StyleManager._instance = new haxe.ui.toolkit.style.StyleManager();
 	return haxe.ui.toolkit.style.StyleManager._instance;
@@ -45675,6 +47629,16 @@ haxe.ui.toolkit.style.StyleManager.prototype = {
 		this._styles = new haxe.ds.StringMap();
 		this._rules = new Array();
 		haxe.ui.toolkit.style.StyleHelper.clearCache();
+	}
+	,get_useCache: function() {
+		return this._cacheStyles;
+	}
+	,set_useCache: function(value) {
+		this._cacheStyles = false;
+		return value;
+	}
+	,clearCache: function() {
+		this._cachedStyles = new haxe.ds.StringMap();
 	}
 	,findAncestor: function(c,rulePart) {
 		var a = null;
@@ -45749,7 +47713,7 @@ haxe.ui.toolkit.style.StyleManager.prototype = {
 		if(this._cacheStyles == true) {
 			cacheKey = this.buildFullCacheKey(c,state);
 			if(this._cachedStyles == null) this._cachedStyles = new haxe.ds.StringMap();
-			if(this._cachedStyles.get(cacheKey) != null) return this._cachedStyles.get(cacheKey);
+			if(this._cachedStyles.get(cacheKey) != null) return this._cachedStyles.get(cacheKey).clone();
 		}
 		var style = new haxe.ui.toolkit.style.Style();
 		style.set_autoApply(false);
@@ -45789,7 +47753,7 @@ haxe.ui.toolkit.style.StyleManager.prototype = {
 		if(this._cacheStyles == true && cacheKey != null) this._cachedStyles.set(cacheKey,style);
 		style.set_target(c);
 		style.set_autoApply(true);
-		return style;
+		return style.clone();
 	}
 	,buildCacheKey: function(c,state) {
 		if(state == "normal") state = null;
@@ -45798,11 +47762,16 @@ haxe.ui.toolkit.style.StyleManager.prototype = {
 		className = HxOverrides.substr(className,n + 1,className.length);
 		var id = c.get_id();
 		var styleName = null;
-		if(js.Boot.__instanceof(c,haxe.ui.toolkit.core.interfaces.IStyleableDisplayObject)) styleName = (js.Boot.__cast(c , haxe.ui.toolkit.core.interfaces.IStyleableDisplayObject)).get_styleName();
+		var styleString = null;
+		if(js.Boot.__instanceof(c,haxe.ui.toolkit.core.interfaces.IStyleableDisplayObject)) {
+			styleName = (js.Boot.__cast(c , haxe.ui.toolkit.core.interfaces.IStyleableDisplayObject)).get_styleName();
+			styleString = (js.Boot.__cast(c , haxe.ui.toolkit.core.interfaces.IStyleableDisplayObject)).get_styleString();
+		}
 		var s = className;
 		if(id != null) s += "#" + id;
 		if(styleName != null) s += "." + styleName;
 		if(state != null) s += ":" + state;
+		if(styleString != null) s += "{" + styleString + "}";
 		return s;
 	}
 	,buildFullCacheKey: function(c,state) {
@@ -45819,16 +47788,16 @@ haxe.ui.toolkit.style.StyleManager.prototype = {
 		var $it0 = this.stylesBuiltFor.keys();
 		while( $it0.hasNext() ) {
 			var key = $it0.next();
-			haxe.Log.trace("> " + key + " = " + this.stylesBuiltFor.get(key),{ fileName : "StyleManager.hx", lineNumber : 325, className : "haxe.ui.toolkit.style.StyleManager", methodName : "dump"});
+			haxe.Log.trace("> " + key + " = " + this.stylesBuiltFor.get(key),{ fileName : "StyleManager.hx", lineNumber : 343, className : "haxe.ui.toolkit.style.StyleManager", methodName : "dump"});
 		}
-		haxe.Log.trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",{ fileName : "StyleManager.hx", lineNumber : 327, className : "haxe.ui.toolkit.style.StyleManager", methodName : "dump"});
+		haxe.Log.trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",{ fileName : "StyleManager.hx", lineNumber : 345, className : "haxe.ui.toolkit.style.StyleManager", methodName : "dump"});
 	}
 	,get_hasStyles: function() {
 		if(this._styles == null) return false;
 		return this._styles.keys().hasNext();
 	}
 	,__class__: haxe.ui.toolkit.style.StyleManager
-	,__properties__: {get_hasStyles:"get_hasStyles"}
+	,__properties__: {set_useCache:"set_useCache",get_useCache:"get_useCache",get_hasStyles:"get_hasStyles"}
 };
 haxe.ui.toolkit.style._StyleManager = {};
 haxe.ui.toolkit.style._StyleManager.StyleRule = function(rule,style) {
@@ -45920,7 +47889,8 @@ haxe.ui.toolkit.style._StyleManager.StyleRulePart.prototype = {
 haxe.ui.toolkit.style.StyleParser = function() { };
 $hxClasses["haxe.ui.toolkit.style.StyleParser"] = haxe.ui.toolkit.style.StyleParser;
 haxe.ui.toolkit.style.StyleParser.__name__ = ["haxe","ui","toolkit","style","StyleParser"];
-haxe.ui.toolkit.style.StyleParser.fromString = function(styleString) {
+haxe.ui.toolkit.style.StyleParser.fromString = function(styleString,storeRaw) {
+	if(storeRaw == null) storeRaw = false;
 	if(styleString == null || styleString.length == 0) return new haxe.ui.toolkit.style.Styles();
 	var styles = new haxe.ui.toolkit.style.Styles();
 	var n1 = -1;
@@ -45936,13 +47906,14 @@ haxe.ui.toolkit.style.StyleParser.fromString = function(styleString) {
 			var prop = props[_g];
 			++_g;
 			prop = StringTools.trim(prop);
-			if(StringTools.startsWith(prop,"//")) continue;
+			if(prop.length == 0 || StringTools.startsWith(prop,"//")) continue;
+			if(storeRaw == true) style.addRawProperty(prop);
 			if(prop != null && prop.length > 0) {
 				var temp = prop.split(":");
 				var propName = StringTools.trim(temp[0]);
 				propName = haxe.ui.toolkit.util.StringUtil.capitalizeHyphens(propName);
 				if(Reflect.field(style,"set_" + propName) == null) {
-					haxe.Log.trace("Warning: " + propName + " not found",{ fileName : "StyleParser.hx", lineNumber : 36, className : "haxe.ui.toolkit.style.StyleParser", methodName : "fromString"});
+					haxe.Log.trace("Warning: " + propName + " not found",{ fileName : "StyleParser.hx", lineNumber : 39, className : "haxe.ui.toolkit.style.StyleParser", methodName : "fromString"});
 					continue;
 				}
 				var propValue = StringTools.trim(temp[1]);
@@ -46033,6 +48004,7 @@ haxe.ui.toolkit.text.TextDisplay.prototype = {
 			if(this._tf.multiline == false) this._tf.set_text(StringTools.replace(value,"\\n","\n")); else this._tf.set_text(StringTools.replace(value,"\\n","\n"));
 		}
 		this.set_style(this._style);
+		if(this._tf.get_height() - 2 != this._tf.get_textHeight()) this._tf.set_height(this._tf.get_textHeight() - 2);
 		return value;
 	}
 	,get_style: function() {
@@ -46042,9 +48014,11 @@ haxe.ui.toolkit.text.TextDisplay.prototype = {
 		if(value == null) return value;
 		this._style = value;
 		var format = this._tf.getTextFormat();
-		if(this._style.get_fontName() != null) {
+		var fontName = this._style.get_fontName();
+		if(fontName != null) {
+			if(fontName == "_sans") fontName = "Tahoma";
 			this._tf.embedFonts = this._style.get_fontEmbedded();
-			format.font = this._style.get_fontName();
+			format.font = fontName;
 		}
 		if(this._style.get_fontSize() != -1) format.size = this._style.get_fontSize();
 		if(this._style.get_color() != -1) format.color = this._style.get_color();
@@ -46092,7 +48066,7 @@ haxe.ui.toolkit.text.TextDisplay.prototype = {
 		return this._tf.displayAsPassword;
 	}
 	,set_displayAsPassword: function(value) {
-		this._tf.displayAsPassword = value;
+		this._tf.set_displayAsPassword(value);
 		return value;
 	}
 	,get_visible: function() {
@@ -46243,7 +48217,7 @@ haxe.ui.toolkit.util.ByteConverter = function() { };
 $hxClasses["haxe.ui.toolkit.util.ByteConverter"] = haxe.ui.toolkit.util.ByteConverter;
 haxe.ui.toolkit.util.ByteConverter.__name__ = ["haxe","ui","toolkit","util","ByteConverter"];
 haxe.ui.toolkit.util.ByteConverter.fromHaxeBytes = function(bytes) {
-	var ba = new openfl.utils.ByteArray();
+	var ba = new lime.utils.ByteArray();
 	var _g1 = 0;
 	var _g = bytes.length;
 	while(_g1 < _g) {
@@ -46251,6 +48225,28 @@ haxe.ui.toolkit.util.ByteConverter.fromHaxeBytes = function(bytes) {
 		ba.writeByte(bytes.b[a]);
 	}
 	return ba;
+};
+haxe.ui.toolkit.util.ByteConverter.toHaxeBytes = function(ba) {
+	var bytes = haxe.io.Bytes.alloc(ba.length);
+	var _g1 = 0;
+	var _g = ba.length;
+	while(_g1 < _g) {
+		var a = _g1++;
+		bytes.set(a,ba.readByte());
+	}
+	return bytes;
+};
+haxe.ui.toolkit.util.CallStackHelper = function() { };
+$hxClasses["haxe.ui.toolkit.util.CallStackHelper"] = haxe.ui.toolkit.util.CallStackHelper;
+haxe.ui.toolkit.util.CallStackHelper.__name__ = ["haxe","ui","toolkit","util","CallStackHelper"];
+haxe.ui.toolkit.util.CallStackHelper.traceCallStack = function() {
+	var arr = haxe.CallStack.callStack();
+	if(arr == null) {
+		haxe.Log.trace("Callstack is null!",{ fileName : "CallStackHelper.hx", lineNumber : 9, className : "haxe.ui.toolkit.util.CallStackHelper", methodName : "traceCallStack"});
+		return;
+	}
+	haxe.Log.trace(haxe.CallStack.toString(arr),{ fileName : "CallStackHelper.hx", lineNumber : 12, className : "haxe.ui.toolkit.util.CallStackHelper", methodName : "traceCallStack"});
+	haxe.Log.trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>> END >>>>>>>>>>>>>>>>>>>>>>>>>>>>",{ fileName : "CallStackHelper.hx", lineNumber : 13, className : "haxe.ui.toolkit.util.CallStackHelper", methodName : "traceCallStack"});
 };
 haxe.ui.toolkit.util.FilterParser = function() { };
 $hxClasses["haxe.ui.toolkit.util.FilterParser"] = haxe.ui.toolkit.util.FilterParser;
@@ -46314,6 +48310,10 @@ haxe.ui.toolkit.util.FilterParser.copyFilterDefaults = function(filterName,param
 		}
 	}
 	return copy;
+};
+haxe.ui.toolkit.util.FilterParser.changeFilterQuality = function(filter,quality) {
+	if(filter == null) return null;
+	return filter;
 };
 haxe.ui.toolkit.util.Identifier = function() { };
 $hxClasses["haxe.ui.toolkit.util.Identifier"] = haxe.ui.toolkit.util.Identifier;
@@ -46960,6 +48960,7 @@ hscript.Token.TDoubleDot = ["TDoubleDot",14];
 hscript.Token.TDoubleDot.toString = $estr;
 hscript.Token.TDoubleDot.__enum__ = hscript.Token;
 hscript.Parser = function() {
+	this.uid = 0;
 	this.line = 1;
 	this.opChars = "+*/-=!><&|^%~";
 	this.identChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
@@ -46999,6 +49000,7 @@ hscript.Parser.prototype = {
 	}
 	,parseString: function(s) {
 		this.line = 1;
+		this.uid = 0;
 		return this.parse(new haxe.io.StringInput(s));
 	}
 	,parse: function(s) {
@@ -47210,10 +49212,59 @@ hscript.Parser.prototype = {
 				tk = this.token();
 				if(tk == hscript.Token.TComma) tk = this.token();
 			}
+			if(a1.length == 1) {
+				var _g = a1[0];
+				switch(_g[1]) {
+				case 11:case 10:
+					var tmp = "__a_" + this.uid++;
+					var e2 = this.mk(hscript.Expr.EBlock([this.mk(hscript.Expr.EVar(tmp,null,this.mk(hscript.Expr.EArrayDecl([]),0,null)),0,null),this.mapCompr(tmp,a1[0]),this.mk(hscript.Expr.EIdent(tmp),0,null)]),0,null);
+					return this.parseExprNext(e2);
+				default:
+				}
+			}
 			return this.parseExprNext(this.mk(hscript.Expr.EArrayDecl(a1),0,null));
 		default:
 			return this.unexpected(tk);
 		}
+	}
+	,mapCompr: function(tmp,e) {
+		var edef;
+		switch(e[1]) {
+		case 11:
+			var e2 = e[4];
+			var it = e[3];
+			var v = e[2];
+			edef = hscript.Expr.EFor(v,it,this.mapCompr(tmp,e2));
+			break;
+		case 10:
+			var e21 = e[3];
+			var cond = e[2];
+			edef = hscript.Expr.EWhile(cond,this.mapCompr(tmp,e21));
+			break;
+		case 9:
+			var e22 = e[4];
+			var e1 = e[3];
+			var cond1 = e[2];
+			if(e22 == null) edef = hscript.Expr.EIf(cond1,this.mapCompr(tmp,e1),null); else edef = hscript.Expr.ECall(this.mk(hscript.Expr.EField(this.mk(hscript.Expr.EIdent(tmp),0,0),"push"),0,0),[e]);
+			break;
+		case 4:
+			switch(e[2].length) {
+			case 1:
+				var e3 = e[2][0];
+				edef = hscript.Expr.EBlock([this.mapCompr(tmp,e3)]);
+				break;
+			default:
+				edef = hscript.Expr.ECall(this.mk(hscript.Expr.EField(this.mk(hscript.Expr.EIdent(tmp),0,0),"push"),0,0),[e]);
+			}
+			break;
+		case 3:
+			var e23 = e[2];
+			edef = hscript.Expr.EParent(this.mapCompr(tmp,e23));
+			break;
+		default:
+			edef = hscript.Expr.ECall(this.mk(hscript.Expr.EField(this.mk(hscript.Expr.EIdent(tmp),0,0),"push"),0,0),[e]);
+		}
+		return edef;
 	}
 	,makeUnop: function(op,e) {
 		switch(e[1]) {
@@ -47473,12 +49524,58 @@ hscript.Parser.prototype = {
 									}
 								}
 							} catch( e ) { if( e != "__break__" ) throw e; }
-							c.expr = this.parseFullExpr();
+							var exprs = [];
+							try {
+								while(true) {
+									tk7 = this.token();
+									this.tokens.add(tk7);
+									switch(tk7[1]) {
+									case 2:
+										switch(tk7[2]) {
+										case "case":case "default":
+											throw "__break__";
+											break;
+										default:
+											exprs.push(this.parseFullExpr());
+										}
+										break;
+									case 7:
+										throw "__break__";
+										break;
+									default:
+										exprs.push(this.parseFullExpr());
+									}
+								}
+							} catch( e ) { if( e != "__break__" ) throw e; }
+							if(exprs.length == 1) c.expr = exprs[0]; else if(exprs.length == 0) c.expr = this.mk(hscript.Expr.EBlock([]),0,0); else c.expr = this.mk(hscript.Expr.EBlock(exprs),0,0);
 							break;
 						case "default":
 							if(def != null) this.unexpected(tk7);
-							this.ensure(hscript.Token.TSemicolon);
-							def = this.parseExpr();
+							this.ensure(hscript.Token.TDoubleDot);
+							var exprs1 = [];
+							try {
+								while(true) {
+									tk7 = this.token();
+									this.tokens.add(tk7);
+									switch(tk7[1]) {
+									case 2:
+										switch(tk7[2]) {
+										case "case":case "default":
+											throw "__break__";
+											break;
+										default:
+											exprs1.push(this.parseFullExpr());
+										}
+										break;
+									case 7:
+										throw "__break__";
+										break;
+									default:
+										exprs1.push(this.parseFullExpr());
+									}
+								}
+							} catch( e ) { if( e != "__break__" ) throw e; }
+							if(exprs1.length == 1) def = exprs1[0]; else if(exprs1.length == 0) def = this.mk(hscript.Expr.EBlock([]),0,0); else def = this.mk(hscript.Expr.EBlock(exprs1),0,0);
 							break;
 						default:
 							this.unexpected(tk7);
@@ -48021,8 +50118,24 @@ js.Boot.__trace = function(v,i) {
 	var d;
 	if(typeof(document) != "undefined" && (d = document.getElementById("haxe:trace")) != null) d.innerHTML += js.Boot.__unhtml(msg) + "<br/>"; else if(typeof console != "undefined" && console.log != null) console.log(msg);
 };
+js.Boot.__clear_trace = function() {
+	var d = document.getElementById("haxe:trace");
+	if(d != null) d.innerHTML = "";
+};
+js.Boot.isClass = function(o) {
+	return o.__name__;
+};
+js.Boot.isEnum = function(e) {
+	return e.__ename__;
+};
 js.Boot.getClass = function(o) {
-	if((o instanceof Array) && o.__enum__ == null) return Array; else return o.__class__;
+	if((o instanceof Array) && o.__enum__ == null) return Array; else {
+		var cl = o.__class__;
+		if(cl != null) return cl;
+		var name = js.Boot.__nativeClassName(o);
+		if(name != null) return js.Boot.__resolveNativeClass(name);
+		return null;
+	}
 };
 js.Boot.__string_rec = function(o,s) {
 	if(o == null) return "null";
@@ -48062,7 +50175,7 @@ js.Boot.__string_rec = function(o,s) {
 		} catch( e ) {
 			return "???";
 		}
-		if(tostr != null && tostr != Object.toString) {
+		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
 			var s2 = o.toString();
 			if(s2 != "[object Object]") return s2;
 		}
@@ -48126,6 +50239,8 @@ js.Boot.__instanceof = function(o,cl) {
 			if(typeof(cl) == "function") {
 				if(o instanceof cl) return true;
 				if(js.Boot.__interfLoop(js.Boot.getClass(o),cl)) return true;
+			} else if(typeof(cl) == "object" && js.Boot.__isNativeObj(cl)) {
+				if(o instanceof cl) return true;
 			}
 		} else return false;
 		if(cl == Class && o.__name__ != null) return true;
@@ -48135,6 +50250,17 @@ js.Boot.__instanceof = function(o,cl) {
 };
 js.Boot.__cast = function(o,t) {
 	if(js.Boot.__instanceof(o,t)) return o; else throw "Cannot cast " + Std.string(o) + " to " + Std.string(t);
+};
+js.Boot.__nativeClassName = function(o) {
+	var name = js.Boot.__toStr.call(o).slice(8,-1);
+	if(name == "Object" || name == "Function" || name == "Math" || name == "JSON") return null;
+	return name;
+};
+js.Boot.__isNativeObj = function(o) {
+	return js.Boot.__nativeClassName(o) != null;
+};
+js.Boot.__resolveNativeClass = function(name) {
+	if(typeof window != "undefined") return window[name]; else return global[name];
 };
 js.Browser = function() { };
 $hxClasses["js.Browser"] = js.Browser;
@@ -48147,6 +50273,5697 @@ js.Browser.getLocalStorage = function() {
 	} catch( e ) {
 		return null;
 	}
+};
+lime.AssetCache = function() {
+	this.enabled = true;
+	this.audio = new haxe.ds.StringMap();
+	this.font = new haxe.ds.StringMap();
+	this.image = new haxe.ds.StringMap();
+};
+$hxClasses["lime.AssetCache"] = lime.AssetCache;
+lime.AssetCache.__name__ = ["lime","AssetCache"];
+lime.AssetCache.prototype = {
+	clear: function(prefix) {
+		if(prefix == null) {
+			this.audio = new haxe.ds.StringMap();
+			this.font = new haxe.ds.StringMap();
+			this.image = new haxe.ds.StringMap();
+		} else {
+			var keys = this.audio.keys();
+			while( keys.hasNext() ) {
+				var key = keys.next();
+				if(StringTools.startsWith(key,prefix)) this.audio.remove(key);
+			}
+			var keys1 = this.font.keys();
+			while( keys1.hasNext() ) {
+				var key1 = keys1.next();
+				if(StringTools.startsWith(key1,prefix)) this.font.remove(key1);
+			}
+			var keys2 = this.image.keys();
+			while( keys2.hasNext() ) {
+				var key2 = keys2.next();
+				if(StringTools.startsWith(key2,prefix)) this.image.remove(key2);
+			}
+		}
+	}
+	,__class__: lime.AssetCache
+};
+lime.Assets = function() { };
+$hxClasses["lime.Assets"] = lime.Assets;
+lime.Assets.__name__ = ["lime","Assets"];
+lime.Assets.exists = function(id,type) {
+	lime.Assets.initialize();
+	if(type == null) type = "BINARY";
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) return library.exists(symbolName,type);
+	return false;
+};
+lime.Assets.getAudioBuffer = function(id,useCache) {
+	if(useCache == null) useCache = true;
+	lime.Assets.initialize();
+	if(useCache && lime.Assets.cache.enabled && lime.Assets.cache.audio.exists(id)) {
+		var audio = lime.Assets.cache.audio.get(id);
+		if(lime.Assets.isValidAudio(audio)) return audio;
+	}
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,"SOUND")) {
+			if(library.isLocal(symbolName,"SOUND")) {
+				var audio1 = library.getAudioBuffer(symbolName);
+				if(useCache && lime.Assets.cache.enabled) lime.Assets.cache.audio.set(id,audio1);
+				return audio1;
+			} else haxe.Log.trace("[Assets] Audio asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 115, className : "lime.Assets", methodName : "getAudioBuffer"});
+		} else haxe.Log.trace("[Assets] There is no audio asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 121, className : "lime.Assets", methodName : "getAudioBuffer"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 127, className : "lime.Assets", methodName : "getAudioBuffer"});
+	return null;
+};
+lime.Assets.getBytes = function(id) {
+	lime.Assets.initialize();
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,"BINARY")) {
+			if(library.isLocal(symbolName,"BINARY")) return library.getBytes(symbolName); else haxe.Log.trace("[Assets] String or ByteArray asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 164, className : "lime.Assets", methodName : "getBytes"});
+		} else haxe.Log.trace("[Assets] There is no String or ByteArray asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 170, className : "lime.Assets", methodName : "getBytes"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 176, className : "lime.Assets", methodName : "getBytes"});
+	return null;
+};
+lime.Assets.getFont = function(id,useCache) {
+	if(useCache == null) useCache = true;
+	lime.Assets.initialize();
+	if(useCache && lime.Assets.cache.enabled && lime.Assets.cache.font.exists(id)) return lime.Assets.cache.font.get(id);
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,"FONT")) {
+			if(library.isLocal(symbolName,"FONT")) {
+				var font = library.getFont(symbolName);
+				if(useCache && lime.Assets.cache.enabled) lime.Assets.cache.font.set(id,font);
+				return font;
+			} else haxe.Log.trace("[Assets] Font asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 227, className : "lime.Assets", methodName : "getFont"});
+		} else haxe.Log.trace("[Assets] There is no Font asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 233, className : "lime.Assets", methodName : "getFont"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 239, className : "lime.Assets", methodName : "getFont"});
+	return null;
+};
+lime.Assets.getImage = function(id,useCache) {
+	if(useCache == null) useCache = true;
+	lime.Assets.initialize();
+	if(useCache && lime.Assets.cache.enabled && lime.Assets.cache.image.exists(id)) {
+		var image = lime.Assets.cache.image.get(id);
+		if(lime.Assets.isValidImage(image)) return image;
+	}
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,"IMAGE")) {
+			if(library.isLocal(symbolName,"IMAGE")) {
+				var image1 = library.getImage(symbolName);
+				if(useCache && lime.Assets.cache.enabled) lime.Assets.cache.image.set(id,image1);
+				return image1;
+			} else haxe.Log.trace("[Assets] Image asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 297, className : "lime.Assets", methodName : "getImage"});
+		} else haxe.Log.trace("[Assets] There is no Image asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 303, className : "lime.Assets", methodName : "getImage"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 309, className : "lime.Assets", methodName : "getImage"});
+	return null;
+};
+lime.Assets.getLibrary = function(name) {
+	if(name == null || name == "") name = "default";
+	return lime.Assets.libraries.get(name);
+};
+lime.Assets.getPath = function(id) {
+	lime.Assets.initialize();
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,null)) return library.getPath(symbolName); else haxe.Log.trace("[Assets] There is no asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 426, className : "lime.Assets", methodName : "getPath"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 432, className : "lime.Assets", methodName : "getPath"});
+	return null;
+};
+lime.Assets.getText = function(id) {
+	lime.Assets.initialize();
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,"TEXT")) {
+			if(library.isLocal(symbolName,"TEXT")) return library.getText(symbolName); else haxe.Log.trace("[Assets] String asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 469, className : "lime.Assets", methodName : "getText"});
+		} else haxe.Log.trace("[Assets] There is no String asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 475, className : "lime.Assets", methodName : "getText"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 481, className : "lime.Assets", methodName : "getText"});
+	return null;
+};
+lime.Assets.initialize = function() {
+	if(!lime.Assets.initialized) {
+		lime.Assets.registerLibrary("default",new DefaultAssetLibrary());
+		lime.Assets.initialized = true;
+	}
+};
+lime.Assets.isLocal = function(id,type,useCache) {
+	if(useCache == null) useCache = true;
+	lime.Assets.initialize();
+	if(useCache && lime.Assets.cache.enabled) {
+		if(type == "IMAGE" || type == null) {
+			if(lime.Assets.cache.image.exists(id)) return true;
+		}
+		if(type == "FONT" || type == null) {
+			if(lime.Assets.cache.font.exists(id)) return true;
+		}
+		if(type == "SOUND" || type == "MUSIC" || type == null) {
+			if(lime.Assets.cache.audio.exists(id)) return true;
+		}
+	}
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) return library.isLocal(symbolName,type);
+	return false;
+};
+lime.Assets.isValidAudio = function(buffer) {
+	return buffer != null;
+	return true;
+};
+lime.Assets.isValidImage = function(buffer) {
+	return true;
+};
+lime.Assets.list = function(type) {
+	lime.Assets.initialize();
+	var items = [];
+	var $it0 = lime.Assets.libraries.iterator();
+	while( $it0.hasNext() ) {
+		var library = $it0.next();
+		var libraryItems = library.list(type);
+		if(libraryItems != null) items = items.concat(libraryItems);
+	}
+	return items;
+};
+lime.Assets.loadAudioBuffer = function(id,handler,useCache) {
+	if(useCache == null) useCache = true;
+	lime.Assets.initialize();
+	if(useCache && lime.Assets.cache.enabled && lime.Assets.cache.audio.exists(id)) {
+		var audio = lime.Assets.cache.audio.get(id);
+		if(lime.Assets.isValidAudio(audio)) {
+			handler(audio);
+			return;
+		}
+	}
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,"SOUND")) {
+			if(useCache && lime.Assets.cache.enabled) library.loadAudioBuffer(symbolName,function(audio1) {
+				var value = audio1;
+				lime.Assets.cache.audio.set(id,value);
+				handler(audio1);
+			}); else library.loadAudioBuffer(symbolName,handler);
+			return;
+		} else haxe.Log.trace("[Assets] There is no audio asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 666, className : "lime.Assets", methodName : "loadAudioBuffer"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 672, className : "lime.Assets", methodName : "loadAudioBuffer"});
+	handler(null);
+};
+lime.Assets.loadBytes = function(id,handler) {
+	lime.Assets.initialize();
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,"BINARY")) {
+			library.loadBytes(symbolName,handler);
+			return;
+		} else haxe.Log.trace("[Assets] There is no String or ByteArray asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 702, className : "lime.Assets", methodName : "loadBytes"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 708, className : "lime.Assets", methodName : "loadBytes"});
+	handler(null);
+};
+lime.Assets.loadImage = function(id,handler,useCache) {
+	if(useCache == null) useCache = true;
+	lime.Assets.initialize();
+	if(useCache && lime.Assets.cache.enabled && lime.Assets.cache.image.exists(id)) {
+		var image = lime.Assets.cache.image.get(id);
+		if(lime.Assets.isValidImage(image)) {
+			handler(image);
+			return;
+		}
+	}
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,"IMAGE")) {
+			if(useCache && lime.Assets.cache.enabled) library.loadImage(symbolName,function(image1) {
+				lime.Assets.cache.image.set(id,image1);
+				handler(image1);
+			}); else library.loadImage(symbolName,handler);
+			return;
+		} else haxe.Log.trace("[Assets] There is no Image asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 765, className : "lime.Assets", methodName : "loadImage"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 771, className : "lime.Assets", methodName : "loadImage"});
+	handler(null);
+};
+lime.Assets.loadLibrary = function(name,handler) {
+	lime.Assets.initialize();
+	var data = lime.Assets.getText("libraries/" + name + ".json");
+	if(data != null && data != "") {
+		var info = JSON.parse(data);
+		var library = Type.createInstance(Type.resolveClass(info.type),info.args);
+		lime.Assets.libraries.set(name,library);
+		library.eventCallback = lime.Assets.library_onEvent;
+		library.load(handler);
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + name + "\"",{ fileName : "Assets.hx", lineNumber : 800, className : "lime.Assets", methodName : "loadLibrary"});
+};
+lime.Assets.loadText = function(id,handler) {
+	lime.Assets.initialize();
+	var libraryName = id.substring(0,id.indexOf(":"));
+	var symbolName;
+	var pos = id.indexOf(":") + 1;
+	symbolName = HxOverrides.substr(id,pos,null);
+	var library = lime.Assets.getLibrary(libraryName);
+	if(library != null) {
+		if(library.exists(symbolName,"TEXT")) {
+			library.loadText(symbolName,handler);
+			return;
+		} else haxe.Log.trace("[Assets] There is no String asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 891, className : "lime.Assets", methodName : "loadText"});
+	} else haxe.Log.trace("[Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 897, className : "lime.Assets", methodName : "loadText"});
+	handler(null);
+};
+lime.Assets.registerLibrary = function(name,library) {
+	if(lime.Assets.libraries.exists(name)) lime.Assets.unloadLibrary(name);
+	if(library != null) library.eventCallback = lime.Assets.library_onEvent;
+	lime.Assets.libraries.set(name,library);
+};
+lime.Assets.unloadLibrary = function(name) {
+	lime.Assets.initialize();
+	var library = lime.Assets.libraries.get(name);
+	if(library != null) {
+		lime.Assets.cache.clear(name + ":");
+		library.eventCallback = null;
+	}
+	lime.Assets.libraries.remove(name);
+};
+lime.Assets.library_onEvent = function(library,type) {
+	if(type == "change") lime.Assets.cache.clear();
+};
+lime._Assets = {};
+lime._Assets.AssetType_Impl_ = function() { };
+$hxClasses["lime._Assets.AssetType_Impl_"] = lime._Assets.AssetType_Impl_;
+lime._Assets.AssetType_Impl_.__name__ = ["lime","_Assets","AssetType_Impl_"];
+lime.app = {};
+lime.app.Module = function() {
+};
+$hxClasses["lime.app.Module"] = lime.app.Module;
+lime.app.Module.__name__ = ["lime","app","Module"];
+lime.app.Module.prototype = {
+	__class__: lime.app.Module
+};
+lime.app._Application = {};
+lime.app._Application.UpdateEventInfo = function(type,deltaTime) {
+	if(deltaTime == null) deltaTime = 0;
+	this.type = type;
+	this.deltaTime = deltaTime;
+};
+$hxClasses["lime.app._Application.UpdateEventInfo"] = lime.app._Application.UpdateEventInfo;
+lime.app._Application.UpdateEventInfo.__name__ = ["lime","app","_Application","UpdateEventInfo"];
+lime.app._Application.UpdateEventInfo.prototype = {
+	clone: function() {
+		return new lime.app._Application.UpdateEventInfo(this.type,this.deltaTime);
+	}
+	,__class__: lime.app._Application.UpdateEventInfo
+};
+lime.app.Event = function() {
+	this.listeners = new Array();
+	this.priorities = new Array();
+	this.repeat = new Array();
+};
+$hxClasses["lime.app.Event"] = lime.app.Event;
+lime.app.Event.__name__ = ["lime","app","Event"];
+lime.app.Event.prototype = {
+	add: function(listener,once,priority) {
+		if(priority == null) priority = 0;
+		if(once == null) once = false;
+		var _g1 = 0;
+		var _g = this.priorities.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			if(priority > this.priorities[i]) {
+				this.listeners.splice(i,0,listener);
+				this.priorities.splice(i,0,priority);
+				this.repeat.splice(i,0,!once);
+				return;
+			}
+		}
+		this.listeners.push(listener);
+		this.priorities.push(priority);
+		this.repeat.push(!once);
+	}
+	,remove: function(listener) {
+		var index = HxOverrides.indexOf(this.listeners,listener,0);
+		if(index > -1) {
+			this.listeners.splice(index,1);
+			this.priorities.splice(index,1);
+			this.repeat.splice(index,1);
+		}
+	}
+	,__class__: lime.app.Event
+};
+lime.app.Application = function() {
+	lime.app.Module.call(this);
+	lime.app.Application.__instance = this;
+	this.windows = new Array();
+	if(!lime.app.Application.__registered) {
+		lime.app.Application.__registered = true;
+		lime.audio.AudioManager.init();
+	}
+};
+$hxClasses["lime.app.Application"] = lime.app.Application;
+lime.app.Application.__name__ = ["lime","app","Application"];
+lime.app.Application.__initialized = null;
+lime.app.Application.__instance = null;
+lime.app.Application.__registered = null;
+lime.app.Application.__dispatch = function() {
+	lime.app.Application.__instance.update(lime.app.Application.__eventInfo.deltaTime);
+	var listeners = lime.app.Application.onUpdate.listeners;
+	var repeat = lime.app.Application.onUpdate.repeat;
+	var length = listeners.length;
+	var i = 0;
+	while(i < length) {
+		listeners[i](lime.app.Application.__eventInfo.deltaTime);
+		if(!repeat[i]) {
+			lime.app.Application.onUpdate.remove(listeners[i]);
+			length--;
+		} else i++;
+	}
+};
+lime.app.Application.__super__ = lime.app.Module;
+lime.app.Application.prototype = $extend(lime.app.Module.prototype,{
+	addWindow: function(window) {
+		this.windows.push(window);
+		window.create(this);
+	}
+	,create: function(config) {
+		this.config = config;
+		lime.ui.KeyEventManager.create();
+		lime.ui.MouseEventManager.create();
+		lime.ui.TouchEventManager.create();
+		lime.ui.KeyEventManager.onKeyDown.add($bind(this,this.onKeyDown));
+		lime.ui.KeyEventManager.onKeyUp.add($bind(this,this.onKeyUp));
+		lime.ui.MouseEventManager.onMouseDown.add($bind(this,this.onMouseDown));
+		lime.ui.MouseEventManager.onMouseMove.add($bind(this,this.onMouseMove));
+		lime.ui.MouseEventManager.onMouseUp.add($bind(this,this.onMouseUp));
+		lime.ui.MouseEventManager.onMouseWheel.add($bind(this,this.onMouseWheel));
+		lime.ui.TouchEventManager.onTouchStart.add($bind(this,this.onTouchStart));
+		lime.ui.TouchEventManager.onTouchMove.add($bind(this,this.onTouchMove));
+		lime.ui.TouchEventManager.onTouchEnd.add($bind(this,this.onTouchEnd));
+		lime.graphics.Renderer.onRenderContextLost.add($bind(this,this.onRenderContextLost));
+		lime.graphics.Renderer.onRenderContextRestored.add($bind(this,this.onRenderContextRestored));
+		lime.ui.Window.onWindowActivate.add($bind(this,this.onWindowActivate));
+		lime.ui.Window.onWindowClose.add($bind(this,this.onWindowClose));
+		lime.ui.Window.onWindowDeactivate.add($bind(this,this.onWindowDeactivate));
+		lime.ui.Window.onWindowFocusIn.add($bind(this,this.onWindowFocusIn));
+		lime.ui.Window.onWindowFocusOut.add($bind(this,this.onWindowFocusOut));
+		lime.ui.Window.onWindowMove.add($bind(this,this.onWindowMove));
+		lime.ui.Window.onWindowResize.add($bind(this,this.onWindowResize));
+		var $window = new lime.ui.Window(config);
+		var renderer = new lime.graphics.Renderer($window);
+		$window.width = config.width;
+		$window.height = config.height;
+		$window.element = config.element;
+		this.addWindow($window);
+	}
+	,exec: function() {
+		
+			var lastTime = 0;
+			var vendors = ['ms', 'moz', 'webkit', 'o'];
+			for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+				window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+				window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
+										   || window[vendors[x]+'CancelRequestAnimationFrame'];
+			}
+			
+			if (!window.requestAnimationFrame)
+				window.requestAnimationFrame = function(callback, element) {
+					var currTime = new Date().getTime();
+					var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+					var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+					  timeToCall);
+					lastTime = currTime + timeToCall;
+					return id;
+				};
+			
+			if (!window.cancelAnimationFrame)
+				window.cancelAnimationFrame = function(id) {
+					clearTimeout(id);
+				};
+			
+			window.requestAnimFrame = window.requestAnimationFrame;
+		;
+		this.__triggerFrame();
+		return 0;
+	}
+	,init: function(context) {
+	}
+	,onKeyDown: function(keyCode,modifier) {
+	}
+	,onKeyUp: function(keyCode,modifier) {
+	}
+	,onMouseDown: function(x,y,button) {
+	}
+	,onMouseMove: function(x,y,button) {
+	}
+	,onMouseUp: function(x,y,button) {
+	}
+	,onMouseWheel: function(deltaX,deltaY) {
+	}
+	,onRenderContextLost: function() {
+	}
+	,onRenderContextRestored: function(context) {
+	}
+	,onTouchEnd: function(x,y,id) {
+	}
+	,onTouchMove: function(x,y,id) {
+	}
+	,onTouchStart: function(x,y,id) {
+	}
+	,onWindowActivate: function() {
+	}
+	,onWindowClose: function() {
+	}
+	,onWindowDeactivate: function() {
+	}
+	,onWindowFocusIn: function() {
+	}
+	,onWindowFocusOut: function() {
+	}
+	,onWindowMove: function(x,y) {
+	}
+	,onWindowResize: function(width,height) {
+	}
+	,render: function(context) {
+	}
+	,update: function(deltaTime) {
+	}
+	,__triggerFrame: function(_) {
+		lime.app.Application.__eventInfo.deltaTime = 16;
+		lime.app.Application.__dispatch();
+		lime.graphics.Renderer.render();
+		window.requestAnimationFrame($bind(this,this.__triggerFrame));
+	}
+	,get_window: function() {
+		return this.windows[0];
+	}
+	,__class__: lime.app.Application
+	,__properties__: {get_window:"get_window"}
+});
+lime.app._Application.UpdateEventType_Impl_ = function() { };
+$hxClasses["lime.app._Application.UpdateEventType_Impl_"] = lime.app._Application.UpdateEventType_Impl_;
+lime.app._Application.UpdateEventType_Impl_.__name__ = ["lime","app","_Application","UpdateEventType_Impl_"];
+lime.app.Preloader = function() {
+	this.total = 0;
+	this.loaded = 0;
+};
+$hxClasses["lime.app.Preloader"] = lime.app.Preloader;
+lime.app.Preloader.__name__ = ["lime","app","Preloader"];
+lime.app.Preloader.prototype = {
+	create: function(config) {
+	}
+	,load: function(urls,types) {
+		var url = null;
+		var _g1 = 0;
+		var _g = urls.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			url = urls[i];
+			var _g2 = types[i];
+			switch(_g2) {
+			case "IMAGE":
+				var image = new Image();
+				lime.app.Preloader.images.set(url,image);
+				image.onload = $bind(this,this.image_onLoad);
+				image.src = url;
+				this.total++;
+				break;
+			case "BINARY":
+				var loader = new lime.net.URLLoader();
+				loader.set_dataFormat(lime.net.URLLoaderDataFormat.BINARY);
+				lime.app.Preloader.loaders.set(url,loader);
+				this.total++;
+				break;
+			case "TEXT":
+				var loader1 = new lime.net.URLLoader();
+				lime.app.Preloader.loaders.set(url,loader1);
+				this.total++;
+				break;
+			case "FONT":
+				this.total++;
+				this.loadFont(url);
+				break;
+			default:
+			}
+		}
+		var $it0 = lime.app.Preloader.loaders.keys();
+		while( $it0.hasNext() ) {
+			var url1 = $it0.next();
+			var loader2 = lime.app.Preloader.loaders.get(url1);
+			loader2.onComplete.add($bind(this,this.loader_onComplete));
+			loader2.load(new lime.net.URLRequest(url1));
+		}
+		if(this.total == 0) this.start();
+	}
+	,loadFont: function(font) {
+		var _g = this;
+		var node = window.document.createElement("span");
+		node.innerHTML = "giItT1WQy@!-/#";
+		var style = node.style;
+		style.position = "absolute";
+		style.left = "-10000px";
+		style.top = "-10000px";
+		style.fontSize = "300px";
+		style.fontFamily = "sans-serif";
+		style.fontVariant = "normal";
+		style.fontStyle = "normal";
+		style.fontWeight = "normal";
+		style.letterSpacing = "0";
+		window.document.body.appendChild(node);
+		var width = node.offsetWidth;
+		style.fontFamily = "'" + font + "'";
+		var interval = null;
+		var found = false;
+		var checkFont = function() {
+			if(node.offsetWidth != width) {
+				if(!found) {
+					found = true;
+					return false;
+				}
+				_g.loaded++;
+				if(interval != null) window.clearInterval(interval);
+				node.parentNode.removeChild(node);
+				node = null;
+				_g.update(_g.loaded,_g.total);
+				if(_g.loaded == _g.total) _g.start();
+				return true;
+			}
+			return false;
+		};
+		if(!checkFont()) interval = window.setInterval(checkFont,50);
+	}
+	,start: function() {
+		if(this.onComplete != null) this.onComplete();
+	}
+	,update: function(loaded,total) {
+	}
+	,image_onLoad: function(_) {
+		this.loaded++;
+		this.update(this.loaded,this.total);
+		if(this.loaded == this.total) this.start();
+	}
+	,loader_onComplete: function(loader) {
+		this.loaded++;
+		this.update(this.loaded,this.total);
+		if(this.loaded == this.total) this.start();
+	}
+	,__class__: lime.app.Preloader
+};
+lime.audio = {};
+lime.audio.ALAudioContext = function() {
+	this.EXPONENT_DISTANCE_CLAMPED = 53254;
+	this.EXPONENT_DISTANCE = 53253;
+	this.LINEAR_DISTANCE_CLAMPED = 53252;
+	this.LINEAR_DISTANCE = 53251;
+	this.INVERSE_DISTANCE_CLAMPED = 53250;
+	this.INVERSE_DISTANCE = 53249;
+	this.DISTANCE_MODEL = 53248;
+	this.DOPPLER_VELOCITY = 49153;
+	this.SPEED_OF_SOUND = 49155;
+	this.DOPPLER_FACTOR = 49152;
+	this.EXTENSIONS = 45060;
+	this.RENDERER = 45059;
+	this.VERSION = 45058;
+	this.VENDOR = 45057;
+	this.OUT_OF_MEMORY = 40965;
+	this.INVALID_OPERATION = 40964;
+	this.INVALID_VALUE = 40963;
+	this.INVALID_ENUM = 40962;
+	this.INVALID_NAME = 40961;
+	this.NO_ERROR = 0;
+	this.SIZE = 8196;
+	this.CHANNELS = 8195;
+	this.BITS = 8194;
+	this.FREQUENCY = 8193;
+	this.FORMAT_STEREO16 = 4355;
+	this.FORMAT_STEREO8 = 4354;
+	this.FORMAT_MONO16 = 4353;
+	this.FORMAT_MONO8 = 4352;
+	this.UNDETERMINED = 4144;
+	this.STREAMING = 4137;
+	this.STATIC = 4136;
+	this.SOURCE_TYPE = 4135;
+	this.BYTE_OFFSET = 4134;
+	this.SAMPLE_OFFSET = 4133;
+	this.SEC_OFFSET = 4132;
+	this.MAX_DISTANCE = 4131;
+	this.CONE_OUTER_GAIN = 4130;
+	this.ROLLOFF_FACTOR = 4129;
+	this.REFERENCE_DISTANCE = 4128;
+	this.BUFFERS_PROCESSED = 4118;
+	this.BUFFERS_QUEUED = 4117;
+	this.STOPPED = 4116;
+	this.PAUSED = 4115;
+	this.PLAYING = 4114;
+	this.INITIAL = 4113;
+	this.SOURCE_STATE = 4112;
+	this.ORIENTATION = 4111;
+	this.MAX_GAIN = 4110;
+	this.MIN_GAIN = 4109;
+	this.GAIN = 4106;
+	this.BUFFER = 4105;
+	this.LOOPING = 4103;
+	this.VELOCITY = 4102;
+	this.DIRECTION = 4101;
+	this.POSITION = 4100;
+	this.PITCH = 4099;
+	this.CONE_OUTER_ANGLE = 4098;
+	this.CONE_INNER_ANGLE = 4097;
+	this.SOURCE_RELATIVE = 514;
+	this.TRUE = 1;
+	this.FALSE = 0;
+	this.NONE = 0;
+};
+$hxClasses["lime.audio.ALAudioContext"] = lime.audio.ALAudioContext;
+lime.audio.ALAudioContext.__name__ = ["lime","audio","ALAudioContext"];
+lime.audio.ALAudioContext.prototype = {
+	bufferData: function(buffer,format,data,size,freq) {
+		lime.audio.openal.AL.bufferData(buffer,format,data,size,freq);
+	}
+	,buffer3f: function(buffer,param,value1,value2,value3) {
+		lime.audio.openal.AL.buffer3f(buffer,param,value1,value2,value3);
+	}
+	,buffer3i: function(buffer,param,value1,value2,value3) {
+		lime.audio.openal.AL.buffer3i(buffer,param,value1,value2,value3);
+	}
+	,bufferf: function(buffer,param,value) {
+		lime.audio.openal.AL.bufferf(buffer,param,value);
+	}
+	,bufferfv: function(buffer,param,values) {
+		lime.audio.openal.AL.bufferfv(buffer,param,values);
+	}
+	,bufferi: function(buffer,param,value) {
+		lime.audio.openal.AL.bufferi(buffer,param,value);
+	}
+	,bufferiv: function(buffer,param,values) {
+		lime.audio.openal.AL.bufferiv(buffer,param,values);
+	}
+	,deleteBuffer: function(buffer) {
+		lime.audio.openal.AL.deleteBuffer(buffer);
+	}
+	,deleteBuffers: function(buffers) {
+		lime.audio.openal.AL.deleteBuffers(buffers);
+	}
+	,deleteSource: function(source) {
+		lime.audio.openal.AL.deleteSource(source);
+	}
+	,deleteSources: function(sources) {
+		lime.audio.openal.AL.deleteSources(sources);
+	}
+	,disable: function(capability) {
+		lime.audio.openal.AL.disable(capability);
+	}
+	,distanceModel: function(distanceModel) {
+		lime.audio.openal.AL.distanceModel(distanceModel);
+	}
+	,dopplerFactor: function(value) {
+		lime.audio.openal.AL.dopplerFactor(value);
+	}
+	,dopplerVelocity: function(value) {
+		lime.audio.openal.AL.dopplerVelocity(value);
+	}
+	,enable: function(capability) {
+		lime.audio.openal.AL.enable(capability);
+	}
+	,genSource: function() {
+		return lime.audio.openal.AL.genSource();
+	}
+	,genSources: function(n) {
+		return lime.audio.openal.AL.genSources(n);
+	}
+	,genBuffer: function() {
+		return lime.audio.openal.AL.genBuffer();
+	}
+	,genBuffers: function(n) {
+		return lime.audio.openal.AL.genBuffers(n);
+	}
+	,getBoolean: function(param) {
+		return lime.audio.openal.AL.getBoolean(param);
+	}
+	,getBooleanv: function(param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.AL.getBooleanv(param,count);
+	}
+	,getBuffer3f: function(buffer,param) {
+		return lime.audio.openal.AL.getBuffer3f(buffer,param);
+	}
+	,getBuffer3i: function(buffer,param) {
+		return lime.audio.openal.AL.getBuffer3i(buffer,param);
+	}
+	,getBufferf: function(buffer,param) {
+		return lime.audio.openal.AL.getBufferf(buffer,param);
+	}
+	,getBufferfv: function(buffer,param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.AL.getBufferfv(buffer,param,count);
+	}
+	,getBufferi: function(buffer,param) {
+		return lime.audio.openal.AL.getBufferi(buffer,param);
+	}
+	,getBufferiv: function(buffer,param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.AL.getBufferiv(buffer,param,count);
+	}
+	,getDouble: function(param) {
+		return lime.audio.openal.AL.getDouble(param);
+	}
+	,getDoublev: function(param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.AL.getDoublev(param,count);
+	}
+	,getEnumValue: function(ename) {
+		return lime.audio.openal.AL.getEnumValue(ename);
+	}
+	,getError: function() {
+		return lime.audio.openal.AL.getError();
+	}
+	,getErrorString: function() {
+		return lime.audio.openal.AL.getErrorString();
+	}
+	,getFloat: function(param) {
+		return lime.audio.openal.AL.getFloat(param);
+	}
+	,getFloatv: function(param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.AL.getFloatv(param,count);
+	}
+	,getInteger: function(param) {
+		return lime.audio.openal.AL.getInteger(param);
+	}
+	,getIntegerv: function(param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.AL.getIntegerv(param,count);
+	}
+	,getListener3f: function(param) {
+		return lime.audio.openal.AL.getListener3f(param);
+	}
+	,getListener3i: function(param) {
+		return lime.audio.openal.AL.getListener3i(param);
+	}
+	,getListenerf: function(param) {
+		return lime.audio.openal.AL.getListenerf(param);
+	}
+	,getListenerfv: function(param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.AL.getListenerfv(param,count);
+	}
+	,getListeneri: function(param) {
+		return lime.audio.openal.AL.getListeneri(param);
+	}
+	,getListeneriv: function(param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.AL.getListeneriv(param,count);
+	}
+	,getProcAddress: function(fname) {
+		return lime.audio.openal.AL.getProcAddress(fname);
+	}
+	,getSource3f: function(source,param) {
+		return lime.audio.openal.AL.getSource3f(source,param);
+	}
+	,getSourcef: function(source,param) {
+		return lime.audio.openal.AL.getSourcef(source,param);
+	}
+	,getSource3i: function(source,param) {
+		return lime.audio.openal.AL.getSource3i(source,param);
+	}
+	,getSourcefv: function(source,param) {
+		return lime.audio.openal.AL.getSourcefv(source,param);
+	}
+	,getSourcei: function(source,param) {
+		return lime.audio.openal.AL.getSourcei(source,param);
+	}
+	,getSourceiv: function(source,param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.AL.getSourceiv(source,param,count);
+	}
+	,getString: function(param) {
+		return lime.audio.openal.AL.getString(param);
+	}
+	,isBuffer: function(buffer) {
+		return lime.audio.openal.AL.isBuffer(buffer);
+	}
+	,isEnabled: function(capability) {
+		return lime.audio.openal.AL.isEnabled(capability);
+	}
+	,isExtensionPresent: function(extname) {
+		return lime.audio.openal.AL.isExtensionPresent(extname);
+	}
+	,isSource: function(source) {
+		return lime.audio.openal.AL.isSource(source);
+	}
+	,listener3f: function(param,value1,value2,value3) {
+		lime.audio.openal.AL.listener3f(param,value1,value2,value3);
+	}
+	,listener3i: function(param,value1,value2,value3) {
+		lime.audio.openal.AL.listener3i(param,value1,value2,value3);
+	}
+	,listenerf: function(param,value) {
+		lime.audio.openal.AL.listenerf(param,value);
+	}
+	,listenerfv: function(param,values) {
+		lime.audio.openal.AL.listenerfv(param,values);
+	}
+	,listeneri: function(param,value) {
+		lime.audio.openal.AL.listeneri(param,value);
+	}
+	,listeneriv: function(param,values) {
+		lime.audio.openal.AL.listeneriv(param,values);
+	}
+	,source3f: function(source,param,value1,value2,value3) {
+		lime.audio.openal.AL.source3f(source,param,value1,value2,value3);
+	}
+	,source3i: function(source,param,value1,value2,value3) {
+		lime.audio.openal.AL.source3i(source,param,value1,value2,value3);
+	}
+	,sourcef: function(source,param,value) {
+		lime.audio.openal.AL.sourcef(source,param,value);
+	}
+	,sourcefv: function(source,param,values) {
+		lime.audio.openal.AL.sourcefv(source,param,values);
+	}
+	,sourcei: function(source,param,value) {
+		lime.audio.openal.AL.sourcei(source,param,value);
+	}
+	,sourceiv: function(source,param,values) {
+		lime.audio.openal.AL.sourceiv(source,param,values);
+	}
+	,sourcePlay: function(source) {
+		lime.audio.openal.AL.sourcePlay(source);
+	}
+	,sourcePlayv: function(sources) {
+		lime.audio.openal.AL.sourcePlayv(sources);
+	}
+	,sourceStop: function(source) {
+		lime.audio.openal.AL.sourceStop(source);
+	}
+	,sourceStopv: function(sources) {
+		lime.audio.openal.AL.sourceStopv(sources);
+	}
+	,sourceRewind: function(source) {
+		lime.audio.openal.AL.sourceRewind(source);
+	}
+	,sourceRewindv: function(sources) {
+		lime.audio.openal.AL.sourceRewindv(sources);
+	}
+	,sourcePause: function(source) {
+		lime.audio.openal.AL.sourcePause(source);
+	}
+	,sourcePausev: function(sources) {
+		lime.audio.openal.AL.sourcePausev(sources);
+	}
+	,sourceQueueBuffer: function(source,buffer) {
+		lime.audio.openal.AL.sourceQueueBuffer(source,buffer);
+	}
+	,sourceQueueBuffers: function(source,nb,buffers) {
+		lime.audio.openal.AL.sourceQueueBuffers(source,nb,buffers);
+	}
+	,sourceUnqueueBuffer: function(source) {
+		return lime.audio.openal.AL.sourceUnqueueBuffer(source);
+	}
+	,sourceUnqueueBuffers: function(source,nb) {
+		return lime.audio.openal.AL.sourceUnqueueBuffers(source,nb);
+	}
+	,speedOfSound: function(value) {
+		lime.audio.openal.AL.speedOfSound(value);
+	}
+	,__class__: lime.audio.ALAudioContext
+};
+lime.audio.ALCAudioContext = function() {
+	this.ALL_DEVICES_SPECIFIER = 4115;
+	this.DEFAULT_ALL_DEVICES_SPECIFIER = 4114;
+	this.ENUMERATE_ALL_EXT = 1;
+	this.EXTENSIONS = 4102;
+	this.DEVICE_SPECIFIER = 4101;
+	this.DEFAULT_DEVICE_SPECIFIER = 4100;
+	this.ALL_ATTRIBUTES = 4099;
+	this.ATTRIBUTES_SIZE = 4098;
+	this.OUT_OF_MEMORY = 40965;
+	this.INVALID_VALUE = 40964;
+	this.INVALID_ENUM = 40963;
+	this.INVALID_CONTEXT = 40962;
+	this.INVALID_DEVICE = 40961;
+	this.NO_ERROR = 0;
+	this.STEREO_SOURCES = 4113;
+	this.MONO_SOURCES = 4112;
+	this.SYNC = 4105;
+	this.REFRESH = 4104;
+	this.FREQUENCY = 4103;
+	this.TRUE = 1;
+	this.FALSE = 0;
+};
+$hxClasses["lime.audio.ALCAudioContext"] = lime.audio.ALCAudioContext;
+lime.audio.ALCAudioContext.__name__ = ["lime","audio","ALCAudioContext"];
+lime.audio.ALCAudioContext.prototype = {
+	closeDevice: function(device) {
+		return lime.audio.openal.ALC.closeDevice(device);
+	}
+	,createContext: function(device,attrlist) {
+		return lime.audio.openal.ALC.createContext(device,attrlist);
+	}
+	,destroyContext: function(context) {
+		lime.audio.openal.ALC.destroyContext(context);
+	}
+	,getContextsDevice: function(context) {
+		return lime.audio.openal.ALC.getContextsDevice(context);
+	}
+	,getCurrentContext: function() {
+		return lime.audio.openal.ALC.getCurrentContext();
+	}
+	,getError: function(device) {
+		return lime.audio.openal.ALC.getError(device);
+	}
+	,getErrorString: function(device) {
+		return lime.audio.openal.ALC.getErrorString(device);
+	}
+	,getIntegerv: function(device,param,count) {
+		if(count == null) count = 1;
+		return lime.audio.openal.ALC.getIntegerv(device,param,count);
+	}
+	,getString: function(device,param) {
+		return lime.audio.openal.ALC.getString(device,param);
+	}
+	,makeContextCurrent: function(context) {
+		return lime.audio.openal.ALC.makeContextCurrent(context);
+	}
+	,openDevice: function(deviceName) {
+		return lime.audio.openal.ALC.openDevice(deviceName);
+	}
+	,processContext: function(context) {
+		lime.audio.openal.ALC.processContext(context);
+	}
+	,suspendContext: function(context) {
+		lime.audio.openal.ALC.suspendContext(context);
+	}
+	,__class__: lime.audio.ALCAudioContext
+};
+lime.audio.AudioBuffer = function() {
+	this.id = 0;
+};
+$hxClasses["lime.audio.AudioBuffer"] = lime.audio.AudioBuffer;
+lime.audio.AudioBuffer.__name__ = ["lime","audio","AudioBuffer"];
+lime.audio.AudioBuffer.fromBytes = function(bytes) {
+	return null;
+};
+lime.audio.AudioBuffer.fromFile = function(path) {
+	return null;
+};
+lime.audio.AudioBuffer.fromURL = function(url,handler) {
+};
+lime.audio.AudioBuffer.prototype = {
+	dispose: function() {
+	}
+	,__class__: lime.audio.AudioBuffer
+};
+lime.audio.AudioContext = $hxClasses["lime.audio.AudioContext"] = { __ename__ : ["lime","audio","AudioContext"], __constructs__ : ["OPENAL","HTML5","WEB","FLASH","CUSTOM"] };
+lime.audio.AudioContext.OPENAL = function(alc,al) { var $x = ["OPENAL",0,alc,al]; $x.__enum__ = lime.audio.AudioContext; $x.toString = $estr; return $x; };
+lime.audio.AudioContext.HTML5 = function(context) { var $x = ["HTML5",1,context]; $x.__enum__ = lime.audio.AudioContext; $x.toString = $estr; return $x; };
+lime.audio.AudioContext.WEB = function(context) { var $x = ["WEB",2,context]; $x.__enum__ = lime.audio.AudioContext; $x.toString = $estr; return $x; };
+lime.audio.AudioContext.FLASH = function(context) { var $x = ["FLASH",3,context]; $x.__enum__ = lime.audio.AudioContext; $x.toString = $estr; return $x; };
+lime.audio.AudioContext.CUSTOM = function(data) { var $x = ["CUSTOM",4,data]; $x.__enum__ = lime.audio.AudioContext; $x.toString = $estr; return $x; };
+lime.audio.AudioManager = function() { };
+$hxClasses["lime.audio.AudioManager"] = lime.audio.AudioManager;
+lime.audio.AudioManager.__name__ = ["lime","audio","AudioManager"];
+lime.audio.AudioManager.context = null;
+lime.audio.AudioManager.init = function(context) {
+	if(context == null) try {
+		window.AudioContext = window.AudioContext || window.webkitAudioContext;;
+		lime.audio.AudioManager.context = lime.audio.AudioContext.WEB(new AudioContext ());
+	} catch( e ) {
+		lime.audio.AudioManager.context = lime.audio.AudioContext.HTML5(new lime.audio.HTML5AudioContext());
+	} else lime.audio.AudioManager.context = context;
+};
+lime.audio.AudioManager.resume = function() {
+	if(lime.audio.AudioManager.context != null) {
+		var _g = lime.audio.AudioManager.context;
+		switch(_g[1]) {
+		case 0:
+			var al = _g[3];
+			var alc = _g[2];
+			alc.processContext(alc.getCurrentContext());
+			break;
+		default:
+		}
+	}
+};
+lime.audio.AudioManager.shutdown = function() {
+	if(lime.audio.AudioManager.context != null) {
+		var _g = lime.audio.AudioManager.context;
+		switch(_g[1]) {
+		case 0:
+			var al = _g[3];
+			var alc = _g[2];
+			var currentContext = alc.getCurrentContext();
+			if(currentContext != null) {
+				var device = alc.getContextsDevice(currentContext);
+				alc.makeContextCurrent(null);
+				alc.destroyContext(currentContext);
+				alc.closeDevice(device);
+			}
+			break;
+		default:
+		}
+	}
+};
+lime.audio.AudioManager.suspend = function() {
+	if(lime.audio.AudioManager.context != null) {
+		var _g = lime.audio.AudioManager.context;
+		switch(_g[1]) {
+		case 0:
+			var al = _g[3];
+			var alc = _g[2];
+			alc.suspendContext(alc.getCurrentContext());
+			break;
+		default:
+		}
+	}
+};
+lime.audio.FlashAudioContext = function() {
+};
+$hxClasses["lime.audio.FlashAudioContext"] = lime.audio.FlashAudioContext;
+lime.audio.FlashAudioContext.__name__ = ["lime","audio","FlashAudioContext"];
+lime.audio.FlashAudioContext.prototype = {
+	createBuffer: function(stream,context) {
+		return null;
+	}
+	,getBytesLoaded: function(buffer) {
+		return 0;
+	}
+	,getBytesTotal: function(buffer) {
+		return 0;
+	}
+	,getID3: function(buffer) {
+		return null;
+	}
+	,getIsBuffering: function(buffer) {
+		return false;
+	}
+	,getIsURLInaccessible: function(buffer) {
+		return false;
+	}
+	,getLength: function(buffer) {
+		return 0;
+	}
+	,getURL: function(buffer) {
+		return null;
+	}
+	,close: function(buffer) {
+	}
+	,extract: function(buffer,target,length,startPosition) {
+		if(startPosition == null) startPosition = -1;
+		return 0;
+	}
+	,load: function(buffer,stream,context) {
+	}
+	,loadCompressedDataFromByteArray: function(buffer,bytes,bytesLength) {
+	}
+	,loadPCMFromByteArray: function(buffer,bytes,samples,format,stereo,sampleRate) {
+		if(sampleRate == null) sampleRate = 44100;
+		if(stereo == null) stereo = true;
+	}
+	,play: function(buffer,startTime,loops,sndTransform) {
+		if(loops == null) loops = 0;
+		if(startTime == null) startTime = 0;
+		return null;
+	}
+	,__class__: lime.audio.FlashAudioContext
+};
+lime.audio.HTML5AudioContext = function() {
+	this.NETWORK_NO_SOURCE = 3;
+	this.NETWORK_LOADING = 2;
+	this.NETWORK_IDLE = 1;
+	this.NETWORK_EMPTY = 0;
+	this.HAVE_NOTHING = 0;
+	this.HAVE_METADATA = 1;
+	this.HAVE_FUTURE_DATA = 3;
+	this.HAVE_ENOUGH_DATA = 4;
+	this.HAVE_CURRENT_DATA = 2;
+};
+$hxClasses["lime.audio.HTML5AudioContext"] = lime.audio.HTML5AudioContext;
+lime.audio.HTML5AudioContext.__name__ = ["lime","audio","HTML5AudioContext"];
+lime.audio.HTML5AudioContext.prototype = {
+	canPlayType: function(buffer,type) {
+		if(buffer.src != null) return buffer.src.canPlayType(type);
+		return null;
+	}
+	,createBuffer: function(urlString) {
+		var buffer = new lime.audio.AudioBuffer();
+		buffer.src = new Audio();
+		buffer.src.src = urlString;
+		return buffer;
+	}
+	,getAudioDecodedByteCount: function(buffer) {
+		if(buffer.src != null) return buffer.src.audioDecodedByteCount;
+		return 0;
+	}
+	,getAutoplay: function(buffer) {
+		if(buffer.src != null) return buffer.src.autoplay;
+		return false;
+	}
+	,getBuffered: function(buffer) {
+		if(buffer.src != null) return buffer.src.buffered;
+		return null;
+	}
+	,getController: function(buffer) {
+		if(buffer.src != null) return buffer.src.controller;
+		return null;
+	}
+	,getCurrentSrc: function(buffer) {
+		if(buffer.src != null) return buffer.src.currentSrc;
+		return null;
+	}
+	,getCurrentTime: function(buffer) {
+		if(buffer.src != null) return buffer.src.currentTime;
+		return 0;
+	}
+	,getDefaultPlaybackRate: function(buffer) {
+		if(buffer.src != null) return buffer.src.defaultPlaybackRate;
+		return 1;
+	}
+	,getDuration: function(buffer) {
+		if(buffer.src != null) return buffer.src.duration;
+		return 0;
+	}
+	,getEnded: function(buffer) {
+		if(buffer.src != null) return buffer.src.ended;
+		return false;
+	}
+	,getError: function(buffer) {
+		if(buffer.src != null) return buffer.src.error;
+		return null;
+	}
+	,getInitialTime: function(buffer) {
+		if(buffer.src != null) return buffer.src.initialTime;
+		return 0;
+	}
+	,getLoop: function(buffer) {
+		if(buffer.src != null) return buffer.src.loop;
+		return false;
+	}
+	,getMediaGroup: function(buffer) {
+		if(buffer.src != null) return buffer.src.mediaGroup;
+		return null;
+	}
+	,getMuted: function(buffer) {
+		if(buffer.src != null) return buffer.src.muted;
+		return false;
+	}
+	,getNetworkState: function(buffer) {
+		if(buffer.src != null) return buffer.src.networkState;
+		return 0;
+	}
+	,getPaused: function(buffer) {
+		if(buffer.src != null) return buffer.src.paused;
+		return false;
+	}
+	,getPlaybackRate: function(buffer) {
+		if(buffer.src != null) return buffer.src.playbackRate;
+		return 1;
+	}
+	,getPlayed: function(buffer) {
+		if(buffer.src != null) return buffer.src.played;
+		return null;
+	}
+	,getPreload: function(buffer) {
+		if(buffer.src != null) return buffer.src.preload;
+		return null;
+	}
+	,getReadyState: function(buffer) {
+		if(buffer.src != null) return buffer.src.readyState;
+		return 0;
+	}
+	,getSeekable: function(buffer) {
+		if(buffer.src != null) return buffer.src.seekable;
+		return null;
+	}
+	,getSeeking: function(buffer) {
+		if(buffer.src != null) return buffer.src.seeking;
+		return false;
+	}
+	,getSrc: function(buffer) {
+		if(buffer.src != null) return buffer.src.src;
+		return null;
+	}
+	,getStartTime: function(buffer) {
+		if(buffer.src != null) return buffer.src.playbackRate;
+		return 0;
+	}
+	,getVolume: function(buffer) {
+		if(buffer.src != null) return buffer.src.volume;
+		return 1;
+	}
+	,load: function(buffer) {
+		if(buffer.src != null) return buffer.src.load();
+	}
+	,pause: function(buffer) {
+		if(buffer.src != null) return buffer.src.pause();
+	}
+	,play: function(buffer) {
+		if(buffer.src != null) return buffer.src.play();
+	}
+	,setAutoplay: function(buffer,value) {
+		if(buffer.src != null) buffer.src.autoplay = value;
+	}
+	,setController: function(buffer,value) {
+		if(buffer.src != null) buffer.src.controller = value;
+	}
+	,setCurrentTime: function(buffer,value) {
+		if(buffer.src != null) buffer.src.currentTime = value;
+	}
+	,setDefaultPlaybackRate: function(buffer,value) {
+		if(buffer.src != null) buffer.src.defaultPlaybackRate = value;
+	}
+	,setLoop: function(buffer,value) {
+		if(buffer.src != null) buffer.src.loop = value;
+	}
+	,setMediaGroup: function(buffer,value) {
+		if(buffer.src != null) buffer.src.mediaGroup = value;
+	}
+	,setMuted: function(buffer,value) {
+		if(buffer.src != null) buffer.src.muted = value;
+	}
+	,setPlaybackRate: function(buffer,value) {
+		if(buffer.src != null) buffer.src.playbackRate = value;
+	}
+	,setPreload: function(buffer,value) {
+		if(buffer.src != null) buffer.src.preload = value;
+	}
+	,setSrc: function(buffer,value) {
+		if(buffer.src != null) buffer.src.src = value;
+	}
+	,setVolume: function(buffer,value) {
+		if(buffer.src != null) buffer.src.volume = value;
+	}
+	,__class__: lime.audio.HTML5AudioContext
+};
+lime.audio.openal = {};
+lime.audio.openal.AL = function() { };
+$hxClasses["lime.audio.openal.AL"] = lime.audio.openal.AL;
+lime.audio.openal.AL.__name__ = ["lime","audio","openal","AL"];
+lime.audio.openal.AL.bufferData = function(buffer,format,data,size,freq) {
+};
+lime.audio.openal.AL.buffer3f = function(buffer,param,value1,value2,value3) {
+};
+lime.audio.openal.AL.buffer3i = function(buffer,param,value1,value2,value3) {
+};
+lime.audio.openal.AL.bufferf = function(buffer,param,value) {
+};
+lime.audio.openal.AL.bufferfv = function(buffer,param,values) {
+};
+lime.audio.openal.AL.bufferi = function(buffer,param,value) {
+};
+lime.audio.openal.AL.bufferiv = function(buffer,param,values) {
+};
+lime.audio.openal.AL.deleteBuffer = function(buffer) {
+};
+lime.audio.openal.AL.deleteBuffers = function(buffers) {
+};
+lime.audio.openal.AL.deleteSource = function(source) {
+};
+lime.audio.openal.AL.deleteSources = function(sources) {
+};
+lime.audio.openal.AL.disable = function(capability) {
+};
+lime.audio.openal.AL.distanceModel = function(distanceModel) {
+};
+lime.audio.openal.AL.dopplerFactor = function(value) {
+};
+lime.audio.openal.AL.dopplerVelocity = function(value) {
+};
+lime.audio.openal.AL.enable = function(capability) {
+};
+lime.audio.openal.AL.genSource = function() {
+	return 0;
+};
+lime.audio.openal.AL.genSources = function(n) {
+	return null;
+};
+lime.audio.openal.AL.genBuffer = function() {
+	return 0;
+};
+lime.audio.openal.AL.genBuffers = function(n) {
+	return null;
+};
+lime.audio.openal.AL.getBoolean = function(param) {
+	return false;
+};
+lime.audio.openal.AL.getBooleanv = function(param,count) {
+	if(count == null) count = 1;
+	return null;
+};
+lime.audio.openal.AL.getBuffer3f = function(buffer,param) {
+	return null;
+};
+lime.audio.openal.AL.getBuffer3i = function(buffer,param) {
+	return null;
+};
+lime.audio.openal.AL.getBufferf = function(buffer,param) {
+	return 0;
+};
+lime.audio.openal.AL.getBufferfv = function(buffer,param,count) {
+	if(count == null) count = 1;
+	return null;
+};
+lime.audio.openal.AL.getBufferi = function(buffer,param) {
+	return 0;
+};
+lime.audio.openal.AL.getBufferiv = function(buffer,param,count) {
+	if(count == null) count = 1;
+	return null;
+};
+lime.audio.openal.AL.getDouble = function(param) {
+	return 0;
+};
+lime.audio.openal.AL.getDoublev = function(param,count) {
+	if(count == null) count = 1;
+	return null;
+};
+lime.audio.openal.AL.getEnumValue = function(ename) {
+	return 0;
+};
+lime.audio.openal.AL.getError = function() {
+	return 0;
+};
+lime.audio.openal.AL.getErrorString = function() {
+	var _g = lime.audio.openal.AL.getError();
+	switch(_g) {
+	case 40961:
+		return "INVALID_NAME: Invalid parameter name";
+	case 40962:
+		return "INVALID_ENUM: Invalid enum value";
+	case 40963:
+		return "INVALID_VALUE: Invalid parameter value";
+	case 40964:
+		return "INVALID_OPERATION: Illegal operation or call";
+	case 40965:
+		return "OUT_OF_MEMORY: OpenAL has run out of memory";
+	default:
+		return "";
+	}
+};
+lime.audio.openal.AL.getFloat = function(param) {
+	return 0;
+};
+lime.audio.openal.AL.getFloatv = function(param,count) {
+	if(count == null) count = 1;
+	return null;
+};
+lime.audio.openal.AL.getInteger = function(param) {
+	return 0;
+};
+lime.audio.openal.AL.getIntegerv = function(param,count) {
+	if(count == null) count = 1;
+	return null;
+};
+lime.audio.openal.AL.getListener3f = function(param) {
+	return null;
+};
+lime.audio.openal.AL.getListener3i = function(param) {
+	return null;
+};
+lime.audio.openal.AL.getListenerf = function(param) {
+	return 0;
+};
+lime.audio.openal.AL.getListenerfv = function(param,count) {
+	if(count == null) count = 1;
+	return null;
+};
+lime.audio.openal.AL.getListeneri = function(param) {
+	return 0;
+};
+lime.audio.openal.AL.getListeneriv = function(param,count) {
+	if(count == null) count = 1;
+	return null;
+};
+lime.audio.openal.AL.getProcAddress = function(fname) {
+	return null;
+};
+lime.audio.openal.AL.getSource3f = function(source,param) {
+	return null;
+};
+lime.audio.openal.AL.getSourcef = function(source,param) {
+	return 0;
+};
+lime.audio.openal.AL.getSource3i = function(source,param) {
+	return null;
+};
+lime.audio.openal.AL.getSourcefv = function(source,param) {
+	return null;
+};
+lime.audio.openal.AL.getSourcei = function(source,param) {
+	return 0;
+};
+lime.audio.openal.AL.getSourceiv = function(source,param,count) {
+	if(count == null) count = 1;
+	return null;
+};
+lime.audio.openal.AL.getString = function(param) {
+	return null;
+};
+lime.audio.openal.AL.isBuffer = function(buffer) {
+	return false;
+};
+lime.audio.openal.AL.isEnabled = function(capability) {
+	return false;
+};
+lime.audio.openal.AL.isExtensionPresent = function(extname) {
+	return false;
+};
+lime.audio.openal.AL.isSource = function(source) {
+	return false;
+};
+lime.audio.openal.AL.listener3f = function(param,value1,value2,value3) {
+};
+lime.audio.openal.AL.listener3i = function(param,value1,value2,value3) {
+};
+lime.audio.openal.AL.listenerf = function(param,value) {
+};
+lime.audio.openal.AL.listenerfv = function(param,values) {
+};
+lime.audio.openal.AL.listeneri = function(param,value) {
+};
+lime.audio.openal.AL.listeneriv = function(param,values) {
+};
+lime.audio.openal.AL.source3f = function(source,param,value1,value2,value3) {
+};
+lime.audio.openal.AL.source3i = function(source,param,value1,value2,value3) {
+};
+lime.audio.openal.AL.sourcef = function(source,param,value) {
+};
+lime.audio.openal.AL.sourcefv = function(source,param,values) {
+};
+lime.audio.openal.AL.sourcei = function(source,param,value) {
+};
+lime.audio.openal.AL.sourceiv = function(source,param,values) {
+};
+lime.audio.openal.AL.sourcePlay = function(source) {
+};
+lime.audio.openal.AL.sourcePlayv = function(sources) {
+};
+lime.audio.openal.AL.sourceStop = function(source) {
+};
+lime.audio.openal.AL.sourceStopv = function(sources) {
+};
+lime.audio.openal.AL.sourceRewind = function(source) {
+};
+lime.audio.openal.AL.sourceRewindv = function(sources) {
+};
+lime.audio.openal.AL.sourcePause = function(source) {
+};
+lime.audio.openal.AL.sourcePausev = function(sources) {
+};
+lime.audio.openal.AL.sourceQueueBuffer = function(source,buffer) {
+};
+lime.audio.openal.AL.sourceQueueBuffers = function(source,nb,buffers) {
+};
+lime.audio.openal.AL.sourceUnqueueBuffer = function(source) {
+	return 0;
+};
+lime.audio.openal.AL.sourceUnqueueBuffers = function(source,nb) {
+	return null;
+};
+lime.audio.openal.AL.speedOfSound = function(value) {
+};
+lime.audio.openal.ALC = function() { };
+$hxClasses["lime.audio.openal.ALC"] = lime.audio.openal.ALC;
+lime.audio.openal.ALC.__name__ = ["lime","audio","openal","ALC"];
+lime.audio.openal.ALC.closeDevice = function(device) {
+	return false;
+};
+lime.audio.openal.ALC.createContext = function(device,attrlist) {
+	return null;
+};
+lime.audio.openal.ALC.destroyContext = function(context) {
+};
+lime.audio.openal.ALC.getContextsDevice = function(context) {
+	return null;
+};
+lime.audio.openal.ALC.getCurrentContext = function() {
+	return null;
+};
+lime.audio.openal.ALC.getError = function(device) {
+	return 0;
+};
+lime.audio.openal.ALC.getErrorString = function(device) {
+	var _g = lime.audio.openal.ALC.getError(device);
+	switch(_g) {
+	case 40961:
+		return "INVALID_DEVICE: Invalid device (or no device?)";
+	case 40962:
+		return "INVALID_CONTEXT: Invalid context (or no context?)";
+	case 40963:
+		return "INVALID_ENUM: Invalid enum value";
+	case 40964:
+		return "INVALID_VALUE: Invalid param value";
+	case 40965:
+		return "OUT_OF_MEMORY: OpenAL has run out of memory";
+	default:
+		return "";
+	}
+};
+lime.audio.openal.ALC.getIntegerv = function(device,param,size) {
+	return null;
+};
+lime.audio.openal.ALC.getString = function(device,param) {
+	return null;
+};
+lime.audio.openal.ALC.makeContextCurrent = function(context) {
+	return false;
+};
+lime.audio.openal.ALC.openDevice = function(deviceName) {
+	return null;
+};
+lime.audio.openal.ALC.processContext = function(context) {
+};
+lime.audio.openal.ALC.suspendContext = function(context) {
+};
+lime.audio.openal._ALContext = {};
+lime.audio.openal._ALContext.ALContext_Impl_ = function() { };
+$hxClasses["lime.audio.openal._ALContext.ALContext_Impl_"] = lime.audio.openal._ALContext.ALContext_Impl_;
+lime.audio.openal._ALContext.ALContext_Impl_.__name__ = ["lime","audio","openal","_ALContext","ALContext_Impl_"];
+lime.audio.openal._ALContext.ALContext_Impl_._new = function(handle) {
+	return handle;
+};
+lime.audio.openal._ALDevice = {};
+lime.audio.openal._ALDevice.ALDevice_Impl_ = function() { };
+$hxClasses["lime.audio.openal._ALDevice.ALDevice_Impl_"] = lime.audio.openal._ALDevice.ALDevice_Impl_;
+lime.audio.openal._ALDevice.ALDevice_Impl_.__name__ = ["lime","audio","openal","_ALDevice","ALDevice_Impl_"];
+lime.audio.openal._ALDevice.ALDevice_Impl_._new = function(handle) {
+	return handle;
+};
+lime.graphics = {};
+lime.graphics.FlashRenderContext = function() {
+};
+$hxClasses["lime.graphics.FlashRenderContext"] = lime.graphics.FlashRenderContext;
+lime.graphics.FlashRenderContext.__name__ = ["lime","graphics","FlashRenderContext"];
+lime.graphics.FlashRenderContext.prototype = {
+	addChild: function(child) {
+		return null;
+	}
+	,addChildAt: function(child,index) {
+		return null;
+	}
+	,addEventListener: function(type,listener,useCapture,priority,useWeakReference) {
+		if(useWeakReference == null) useWeakReference = false;
+		if(priority == null) priority = 0;
+		if(useCapture == null) useCapture = false;
+	}
+	,areInaccessibleObjectsUnderPoint: function(point) {
+		return false;
+	}
+	,contains: function(child) {
+		return false;
+	}
+	,dispatchEvent: function(event) {
+		return false;
+	}
+	,getBounds: function(targetCoordinateSpace) {
+		return null;
+	}
+	,getChildAt: function(index) {
+		return null;
+	}
+	,getChildByName: function(name) {
+		return null;
+	}
+	,getChildIndex: function(child) {
+		return 0;
+	}
+	,getObjectsUnderPoint: function(point) {
+		return null;
+	}
+	,getRect: function(targetCoordinateSpace) {
+		return null;
+	}
+	,globalToLocal: function(point) {
+		return null;
+	}
+	,globalToLocal3D: function(point) {
+		return null;
+	}
+	,hasEventListener: function(type) {
+		return false;
+	}
+	,hitTestObject: function(obj) {
+		return false;
+	}
+	,hitTestPoint: function(x,y,shapeFlag) {
+		if(shapeFlag == null) shapeFlag = false;
+		return false;
+	}
+	,local3DToGlobal: function(point3d) {
+		return null;
+	}
+	,localToGlobal: function(point) {
+		return null;
+	}
+	,removeChild: function(child) {
+		return null;
+	}
+	,removeChildAt: function(index) {
+		return null;
+	}
+	,removeChildren: function(beginIndex,endIndex) {
+		if(endIndex == null) endIndex = 2147483647;
+		if(beginIndex == null) beginIndex = 0;
+	}
+	,removeEventListener: function(type,listener,useCapture) {
+		if(useCapture == null) useCapture = false;
+	}
+	,requestSoftKeyboard: function() {
+		return false;
+	}
+	,setChildIndex: function(child,index) {
+	}
+	,startDrag: function(lockCenter,bounds) {
+		if(lockCenter == null) lockCenter = false;
+	}
+	,startTouchDrag: function(touchPointID,lockCenter,bounds) {
+		if(lockCenter == null) lockCenter = false;
+	}
+	,stopAllMovieClips: function() {
+	}
+	,stopDrag: function() {
+	}
+	,stopTouchDrag: function(touchPointID) {
+	}
+	,swapChildren: function(child1,child2) {
+	}
+	,swapChildrenAt: function(index1,index2) {
+	}
+	,toString: function() {
+		return null;
+	}
+	,willTrigger: function(type) {
+		return false;
+	}
+	,__class__: lime.graphics.FlashRenderContext
+};
+lime.graphics.Font = function(fontName) {
+	this.fontName = fontName;
+	this.glyphs = new haxe.ds.IntMap();
+};
+$hxClasses["lime.graphics.Font"] = lime.graphics.Font;
+lime.graphics.Font.__name__ = ["lime","graphics","Font"];
+lime.graphics.Font.fromBytes = function(bytes) {
+	var font = new lime.graphics.Font();
+	return font;
+};
+lime.graphics.Font.fromFile = function(path) {
+	var font = new lime.graphics.Font();
+	font.__fromFile(path);
+	return font;
+};
+lime.graphics.Font.prototype = {
+	createImage: function() {
+		this.glyphs = new haxe.ds.IntMap();
+		return null;
+	}
+	,decompose: function() {
+		return null;
+	}
+	,loadRange: function(size,start,end) {
+	}
+	,loadGlyphs: function(size,glyphs) {
+		if(glyphs == null) glyphs = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^`'\"/\\&*()[]{}<>|:;_-+=?,. ";
+	}
+	,__fromFile: function(path) {
+		this.__fontPath = path;
+	}
+	,__class__: lime.graphics.Font
+};
+lime.graphics.GlyphRect = function(x,y,width,height,xOffset,yOffset) {
+	if(yOffset == null) yOffset = 0;
+	if(xOffset == null) xOffset = 0;
+	this.x = x;
+	this.y = y;
+	this.xOffset = xOffset;
+	this.yOffset = yOffset;
+	this.width = width;
+	this.height = height;
+};
+$hxClasses["lime.graphics.GlyphRect"] = lime.graphics.GlyphRect;
+lime.graphics.GlyphRect.__name__ = ["lime","graphics","GlyphRect"];
+lime.graphics.GlyphRect.prototype = {
+	__class__: lime.graphics.GlyphRect
+};
+lime.graphics.Image = function(buffer,offsetX,offsetY,width,height,color,type) {
+	if(height == null) height = 0;
+	if(width == null) width = 0;
+	if(offsetY == null) offsetY = 0;
+	if(offsetX == null) offsetX = 0;
+	this.offsetX = offsetX;
+	this.offsetY = offsetY;
+	this.width = width;
+	this.height = height;
+	if(type == null) {
+		if(lime.app.Application.__instance != null && lime.app.Application.__instance.windows != null && lime.app.Application.__instance.windows[0].currentRenderer != null) {
+			var _g = lime.app.Application.__instance.windows[0].currentRenderer.context;
+			switch(_g[1]) {
+			case 2:case 1:
+				this.type = lime.graphics.ImageType.CANVAS;
+				break;
+			case 3:
+				this.type = lime.graphics.ImageType.FLASH;
+				break;
+			default:
+				this.type = lime.graphics.ImageType.DATA;
+			}
+		} else this.type = lime.graphics.ImageType.DATA;
+	} else this.type = type;
+	if(buffer == null) {
+		if(width > 0 && height > 0) {
+			var _g1 = this.type;
+			switch(_g1[1]) {
+			case 0:
+				this.buffer = new lime.graphics.ImageBuffer(null,width,height);
+				lime.graphics.utils.ImageCanvasUtil.createCanvas(this,width,height);
+				if(color != null) this.fillRect(new lime.math.Rectangle(0,0,width,height),color);
+				break;
+			case 1:
+				this.buffer = new lime.graphics.ImageBuffer(new Uint8Array(width * height * 4),width,height);
+				if(color != null) this.fillRect(new lime.math.Rectangle(0,0,width,height),color);
+				break;
+			case 2:
+				break;
+			default:
+			}
+		}
+	} else this.__fromImageBuffer(buffer);
+};
+$hxClasses["lime.graphics.Image"] = lime.graphics.Image;
+lime.graphics.Image.__name__ = ["lime","graphics","Image"];
+lime.graphics.Image.__base64Encoder = null;
+lime.graphics.Image.fromBase64 = function(base64,type,onload) {
+	var image = new lime.graphics.Image();
+	image.__fromBase64(base64,type,onload);
+	return image;
+};
+lime.graphics.Image.fromBitmapData = function(bitmapData) {
+	var buffer = new lime.graphics.ImageBuffer(null,bitmapData.width,bitmapData.height);
+	buffer.__srcBitmapData = bitmapData;
+	return new lime.graphics.Image(buffer);
+};
+lime.graphics.Image.fromBytes = function(bytes,onload) {
+	var image = new lime.graphics.Image();
+	image.__fromBytes(bytes,onload);
+	return image;
+};
+lime.graphics.Image.fromCanvas = function(canvas) {
+	var buffer = new lime.graphics.ImageBuffer(null,canvas.width,canvas.height);
+	buffer.set_src(canvas);
+	return new lime.graphics.Image(buffer);
+};
+lime.graphics.Image.fromFile = function(path,onload,onerror) {
+	var image = new lime.graphics.Image();
+	image.__fromFile(path,onload,onerror);
+	return image;
+};
+lime.graphics.Image.fromImageElement = function(image) {
+	var buffer = new lime.graphics.ImageBuffer(null,image.width,image.height);
+	buffer.set_src(image);
+	return new lime.graphics.Image(buffer);
+};
+lime.graphics.Image.__base64Encode = function(bytes) {
+	var extension;
+	var _g = bytes.length % 3;
+	switch(_g) {
+	case 1:
+		extension = "==";
+		break;
+	case 2:
+		extension = "=";
+		break;
+	default:
+		extension = "";
+	}
+	if(lime.graphics.Image.__base64Encoder == null) lime.graphics.Image.__base64Encoder = new haxe.crypto.BaseCode(haxe.io.Bytes.ofString(lime.graphics.Image.__base64Chars));
+	return lime.graphics.Image.__base64Encoder.encodeBytes(haxe.io.Bytes.ofData(bytes.byteView)).toString() + extension;
+};
+lime.graphics.Image.__isJPG = function(bytes) {
+	bytes.position = 0;
+	return bytes.readByte() == 255 && bytes.readByte() == 216;
+};
+lime.graphics.Image.__isPNG = function(bytes) {
+	bytes.position = 0;
+	return bytes.readByte() == 137 && bytes.readByte() == 80 && bytes.readByte() == 78 && bytes.readByte() == 71 && bytes.readByte() == 13 && bytes.readByte() == 10 && bytes.readByte() == 26 && bytes.readByte() == 10;
+};
+lime.graphics.Image.__isGIF = function(bytes) {
+	bytes.position = 0;
+	if(bytes.readByte() == 71 && bytes.readByte() == 73 && bytes.readByte() == 70 && bytes.readByte() == 38) {
+		var b = bytes.readByte();
+		return (b == 7 || b == 9) && bytes.readByte() == 97;
+	}
+	return false;
+};
+lime.graphics.Image.prototype = {
+	clone: function() {
+		lime.graphics.utils.ImageCanvasUtil.sync(this);
+		var image = new lime.graphics.Image(this.buffer.clone(),this.offsetX,this.offsetY,this.width,this.height,null,this.type);
+		return image;
+	}
+	,colorTransform: function(rect,colorMatrix) {
+		rect = this.__clipRect(rect);
+		if(this.buffer == null || rect == null) return;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			lime.graphics.utils.ImageCanvasUtil.colorTransform(this,rect,colorMatrix);
+			break;
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			lime.graphics.utils.ImageDataUtil.colorTransform(this,rect,colorMatrix);
+			break;
+		case 2:
+			rect.offset(this.offsetX,this.offsetY);
+			this.buffer.__srcBitmapData.colorTransform(rect.__toFlashRectangle(),lime.math._ColorMatrix.ColorMatrix_Impl_.__toFlashColorTransform(colorMatrix));
+			break;
+		default:
+		}
+	}
+	,copyChannel: function(sourceImage,sourceRect,destPoint,sourceChannel,destChannel) {
+		sourceRect = this.__clipRect(sourceRect);
+		if(this.buffer == null || sourceRect == null) return;
+		if(destChannel == lime.graphics.ImageChannel.ALPHA && !this.get_transparent()) return;
+		if(sourceRect.width <= 0 || sourceRect.height <= 0) return;
+		if(sourceRect.x + sourceRect.width > sourceImage.width) sourceRect.width = sourceImage.width - sourceRect.x;
+		if(sourceRect.y + sourceRect.height > sourceImage.height) sourceRect.height = sourceImage.height - sourceRect.y;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			lime.graphics.utils.ImageCanvasUtil.copyChannel(this,sourceImage,sourceRect,destPoint,sourceChannel,destChannel);
+			break;
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			lime.graphics.utils.ImageDataUtil.copyChannel(this,sourceImage,sourceRect,destPoint,sourceChannel,destChannel);
+			break;
+		case 2:
+			var srcChannel;
+			switch(sourceChannel[1]) {
+			case 0:
+				srcChannel = 1;
+				break;
+			case 1:
+				srcChannel = 2;
+				break;
+			case 2:
+				srcChannel = 4;
+				break;
+			case 3:
+				srcChannel = 8;
+				break;
+			}
+			var dstChannel;
+			switch(destChannel[1]) {
+			case 0:
+				dstChannel = 1;
+				break;
+			case 1:
+				dstChannel = 2;
+				break;
+			case 2:
+				dstChannel = 4;
+				break;
+			case 3:
+				dstChannel = 8;
+				break;
+			}
+			sourceRect.offset(sourceImage.offsetX,sourceImage.offsetY);
+			destPoint.offset(this.offsetX,this.offsetY);
+			this.buffer.__srcBitmapData.copyChannel(sourceImage.buffer.get_src(),sourceRect.__toFlashRectangle(),destPoint.__toFlashPoint(),srcChannel,dstChannel);
+			break;
+		default:
+		}
+	}
+	,copyPixels: function(sourceImage,sourceRect,destPoint,alphaImage,alphaPoint,mergeAlpha) {
+		if(mergeAlpha == null) mergeAlpha = false;
+		if(this.buffer == null || sourceImage == null) return;
+		if(sourceRect.x + sourceRect.width > sourceImage.width) sourceRect.width = sourceImage.width - sourceRect.x;
+		if(sourceRect.y + sourceRect.height > sourceImage.height) sourceRect.height = sourceImage.height - sourceRect.y;
+		if(sourceRect.width <= 0 || sourceRect.height <= 0) return;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			lime.graphics.utils.ImageCanvasUtil.copyPixels(this,sourceImage,sourceRect,destPoint,alphaImage,alphaPoint,mergeAlpha);
+			break;
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			lime.graphics.utils.ImageCanvasUtil.convertToData(sourceImage);
+			lime.graphics.utils.ImageDataUtil.copyPixels(this,sourceImage,sourceRect,destPoint,alphaImage,alphaPoint,mergeAlpha);
+			break;
+		case 2:
+			sourceRect.offset(sourceImage.offsetX,sourceImage.offsetY);
+			destPoint.offset(this.offsetX,this.offsetY);
+			if(alphaImage != null && alphaPoint != null) alphaPoint.offset(alphaImage.offsetX,alphaImage.offsetY);
+			this.buffer.__srcBitmapData.copyPixels(sourceImage.buffer.__srcBitmapData,sourceRect.__toFlashRectangle(),destPoint.__toFlashPoint(),alphaImage != null?alphaImage.buffer.get_src():null,alphaPoint != null?alphaPoint.__toFlashPoint():null,mergeAlpha);
+			break;
+		default:
+		}
+	}
+	,encode: function(format,quality) {
+		if(quality == null) quality = 90;
+		if(format == null) format = "png";
+		return null;
+	}
+	,fillRect: function(rect,color) {
+		rect = this.__clipRect(rect);
+		if(this.buffer == null || rect == null) return;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			lime.graphics.utils.ImageCanvasUtil.fillRect(this,rect,color);
+			break;
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			lime.graphics.utils.ImageDataUtil.fillRect(this,rect,color);
+			break;
+		case 2:
+			rect.offset(this.offsetX,this.offsetY);
+			this.buffer.__srcBitmapData.fillRect(rect.__toFlashRectangle(),color);
+			break;
+		default:
+		}
+	}
+	,floodFill: function(x,y,color) {
+		if(this.buffer == null) return;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			lime.graphics.utils.ImageCanvasUtil.floodFill(this,x,y,color);
+			break;
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			lime.graphics.utils.ImageDataUtil.floodFill(this,x,y,color);
+			break;
+		case 2:
+			this.buffer.__srcBitmapData.floodFill(x + this.offsetX,y + this.offsetY,color);
+			break;
+		default:
+		}
+	}
+	,getPixel: function(x,y) {
+		if(this.buffer == null || x < 0 || y < 0 || x >= this.width || y >= this.height) return 0;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			return lime.graphics.utils.ImageCanvasUtil.getPixel(this,x,y);
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			return lime.graphics.utils.ImageDataUtil.getPixel(this,x,y);
+		case 2:
+			return this.buffer.__srcBitmapData.getPixel(x + this.offsetX,y + this.offsetY);
+		default:
+			return 0;
+		}
+	}
+	,getPixel32: function(x,y) {
+		if(this.buffer == null || x < 0 || y < 0 || x >= this.width || y >= this.height) return 0;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			return lime.graphics.utils.ImageCanvasUtil.getPixel32(this,x,y);
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			return lime.graphics.utils.ImageDataUtil.getPixel32(this,x,y);
+		case 2:
+			return this.buffer.__srcBitmapData.getPixel32(x + this.offsetX,y + this.offsetY);
+		default:
+			return 0;
+		}
+	}
+	,getPixels: function(rect) {
+		if(this.buffer == null) return null;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			return lime.graphics.utils.ImageCanvasUtil.getPixels(this,rect);
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			return lime.graphics.utils.ImageDataUtil.getPixels(this,rect);
+		case 2:
+			rect.offset(this.offsetX,this.offsetY);
+			return this.buffer.__srcBitmapData.getPixels(rect.__toFlashRectangle());
+		default:
+			return null;
+		}
+	}
+	,resize: function(newWidth,newHeight) {
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			lime.graphics.utils.ImageCanvasUtil.resize(this,newWidth,newHeight);
+			break;
+		case 1:
+			lime.graphics.utils.ImageDataUtil.resize(this,newWidth,newHeight);
+			break;
+		case 2:
+			break;
+		default:
+		}
+		this.buffer.width = newWidth;
+		this.buffer.height = newHeight;
+		this.offsetX = 0;
+		this.offsetY = 0;
+		this.width = newWidth;
+		this.height = newHeight;
+	}
+	,setPixel: function(x,y,color) {
+		if(this.buffer == null || x < 0 || y < 0 || x >= this.width || y >= this.height) return;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			lime.graphics.utils.ImageCanvasUtil.setPixel(this,x,y,color);
+			break;
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			lime.graphics.utils.ImageDataUtil.setPixel(this,x,y,color);
+			break;
+		case 2:
+			this.buffer.__srcBitmapData.setPixel(x + this.offsetX,y + this.offsetX,color);
+			break;
+		default:
+		}
+	}
+	,setPixel32: function(x,y,color) {
+		if(this.buffer == null || x < 0 || y < 0 || x >= this.width || y >= this.height) return;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			lime.graphics.utils.ImageCanvasUtil.setPixel32(this,x,y,color);
+			break;
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			lime.graphics.utils.ImageDataUtil.setPixel32(this,x,y,color);
+			break;
+		case 2:
+			this.buffer.__srcBitmapData.setPixel32(x + this.offsetX,y + this.offsetY,color);
+			break;
+		default:
+		}
+	}
+	,setPixels: function(rect,byteArray) {
+		rect = this.__clipRect(rect);
+		if(this.buffer == null || rect == null) return;
+		var _g = this.type;
+		switch(_g[1]) {
+		case 0:
+			lime.graphics.utils.ImageCanvasUtil.setPixels(this,rect,byteArray);
+			break;
+		case 1:
+			lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+			lime.graphics.utils.ImageDataUtil.setPixels(this,rect,byteArray);
+			break;
+		case 2:
+			rect.offset(this.offsetX,this.offsetY);
+			this.buffer.__srcBitmapData.setPixels(rect.__toFlashRectangle(),byteArray);
+			break;
+		default:
+		}
+	}
+	,__clipRect: function(r) {
+		if(r == null) return null;
+		if(r.x < 0) {
+			r.width -= -r.x;
+			r.x = 0;
+			if(r.x + r.width <= 0) return null;
+		}
+		if(r.y < 0) {
+			r.height -= -r.y;
+			r.y = 0;
+			if(r.y + r.height <= 0) return null;
+		}
+		if(r.x + r.width >= this.width) {
+			r.width -= r.x + r.width - this.width;
+			if(r.width <= 0) return null;
+		}
+		if(r.y + r.height >= this.height) {
+			r.height -= r.y + r.height - this.height;
+			if(r.height <= 0) return null;
+		}
+		return r;
+	}
+	,__fromBase64: function(base64,type,onload) {
+		var _g = this;
+		var image = new Image();
+		var image_onLoaded = function(event) {
+			_g.buffer = new lime.graphics.ImageBuffer(null,image.width,image.height);
+			_g.buffer.__srcImage = image;
+			_g.offsetX = 0;
+			_g.offsetY = 0;
+			_g.width = _g.buffer.width;
+			_g.height = _g.buffer.height;
+			if(onload != null) onload(_g);
+		};
+		image.addEventListener("load",image_onLoaded,false);
+		image.src = "data:" + type + ";base64," + base64;
+	}
+	,__fromBytes: function(bytes,onload) {
+		var type = "";
+		if(lime.graphics.Image.__isPNG(bytes)) type = "image/png"; else if(lime.graphics.Image.__isJPG(bytes)) type = "image/jpeg"; else if(lime.graphics.Image.__isGIF(bytes)) type = "image/gif"; else throw "Image tried to read a PNG/JPG ByteArray, but found an invalid header.";
+		this.__fromBase64(lime.graphics.Image.__base64Encode(bytes),type,onload);
+	}
+	,__fromFile: function(path,onload,onerror) {
+		var _g = this;
+		var image = new Image();
+		image.onload = function(_) {
+			_g.buffer = new lime.graphics.ImageBuffer(null,image.width,image.height);
+			_g.buffer.__srcImage = image;
+			_g.width = image.width;
+			_g.height = image.height;
+			if(onload != null) onload(_g);
+		};
+		image.onerror = function(_1) {
+			if(onerror != null) onerror();
+		};
+		image.src = path;
+		if(image.complete) {
+		}
+	}
+	,__fromImageBuffer: function(buffer) {
+		this.buffer = buffer;
+		if(buffer != null) {
+			if(this.width == 0) this.width = buffer.width;
+			if(this.height == 0) this.height = buffer.height;
+		}
+	}
+	,get_data: function() {
+		if(this.buffer.data == null && this.buffer.width > 0 && this.buffer.height > 0) {
+			lime.graphics.utils.ImageCanvasUtil.convertToCanvas(this);
+			lime.graphics.utils.ImageCanvasUtil.createImageData(this);
+		}
+		return this.buffer.data;
+	}
+	,set_data: function(value) {
+		return this.buffer.data = value;
+	}
+	,get_powerOfTwo: function() {
+		return this.buffer.width != 0 && (this.buffer.width & ~this.buffer.width + 1) == this.buffer.width && (this.buffer.height != 0 && (this.buffer.height & ~this.buffer.height + 1) == this.buffer.height);
+	}
+	,set_powerOfTwo: function(value) {
+		if(value != this.get_powerOfTwo()) {
+			var newWidth = 1;
+			var newHeight = 1;
+			while(newWidth < this.buffer.width) newWidth <<= 1;
+			while(newHeight < this.buffer.height) newHeight <<= 1;
+			var _g = this.type;
+			switch(_g[1]) {
+			case 0:
+				break;
+			case 1:
+				lime.graphics.utils.ImageDataUtil.resizeBuffer(this,newWidth,newHeight);
+				break;
+			case 2:
+				break;
+			default:
+			}
+		}
+		return value;
+	}
+	,get_premultiplied: function() {
+		return this.buffer.premultiplied;
+	}
+	,set_premultiplied: function(value) {
+		if(value && !this.buffer.premultiplied) {
+			var _g = this.type;
+			switch(_g[1]) {
+			case 1:
+				lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+				lime.graphics.utils.ImageDataUtil.multiplyAlpha(this);
+				break;
+			default:
+			}
+		} else if(!value && this.buffer.premultiplied) {
+			var _g1 = this.type;
+			switch(_g1[1]) {
+			case 1:
+				lime.graphics.utils.ImageCanvasUtil.convertToData(this);
+				lime.graphics.utils.ImageDataUtil.unmultiplyAlpha(this);
+				break;
+			default:
+			}
+		}
+		return value;
+	}
+	,get_rect: function() {
+		return new lime.math.Rectangle(0,0,this.width,this.height);
+	}
+	,get_src: function() {
+		return this.buffer.get_src();
+	}
+	,set_src: function(value) {
+		return this.buffer.set_src(value);
+	}
+	,get_transparent: function() {
+		return this.buffer.transparent;
+	}
+	,set_transparent: function(value) {
+		return this.buffer.transparent = value;
+	}
+	,__class__: lime.graphics.Image
+	,__properties__: {set_transparent:"set_transparent",get_transparent:"get_transparent",set_src:"set_src",get_src:"get_src",get_rect:"get_rect",set_premultiplied:"set_premultiplied",get_premultiplied:"get_premultiplied",set_powerOfTwo:"set_powerOfTwo",get_powerOfTwo:"get_powerOfTwo",set_data:"set_data",get_data:"get_data"}
+};
+lime.graphics.ImageChannel = $hxClasses["lime.graphics.ImageChannel"] = { __ename__ : ["lime","graphics","ImageChannel"], __constructs__ : ["RED","GREEN","BLUE","ALPHA"] };
+lime.graphics.ImageChannel.RED = ["RED",0];
+lime.graphics.ImageChannel.RED.toString = $estr;
+lime.graphics.ImageChannel.RED.__enum__ = lime.graphics.ImageChannel;
+lime.graphics.ImageChannel.GREEN = ["GREEN",1];
+lime.graphics.ImageChannel.GREEN.toString = $estr;
+lime.graphics.ImageChannel.GREEN.__enum__ = lime.graphics.ImageChannel;
+lime.graphics.ImageChannel.BLUE = ["BLUE",2];
+lime.graphics.ImageChannel.BLUE.toString = $estr;
+lime.graphics.ImageChannel.BLUE.__enum__ = lime.graphics.ImageChannel;
+lime.graphics.ImageChannel.ALPHA = ["ALPHA",3];
+lime.graphics.ImageChannel.ALPHA.toString = $estr;
+lime.graphics.ImageChannel.ALPHA.__enum__ = lime.graphics.ImageChannel;
+lime.graphics.ImageBuffer = function(data,width,height,bitsPerPixel) {
+	if(bitsPerPixel == null) bitsPerPixel = 4;
+	if(height == null) height = 0;
+	if(width == null) width = 0;
+	this.data = data;
+	this.width = width;
+	this.height = height;
+	this.bitsPerPixel = bitsPerPixel;
+	this.transparent = true;
+};
+$hxClasses["lime.graphics.ImageBuffer"] = lime.graphics.ImageBuffer;
+lime.graphics.ImageBuffer.__name__ = ["lime","graphics","ImageBuffer"];
+lime.graphics.ImageBuffer.prototype = {
+	clone: function() {
+		var buffer = new lime.graphics.ImageBuffer(this.data,this.width,this.height,this.bitsPerPixel);
+		buffer.set_src(this.get_src());
+		buffer.premultiplied = this.premultiplied;
+		buffer.transparent = this.transparent;
+		return buffer;
+	}
+	,get_src: function() {
+		if(this.__srcImage != null) return this.__srcImage;
+		return this.__srcCanvas;
+	}
+	,set_src: function(value) {
+		if(js.Boot.__instanceof(value,Image)) this.__srcImage = value; else if(js.Boot.__instanceof(value,HTMLCanvasElement)) {
+			this.__srcCanvas = value;
+			this.__srcContext = this.__srcCanvas.getContext("2d");
+		}
+		return value;
+	}
+	,__class__: lime.graphics.ImageBuffer
+	,__properties__: {set_src:"set_src",get_src:"get_src"}
+};
+lime.graphics.ImageType = $hxClasses["lime.graphics.ImageType"] = { __ename__ : ["lime","graphics","ImageType"], __constructs__ : ["CANVAS","DATA","FLASH","CUSTOM"] };
+lime.graphics.ImageType.CANVAS = ["CANVAS",0];
+lime.graphics.ImageType.CANVAS.toString = $estr;
+lime.graphics.ImageType.CANVAS.__enum__ = lime.graphics.ImageType;
+lime.graphics.ImageType.DATA = ["DATA",1];
+lime.graphics.ImageType.DATA.toString = $estr;
+lime.graphics.ImageType.DATA.__enum__ = lime.graphics.ImageType;
+lime.graphics.ImageType.FLASH = ["FLASH",2];
+lime.graphics.ImageType.FLASH.toString = $estr;
+lime.graphics.ImageType.FLASH.__enum__ = lime.graphics.ImageType;
+lime.graphics.ImageType.CUSTOM = ["CUSTOM",3];
+lime.graphics.ImageType.CUSTOM.toString = $estr;
+lime.graphics.ImageType.CUSTOM.__enum__ = lime.graphics.ImageType;
+lime.graphics.RenderContext = $hxClasses["lime.graphics.RenderContext"] = { __ename__ : ["lime","graphics","RenderContext"], __constructs__ : ["OPENGL","CANVAS","DOM","FLASH","CUSTOM"] };
+lime.graphics.RenderContext.OPENGL = function(gl) { var $x = ["OPENGL",0,gl]; $x.__enum__ = lime.graphics.RenderContext; $x.toString = $estr; return $x; };
+lime.graphics.RenderContext.CANVAS = function(context) { var $x = ["CANVAS",1,context]; $x.__enum__ = lime.graphics.RenderContext; $x.toString = $estr; return $x; };
+lime.graphics.RenderContext.DOM = function(element) { var $x = ["DOM",2,element]; $x.__enum__ = lime.graphics.RenderContext; $x.toString = $estr; return $x; };
+lime.graphics.RenderContext.FLASH = function(stage) { var $x = ["FLASH",3,stage]; $x.__enum__ = lime.graphics.RenderContext; $x.toString = $estr; return $x; };
+lime.graphics.RenderContext.CUSTOM = function(data) { var $x = ["CUSTOM",4,data]; $x.__enum__ = lime.graphics.RenderContext; $x.toString = $estr; return $x; };
+lime.graphics._Renderer = {};
+lime.graphics._Renderer.RenderEventInfo = function(type,context) {
+	this.type = type;
+	this.context = context;
+};
+$hxClasses["lime.graphics._Renderer.RenderEventInfo"] = lime.graphics._Renderer.RenderEventInfo;
+lime.graphics._Renderer.RenderEventInfo.__name__ = ["lime","graphics","_Renderer","RenderEventInfo"];
+lime.graphics._Renderer.RenderEventInfo.prototype = {
+	clone: function() {
+		return new lime.graphics._Renderer.RenderEventInfo(this.type,this.context);
+	}
+	,__class__: lime.graphics._Renderer.RenderEventInfo
+};
+lime.graphics.Renderer = function(window) {
+	this.window = window;
+	this.window.currentRenderer = this;
+};
+$hxClasses["lime.graphics.Renderer"] = lime.graphics.Renderer;
+lime.graphics.Renderer.__name__ = ["lime","graphics","Renderer"];
+lime.graphics.Renderer.registered = null;
+lime.graphics.Renderer.render = function() {
+	lime.graphics.Renderer.eventInfo.type = 0;
+	var _g = 0;
+	var _g1 = lime.app.Application.__instance.windows;
+	while(_g < _g1.length) {
+		var $window = _g1[_g];
+		++_g;
+		if($window.currentRenderer != null) $window.currentRenderer.dispatch();
+	}
+};
+lime.graphics.Renderer.prototype = {
+	create: function() {
+		this.createContext();
+		{
+			var _g = this.context;
+			switch(_g[1]) {
+			case 0:
+				this.window.canvas.addEventListener("webglcontextlost",$bind(this,this.handleCanvasEvent),false);
+				this.window.canvas.addEventListener("webglcontextrestored",$bind(this,this.handleCanvasEvent),false);
+				break;
+			default:
+			}
+		}
+		if(!lime.graphics.Renderer.registered) lime.graphics.Renderer.registered = true;
+	}
+	,createContext: function() {
+		if(this.window.div != null) this.context = lime.graphics.RenderContext.DOM(this.window.div); else if(this.window.canvas != null) {
+			var webgl = null;
+			if(webgl == null) this.context = lime.graphics.RenderContext.CANVAS(this.window.canvas.getContext("2d")); else {
+				lime.graphics.opengl.GL.context = webgl;
+				this.context = lime.graphics.RenderContext.OPENGL(lime.graphics.opengl.GL.context);
+			}
+		}
+	}
+	,dispatch: function() {
+		var _g = lime.graphics.Renderer.eventInfo.type;
+		switch(_g) {
+		case 0:
+			if(!lime.app.Application.__initialized) {
+				lime.app.Application.__initialized = true;
+				lime.app.Application.__instance.init(this.context);
+			}
+			lime.app.Application.__instance.render(this.context);
+			var listeners = lime.graphics.Renderer.onRender.listeners;
+			var repeat = lime.graphics.Renderer.onRender.repeat;
+			var length = listeners.length;
+			var i = 0;
+			while(i < length) {
+				listeners[i](this.context);
+				if(!repeat[i]) {
+					lime.graphics.Renderer.onRender.remove(listeners[i]);
+					length--;
+				} else i++;
+			}
+			this.flip();
+			break;
+		case 1:
+			this.context = null;
+			var listeners1 = lime.graphics.Renderer.onRenderContextLost.listeners;
+			var repeat1 = lime.graphics.Renderer.onRenderContextLost.repeat;
+			var length1 = listeners1.length;
+			var i1 = 0;
+			while(i1 < length1) {
+				listeners1[i1]();
+				if(!repeat1[i1]) {
+					lime.graphics.Renderer.onRenderContextLost.remove(listeners1[i1]);
+					length1--;
+				} else i1++;
+			}
+			break;
+		case 2:
+			this.createContext();
+			var listeners2 = lime.graphics.Renderer.onRenderContextRestored.listeners;
+			var repeat2 = lime.graphics.Renderer.onRenderContextRestored.repeat;
+			var length2 = listeners2.length;
+			var i2 = 0;
+			while(i2 < length2) {
+				listeners2[i2](this.context);
+				if(!repeat2[i2]) {
+					lime.graphics.Renderer.onRenderContextRestored.remove(listeners2[i2]);
+					length2--;
+				} else i2++;
+			}
+			break;
+		}
+	}
+	,flip: function() {
+	}
+	,handleCanvasEvent: function(event) {
+		var _g = event.type;
+		switch(_g) {
+		case "webglcontextlost":
+			event.preventDefault();
+			lime.graphics.Renderer.eventInfo.type = 1;
+			this.dispatch();
+			break;
+		case "webglcontextrestored":
+			this.createContext();
+			lime.graphics.Renderer.eventInfo.type = 2;
+			this.dispatch();
+			break;
+		default:
+		}
+	}
+	,__class__: lime.graphics.Renderer
+};
+lime.graphics._Renderer.RenderEventType_Impl_ = function() { };
+$hxClasses["lime.graphics._Renderer.RenderEventType_Impl_"] = lime.graphics._Renderer.RenderEventType_Impl_;
+lime.graphics._Renderer.RenderEventType_Impl_.__name__ = ["lime","graphics","_Renderer","RenderEventType_Impl_"];
+lime.graphics.opengl = {};
+lime.graphics.opengl.GL = function() { };
+$hxClasses["lime.graphics.opengl.GL"] = lime.graphics.opengl.GL;
+lime.graphics.opengl.GL.__name__ = ["lime","graphics","opengl","GL"];
+lime.graphics.opengl.GL.__properties__ = {get_version:"get_version"}
+lime.graphics.opengl.GL.version = null;
+lime.graphics.opengl.GL.context = null;
+lime.graphics.opengl.GL.activeTexture = function(texture) {
+	lime.graphics.opengl.GL.context.activeTexture(texture);
+};
+lime.graphics.opengl.GL.attachShader = function(program,shader) {
+	lime.graphics.opengl.GL.context.attachShader(program,shader);
+};
+lime.graphics.opengl.GL.bindAttribLocation = function(program,index,name) {
+	lime.graphics.opengl.GL.context.bindAttribLocation(program,index,name);
+};
+lime.graphics.opengl.GL.bindBuffer = function(target,buffer) {
+	lime.graphics.opengl.GL.context.bindBuffer(target,buffer);
+};
+lime.graphics.opengl.GL.bindFramebuffer = function(target,framebuffer) {
+	lime.graphics.opengl.GL.context.bindFramebuffer(target,framebuffer);
+};
+lime.graphics.opengl.GL.bindRenderbuffer = function(target,renderbuffer) {
+	lime.graphics.opengl.GL.context.bindRenderbuffer(target,renderbuffer);
+};
+lime.graphics.opengl.GL.bindTexture = function(target,texture) {
+	lime.graphics.opengl.GL.context.bindTexture(target,texture);
+};
+lime.graphics.opengl.GL.blendColor = function(red,green,blue,alpha) {
+	lime.graphics.opengl.GL.context.blendColor(red,green,blue,alpha);
+};
+lime.graphics.opengl.GL.blendEquation = function(mode) {
+	lime.graphics.opengl.GL.context.blendEquation(mode);
+};
+lime.graphics.opengl.GL.blendEquationSeparate = function(modeRGB,modeAlpha) {
+	lime.graphics.opengl.GL.context.blendEquationSeparate(modeRGB,modeAlpha);
+};
+lime.graphics.opengl.GL.blendFunc = function(sfactor,dfactor) {
+	lime.graphics.opengl.GL.context.blendFunc(sfactor,dfactor);
+};
+lime.graphics.opengl.GL.blendFuncSeparate = function(srcRGB,dstRGB,srcAlpha,dstAlpha) {
+	lime.graphics.opengl.GL.context.blendFuncSeparate(srcRGB,dstRGB,srcAlpha,dstAlpha);
+};
+lime.graphics.opengl.GL.bufferData = function(target,data,usage) {
+	lime.graphics.opengl.GL.context.bufferData(target,data,usage);
+};
+lime.graphics.opengl.GL.bufferSubData = function(target,offset,data) {
+	lime.graphics.opengl.GL.context.bufferSubData(target,offset,data);
+};
+lime.graphics.opengl.GL.checkFramebufferStatus = function(target) {
+	return lime.graphics.opengl.GL.context.checkFramebufferStatus(target);
+};
+lime.graphics.opengl.GL.clear = function(mask) {
+	lime.graphics.opengl.GL.context.clear(mask);
+};
+lime.graphics.opengl.GL.clearColor = function(red,green,blue,alpha) {
+	lime.graphics.opengl.GL.context.clearColor(red,green,blue,alpha);
+};
+lime.graphics.opengl.GL.clearDepth = function(depth) {
+	lime.graphics.opengl.GL.context.clearDepth(depth);
+};
+lime.graphics.opengl.GL.clearStencil = function(s) {
+	lime.graphics.opengl.GL.context.clearStencil(s);
+};
+lime.graphics.opengl.GL.colorMask = function(red,green,blue,alpha) {
+	lime.graphics.opengl.GL.context.colorMask(red,green,blue,alpha);
+};
+lime.graphics.opengl.GL.compileShader = function(shader) {
+	lime.graphics.opengl.GL.context.compileShader(shader);
+};
+lime.graphics.opengl.GL.compressedTexImage2D = function(target,level,internalformat,width,height,border,data) {
+	lime.graphics.opengl.GL.context.compressedTexImage2D(target,level,internalformat,width,height,border,data);
+};
+lime.graphics.opengl.GL.compressedTexSubImage2D = function(target,level,xoffset,yoffset,width,height,format,data) {
+	lime.graphics.opengl.GL.context.compressedTexSubImage2D(target,level,xoffset,yoffset,width,height,format,data);
+};
+lime.graphics.opengl.GL.copyTexImage2D = function(target,level,internalformat,x,y,width,height,border) {
+	lime.graphics.opengl.GL.context.copyTexImage2D(target,level,internalformat,x,y,width,height,border);
+};
+lime.graphics.opengl.GL.copyTexSubImage2D = function(target,level,xoffset,yoffset,x,y,width,height) {
+	lime.graphics.opengl.GL.context.copyTexSubImage2D(target,level,xoffset,yoffset,x,y,width,height);
+};
+lime.graphics.opengl.GL.createBuffer = function() {
+	return lime.graphics.opengl.GL.context.createBuffer();
+};
+lime.graphics.opengl.GL.createFramebuffer = function() {
+	return lime.graphics.opengl.GL.context.createFramebuffer();
+};
+lime.graphics.opengl.GL.createProgram = function() {
+	return lime.graphics.opengl.GL.context.createProgram();
+};
+lime.graphics.opengl.GL.createRenderbuffer = function() {
+	return lime.graphics.opengl.GL.context.createRenderbuffer();
+};
+lime.graphics.opengl.GL.createShader = function(type) {
+	return lime.graphics.opengl.GL.context.createShader(type);
+};
+lime.graphics.opengl.GL.createTexture = function() {
+	return lime.graphics.opengl.GL.context.createTexture();
+};
+lime.graphics.opengl.GL.cullFace = function(mode) {
+	lime.graphics.opengl.GL.context.cullFace(mode);
+};
+lime.graphics.opengl.GL.deleteBuffer = function(buffer) {
+	lime.graphics.opengl.GL.context.deleteBuffer(buffer);
+};
+lime.graphics.opengl.GL.deleteFramebuffer = function(framebuffer) {
+	lime.graphics.opengl.GL.context.deleteFramebuffer(framebuffer);
+};
+lime.graphics.opengl.GL.deleteProgram = function(program) {
+	lime.graphics.opengl.GL.context.deleteProgram(program);
+};
+lime.graphics.opengl.GL.deleteRenderbuffer = function(renderbuffer) {
+	lime.graphics.opengl.GL.context.deleteRenderbuffer(renderbuffer);
+};
+lime.graphics.opengl.GL.deleteShader = function(shader) {
+	lime.graphics.opengl.GL.context.deleteShader(shader);
+};
+lime.graphics.opengl.GL.deleteTexture = function(texture) {
+	lime.graphics.opengl.GL.context.deleteTexture(texture);
+};
+lime.graphics.opengl.GL.depthFunc = function(func) {
+	lime.graphics.opengl.GL.context.depthFunc(func);
+};
+lime.graphics.opengl.GL.depthMask = function(flag) {
+	lime.graphics.opengl.GL.context.depthMask(flag);
+};
+lime.graphics.opengl.GL.depthRange = function(zNear,zFar) {
+	lime.graphics.opengl.GL.context.depthRange(zNear,zFar);
+};
+lime.graphics.opengl.GL.detachShader = function(program,shader) {
+	lime.graphics.opengl.GL.context.detachShader(program,shader);
+};
+lime.graphics.opengl.GL.disable = function(cap) {
+	lime.graphics.opengl.GL.context.disable(cap);
+};
+lime.graphics.opengl.GL.disableVertexAttribArray = function(index) {
+	lime.graphics.opengl.GL.context.disableVertexAttribArray(index);
+};
+lime.graphics.opengl.GL.drawArrays = function(mode,first,count) {
+	lime.graphics.opengl.GL.context.drawArrays(mode,first,count);
+};
+lime.graphics.opengl.GL.drawElements = function(mode,count,type,offset) {
+	lime.graphics.opengl.GL.context.drawElements(mode,count,type,offset);
+};
+lime.graphics.opengl.GL.enable = function(cap) {
+	lime.graphics.opengl.GL.context.enable(cap);
+};
+lime.graphics.opengl.GL.enableVertexAttribArray = function(index) {
+	lime.graphics.opengl.GL.context.enableVertexAttribArray(index);
+};
+lime.graphics.opengl.GL.finish = function() {
+	lime.graphics.opengl.GL.context.finish();
+};
+lime.graphics.opengl.GL.flush = function() {
+	lime.graphics.opengl.GL.context.flush();
+};
+lime.graphics.opengl.GL.framebufferRenderbuffer = function(target,attachment,renderbuffertarget,renderbuffer) {
+	lime.graphics.opengl.GL.context.framebufferRenderbuffer(target,attachment,renderbuffertarget,renderbuffer);
+};
+lime.graphics.opengl.GL.framebufferTexture2D = function(target,attachment,textarget,texture,level) {
+	lime.graphics.opengl.GL.context.framebufferTexture2D(target,attachment,textarget,texture,level);
+};
+lime.graphics.opengl.GL.frontFace = function(mode) {
+	lime.graphics.opengl.GL.context.frontFace(mode);
+};
+lime.graphics.opengl.GL.generateMipmap = function(target) {
+	lime.graphics.opengl.GL.context.generateMipmap(target);
+};
+lime.graphics.opengl.GL.getActiveAttrib = function(program,index) {
+	return lime.graphics.opengl.GL.context.getActiveAttrib(program,index);
+};
+lime.graphics.opengl.GL.getActiveUniform = function(program,index) {
+	return lime.graphics.opengl.GL.context.getActiveUniform(program,index);
+};
+lime.graphics.opengl.GL.getAttachedShaders = function(program) {
+	return lime.graphics.opengl.GL.context.getAttachedShaders(program);
+};
+lime.graphics.opengl.GL.getAttribLocation = function(program,name) {
+	return lime.graphics.opengl.GL.context.getAttribLocation(program,name);
+};
+lime.graphics.opengl.GL.getBufferParameter = function(target,pname) {
+	return lime.graphics.opengl.GL.context.getBufferParameter(target,pname);
+};
+lime.graphics.opengl.GL.getContextAttributes = function() {
+	return lime.graphics.opengl.GL.context.getContextAttributes();
+};
+lime.graphics.opengl.GL.getError = function() {
+	return lime.graphics.opengl.GL.context.getError();
+};
+lime.graphics.opengl.GL.getExtension = function(name) {
+	return lime.graphics.opengl.GL.context.getExtension(name);
+};
+lime.graphics.opengl.GL.getFramebufferAttachmentParameter = function(target,attachment,pname) {
+	return lime.graphics.opengl.GL.context.getFramebufferAttachmentParameter(target,attachment,pname);
+};
+lime.graphics.opengl.GL.getParameter = function(pname) {
+	return lime.graphics.opengl.GL.context.getParameter(pname);
+};
+lime.graphics.opengl.GL.getProgramInfoLog = function(program) {
+	return lime.graphics.opengl.GL.context.getProgramInfoLog(program);
+};
+lime.graphics.opengl.GL.getProgramParameter = function(program,pname) {
+	return lime.graphics.opengl.GL.context.getProgramParameter(program,pname);
+};
+lime.graphics.opengl.GL.getRenderbufferParameter = function(target,pname) {
+	return lime.graphics.opengl.GL.context.getRenderbufferParameter(target,pname);
+};
+lime.graphics.opengl.GL.getShaderInfoLog = function(shader) {
+	return lime.graphics.opengl.GL.context.getShaderInfoLog(shader);
+};
+lime.graphics.opengl.GL.getShaderParameter = function(shader,pname) {
+	return lime.graphics.opengl.GL.context.getShaderParameter(shader,pname);
+};
+lime.graphics.opengl.GL.getShaderPrecisionFormat = function(shadertype,precisiontype) {
+	return lime.graphics.opengl.GL.context.getShaderPrecisionFormat(shadertype,precisiontype);
+};
+lime.graphics.opengl.GL.getShaderSource = function(shader) {
+	return lime.graphics.opengl.GL.context.getShaderSource(shader);
+};
+lime.graphics.opengl.GL.getSupportedExtensions = function() {
+	return lime.graphics.opengl.GL.context.getSupportedExtensions();
+};
+lime.graphics.opengl.GL.getTexParameter = function(target,pname) {
+	return lime.graphics.opengl.GL.context.getTexParameter(target,pname);
+};
+lime.graphics.opengl.GL.getUniform = function(program,location) {
+	return lime.graphics.opengl.GL.context.getUniform(program,location);
+};
+lime.graphics.opengl.GL.getUniformLocation = function(program,name) {
+	return lime.graphics.opengl.GL.context.getUniformLocation(program,name);
+};
+lime.graphics.opengl.GL.getVertexAttrib = function(index,pname) {
+	return lime.graphics.opengl.GL.context.getVertexAttrib(index,pname);
+};
+lime.graphics.opengl.GL.getVertexAttribOffset = function(index,pname) {
+	return lime.graphics.opengl.GL.context.getVertexAttribOffset(index,pname);
+};
+lime.graphics.opengl.GL.hint = function(target,mode) {
+	lime.graphics.opengl.GL.context.hint(target,mode);
+};
+lime.graphics.opengl.GL.isBuffer = function(buffer) {
+	return lime.graphics.opengl.GL.context.isBuffer(buffer);
+};
+lime.graphics.opengl.GL.isContextLost = function() {
+	return lime.graphics.opengl.GL.context.isContextLost();
+};
+lime.graphics.opengl.GL.isEnabled = function(cap) {
+	return lime.graphics.opengl.GL.context.isEnabled(cap);
+};
+lime.graphics.opengl.GL.isFramebuffer = function(framebuffer) {
+	return lime.graphics.opengl.GL.context.isFramebuffer(framebuffer);
+};
+lime.graphics.opengl.GL.isProgram = function(program) {
+	return lime.graphics.opengl.GL.context.isProgram(program);
+};
+lime.graphics.opengl.GL.isRenderbuffer = function(renderbuffer) {
+	return lime.graphics.opengl.GL.context.isRenderbuffer(renderbuffer);
+};
+lime.graphics.opengl.GL.isShader = function(shader) {
+	return lime.graphics.opengl.GL.context.isShader(shader);
+};
+lime.graphics.opengl.GL.isTexture = function(texture) {
+	return lime.graphics.opengl.GL.context.isTexture(texture);
+};
+lime.graphics.opengl.GL.lineWidth = function(width) {
+	lime.graphics.opengl.GL.context.lineWidth(width);
+};
+lime.graphics.opengl.GL.linkProgram = function(program) {
+	lime.graphics.opengl.GL.context.linkProgram(program);
+};
+lime.graphics.opengl.GL.pixelStorei = function(pname,param) {
+	lime.graphics.opengl.GL.context.pixelStorei(pname,param);
+};
+lime.graphics.opengl.GL.polygonOffset = function(factor,units) {
+	lime.graphics.opengl.GL.context.polygonOffset(factor,units);
+};
+lime.graphics.opengl.GL.readPixels = function(x,y,width,height,format,type,pixels) {
+	lime.graphics.opengl.GL.context.readPixels(x,y,width,height,format,type,pixels);
+};
+lime.graphics.opengl.GL.renderbufferStorage = function(target,internalformat,width,height) {
+	lime.graphics.opengl.GL.context.renderbufferStorage(target,internalformat,width,height);
+};
+lime.graphics.opengl.GL.sampleCoverage = function(value,invert) {
+	lime.graphics.opengl.GL.context.sampleCoverage(value,invert);
+};
+lime.graphics.opengl.GL.scissor = function(x,y,width,height) {
+	lime.graphics.opengl.GL.context.scissor(x,y,width,height);
+};
+lime.graphics.opengl.GL.shaderSource = function(shader,source) {
+	lime.graphics.opengl.GL.context.shaderSource(shader,source);
+};
+lime.graphics.opengl.GL.stencilFunc = function(func,ref,mask) {
+	lime.graphics.opengl.GL.context.stencilFunc(func,ref,mask);
+};
+lime.graphics.opengl.GL.stencilFuncSeparate = function(face,func,ref,mask) {
+	lime.graphics.opengl.GL.context.stencilFuncSeparate(face,func,ref,mask);
+};
+lime.graphics.opengl.GL.stencilMask = function(mask) {
+	lime.graphics.opengl.GL.context.stencilMask(mask);
+};
+lime.graphics.opengl.GL.stencilMaskSeparate = function(face,mask) {
+	lime.graphics.opengl.GL.context.stencilMaskSeparate(face,mask);
+};
+lime.graphics.opengl.GL.stencilOp = function(fail,zfail,zpass) {
+	lime.graphics.opengl.GL.context.stencilOp(fail,zfail,zpass);
+};
+lime.graphics.opengl.GL.stencilOpSeparate = function(face,fail,zfail,zpass) {
+	lime.graphics.opengl.GL.context.stencilOpSeparate(face,fail,zfail,zpass);
+};
+lime.graphics.opengl.GL.texImage2D = function(target,level,internalformat,width,height,border,format,type,pixels) {
+	lime.graphics.opengl.GL.context.texImage2D(target,level,internalformat,width,height,border,format,type,pixels);
+};
+lime.graphics.opengl.GL.texParameterf = function(target,pname,param) {
+	lime.graphics.opengl.GL.context.texParameterf(target,pname,param);
+};
+lime.graphics.opengl.GL.texParameteri = function(target,pname,param) {
+	lime.graphics.opengl.GL.context.texParameteri(target,pname,param);
+};
+lime.graphics.opengl.GL.texSubImage2D = function(target,level,xoffset,yoffset,width,height,format,type,pixels) {
+	lime.graphics.opengl.GL.context.texSubImage2D(target,level,xoffset,yoffset,width,height,format,type,pixels);
+};
+lime.graphics.opengl.GL.uniform1f = function(location,x) {
+	lime.graphics.opengl.GL.context.uniform1f(location,x);
+};
+lime.graphics.opengl.GL.uniform1fv = function(location,x) {
+	lime.graphics.opengl.GL.context.uniform1fv(location,x);
+};
+lime.graphics.opengl.GL.uniform1i = function(location,x) {
+	lime.graphics.opengl.GL.context.uniform1i(location,x);
+};
+lime.graphics.opengl.GL.uniform1iv = function(location,v) {
+	lime.graphics.opengl.GL.context.uniform1iv(location,v);
+};
+lime.graphics.opengl.GL.uniform2f = function(location,x,y) {
+	lime.graphics.opengl.GL.context.uniform2f(location,x,y);
+};
+lime.graphics.opengl.GL.uniform2fv = function(location,v) {
+	lime.graphics.opengl.GL.context.uniform2fv(location,v);
+};
+lime.graphics.opengl.GL.uniform2i = function(location,x,y) {
+	lime.graphics.opengl.GL.context.uniform2i(location,x,y);
+};
+lime.graphics.opengl.GL.uniform2iv = function(location,v) {
+	lime.graphics.opengl.GL.context.uniform2iv(location,v);
+};
+lime.graphics.opengl.GL.uniform3f = function(location,x,y,z) {
+	lime.graphics.opengl.GL.context.uniform3f(location,x,y,z);
+};
+lime.graphics.opengl.GL.uniform3fv = function(location,v) {
+	lime.graphics.opengl.GL.context.uniform3fv(location,v);
+};
+lime.graphics.opengl.GL.uniform3i = function(location,x,y,z) {
+	lime.graphics.opengl.GL.context.uniform3i(location,x,y,z);
+};
+lime.graphics.opengl.GL.uniform3iv = function(location,v) {
+	lime.graphics.opengl.GL.context.uniform3iv(location,v);
+};
+lime.graphics.opengl.GL.uniform4f = function(location,x,y,z,w) {
+	lime.graphics.opengl.GL.context.uniform4f(location,x,y,z,w);
+};
+lime.graphics.opengl.GL.uniform4fv = function(location,v) {
+	lime.graphics.opengl.GL.context.uniform4fv(location,v);
+};
+lime.graphics.opengl.GL.uniform4i = function(location,x,y,z,w) {
+	lime.graphics.opengl.GL.context.uniform4i(location,x,y,z,w);
+};
+lime.graphics.opengl.GL.uniform4iv = function(location,v) {
+	lime.graphics.opengl.GL.context.uniform4iv(location,v);
+};
+lime.graphics.opengl.GL.uniformMatrix2fv = function(location,transpose,v) {
+	lime.graphics.opengl.GL.context.uniformMatrix2fv(location,transpose,v);
+};
+lime.graphics.opengl.GL.uniformMatrix3fv = function(location,transpose,v) {
+	lime.graphics.opengl.GL.context.uniformMatrix3fv(location,transpose,v);
+};
+lime.graphics.opengl.GL.uniformMatrix4fv = function(location,transpose,v) {
+	lime.graphics.opengl.GL.context.uniformMatrix4fv(location,transpose,v);
+};
+lime.graphics.opengl.GL.useProgram = function(program) {
+	lime.graphics.opengl.GL.context.useProgram(program);
+};
+lime.graphics.opengl.GL.validateProgram = function(program) {
+	lime.graphics.opengl.GL.context.validateProgram(program);
+};
+lime.graphics.opengl.GL.vertexAttrib1f = function(indx,x) {
+	lime.graphics.opengl.GL.context.vertexAttrib1f(indx,x);
+};
+lime.graphics.opengl.GL.vertexAttrib1fv = function(indx,values) {
+	lime.graphics.opengl.GL.context.vertexAttrib1fv(indx,values);
+};
+lime.graphics.opengl.GL.vertexAttrib2f = function(indx,x,y) {
+	lime.graphics.opengl.GL.context.vertexAttrib2f(indx,x,y);
+};
+lime.graphics.opengl.GL.vertexAttrib2fv = function(indx,values) {
+	lime.graphics.opengl.GL.context.vertexAttrib2fv(indx,values);
+};
+lime.graphics.opengl.GL.vertexAttrib3f = function(indx,x,y,z) {
+	lime.graphics.opengl.GL.context.vertexAttrib3f(indx,x,y,z);
+};
+lime.graphics.opengl.GL.vertexAttrib3fv = function(indx,values) {
+	lime.graphics.opengl.GL.context.vertexAttrib3fv(indx,values);
+};
+lime.graphics.opengl.GL.vertexAttrib4f = function(indx,x,y,z,w) {
+	lime.graphics.opengl.GL.context.vertexAttrib4f(indx,x,y,z,w);
+};
+lime.graphics.opengl.GL.vertexAttrib4fv = function(indx,values) {
+	lime.graphics.opengl.GL.context.vertexAttrib4fv(indx,values);
+};
+lime.graphics.opengl.GL.vertexAttribPointer = function(indx,size,type,normalized,stride,offset) {
+	lime.graphics.opengl.GL.context.vertexAttribPointer(indx,size,type,normalized,stride,offset);
+};
+lime.graphics.opengl.GL.viewport = function(x,y,width,height) {
+	lime.graphics.opengl.GL.context.viewport(x,y,width,height);
+};
+lime.graphics.opengl.GL.get_version = function() {
+	return 2;
+};
+lime.graphics.utils = {};
+lime.graphics.utils.ImageCanvasUtil = function() { };
+$hxClasses["lime.graphics.utils.ImageCanvasUtil"] = lime.graphics.utils.ImageCanvasUtil;
+lime.graphics.utils.ImageCanvasUtil.__name__ = ["lime","graphics","utils","ImageCanvasUtil"];
+lime.graphics.utils.ImageCanvasUtil.colorTransform = function(image,rect,colorMatrix) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+	lime.graphics.utils.ImageDataUtil.colorTransform(image,rect,colorMatrix);
+};
+lime.graphics.utils.ImageCanvasUtil.convertToCanvas = function(image) {
+	var buffer = image.buffer;
+	if(buffer.__srcImage != null) {
+		if(buffer.__srcCanvas == null) {
+			lime.graphics.utils.ImageCanvasUtil.createCanvas(image,buffer.__srcImage.width,buffer.__srcImage.height);
+			buffer.__srcContext.drawImage(buffer.__srcImage,0,0);
+		}
+		buffer.__srcImage = null;
+	}
+};
+lime.graphics.utils.ImageCanvasUtil.convertToData = function(image) {
+	if(image.buffer.data == null) {
+		lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+		lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+		image.buffer.__srcCanvas = null;
+		image.buffer.__srcContext = null;
+	}
+};
+lime.graphics.utils.ImageCanvasUtil.copyChannel = function(image,sourceImage,sourceRect,destPoint,sourceChannel,destChannel) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(sourceImage);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(sourceImage);
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+	lime.graphics.utils.ImageDataUtil.copyChannel(image,sourceImage,sourceRect,destPoint,sourceChannel,destChannel);
+};
+lime.graphics.utils.ImageCanvasUtil.copyPixels = function(image,sourceImage,sourceRect,destPoint,alphaImage,alphaPoint,mergeAlpha) {
+	if(mergeAlpha == null) mergeAlpha = false;
+	if(alphaImage != null && alphaImage.get_transparent()) {
+		if(alphaPoint == null) alphaPoint = new lime.math.Vector2();
+		var tempData = image.clone();
+		tempData.copyChannel(alphaImage,new lime.math.Rectangle(alphaPoint.x,alphaPoint.y,sourceRect.width,sourceRect.height),new lime.math.Vector2(sourceRect.x,sourceRect.y),lime.graphics.ImageChannel.ALPHA,lime.graphics.ImageChannel.ALPHA);
+		sourceImage = tempData;
+	}
+	lime.graphics.utils.ImageCanvasUtil.sync(image);
+	if(!mergeAlpha) {
+		if(image.get_transparent() && sourceImage.get_transparent()) image.buffer.__srcContext.clearRect(destPoint.x + image.offsetX,destPoint.y + image.offsetY,sourceRect.width + image.offsetX,sourceRect.height + image.offsetY);
+	}
+	lime.graphics.utils.ImageCanvasUtil.sync(sourceImage);
+	if(sourceImage.buffer.get_src() != null) image.buffer.__srcContext.drawImage(sourceImage.buffer.get_src(),sourceRect.x + sourceImage.offsetX | 0,sourceRect.y + sourceImage.offsetY | 0,sourceRect.width | 0,sourceRect.height | 0,destPoint.x + image.offsetX | 0,destPoint.y + image.offsetY | 0,sourceRect.width | 0,sourceRect.height | 0);
+};
+lime.graphics.utils.ImageCanvasUtil.createCanvas = function(image,width,height) {
+	var buffer = image.buffer;
+	if(buffer.__srcCanvas == null) {
+		buffer.__srcCanvas = window.document.createElement("canvas");
+		buffer.__srcCanvas.width = width;
+		buffer.__srcCanvas.height = height;
+		if(!image.get_transparent()) {
+			if(!image.get_transparent()) buffer.__srcCanvas.setAttribute("moz-opaque","true");
+			buffer.__srcContext = buffer.__srcCanvas.getContext ("2d", { alpha: false });
+		} else buffer.__srcContext = buffer.__srcCanvas.getContext("2d");
+		buffer.__srcContext.mozImageSmoothingEnabled = false;
+		buffer.__srcContext.webkitImageSmoothingEnabled = false;
+		buffer.__srcContext.imageSmoothingEnabled = false;
+	}
+};
+lime.graphics.utils.ImageCanvasUtil.createImageData = function(image) {
+	var buffer = image.buffer;
+	if(buffer.data == null) {
+		buffer.__srcImageData = buffer.__srcContext.getImageData(0,0,buffer.width,buffer.height);
+		if(image.type == lime.graphics.ImageType.CANVAS) buffer.data = buffer.__srcImageData.data; else buffer.data = new Uint8Array(buffer.__srcImageData.data);
+	}
+};
+lime.graphics.utils.ImageCanvasUtil.fillRect = function(image,rect,color) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.sync(image);
+	if(rect.x == 0 && rect.y == 0 && rect.width == image.width && rect.height == image.height) {
+		if(image.get_transparent() && (color & -16777216) == 0) {
+			image.buffer.__srcCanvas.width = image.buffer.width;
+			return;
+		}
+	}
+	var a;
+	if(image.get_transparent()) a = (color & -16777216) >>> 24; else a = 255;
+	var r = (color & 16711680) >>> 16;
+	var g = (color & 65280) >>> 8;
+	var b = color & 255;
+	image.buffer.__srcContext.fillStyle = "rgba(" + r + ", " + g + ", " + b + ", " + a / 255 + ")";
+	image.buffer.__srcContext.fillRect(rect.x + image.offsetX,rect.y + image.offsetY,rect.width + image.offsetX,rect.height + image.offsetY);
+};
+lime.graphics.utils.ImageCanvasUtil.floodFill = function(image,x,y,color) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+	lime.graphics.utils.ImageDataUtil.floodFill(image,x,y,color);
+};
+lime.graphics.utils.ImageCanvasUtil.getPixel = function(image,x,y) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+	return lime.graphics.utils.ImageDataUtil.getPixel(image,x,y);
+};
+lime.graphics.utils.ImageCanvasUtil.getPixel32 = function(image,x,y) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+	return lime.graphics.utils.ImageDataUtil.getPixel32(image,x,y);
+};
+lime.graphics.utils.ImageCanvasUtil.getPixels = function(image,rect) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+	return lime.graphics.utils.ImageDataUtil.getPixels(image,rect);
+};
+lime.graphics.utils.ImageCanvasUtil.resize = function(image,newWidth,newHeight) {
+	var buffer = image.buffer;
+	if(buffer.__srcCanvas == null) {
+		lime.graphics.utils.ImageCanvasUtil.createCanvas(image,newWidth,newHeight);
+		buffer.__srcContext.drawImage(buffer.get_src(),0,0,newWidth,newHeight);
+	} else {
+		var sourceCanvas = buffer.__srcCanvas;
+		buffer.__srcCanvas = null;
+		lime.graphics.utils.ImageCanvasUtil.createCanvas(image,newWidth,newHeight);
+		buffer.__srcContext.drawImage(sourceCanvas,0,0,newWidth,newHeight);
+	}
+};
+lime.graphics.utils.ImageCanvasUtil.setPixel = function(image,x,y,color) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+	lime.graphics.utils.ImageDataUtil.setPixel(image,x,y,color);
+};
+lime.graphics.utils.ImageCanvasUtil.setPixel32 = function(image,x,y,color) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+	lime.graphics.utils.ImageDataUtil.setPixel32(image,x,y,color);
+};
+lime.graphics.utils.ImageCanvasUtil.setPixels = function(image,rect,byteArray) {
+	lime.graphics.utils.ImageCanvasUtil.convertToCanvas(image);
+	lime.graphics.utils.ImageCanvasUtil.createImageData(image);
+	lime.graphics.utils.ImageDataUtil.setPixels(image,rect,byteArray);
+};
+lime.graphics.utils.ImageCanvasUtil.sync = function(image) {
+	if(image.dirty && image.type != lime.graphics.ImageType.DATA) {
+		image.buffer.__srcContext.putImageData(image.buffer.__srcImageData,0,0);
+		image.buffer.data = null;
+		image.dirty = false;
+	}
+};
+lime.graphics.utils.ImageDataUtil = function() { };
+$hxClasses["lime.graphics.utils.ImageDataUtil"] = lime.graphics.utils.ImageDataUtil;
+lime.graphics.utils.ImageDataUtil.__name__ = ["lime","graphics","utils","ImageDataUtil"];
+lime.graphics.utils.ImageDataUtil.__alpha16 = null;
+lime.graphics.utils.ImageDataUtil.__clamp = null;
+lime.graphics.utils.ImageDataUtil.colorTransform = function(image,rect,colorMatrix) {
+	var data = image.buffer.data;
+	var stride = image.buffer.width * 4;
+	var offset;
+	var rowStart = Std["int"](rect.get_top() + image.offsetY);
+	var rowEnd = Std["int"](rect.get_bottom() + image.offsetY);
+	var columnStart = Std["int"](rect.get_left() + image.offsetX);
+	var columnEnd = Std["int"](rect.get_right() + image.offsetX);
+	var r;
+	var g;
+	var b;
+	var a;
+	var ex = 0;
+	var _g = rowStart;
+	while(_g < rowEnd) {
+		var row = _g++;
+		var _g1 = columnStart;
+		while(_g1 < columnEnd) {
+			var column = _g1++;
+			offset = row * stride + column * 4;
+			a = data[offset + 3] * colorMatrix[18] + colorMatrix[19] * 255 | 0;
+			if(a > 255) ex = a - 255; else ex = 0;
+			b = data[offset + 2] * colorMatrix[12] + colorMatrix[14] * 255 + ex | 0;
+			if(b > 255) ex = b - 255; else ex = 0;
+			g = data[offset + 1] * colorMatrix[6] + colorMatrix[9] * 255 + ex | 0;
+			if(g > 255) ex = g - 255; else ex = 0;
+			r = data[offset] * colorMatrix[0] + colorMatrix[4] * 255 + ex | 0;
+			if(r > 255) data[offset] = 255; else data[offset] = r;
+			if(g > 255) data[offset + 1] = 255; else data[offset + 1] = g;
+			if(b > 255) data[offset + 2] = 255; else data[offset + 2] = b;
+			if(a > 255) data[offset + 3] = 255; else data[offset + 3] = a;
+		}
+	}
+	image.dirty = true;
+};
+lime.graphics.utils.ImageDataUtil.copyChannel = function(image,sourceImage,sourceRect,destPoint,sourceChannel,destChannel) {
+	var destIdx;
+	switch(destChannel[1]) {
+	case 0:
+		destIdx = 0;
+		break;
+	case 1:
+		destIdx = 1;
+		break;
+	case 2:
+		destIdx = 2;
+		break;
+	case 3:
+		destIdx = 3;
+		break;
+	}
+	var srcIdx;
+	switch(sourceChannel[1]) {
+	case 0:
+		srcIdx = 0;
+		break;
+	case 1:
+		srcIdx = 1;
+		break;
+	case 2:
+		srcIdx = 2;
+		break;
+	case 3:
+		srcIdx = 3;
+		break;
+	}
+	var srcStride = sourceImage.buffer.width * 4 | 0;
+	var srcPosition = (sourceRect.x + sourceImage.offsetX) * 4 + srcStride * (sourceRect.y + sourceImage.offsetY) + srcIdx | 0;
+	var srcRowOffset = srcStride - (4 * (sourceRect.width + sourceImage.offsetX) | 0);
+	var srcRowEnd = 4 * (sourceRect.x + sourceImage.offsetX + sourceRect.width) | 0;
+	var srcData = sourceImage.buffer.data;
+	var destStride = image.buffer.width * 4 | 0;
+	var destPosition = (destPoint.x + image.offsetX) * 4 + destStride * (destPoint.y + image.offsetY) + destIdx | 0;
+	var destRowOffset = destStride - (4 * (sourceRect.width + image.offsetX) | 0);
+	var destRowEnd = 4 * (destPoint.x + image.offsetX + sourceRect.width) | 0;
+	var destData = image.buffer.data;
+	var length = sourceRect.width * sourceRect.height | 0;
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		destData[destPosition] = srcData[srcPosition];
+		srcPosition += 4;
+		destPosition += 4;
+		if(srcPosition % srcStride > srcRowEnd) srcPosition += srcRowOffset;
+		if(destPosition % destStride > destRowEnd) destPosition += destRowOffset;
+	}
+	image.dirty = true;
+};
+lime.graphics.utils.ImageDataUtil.copyPixels = function(image,sourceImage,sourceRect,destPoint,alphaImage,alphaPoint,mergeAlpha) {
+	if(mergeAlpha == null) mergeAlpha = false;
+	if(alphaImage != null && alphaImage.get_transparent()) {
+		if(alphaPoint == null) alphaPoint = new lime.math.Vector2();
+		var tempData = image.clone();
+		tempData.copyChannel(alphaImage,new lime.math.Rectangle(alphaPoint.x,alphaPoint.y,sourceRect.width,sourceRect.height),new lime.math.Vector2(sourceRect.x,sourceRect.y),lime.graphics.ImageChannel.ALPHA,lime.graphics.ImageChannel.ALPHA);
+		sourceImage = tempData;
+	}
+	var rowOffset = destPoint.y + image.offsetY - sourceRect.y - sourceImage.offsetY | 0;
+	var columnOffset = destPoint.x + image.offsetX - sourceRect.x - sourceImage.offsetY | 0;
+	var sourceData = sourceImage.buffer.data;
+	var sourceStride = sourceImage.buffer.width * 4;
+	var sourceOffset = 0;
+	var data = image.buffer.data;
+	var stride = image.buffer.width * 4;
+	var offset = 0;
+	if(!mergeAlpha || !sourceImage.get_transparent()) {
+		var _g1 = Std["int"](sourceRect.get_top() + sourceImage.offsetY);
+		var _g = Std["int"](sourceRect.get_bottom() + sourceImage.offsetY);
+		while(_g1 < _g) {
+			var row = _g1++;
+			var _g3 = Std["int"](sourceRect.get_left() + sourceImage.offsetX);
+			var _g2 = Std["int"](sourceRect.get_right() + sourceImage.offsetX);
+			while(_g3 < _g2) {
+				var column = _g3++;
+				sourceOffset = row * sourceStride + column * 4;
+				offset = (row + rowOffset) * stride + (column + columnOffset) * 4;
+				data[offset] = sourceData[sourceOffset];
+				data[offset + 1] = sourceData[sourceOffset + 1];
+				data[offset + 2] = sourceData[sourceOffset + 2];
+				data[offset + 3] = sourceData[sourceOffset + 3];
+			}
+		}
+	} else {
+		var sourceAlpha;
+		var oneMinusSourceAlpha;
+		var _g11 = Std["int"](sourceRect.get_top() + sourceImage.offsetY);
+		var _g4 = Std["int"](sourceRect.get_bottom() + sourceImage.offsetY);
+		while(_g11 < _g4) {
+			var row1 = _g11++;
+			var _g31 = Std["int"](sourceRect.get_left() + sourceImage.offsetX);
+			var _g21 = Std["int"](sourceRect.get_right() + sourceImage.offsetX);
+			while(_g31 < _g21) {
+				var column1 = _g31++;
+				sourceOffset = row1 * sourceStride + column1 * 4;
+				offset = (row1 + rowOffset) * stride + (column1 + columnOffset) * 4;
+				sourceAlpha = sourceData[sourceOffset + 3] / 255;
+				oneMinusSourceAlpha = 1 - sourceAlpha;
+				data[offset] = lime.graphics.utils.ImageDataUtil.__clamp[sourceData[sourceOffset] + data[offset] * oneMinusSourceAlpha | 0];
+				data[offset + 1] = lime.graphics.utils.ImageDataUtil.__clamp[sourceData[sourceOffset + 1] + data[offset + 1] * oneMinusSourceAlpha | 0];
+				data[offset + 2] = lime.graphics.utils.ImageDataUtil.__clamp[sourceData[sourceOffset + 2] + data[offset + 2] * oneMinusSourceAlpha | 0];
+				data[offset + 3] = lime.graphics.utils.ImageDataUtil.__clamp[sourceData[sourceOffset + 3] + data[offset + 3] * oneMinusSourceAlpha | 0];
+			}
+		}
+	}
+	image.dirty = true;
+};
+lime.graphics.utils.ImageDataUtil.fillRect = function(image,rect,color) {
+	var a;
+	if(image.get_transparent()) a = (color & -16777216) >>> 24; else a = 255;
+	var r = (color & 16711680) >>> 16;
+	var g = (color & 65280) >>> 8;
+	var b = color & 255;
+	var rgba = r | g << 8 | b << 16 | a << 24;
+	var data = image.buffer.data;
+	if(rect.width == image.buffer.width && rect.height == image.buffer.height && rect.x == 0 && rect.y == 0 && image.offsetX == 0 && image.offsetY == 0) {
+		var length = image.buffer.width * image.buffer.height;
+		var _g = 0;
+		while(_g < length) {
+			var i = _g++;
+			data[i] = r;
+			data[i + 1] = g;
+			data[i + 2] = b;
+			data[i + 3] = a;
+		}
+	} else {
+		var stride = image.buffer.width * 4;
+		var offset;
+		var rowStart = rect.y + image.offsetY | 0;
+		var rowEnd = Std["int"](rect.get_bottom() + image.offsetY);
+		var columnStart = rect.x + image.offsetX | 0;
+		var columnEnd = Std["int"](rect.get_right() + image.offsetX);
+		var _g1 = rowStart;
+		while(_g1 < rowEnd) {
+			var row = _g1++;
+			var _g11 = columnStart;
+			while(_g11 < columnEnd) {
+				var column = _g11++;
+				offset = row * stride + column * 4;
+				data[offset] = r;
+				data[offset + 1] = g;
+				data[offset + 2] = b;
+				data[offset + 3] = a;
+			}
+		}
+	}
+	image.dirty = true;
+};
+lime.graphics.utils.ImageDataUtil.floodFill = function(image,x,y,color) {
+	var data = image.buffer.data;
+	var offset = (y + image.offsetY) * (image.buffer.width * 4) + (x + image.offsetX) * 4;
+	var hitColorR = data[offset];
+	var hitColorG = data[offset + 1];
+	var hitColorB = data[offset + 2];
+	var hitColorA;
+	if(image.get_transparent()) hitColorA = data[offset + 3]; else hitColorA = 255;
+	var r = (color & 16711680) >>> 16;
+	var g = (color & 65280) >>> 8;
+	var b = color & 255;
+	var a;
+	if(image.get_transparent()) a = (color & -16777216) >>> 24; else a = 255;
+	if(hitColorR == r && hitColorG == g && hitColorB == b && hitColorA == a) return;
+	var dx = [0,-1,1,0];
+	var dy = [-1,0,0,1];
+	var minX = -image.offsetX;
+	var minY = -image.offsetY;
+	var maxX = minX + image.width;
+	var maxY = minY + image.height;
+	var queue = new Array();
+	queue.push(x);
+	queue.push(y);
+	while(queue.length > 0) {
+		var curPointY = queue.pop();
+		var curPointX = queue.pop();
+		var _g = 0;
+		while(_g < 4) {
+			var i = _g++;
+			var nextPointX = curPointX + dx[i];
+			var nextPointY = curPointY + dy[i];
+			if(nextPointX < minX || nextPointY < minY || nextPointX >= maxX || nextPointY >= maxY) continue;
+			var nextPointOffset = (nextPointY * image.width + nextPointX) * 4;
+			if(data[nextPointOffset] == hitColorR && data[nextPointOffset + 1] == hitColorG && data[nextPointOffset + 2] == hitColorB && data[nextPointOffset + 3] == hitColorA) {
+				data[nextPointOffset] = r;
+				data[nextPointOffset + 1] = g;
+				data[nextPointOffset + 2] = b;
+				data[nextPointOffset + 3] = a;
+				queue.push(nextPointX);
+				queue.push(nextPointY);
+			}
+		}
+	}
+	image.dirty = true;
+};
+lime.graphics.utils.ImageDataUtil.getPixel = function(image,x,y) {
+	var data = image.buffer.data;
+	var offset = 4 * (y + image.offsetY) * image.buffer.width + (x + image.offsetX) * 4;
+	if(image.get_premultiplied()) {
+		var unmultiply = 255.0 / data[offset + 3];
+		haxe.Log.trace(unmultiply,{ fileName : "ImageDataUtil.hx", lineNumber : 361, className : "lime.graphics.utils.ImageDataUtil", methodName : "getPixel"});
+		return lime.graphics.utils.ImageDataUtil.__clamp[data[offset] * unmultiply | 0] << 16 | lime.graphics.utils.ImageDataUtil.__clamp[data[offset + 1] * unmultiply | 0] << 8 | lime.graphics.utils.ImageDataUtil.__clamp[data[offset + 2] * unmultiply | 0];
+	} else return data[offset] << 16 | data[offset + 1] << 8 | data[offset + 2];
+};
+lime.graphics.utils.ImageDataUtil.getPixel32 = function(image,x,y) {
+	var data = image.buffer.data;
+	var offset = 4 * (y + image.offsetY) * image.buffer.width + (x + image.offsetX) * 4;
+	var a;
+	if(image.get_transparent()) a = data[offset + 3]; else a = 255;
+	if(image.get_premultiplied() && a != 0) {
+		var unmultiply = 255.0 / a;
+		return a << 24 | (function($this) {
+			var $r;
+			var index = Math.round(data[offset] * unmultiply);
+			$r = lime.graphics.utils.ImageDataUtil.__clamp[index];
+			return $r;
+		}(this)) << 16 | lime.graphics.utils.ImageDataUtil.__clamp[data[offset + 1] * unmultiply | 0] << 8 | lime.graphics.utils.ImageDataUtil.__clamp[data[offset + 2] * unmultiply | 0];
+	} else return a << 24 | data[offset] << 16 | data[offset + 1] << 8 | data[offset + 2];
+};
+lime.graphics.utils.ImageDataUtil.getPixels = function(image,rect) {
+	var byteArray = new lime.utils.ByteArray(image.width * image.height * 4);
+	var srcData = image.buffer.data;
+	var srcStride = image.buffer.width * 4 | 0;
+	var srcPosition = rect.x * 4 + srcStride * rect.y | 0;
+	var srcRowOffset = srcStride - (4 * rect.width | 0);
+	var srcRowEnd = 4 * (rect.x + rect.width) | 0;
+	var length = 4 * rect.width * rect.height | 0;
+	if(byteArray.allocated < length) byteArray.___resizeBuffer(byteArray.allocated = Std["int"](Math.max(length,byteArray.allocated * 2))); else if(byteArray.allocated > length) byteArray.___resizeBuffer(byteArray.allocated = length);
+	byteArray.length = length;
+	length;
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		byteArray.__set(i,srcData[srcPosition++]);
+		if(srcPosition % srcStride > srcRowEnd) srcPosition += srcRowOffset;
+	}
+	byteArray.position = 0;
+	return byteArray;
+};
+lime.graphics.utils.ImageDataUtil.multiplyAlpha = function(image) {
+	var data = image.buffer.data;
+	if(data == null) return;
+	var index;
+	var a16;
+	var length = data.length / 4 | 0;
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		index = i * 4;
+		var a161 = lime.graphics.utils.ImageDataUtil.__alpha16[data[index + 3]];
+		data[index] = data[index] * a161 >> 16;
+		data[index + 1] = data[index + 1] * a161 >> 16;
+		data[index + 2] = data[index + 2] * a161 >> 16;
+	}
+	image.buffer.premultiplied = true;
+	image.dirty = true;
+};
+lime.graphics.utils.ImageDataUtil.resize = function(image,newWidth,newHeight) {
+	var buffer = image.buffer;
+	var newBuffer = new lime.graphics.ImageBuffer(new Uint8Array(newWidth * newHeight * 4),newWidth,newHeight);
+	var imageWidth = image.width;
+	var imageHeight = image.height;
+	var data = image.get_data();
+	var newData = newBuffer.data;
+	var sourceIndex;
+	var sourceIndexX;
+	var sourceIndexY;
+	var sourceIndexXY;
+	var index;
+	var sourceX;
+	var sourceY;
+	var u;
+	var v;
+	var uRatio;
+	var vRatio;
+	var uOpposite;
+	var vOpposite;
+	var _g = 0;
+	while(_g < newHeight) {
+		var y = _g++;
+		var _g1 = 0;
+		while(_g1 < newWidth) {
+			var x = _g1++;
+			u = (x + 0.5) / newWidth * imageWidth - 0.5;
+			v = (y + 0.5) / newHeight * imageHeight - 0.5;
+			sourceX = u | 0;
+			sourceY = v | 0;
+			sourceIndex = (sourceY * imageWidth + sourceX) * 4;
+			if(sourceX < imageWidth - 1) sourceIndexX = sourceIndex + 4; else sourceIndexX = sourceIndex;
+			if(sourceY < imageHeight - 1) sourceIndexY = sourceIndex + imageWidth * 4; else sourceIndexY = sourceIndex;
+			if(sourceIndexX != sourceIndex) sourceIndexXY = sourceIndexY + 4; else sourceIndexXY = sourceIndexY;
+			index = (y * newWidth + x) * 4;
+			uRatio = u - sourceX;
+			vRatio = v - sourceY;
+			uOpposite = 1 - uRatio;
+			vOpposite = 1 - vRatio;
+			newData[index] = (data[sourceIndex] * uOpposite + data[sourceIndexX] * uRatio) * vOpposite + (data[sourceIndexY] * uOpposite + data[sourceIndexXY] * uRatio) * vRatio | 0;
+			newData[index + 1] = (data[sourceIndex + 1] * uOpposite + data[sourceIndexX + 1] * uRatio) * vOpposite + (data[sourceIndexY + 1] * uOpposite + data[sourceIndexXY + 1] * uRatio) * vRatio | 0;
+			newData[index + 2] = (data[sourceIndex + 2] * uOpposite + data[sourceIndexX + 2] * uRatio) * vOpposite + (data[sourceIndexY + 2] * uOpposite + data[sourceIndexXY + 2] * uRatio) * vRatio | 0;
+			if(data[sourceIndexX + 3] == 0 || data[sourceIndexY + 3] == 0 || data[sourceIndexXY + 3] == 0) newData[index + 3] = 0; else newData[index + 3] = data[sourceIndex + 3];
+		}
+	}
+	buffer.data = newData;
+	buffer.width = newWidth;
+	buffer.height = newHeight;
+};
+lime.graphics.utils.ImageDataUtil.resizeBuffer = function(image,newWidth,newHeight) {
+	var buffer = image.buffer;
+	var data = image.get_data();
+	var newData = new Uint8Array(newWidth * newHeight * 4);
+	var sourceIndex;
+	var index;
+	var _g1 = 0;
+	var _g = buffer.height;
+	while(_g1 < _g) {
+		var y = _g1++;
+		var _g3 = 0;
+		var _g2 = buffer.width;
+		while(_g3 < _g2) {
+			var x = _g3++;
+			sourceIndex = (y * buffer.width + x) * 4;
+			index = (y * newWidth + x) * 4;
+			newData[index] = data[sourceIndex];
+			newData[index + 1] = data[sourceIndex + 1];
+			newData[index + 2] = data[sourceIndex + 2];
+			newData[index + 3] = data[sourceIndex + 3];
+		}
+	}
+	buffer.data = newData;
+	buffer.width = newWidth;
+	buffer.height = newHeight;
+};
+lime.graphics.utils.ImageDataUtil.setPixel = function(image,x,y,color) {
+	var data = image.buffer.data;
+	var offset = 4 * (y + image.offsetY) * image.buffer.width + (x + image.offsetX) * 4;
+	data[offset] = (color & 16711680) >>> 16;
+	data[offset + 1] = (color & 65280) >>> 8;
+	data[offset + 2] = color & 255;
+	if(image.get_transparent()) data[offset + 3] = 255;
+	image.dirty = true;
+};
+lime.graphics.utils.ImageDataUtil.setPixel32 = function(image,x,y,color) {
+	var data = image.buffer.data;
+	var offset = 4 * (y + image.offsetY) * image.buffer.width + (x + image.offsetX) * 4;
+	var a;
+	if(image.get_transparent()) a = (color & -16777216) >>> 24; else a = 255;
+	if(image.get_transparent() && image.get_premultiplied()) {
+		var a16 = lime.graphics.utils.ImageDataUtil.__alpha16[a];
+		data[offset] = ((color & 16711680) >>> 16) * a16 >> 16;
+		data[offset + 1] = ((color & 65280) >>> 8) * a16 >> 16;
+		data[offset + 2] = (color & 255) * a16 >> 16;
+		data[offset + 3] = a;
+	} else {
+		data[offset] = (color & 16711680) >>> 16;
+		data[offset + 1] = (color & 65280) >>> 8;
+		data[offset + 2] = color & 255;
+		data[offset + 3] = a;
+	}
+	image.dirty = true;
+};
+lime.graphics.utils.ImageDataUtil.setPixels = function(image,rect,byteArray) {
+	var len = Math.round(4 * rect.width * rect.height);
+	var data = image.buffer.data;
+	var offset = Math.round(4 * image.buffer.width * (rect.y + image.offsetX) + (rect.x + image.offsetY) * 4);
+	var pos = offset;
+	var boundR = Math.round(4 * (rect.x + rect.width + image.offsetX));
+	var width = image.buffer.width;
+	var _g = 0;
+	while(_g < len) {
+		var i = _g++;
+		if(pos % (width * 4) > boundR - 1) pos += width * 4 - boundR;
+		data[pos] = byteArray.readByte();
+		pos++;
+	}
+	image.dirty = true;
+};
+lime.graphics.utils.ImageDataUtil.unmultiplyAlpha = function(image) {
+	var data = image.buffer.data;
+	var index;
+	var a;
+	var unmultiply;
+	var length = data.length / 4 | 0;
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		index = i * 4;
+		a = data[index + 3];
+		if(a != 0) {
+			unmultiply = 255.0 / a;
+			data[index] = lime.graphics.utils.ImageDataUtil.__clamp[data[index] * unmultiply | 0];
+			data[index + 1] = lime.graphics.utils.ImageDataUtil.__clamp[data[index + 1] * unmultiply | 0];
+			data[index + 2] = lime.graphics.utils.ImageDataUtil.__clamp[data[index + 2] * unmultiply | 0];
+		}
+	}
+	image.buffer.premultiplied = false;
+	image.dirty = true;
+};
+lime.math = {};
+lime.math._ColorMatrix = {};
+lime.math._ColorMatrix.ColorMatrix_Impl_ = function() { };
+$hxClasses["lime.math._ColorMatrix.ColorMatrix_Impl_"] = lime.math._ColorMatrix.ColorMatrix_Impl_;
+lime.math._ColorMatrix.ColorMatrix_Impl_.__name__ = ["lime","math","_ColorMatrix","ColorMatrix_Impl_"];
+lime.math._ColorMatrix.ColorMatrix_Impl_.__properties__ = {set_redOffset:"set_redOffset",get_redOffset:"get_redOffset",set_redMultiplier:"set_redMultiplier",get_redMultiplier:"get_redMultiplier",set_greenOffset:"set_greenOffset",get_greenOffset:"get_greenOffset",set_greenMultiplier:"set_greenMultiplier",get_greenMultiplier:"get_greenMultiplier",set_color:"set_color",get_color:"get_color",set_blueOffset:"set_blueOffset",get_blueOffset:"get_blueOffset",set_blueMultiplier:"set_blueMultiplier",get_blueMultiplier:"get_blueMultiplier",set_alphaOffset:"set_alphaOffset",get_alphaOffset:"get_alphaOffset",set_alphaMultiplier:"set_alphaMultiplier",get_alphaMultiplier:"get_alphaMultiplier"}
+lime.math._ColorMatrix.ColorMatrix_Impl_._new = function(data) {
+	var this1;
+	if(data != null && data.length == 20) this1 = data; else this1 = new Float32Array(lime.math._ColorMatrix.ColorMatrix_Impl_.__identity);
+	return this1;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.clone = function(this1) {
+	return lime.math._ColorMatrix.ColorMatrix_Impl_._new(new Float32Array(this1));
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.concat = function(this1,second) {
+	var _g = this1;
+	var value = _g[0] + second[0];
+	_g[0] = value;
+	value;
+	var _g1 = this1;
+	var value1 = _g1[6] + second[6];
+	_g1[6] = value1;
+	value1;
+	var _g2 = this1;
+	var value2 = _g2[12] + second[12];
+	_g2[12] = value2;
+	value2;
+	var _g3 = this1;
+	var value3 = _g3[18] + second[18];
+	_g3[18] = value3;
+	value3;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.copyFrom = function(this1,other) {
+	this1.set(other);
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.identity = function(this1) {
+	this1[0] = 1;
+	this1[1] = 0;
+	this1[2] = 0;
+	this1[3] = 0;
+	this1[4] = 0;
+	this1[5] = 0;
+	this1[6] = 1;
+	this1[7] = 0;
+	this1[8] = 0;
+	this1[9] = 0;
+	this1[10] = 0;
+	this1[11] = 0;
+	this1[12] = 1;
+	this1[13] = 0;
+	this1[14] = 0;
+	this1[15] = 0;
+	this1[16] = 0;
+	this1[17] = 0;
+	this1[18] = 1;
+	this1[19] = 0;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.__toFlashColorTransform = function(this1) {
+	return null;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get_alphaMultiplier = function(this1) {
+	return this1[18];
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set_alphaMultiplier = function(this1,value) {
+	this1[18] = value;
+	return value;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get_alphaOffset = function(this1) {
+	return this1[19] * 255;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set_alphaOffset = function(this1,value) {
+	this1[19] = value / 255;
+	return value;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get_blueMultiplier = function(this1) {
+	return this1[12];
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set_blueMultiplier = function(this1,value) {
+	this1[12] = value;
+	return value;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get_blueOffset = function(this1) {
+	return this1[14] * 255;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set_blueOffset = function(this1,value) {
+	this1[14] = value / 255;
+	return value;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get_color = function(this1) {
+	return (this1[4] * 255 | 0) << 16 | (this1[9] * 255 | 0) << 8 | (this1[14] * 255 | 0);
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set_color = function(this1,value) {
+	var value1 = value >> 16 & 255;
+	this1[4] = value1 / 255;
+	value1;
+	var value2 = value >> 8 & 255;
+	this1[9] = value2 / 255;
+	value2;
+	var value3 = value & 255;
+	this1[14] = value3 / 255;
+	value3;
+	this1[0] = 0;
+	0;
+	this1[6] = 0;
+	0;
+	this1[12] = 0;
+	0;
+	return lime.math._ColorMatrix.ColorMatrix_Impl_.get_color(this1);
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get_greenMultiplier = function(this1) {
+	return this1[6];
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set_greenMultiplier = function(this1,value) {
+	this1[6] = value;
+	return value;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get_greenOffset = function(this1) {
+	return this1[9] * 255;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set_greenOffset = function(this1,value) {
+	this1[9] = value / 255;
+	return value;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get_redMultiplier = function(this1) {
+	return this1[0];
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set_redMultiplier = function(this1,value) {
+	this1[0] = value;
+	return value;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get_redOffset = function(this1) {
+	return this1[4] * 255;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set_redOffset = function(this1,value) {
+	this1[4] = value / 255;
+	return value;
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.get = function(this1,index) {
+	return this1[index];
+};
+lime.math._ColorMatrix.ColorMatrix_Impl_.set = function(this1,index,value) {
+	this1[index] = value;
+	return value;
+};
+lime.math.Matrix3 = function(a,b,c,d,tx,ty) {
+	if(ty == null) ty = 0;
+	if(tx == null) tx = 0;
+	if(d == null) d = 1;
+	if(c == null) c = 0;
+	if(b == null) b = 0;
+	if(a == null) a = 1;
+	this.a = a;
+	this.b = b;
+	this.c = c;
+	this.d = d;
+	this.tx = tx;
+	this.ty = ty;
+};
+$hxClasses["lime.math.Matrix3"] = lime.math.Matrix3;
+lime.math.Matrix3.__name__ = ["lime","math","Matrix3"];
+lime.math.Matrix3.prototype = {
+	clone: function() {
+		return new lime.math.Matrix3(this.a,this.b,this.c,this.d,this.tx,this.ty);
+	}
+	,concat: function(m) {
+		var a1 = this.a * m.a + this.b * m.c;
+		this.b = this.a * m.b + this.b * m.d;
+		this.a = a1;
+		var c1 = this.c * m.a + this.d * m.c;
+		this.d = this.c * m.b + this.d * m.d;
+		this.c = c1;
+		var tx1 = this.tx * m.a + this.ty * m.c + m.tx;
+		this.ty = this.tx * m.b + this.ty * m.d + m.ty;
+		this.tx = tx1;
+	}
+	,copyColumnFrom: function(column,vector4) {
+		if(column > 2) throw "Column " + column + " out of bounds (2)"; else if(column == 0) {
+			this.a = vector4.x;
+			this.c = vector4.y;
+		} else if(column == 1) {
+			this.b = vector4.x;
+			this.d = vector4.y;
+		} else {
+			this.tx = vector4.x;
+			this.ty = vector4.y;
+		}
+	}
+	,copyColumnTo: function(column,vector4) {
+		if(column > 2) throw "Column " + column + " out of bounds (2)"; else if(column == 0) {
+			vector4.x = this.a;
+			vector4.y = this.c;
+			vector4.z = 0;
+		} else if(column == 1) {
+			vector4.x = this.b;
+			vector4.y = this.d;
+			vector4.z = 0;
+		} else {
+			vector4.x = this.tx;
+			vector4.y = this.ty;
+			vector4.z = 1;
+		}
+	}
+	,copyFrom: function(sourceMatrix3) {
+		this.a = sourceMatrix3.a;
+		this.b = sourceMatrix3.b;
+		this.c = sourceMatrix3.c;
+		this.d = sourceMatrix3.d;
+		this.tx = sourceMatrix3.tx;
+		this.ty = sourceMatrix3.ty;
+	}
+	,copyRowFrom: function(row,vector4) {
+		if(row > 2) throw "Row " + row + " out of bounds (2)"; else if(row == 0) {
+			this.a = vector4.x;
+			this.c = vector4.y;
+		} else if(row == 1) {
+			this.b = vector4.x;
+			this.d = vector4.y;
+		} else {
+			this.tx = vector4.x;
+			this.ty = vector4.y;
+		}
+	}
+	,copyRowTo: function(row,vector4) {
+		if(row > 2) throw "Row " + row + " out of bounds (2)"; else if(row == 0) {
+			vector4.x = this.a;
+			vector4.y = this.b;
+			vector4.z = this.tx;
+		} else if(row == 1) {
+			vector4.x = this.c;
+			vector4.y = this.d;
+			vector4.z = this.ty;
+		} else {
+			vector4.x = 0;
+			vector4.y = 0;
+			vector4.z = 1;
+		}
+	}
+	,createBox: function(scaleX,scaleY,rotation,tx,ty) {
+		if(ty == null) ty = 0;
+		if(tx == null) tx = 0;
+		if(rotation == null) rotation = 0;
+		this.a = scaleX;
+		this.d = scaleY;
+		this.b = rotation;
+		this.tx = tx;
+		this.ty = ty;
+	}
+	,createGradientBox: function(width,height,rotation,tx,ty) {
+		if(ty == null) ty = 0;
+		if(tx == null) tx = 0;
+		if(rotation == null) rotation = 0;
+		this.a = width / 1638.4;
+		this.d = height / 1638.4;
+		if(rotation != 0) {
+			var cos = Math.cos(rotation);
+			var sin = Math.sin(rotation);
+			this.b = sin * this.d;
+			this.c = -sin * this.a;
+			this.a *= cos;
+			this.d *= cos;
+		} else {
+			this.b = 0;
+			this.c = 0;
+		}
+		this.tx = tx + width / 2;
+		this.ty = ty + height / 2;
+	}
+	,equals: function(Matrix3) {
+		return Matrix3 != null && this.tx == Matrix3.tx && this.ty == Matrix3.ty && this.a == Matrix3.a && this.b == Matrix3.b && this.c == Matrix3.c && this.d == Matrix3.d;
+	}
+	,deltaTransformVector2: function(Vector2) {
+		return new lime.math.Vector2(Vector2.x * this.a + Vector2.y * this.c,Vector2.x * this.b + Vector2.y * this.d);
+	}
+	,identity: function() {
+		this.a = 1;
+		this.b = 0;
+		this.c = 0;
+		this.d = 1;
+		this.tx = 0;
+		this.ty = 0;
+	}
+	,invert: function() {
+		var norm = this.a * this.d - this.b * this.c;
+		if(norm == 0) {
+			this.a = this.b = this.c = this.d = 0;
+			this.tx = -this.tx;
+			this.ty = -this.ty;
+		} else {
+			norm = 1.0 / norm;
+			var a1 = this.d * norm;
+			this.d = this.a * norm;
+			this.a = a1;
+			this.b *= -norm;
+			this.c *= -norm;
+			var tx1 = -this.a * this.tx - this.c * this.ty;
+			this.ty = -this.b * this.tx - this.d * this.ty;
+			this.tx = tx1;
+		}
+		return this;
+	}
+	,mult: function(m) {
+		var result = new lime.math.Matrix3(this.a,this.b,this.c,this.d,this.tx,this.ty);
+		result.concat(m);
+		return result;
+	}
+	,rotate: function(theta) {
+		var cos = Math.cos(theta);
+		var sin = Math.sin(theta);
+		var a1 = this.a * cos - this.b * sin;
+		this.b = this.a * sin + this.b * cos;
+		this.a = a1;
+		var c1 = this.c * cos - this.d * sin;
+		this.d = this.c * sin + this.d * cos;
+		this.c = c1;
+		var tx1 = this.tx * cos - this.ty * sin;
+		this.ty = this.tx * sin + this.ty * cos;
+		this.tx = tx1;
+	}
+	,scale: function(sx,sy) {
+		this.a *= sx;
+		this.b *= sy;
+		this.c *= sx;
+		this.d *= sy;
+		this.tx *= sx;
+		this.ty *= sy;
+	}
+	,setRotation: function(theta,scale) {
+		if(scale == null) scale = 1;
+		this.a = Math.cos(theta) * scale;
+		this.c = Math.sin(theta) * scale;
+		this.b = -this.c;
+		this.d = this.a;
+	}
+	,setTo: function(a,b,c,d,tx,ty) {
+		this.a = a;
+		this.b = b;
+		this.c = c;
+		this.d = d;
+		this.tx = tx;
+		this.ty = ty;
+	}
+	,to3DString: function(roundPixels) {
+		if(roundPixels == null) roundPixels = false;
+		if(roundPixels) return "Matrix33d(" + this.a + ", " + this.b + ", " + "0, 0, " + this.c + ", " + this.d + ", " + "0, 0, 0, 0, 1, 0, " + (this.tx | 0) + ", " + (this.ty | 0) + ", 0, 1)"; else return "Matrix33d(" + this.a + ", " + this.b + ", " + "0, 0, " + this.c + ", " + this.d + ", " + "0, 0, 0, 0, 1, 0, " + this.tx + ", " + this.ty + ", 0, 1)";
+	}
+	,toMozString: function() {
+		return "Matrix3(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + "px, " + this.ty + "px)";
+	}
+	,toString: function() {
+		return "Matrix3(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + ", " + this.ty + ")";
+	}
+	,transformVector2: function(pos) {
+		return new lime.math.Vector2(pos.x * this.a + pos.y * this.c + this.tx,pos.x * this.b + pos.y * this.d + this.ty);
+	}
+	,translate: function(dx,dy) {
+		var m = new lime.math.Matrix3();
+		m.tx = dx;
+		m.ty = dy;
+		this.concat(m);
+	}
+	,__cleanValues: function() {
+		this.a = Math.round(this.a * 1000) / 1000;
+		this.b = Math.round(this.b * 1000) / 1000;
+		this.c = Math.round(this.c * 1000) / 1000;
+		this.d = Math.round(this.d * 1000) / 1000;
+		this.tx = Math.round(this.tx * 10) / 10;
+		this.ty = Math.round(this.ty * 10) / 10;
+	}
+	,__transformX: function(pos) {
+		return pos.x * this.a + pos.y * this.c + this.tx;
+	}
+	,__transformY: function(pos) {
+		return pos.x * this.b + pos.y * this.d + this.ty;
+	}
+	,__translateTransformed: function(pos) {
+		this.tx = pos.x * this.a + pos.y * this.c + this.tx;
+		this.ty = pos.x * this.b + pos.y * this.d + this.ty;
+	}
+	,__class__: lime.math.Matrix3
+};
+lime.math.Rectangle = function(x,y,width,height) {
+	if(height == null) height = 0;
+	if(width == null) width = 0;
+	if(y == null) y = 0;
+	if(x == null) x = 0;
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+};
+$hxClasses["lime.math.Rectangle"] = lime.math.Rectangle;
+lime.math.Rectangle.__name__ = ["lime","math","Rectangle"];
+lime.math.Rectangle.prototype = {
+	clone: function() {
+		return new lime.math.Rectangle(this.x,this.y,this.width,this.height);
+	}
+	,contains: function(x,y) {
+		return x >= this.x && y >= this.y && x < this.get_right() && y < this.get_bottom();
+	}
+	,containsPoint: function(point) {
+		return this.contains(point.x,point.y);
+	}
+	,containsRect: function(rect) {
+		if(rect.width <= 0 || rect.height <= 0) return rect.x > this.x && rect.y > this.y && rect.get_right() < this.get_right() && rect.get_bottom() < this.get_bottom(); else return rect.x >= this.x && rect.y >= this.y && rect.get_right() <= this.get_right() && rect.get_bottom() <= this.get_bottom();
+	}
+	,copyFrom: function(sourceRect) {
+		this.x = sourceRect.x;
+		this.y = sourceRect.y;
+		this.width = sourceRect.width;
+		this.height = sourceRect.height;
+	}
+	,equals: function(toCompare) {
+		return toCompare != null && this.x == toCompare.x && this.y == toCompare.y && this.width == toCompare.width && this.height == toCompare.height;
+	}
+	,inflate: function(dx,dy) {
+		this.x -= dx;
+		this.width += dx * 2;
+		this.y -= dy;
+		this.height += dy * 2;
+	}
+	,inflatePoint: function(point) {
+		this.inflate(point.x,point.y);
+	}
+	,intersection: function(toIntersect) {
+		var x0;
+		if(this.x < toIntersect.x) x0 = toIntersect.x; else x0 = this.x;
+		var x1;
+		if(this.get_right() > toIntersect.get_right()) x1 = toIntersect.get_right(); else x1 = this.get_right();
+		if(x1 <= x0) return new lime.math.Rectangle();
+		var y0;
+		if(this.y < toIntersect.y) y0 = toIntersect.y; else y0 = this.y;
+		var y1;
+		if(this.get_bottom() > toIntersect.get_bottom()) y1 = toIntersect.get_bottom(); else y1 = this.get_bottom();
+		if(y1 <= y0) return new lime.math.Rectangle();
+		return new lime.math.Rectangle(x0,y0,x1 - x0,y1 - y0);
+	}
+	,intersects: function(toIntersect) {
+		var x0;
+		if(this.x < toIntersect.x) x0 = toIntersect.x; else x0 = this.x;
+		var x1;
+		if(this.get_right() > toIntersect.get_right()) x1 = toIntersect.get_right(); else x1 = this.get_right();
+		if(x1 <= x0) return false;
+		var y0;
+		if(this.y < toIntersect.y) y0 = toIntersect.y; else y0 = this.y;
+		var y1;
+		if(this.get_bottom() > toIntersect.get_bottom()) y1 = toIntersect.get_bottom(); else y1 = this.get_bottom();
+		return y1 > y0;
+	}
+	,isEmpty: function() {
+		return this.width <= 0 || this.height <= 0;
+	}
+	,offset: function(dx,dy) {
+		this.x += dx;
+		this.y += dy;
+	}
+	,offsetPoint: function(point) {
+		this.x += point.x;
+		this.y += point.y;
+	}
+	,setEmpty: function() {
+		this.x = this.y = this.width = this.height = 0;
+	}
+	,setTo: function(xa,ya,widtha,heighta) {
+		this.x = xa;
+		this.y = ya;
+		this.width = widtha;
+		this.height = heighta;
+	}
+	,transform: function(m) {
+		var tx0 = m.a * this.x + m.c * this.y;
+		var tx1 = tx0;
+		var ty0 = m.b * this.x + m.d * this.y;
+		var ty1 = tx0;
+		var tx = m.a * (this.x + this.width) + m.c * this.y;
+		var ty = m.b * (this.x + this.width) + m.d * this.y;
+		if(tx < tx0) tx0 = tx;
+		if(ty < ty0) ty0 = ty;
+		if(tx > tx1) tx1 = tx;
+		if(ty > ty1) ty1 = ty;
+		tx = m.a * (this.x + this.width) + m.c * (this.y + this.height);
+		ty = m.b * (this.x + this.width) + m.d * (this.y + this.height);
+		if(tx < tx0) tx0 = tx;
+		if(ty < ty0) ty0 = ty;
+		if(tx > tx1) tx1 = tx;
+		if(ty > ty1) ty1 = ty;
+		tx = m.a * this.x + m.c * (this.y + this.height);
+		ty = m.b * this.x + m.d * (this.y + this.height);
+		if(tx < tx0) tx0 = tx;
+		if(ty < ty0) ty0 = ty;
+		if(tx > tx1) tx1 = tx;
+		if(ty > ty1) ty1 = ty;
+		return new lime.math.Rectangle(tx0 + m.tx,ty0 + m.ty,tx1 - tx0,ty1 - ty0);
+	}
+	,union: function(toUnion) {
+		if(this.width == 0 || this.height == 0) return toUnion.clone(); else if(toUnion.width == 0 || toUnion.height == 0) return this.clone();
+		var x0;
+		if(this.x > toUnion.x) x0 = toUnion.x; else x0 = this.x;
+		var x1;
+		if(this.get_right() < toUnion.get_right()) x1 = toUnion.get_right(); else x1 = this.get_right();
+		var y0;
+		if(this.y > toUnion.y) y0 = toUnion.y; else y0 = this.y;
+		var y1;
+		if(this.get_bottom() < toUnion.get_bottom()) y1 = toUnion.get_bottom(); else y1 = this.get_bottom();
+		return new lime.math.Rectangle(x0,y0,x1 - x0,y1 - y0);
+	}
+	,__contract: function(x,y,width,height) {
+		if(this.width == 0 && this.height == 0) return;
+		var cacheRight = this.get_right();
+		var cacheBottom = this.get_bottom();
+		if(this.x < x) this.x = x;
+		if(this.y < y) this.y = y;
+		if(this.get_right() > x + width) this.width = x + width - this.x;
+		if(this.get_bottom() > y + height) this.height = y + height - this.y;
+	}
+	,__expand: function(x,y,width,height) {
+		if(this.width == 0 && this.height == 0) {
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			return;
+		}
+		var cacheRight = this.get_right();
+		var cacheBottom = this.get_bottom();
+		if(this.x > x) this.x = x;
+		if(this.y > y) this.y = y;
+		if(cacheRight < x + width) this.width = x + width - this.x;
+		if(cacheBottom < y + height) this.height = y + height - this.y;
+	}
+	,__toFlashRectangle: function() {
+		return null;
+	}
+	,get_bottom: function() {
+		return this.y + this.height;
+	}
+	,set_bottom: function(b) {
+		this.height = b - this.y;
+		return b;
+	}
+	,get_bottomRight: function() {
+		return new lime.math.Vector2(this.x + this.width,this.y + this.height);
+	}
+	,set_bottomRight: function(p) {
+		this.width = p.x - this.x;
+		this.height = p.y - this.y;
+		return p.clone();
+	}
+	,get_left: function() {
+		return this.x;
+	}
+	,set_left: function(l) {
+		this.width -= l - this.x;
+		this.x = l;
+		return l;
+	}
+	,get_right: function() {
+		return this.x + this.width;
+	}
+	,set_right: function(r) {
+		this.width = r - this.x;
+		return r;
+	}
+	,get_size: function() {
+		return new lime.math.Vector2(this.width,this.height);
+	}
+	,set_size: function(p) {
+		this.width = p.x;
+		this.height = p.y;
+		return p.clone();
+	}
+	,get_top: function() {
+		return this.y;
+	}
+	,set_top: function(t) {
+		this.height -= t - this.y;
+		this.y = t;
+		return t;
+	}
+	,get_topLeft: function() {
+		return new lime.math.Vector2(this.x,this.y);
+	}
+	,set_topLeft: function(p) {
+		this.x = p.x;
+		this.y = p.y;
+		return p.clone();
+	}
+	,__class__: lime.math.Rectangle
+	,__properties__: {set_topLeft:"set_topLeft",get_topLeft:"get_topLeft",set_top:"set_top",get_top:"get_top",set_size:"set_size",get_size:"get_size",set_right:"set_right",get_right:"get_right",set_left:"set_left",get_left:"get_left",set_bottomRight:"set_bottomRight",get_bottomRight:"get_bottomRight",set_bottom:"set_bottom",get_bottom:"get_bottom"}
+};
+lime.math.Vector2 = function(x,y) {
+	if(y == null) y = 0;
+	if(x == null) x = 0;
+	this.x = x;
+	this.y = y;
+};
+$hxClasses["lime.math.Vector2"] = lime.math.Vector2;
+lime.math.Vector2.__name__ = ["lime","math","Vector2"];
+lime.math.Vector2.distance = function(pt1,pt2) {
+	var dx = pt1.x - pt2.x;
+	var dy = pt1.y - pt2.y;
+	return Math.sqrt(dx * dx + dy * dy);
+};
+lime.math.Vector2.interpolate = function(pt1,pt2,f) {
+	return new lime.math.Vector2(pt2.x + f * (pt1.x - pt2.x),pt2.y + f * (pt1.y - pt2.y));
+};
+lime.math.Vector2.polar = function(len,angle) {
+	return new lime.math.Vector2(len * Math.cos(angle),len * Math.sin(angle));
+};
+lime.math.Vector2.prototype = {
+	add: function(v) {
+		return new lime.math.Vector2(v.x + this.x,v.y + this.y);
+	}
+	,clone: function() {
+		return new lime.math.Vector2(this.x,this.y);
+	}
+	,equals: function(toCompare) {
+		return toCompare != null && toCompare.x == this.x && toCompare.y == this.y;
+	}
+	,normalize: function(thickness) {
+		if(this.x == 0 && this.y == 0) return; else {
+			var norm = thickness / Math.sqrt(this.x * this.x + this.y * this.y);
+			this.x *= norm;
+			this.y *= norm;
+		}
+	}
+	,offset: function(dx,dy) {
+		this.x += dx;
+		this.y += dy;
+	}
+	,setTo: function(xa,ya) {
+		this.x = xa;
+		this.y = ya;
+	}
+	,subtract: function(v) {
+		return new lime.math.Vector2(this.x - v.x,this.y - v.y);
+	}
+	,__toFlashPoint: function() {
+		return null;
+	}
+	,get_length: function() {
+		return Math.sqrt(this.x * this.x + this.y * this.y);
+	}
+	,__class__: lime.math.Vector2
+	,__properties__: {get_length:"get_length"}
+};
+lime.math.Vector4 = function(x,y,z,w) {
+	if(w == null) w = 0.;
+	if(z == null) z = 0.;
+	if(y == null) y = 0.;
+	if(x == null) x = 0.;
+	this.w = w;
+	this.x = x;
+	this.y = y;
+	this.z = z;
+};
+$hxClasses["lime.math.Vector4"] = lime.math.Vector4;
+lime.math.Vector4.__name__ = ["lime","math","Vector4"];
+lime.math.Vector4.__properties__ = {get_Z_AXIS:"get_Z_AXIS",get_Y_AXIS:"get_Y_AXIS",get_X_AXIS:"get_X_AXIS"}
+lime.math.Vector4.X_AXIS = null;
+lime.math.Vector4.Y_AXIS = null;
+lime.math.Vector4.Z_AXIS = null;
+lime.math.Vector4.angleBetween = function(a,b) {
+	var a0 = new lime.math.Vector4(a.x,a.y,a.z,a.w);
+	a0.normalize();
+	var b0 = new lime.math.Vector4(b.x,b.y,b.z,b.w);
+	b0.normalize();
+	return Math.acos(a0.x * b0.x + a0.y * b0.y + a0.z * b0.z);
+};
+lime.math.Vector4.distance = function(pt1,pt2) {
+	var x = pt2.x - pt1.x;
+	var y = pt2.y - pt1.y;
+	var z = pt2.z - pt1.z;
+	return Math.sqrt(x * x + y * y + z * z);
+};
+lime.math.Vector4.get_X_AXIS = function() {
+	return new lime.math.Vector4(1,0,0);
+};
+lime.math.Vector4.get_Y_AXIS = function() {
+	return new lime.math.Vector4(0,1,0);
+};
+lime.math.Vector4.get_Z_AXIS = function() {
+	return new lime.math.Vector4(0,0,1);
+};
+lime.math.Vector4.prototype = {
+	add: function(a) {
+		return new lime.math.Vector4(this.x + a.x,this.y + a.y,this.z + a.z);
+	}
+	,clone: function() {
+		return new lime.math.Vector4(this.x,this.y,this.z,this.w);
+	}
+	,copyFrom: function(sourceVector4) {
+		this.x = sourceVector4.x;
+		this.y = sourceVector4.y;
+		this.z = sourceVector4.z;
+	}
+	,crossProduct: function(a) {
+		return new lime.math.Vector4(this.y * a.z - this.z * a.y,this.z * a.x - this.x * a.z,this.x * a.y - this.y * a.x,1);
+	}
+	,decrementBy: function(a) {
+		this.x -= a.x;
+		this.y -= a.y;
+		this.z -= a.z;
+	}
+	,dotProduct: function(a) {
+		return this.x * a.x + this.y * a.y + this.z * a.z;
+	}
+	,equals: function(toCompare,allFour) {
+		if(allFour == null) allFour = false;
+		return this.x == toCompare.x && this.y == toCompare.y && this.z == toCompare.z && (!allFour || this.w == toCompare.w);
+	}
+	,incrementBy: function(a) {
+		this.x += a.x;
+		this.y += a.y;
+		this.z += a.z;
+	}
+	,nearEquals: function(toCompare,tolerance,allFour) {
+		if(allFour == null) allFour = false;
+		return Math.abs(this.x - toCompare.x) < tolerance && Math.abs(this.y - toCompare.y) < tolerance && Math.abs(this.z - toCompare.z) < tolerance && (!allFour || Math.abs(this.w - toCompare.w) < tolerance);
+	}
+	,negate: function() {
+		this.x *= -1;
+		this.y *= -1;
+		this.z *= -1;
+	}
+	,normalize: function() {
+		var l = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+		if(l != 0) {
+			this.x /= l;
+			this.y /= l;
+			this.z /= l;
+		}
+		return l;
+	}
+	,project: function() {
+		this.x /= this.w;
+		this.y /= this.w;
+		this.z /= this.w;
+	}
+	,scaleBy: function(s) {
+		this.x *= s;
+		this.y *= s;
+		this.z *= s;
+	}
+	,setTo: function(xa,ya,za) {
+		this.x = xa;
+		this.y = ya;
+		this.z = za;
+	}
+	,subtract: function(a) {
+		return new lime.math.Vector4(this.x - a.x,this.y - a.y,this.z - a.z);
+	}
+	,toString: function() {
+		return "Vector4(" + this.x + ", " + this.y + ", " + this.z + ")";
+	}
+	,get_length: function() {
+		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+	}
+	,get_lengthSquared: function() {
+		return this.x * this.x + this.y * this.y + this.z * this.z;
+	}
+	,__class__: lime.math.Vector4
+	,__properties__: {get_lengthSquared:"get_lengthSquared",get_length:"get_length"}
+};
+lime.net = {};
+lime.net.URLLoader = function(request) {
+	this.onSecurityError = new lime.app.Event();
+	this.onProgress = new lime.app.Event();
+	this.onOpen = new lime.app.Event();
+	this.onIOError = new lime.app.Event();
+	this.onHTTPStatus = new lime.app.Event();
+	this.onComplete = new lime.app.Event();
+	this.bytesLoaded = 0;
+	this.bytesTotal = 0;
+	this.set_dataFormat(lime.net.URLLoaderDataFormat.TEXT);
+	this.__data = "";
+	this.__curl = lime.net.curl.CURLEasy.init();
+	if(request != null) this.load(request);
+};
+$hxClasses["lime.net.URLLoader"] = lime.net.URLLoader;
+lime.net.URLLoader.__name__ = ["lime","net","URLLoader"];
+lime.net.URLLoader.prototype = {
+	close: function() {
+		lime.net.curl.CURLEasy.cleanup(this.__curl);
+	}
+	,getData: function() {
+		return null;
+	}
+	,load: function(request) {
+		this.requestUrl(request.url,request.method,request.data,request.formatRequestHeaders());
+	}
+	,registerEvents: function(subject) {
+		var _g = this;
+		var self = this;
+		if(typeof XMLHttpRequestProgressEvent != "undefined") subject.addEventListener("progress",$bind(this,this.__onProgress),false);
+		subject.onreadystatechange = function() {
+			if(subject.readyState != 4) return;
+			var s;
+			try {
+				s = subject.status;
+			} catch( e ) {
+				s = null;
+			}
+			if(s == undefined) s = null;
+			if(s != null) {
+				var listeners = self.onHTTPStatus.listeners;
+				var repeat = self.onHTTPStatus.repeat;
+				var length = listeners.length;
+				var i = 0;
+				while(i < length) {
+					listeners[i](_g,s);
+					if(!repeat[i]) {
+						self.onHTTPStatus.remove(listeners[i]);
+						length--;
+					} else i++;
+				}
+			}
+			if(s != null && s >= 200 && s < 400) self.__onData(subject.response); else if(s == null) {
+				var listeners1 = self.onIOError.listeners;
+				var repeat1 = self.onIOError.repeat;
+				var length1 = listeners1.length;
+				var i1 = 0;
+				while(i1 < length1) {
+					listeners1[i1](_g,"Failed to connect or resolve host");
+					if(!repeat1[i1]) {
+						self.onIOError.remove(listeners1[i1]);
+						length1--;
+					} else i1++;
+				}
+			} else if(s == 12029) {
+				var listeners2 = self.onIOError.listeners;
+				var repeat2 = self.onIOError.repeat;
+				var length2 = listeners2.length;
+				var i2 = 0;
+				while(i2 < length2) {
+					listeners2[i2](_g,"Failed to connect to host");
+					if(!repeat2[i2]) {
+						self.onIOError.remove(listeners2[i2]);
+						length2--;
+					} else i2++;
+				}
+			} else if(s == 12007) {
+				var listeners3 = self.onIOError.listeners;
+				var repeat3 = self.onIOError.repeat;
+				var length3 = listeners3.length;
+				var i3 = 0;
+				while(i3 < length3) {
+					listeners3[i3](_g,"Unknown host");
+					if(!repeat3[i3]) {
+						self.onIOError.remove(listeners3[i3]);
+						length3--;
+					} else i3++;
+				}
+			} else if(s == 0) {
+				var listeners4 = self.onIOError.listeners;
+				var repeat4 = self.onIOError.repeat;
+				var length4 = listeners4.length;
+				var i4 = 0;
+				while(i4 < length4) {
+					listeners4[i4](_g,"Unable to make request (may be blocked due to cross-domain permissions)");
+					if(!repeat4[i4]) {
+						self.onIOError.remove(listeners4[i4]);
+						length4--;
+					} else i4++;
+				}
+				var listeners5 = self.onSecurityError.listeners;
+				var repeat5 = self.onSecurityError.repeat;
+				var length5 = listeners5.length;
+				var i5 = 0;
+				while(i5 < length5) {
+					listeners5[i5](_g,"Unable to make request (may be blocked due to cross-domain permissions)");
+					if(!repeat5[i5]) {
+						self.onSecurityError.remove(listeners5[i5]);
+						length5--;
+					} else i5++;
+				}
+			} else {
+				var listeners6 = self.onIOError.listeners;
+				var repeat6 = self.onIOError.repeat;
+				var length6 = listeners6.length;
+				var i6 = 0;
+				while(i6 < length6) {
+					listeners6[i6](_g,"Http Error #" + subject.status);
+					if(!repeat6[i6]) {
+						self.onIOError.remove(listeners6[i6]);
+						length6--;
+					} else i6++;
+				}
+			}
+		};
+	}
+	,requestUrl: function(url,method,data,requestHeaders) {
+		var xmlHttpRequest = new XMLHttpRequest();
+		this.registerEvents(xmlHttpRequest);
+		var uri = "";
+		if(js.Boot.__instanceof(data,lime.utils.ByteArray)) {
+			var data1 = data;
+			var _g = this.dataFormat;
+			switch(_g[1]) {
+			case 0:
+				uri = data1.data.buffer;
+				break;
+			default:
+				uri = data1.readUTFBytes(data1.length);
+			}
+		} else if(js.Boot.__instanceof(data,lime.net.URLVariables)) {
+			var data2 = data;
+			var _g1 = 0;
+			var _g11 = Reflect.fields(data2);
+			while(_g1 < _g11.length) {
+				var p = _g11[_g1];
+				++_g1;
+				if(uri.length != 0) uri += "&";
+				uri += encodeURIComponent(p) + "=" + StringTools.urlEncode(Reflect.field(data2,p));
+			}
+		} else if(data != null) uri = data.toString();
+		try {
+			if(method == "GET" && uri != null && uri != "") {
+				var question = url.split("?").length <= 1;
+				xmlHttpRequest.open("GET",url + (question?"?":"&") + Std.string(uri),true);
+				uri = "";
+			} else xmlHttpRequest.open(js.Boot.__cast(method , String),url,true);
+		} catch( e ) {
+			var listeners = this.onIOError.listeners;
+			var repeat = this.onIOError.repeat;
+			var length = listeners.length;
+			var i = 0;
+			while(i < length) {
+				listeners[i](this,e.toString());
+				if(!repeat[i]) {
+					this.onIOError.remove(listeners[i]);
+					length--;
+				} else i++;
+			}
+			return;
+		}
+		var _g2 = this.dataFormat;
+		switch(_g2[1]) {
+		case 0:
+			xmlHttpRequest.responseType = "arraybuffer";
+			break;
+		default:
+		}
+		var _g3 = 0;
+		while(_g3 < requestHeaders.length) {
+			var header = requestHeaders[_g3];
+			++_g3;
+			xmlHttpRequest.setRequestHeader(header.name,header.value);
+		}
+		xmlHttpRequest.send(uri);
+		var listeners1 = this.onOpen.listeners;
+		var repeat1 = this.onOpen.repeat;
+		var length1 = listeners1.length;
+		var i1 = 0;
+		while(i1 < length1) {
+			listeners1[i1](this);
+			if(!repeat1[i1]) {
+				this.onOpen.remove(listeners1[i1]);
+				length1--;
+			} else i1++;
+		}
+		this.getData = function() {
+			if(xmlHttpRequest.response != null) return xmlHttpRequest.response; else return xmlHttpRequest.responseText;
+		};
+	}
+	,__onData: function(_) {
+		var content = this.getData();
+		var _g = this.dataFormat;
+		switch(_g[1]) {
+		case 0:
+			this.data = lime.utils.ByteArray.__ofBuffer(content);
+			break;
+		default:
+			this.data = Std.string(content);
+		}
+		var listeners = this.onComplete.listeners;
+		var repeat = this.onComplete.repeat;
+		var length = listeners.length;
+		var i = 0;
+		while(i < length) {
+			listeners[i](this);
+			if(!repeat[i]) {
+				this.onComplete.remove(listeners[i]);
+				length--;
+			} else i++;
+		}
+	}
+	,__onProgress: function(event) {
+		this.bytesLoaded = event.loaded;
+		this.bytesTotal = event.total;
+		var listeners = this.onProgress.listeners;
+		var repeat = this.onProgress.repeat;
+		var length = listeners.length;
+		var i = 0;
+		while(i < length) {
+			listeners[i](this,this.bytesLoaded,this.bytesTotal);
+			if(!repeat[i]) {
+				this.onProgress.remove(listeners[i]);
+				length--;
+			} else i++;
+		}
+	}
+	,set_dataFormat: function(inputVal) {
+		if(inputVal == lime.net.URLLoaderDataFormat.BINARY && !Reflect.hasField(window,"ArrayBuffer")) this.dataFormat = lime.net.URLLoaderDataFormat.TEXT; else this.dataFormat = inputVal;
+		return this.dataFormat;
+	}
+	,__class__: lime.net.URLLoader
+	,__properties__: {set_dataFormat:"set_dataFormat"}
+};
+lime.net.URLLoaderDataFormat = $hxClasses["lime.net.URLLoaderDataFormat"] = { __ename__ : ["lime","net","URLLoaderDataFormat"], __constructs__ : ["BINARY","TEXT","VARIABLES"] };
+lime.net.URLLoaderDataFormat.BINARY = ["BINARY",0];
+lime.net.URLLoaderDataFormat.BINARY.toString = $estr;
+lime.net.URLLoaderDataFormat.BINARY.__enum__ = lime.net.URLLoaderDataFormat;
+lime.net.URLLoaderDataFormat.TEXT = ["TEXT",1];
+lime.net.URLLoaderDataFormat.TEXT.toString = $estr;
+lime.net.URLLoaderDataFormat.TEXT.__enum__ = lime.net.URLLoaderDataFormat;
+lime.net.URLLoaderDataFormat.VARIABLES = ["VARIABLES",2];
+lime.net.URLLoaderDataFormat.VARIABLES.toString = $estr;
+lime.net.URLLoaderDataFormat.VARIABLES.__enum__ = lime.net.URLLoaderDataFormat;
+lime.net.URLRequest = function(inURL) {
+	if(inURL != null) this.url = inURL;
+	this.requestHeaders = [];
+	this.method = "GET";
+	this.contentType = null;
+};
+$hxClasses["lime.net.URLRequest"] = lime.net.URLRequest;
+lime.net.URLRequest.__name__ = ["lime","net","URLRequest"];
+lime.net.URLRequest.prototype = {
+	formatRequestHeaders: function() {
+		var res = this.requestHeaders;
+		if(res == null) res = [];
+		if(this.method == "GET" || this.data == null) return res;
+		if(typeof(this.data) == "string" || js.Boot.__instanceof(this.data,lime.utils.ByteArray)) {
+			res = res.slice();
+			res.push(new lime.net.URLRequestHeader("Content-Type",this.contentType != null?this.contentType:"application/x-www-form-urlencoded"));
+		}
+		return res;
+	}
+	,__class__: lime.net.URLRequest
+};
+lime.net.URLRequestHeader = function(name,value) {
+	if(value == null) value = "";
+	if(name == null) name = "";
+	this.name = name;
+	this.value = value;
+};
+$hxClasses["lime.net.URLRequestHeader"] = lime.net.URLRequestHeader;
+lime.net.URLRequestHeader.__name__ = ["lime","net","URLRequestHeader"];
+lime.net.URLRequestHeader.prototype = {
+	__class__: lime.net.URLRequestHeader
+};
+lime.net._URLRequestMethod = {};
+lime.net._URLRequestMethod.URLRequestMethod_Impl_ = function() { };
+$hxClasses["lime.net._URLRequestMethod.URLRequestMethod_Impl_"] = lime.net._URLRequestMethod.URLRequestMethod_Impl_;
+lime.net._URLRequestMethod.URLRequestMethod_Impl_.__name__ = ["lime","net","_URLRequestMethod","URLRequestMethod_Impl_"];
+lime.net.URLVariables = function(inEncoded) {
+	if(inEncoded != null) this.decode(inEncoded);
+};
+$hxClasses["lime.net.URLVariables"] = lime.net.URLVariables;
+lime.net.URLVariables.__name__ = ["lime","net","URLVariables"];
+lime.net.URLVariables.prototype = {
+	decode: function(inVars) {
+		var fields = Reflect.fields(this);
+		var _g = 0;
+		while(_g < fields.length) {
+			var f = fields[_g];
+			++_g;
+			Reflect.deleteField(this,f);
+		}
+		var fields1 = inVars.split(";").join("&").split("&");
+		var _g1 = 0;
+		while(_g1 < fields1.length) {
+			var f1 = fields1[_g1];
+			++_g1;
+			var eq = f1.indexOf("=");
+			if(eq > 0) Reflect.setField(this,StringTools.urlDecode(HxOverrides.substr(f1,0,eq)),StringTools.urlDecode(HxOverrides.substr(f1,eq + 1,null))); else if(eq != 0) Reflect.setField(this,decodeURIComponent(f1.split("+").join(" ")),"");
+		}
+	}
+	,toString: function() {
+		var result = new Array();
+		var fields = Reflect.fields(this);
+		var _g = 0;
+		while(_g < fields.length) {
+			var f = fields[_g];
+			++_g;
+			result.push(encodeURIComponent(f) + "=" + StringTools.urlEncode(Reflect.field(this,f)));
+		}
+		return result.join("&");
+	}
+	,__class__: lime.net.URLVariables
+};
+lime.net.curl = {};
+lime.net.curl._CURL = {};
+lime.net.curl._CURL.CURL_Impl_ = function() { };
+$hxClasses["lime.net.curl._CURL.CURL_Impl_"] = lime.net.curl._CURL.CURL_Impl_;
+lime.net.curl._CURL.CURL_Impl_.__name__ = ["lime","net","curl","_CURL","CURL_Impl_"];
+lime.net.curl._CURL.CURL_Impl_.getDate = function(date,now) {
+	return 0;
+};
+lime.net.curl._CURL.CURL_Impl_.globalCleanup = function() {
+};
+lime.net.curl._CURL.CURL_Impl_.globalInit = function(flags) {
+	return 0;
+};
+lime.net.curl._CURL.CURL_Impl_.version = function() {
+	return null;
+};
+lime.net.curl._CURL.CURL_Impl_.versionInfo = function(type) {
+	return null;
+};
+lime.net.curl._CURL.CURL_Impl_.intGt = function(a,b) {
+	return a > b;
+};
+lime.net.curl._CURLCode = {};
+lime.net.curl._CURLCode.CURLCode_Impl_ = function() { };
+$hxClasses["lime.net.curl._CURLCode.CURLCode_Impl_"] = lime.net.curl._CURLCode.CURLCode_Impl_;
+lime.net.curl._CURLCode.CURLCode_Impl_.__name__ = ["lime","net","curl","_CURLCode","CURLCode_Impl_"];
+lime.net.curl.CURLEasy = function() { };
+$hxClasses["lime.net.curl.CURLEasy"] = lime.net.curl.CURLEasy;
+lime.net.curl.CURLEasy.__name__ = ["lime","net","curl","CURLEasy"];
+lime.net.curl.CURLEasy.cleanup = function(handle) {
+};
+lime.net.curl.CURLEasy.duphandle = function(handle) {
+	return 0;
+};
+lime.net.curl.CURLEasy.escape = function(handle,url,length) {
+	return null;
+};
+lime.net.curl.CURLEasy.getinfo = function(handle,info) {
+	return null;
+};
+lime.net.curl.CURLEasy.init = function() {
+	return 0;
+};
+lime.net.curl.CURLEasy.pause = function(handle,bitMask) {
+	return 0;
+};
+lime.net.curl.CURLEasy.perform = function(handle) {
+	return 0;
+};
+lime.net.curl.CURLEasy.reset = function(handle) {
+	return 0;
+};
+lime.net.curl.CURLEasy.setopt = function(handle,option,parameter) {
+	return 0;
+};
+lime.net.curl.CURLEasy.strerror = function(code) {
+	return null;
+};
+lime.net.curl.CURLEasy.unescape = function(handle,url,inLength,outLength) {
+	return null;
+};
+lime.net.curl._CURLInfo = {};
+lime.net.curl._CURLInfo.CURLInfo_Impl_ = function() { };
+$hxClasses["lime.net.curl._CURLInfo.CURLInfo_Impl_"] = lime.net.curl._CURLInfo.CURLInfo_Impl_;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.__name__ = ["lime","net","curl","_CURLInfo","CURLInfo_Impl_"];
+lime.net.curl._CURLOption = {};
+lime.net.curl._CURLOption.CURLOption_Impl_ = function() { };
+$hxClasses["lime.net.curl._CURLOption.CURLOption_Impl_"] = lime.net.curl._CURLOption.CURLOption_Impl_;
+lime.net.curl._CURLOption.CURLOption_Impl_.__name__ = ["lime","net","curl","_CURLOption","CURLOption_Impl_"];
+lime.net.curl._CURLVersion = {};
+lime.net.curl._CURLVersion.CURLVersion_Impl_ = function() { };
+$hxClasses["lime.net.curl._CURLVersion.CURLVersion_Impl_"] = lime.net.curl._CURLVersion.CURLVersion_Impl_;
+lime.net.curl._CURLVersion.CURLVersion_Impl_.__name__ = ["lime","net","curl","_CURLVersion","CURLVersion_Impl_"];
+lime.system = {};
+lime.system.System = function() { };
+$hxClasses["lime.system.System"] = lime.system.System;
+lime.system.System.__name__ = ["lime","system","System"];
+lime.system.System.disableCFFI = null;
+lime.system.System.embed = $hx_exports.lime.embed = function(elementName,width,height,background) {
+	var element = null;
+	if(elementName != null) element = window.document.getElementById(elementName); else element = window.document.createElement("div");
+	var color = null;
+	if(background != null) {
+		background = StringTools.replace(background,"#","");
+		if(background.indexOf("0x") > -1) color = Std.parseInt(background); else color = Std.parseInt("0x" + background);
+	}
+	if(width == null) width = 0;
+	if(height == null) height = 0;
+	ApplicationMain.config.background = color;
+	ApplicationMain.config.element = element;
+	ApplicationMain.config.width = width;
+	ApplicationMain.config.height = height;
+	ApplicationMain.create();
+};
+lime.system.System.findHaxeLib = function(library) {
+	return "";
+};
+lime.system.System.load = function(library,method,args,lazy) {
+	if(lazy == null) lazy = false;
+	if(args == null) args = 0;
+	if(lime.system.System.disableCFFI) return Reflect.makeVarArgs(function(_) {
+		return { };
+	});
+	if(lazy) {
+	}
+	var result = null;
+	return result;
+};
+lime.system.System.sysName = function() {
+	return null;
+};
+lime.system.System.tryLoad = function(name,library,func,args) {
+	return null;
+};
+lime.system.System.loaderTrace = function(message) {
+};
+lime.ui = {};
+lime.ui._KeyCode = {};
+lime.ui._KeyCode.KeyCode_Impl_ = function() { };
+$hxClasses["lime.ui._KeyCode.KeyCode_Impl_"] = lime.ui._KeyCode.KeyCode_Impl_;
+lime.ui._KeyCode.KeyCode_Impl_.__name__ = ["lime","ui","_KeyCode","KeyCode_Impl_"];
+lime.ui.KeyEventManager = function() { };
+$hxClasses["lime.ui.KeyEventManager"] = lime.ui.KeyEventManager;
+lime.ui.KeyEventManager.__name__ = ["lime","ui","KeyEventManager"];
+lime.ui.KeyEventManager.eventInfo = null;
+lime.ui.KeyEventManager.create = function() {
+	lime.ui.KeyEventManager.eventInfo = new lime.ui._KeyEventManager.KeyEventInfo();
+	window.addEventListener("keydown",lime.ui.KeyEventManager.handleEvent,false);
+	window.addEventListener("keyup",lime.ui.KeyEventManager.handleEvent,false);
+};
+lime.ui.KeyEventManager.convertKeyCode = function(keyCode) {
+	if(keyCode >= 65 && keyCode <= 90) return keyCode + 32;
+	switch(keyCode) {
+	case 16:
+		return 1073742049;
+	case 17:
+		return 1073742048;
+	case 18:
+		return 1073742050;
+	case 20:
+		return 1073741881;
+	case 144:
+		return 1073741907;
+	case 37:
+		return 1073741904;
+	case 38:
+		return 1073741906;
+	case 39:
+		return 1073741903;
+	case 40:
+		return 1073741905;
+	case 45:
+		return 1073741897;
+	case 46:
+		return 127;
+	case 36:
+		return 1073741898;
+	case 35:
+		return 1073741901;
+	case 33:
+		return 1073741899;
+	case 34:
+		return 1073741902;
+	case 112:
+		return 1073741882;
+	case 113:
+		return 1073741883;
+	case 114:
+		return 1073741884;
+	case 115:
+		return 1073741885;
+	case 116:
+		return 1073741886;
+	case 117:
+		return 1073741887;
+	case 118:
+		return 1073741888;
+	case 119:
+		return 1073741889;
+	case 120:
+		return 1073741890;
+	case 121:
+		return 1073741891;
+	case 122:
+		return 1073741892;
+	case 123:
+		return 1073741893;
+	}
+	return keyCode;
+};
+lime.ui.KeyEventManager.handleEvent = function(event) {
+	var _g = event.keyCode;
+	switch(_g) {
+	case 32:case 37:case 38:case 39:case 40:
+		event.preventDefault();
+		break;
+	}
+	lime.ui.KeyEventManager.eventInfo.keyCode = lime.ui.KeyEventManager.convertKeyCode(event.keyCode != null?event.keyCode:event.which);
+	if(event.type == "keydown") lime.ui.KeyEventManager.eventInfo.type = 0; else lime.ui.KeyEventManager.eventInfo.type = 1;
+	var _g1 = lime.ui.KeyEventManager.eventInfo.type;
+	switch(_g1) {
+	case 0:
+		var listeners = lime.ui.KeyEventManager.onKeyDown.listeners;
+		var repeat = lime.ui.KeyEventManager.onKeyDown.repeat;
+		var length = listeners.length;
+		var i = 0;
+		while(i < length) {
+			listeners[i](lime.ui.KeyEventManager.eventInfo.keyCode,lime.ui.KeyEventManager.eventInfo.modifier);
+			if(!repeat[i]) {
+				lime.ui.KeyEventManager.onKeyDown.remove(listeners[i]);
+				length--;
+			} else i++;
+		}
+		break;
+	case 1:
+		var listeners1 = lime.ui.KeyEventManager.onKeyUp.listeners;
+		var repeat1 = lime.ui.KeyEventManager.onKeyUp.repeat;
+		var length1 = listeners1.length;
+		var i1 = 0;
+		while(i1 < length1) {
+			listeners1[i1](lime.ui.KeyEventManager.eventInfo.keyCode,lime.ui.KeyEventManager.eventInfo.modifier);
+			if(!repeat1[i1]) {
+				lime.ui.KeyEventManager.onKeyUp.remove(listeners1[i1]);
+				length1--;
+			} else i1++;
+		}
+		break;
+	}
+};
+lime.ui._KeyEventManager = {};
+lime.ui._KeyEventManager.KeyEventInfo = function(type,keyCode,modifier) {
+	if(modifier == null) modifier = 0;
+	if(keyCode == null) keyCode = 0;
+	this.type = type;
+	this.keyCode = keyCode;
+	this.modifier = modifier;
+};
+$hxClasses["lime.ui._KeyEventManager.KeyEventInfo"] = lime.ui._KeyEventManager.KeyEventInfo;
+lime.ui._KeyEventManager.KeyEventInfo.__name__ = ["lime","ui","_KeyEventManager","KeyEventInfo"];
+lime.ui._KeyEventManager.KeyEventInfo.prototype = {
+	clone: function() {
+		return new lime.ui._KeyEventManager.KeyEventInfo(this.type,this.keyCode,this.modifier);
+	}
+	,__class__: lime.ui._KeyEventManager.KeyEventInfo
+};
+lime.ui._KeyEventManager.KeyEventType_Impl_ = function() { };
+$hxClasses["lime.ui._KeyEventManager.KeyEventType_Impl_"] = lime.ui._KeyEventManager.KeyEventType_Impl_;
+lime.ui._KeyEventManager.KeyEventType_Impl_.__name__ = ["lime","ui","_KeyEventManager","KeyEventType_Impl_"];
+lime.ui.MouseEventManager = function() { };
+$hxClasses["lime.ui.MouseEventManager"] = lime.ui.MouseEventManager;
+lime.ui.MouseEventManager.__name__ = ["lime","ui","MouseEventManager"];
+lime.ui.MouseEventManager.created = null;
+lime.ui.MouseEventManager.eventInfo = null;
+lime.ui.MouseEventManager.window = null;
+lime.ui.MouseEventManager.create = function() {
+	lime.ui.MouseEventManager.eventInfo = new lime.ui._MouseEventManager.MouseEventInfo();
+};
+lime.ui.MouseEventManager.handleEvent = function(event) {
+	var _g = event.type;
+	switch(_g) {
+	case "mousedown":
+		lime.ui.MouseEventManager.eventInfo.type = 0;
+		break;
+	case "mouseup":
+		lime.ui.MouseEventManager.eventInfo.type = 1;
+		break;
+	case "mousemove":
+		lime.ui.MouseEventManager.eventInfo.type = 2;
+		break;
+	case "wheel":
+		lime.ui.MouseEventManager.eventInfo.type = 3;
+		break;
+	default:
+		lime.ui.MouseEventManager.eventInfo.type = null;
+	}
+	if(lime.ui.MouseEventManager.eventInfo.type != 3) {
+		if(lime.ui.MouseEventManager.window != null && lime.ui.MouseEventManager.window.element != null) {
+			if(lime.ui.MouseEventManager.window.canvas != null) {
+				var rect = lime.ui.MouseEventManager.window.canvas.getBoundingClientRect();
+				lime.ui.MouseEventManager.eventInfo.x = (event.clientX - rect.left) * (lime.ui.MouseEventManager.window.width / rect.width);
+				lime.ui.MouseEventManager.eventInfo.y = (event.clientY - rect.top) * (lime.ui.MouseEventManager.window.height / rect.height);
+			} else if(lime.ui.MouseEventManager.window.div != null) {
+				var rect1 = lime.ui.MouseEventManager.window.div.getBoundingClientRect();
+				lime.ui.MouseEventManager.eventInfo.x = event.clientX - rect1.left;
+				lime.ui.MouseEventManager.eventInfo.y = event.clientY - rect1.top;
+			} else {
+				var rect2 = lime.ui.MouseEventManager.window.element.getBoundingClientRect();
+				lime.ui.MouseEventManager.eventInfo.x = (event.clientX - rect2.left) * (lime.ui.MouseEventManager.window.width / rect2.width);
+				lime.ui.MouseEventManager.eventInfo.y = (event.clientY - rect2.top) * (lime.ui.MouseEventManager.window.height / rect2.height);
+			}
+		} else {
+			lime.ui.MouseEventManager.eventInfo.x = event.clientX;
+			lime.ui.MouseEventManager.eventInfo.y = event.clientY;
+		}
+	} else {
+		lime.ui.MouseEventManager.eventInfo.x = event.deltaX;
+		lime.ui.MouseEventManager.eventInfo.y = event.deltaY;
+	}
+	lime.ui.MouseEventManager.eventInfo.button = event.button;
+	var _g1 = lime.ui.MouseEventManager.eventInfo.type;
+	switch(_g1) {
+	case 0:
+		var listeners = lime.ui.MouseEventManager.onMouseDown.listeners;
+		var repeat = lime.ui.MouseEventManager.onMouseDown.repeat;
+		var length = listeners.length;
+		var i = 0;
+		while(i < length) {
+			listeners[i](lime.ui.MouseEventManager.eventInfo.x,lime.ui.MouseEventManager.eventInfo.y,lime.ui.MouseEventManager.eventInfo.button);
+			if(!repeat[i]) {
+				lime.ui.MouseEventManager.onMouseDown.remove(listeners[i]);
+				length--;
+			} else i++;
+		}
+		break;
+	case 1:
+		var listeners1 = lime.ui.MouseEventManager.onMouseUp.listeners;
+		var repeat1 = lime.ui.MouseEventManager.onMouseUp.repeat;
+		var length1 = listeners1.length;
+		var i1 = 0;
+		while(i1 < length1) {
+			listeners1[i1](lime.ui.MouseEventManager.eventInfo.x,lime.ui.MouseEventManager.eventInfo.y,lime.ui.MouseEventManager.eventInfo.button);
+			if(!repeat1[i1]) {
+				lime.ui.MouseEventManager.onMouseUp.remove(listeners1[i1]);
+				length1--;
+			} else i1++;
+		}
+		break;
+	case 2:
+		var listeners2 = lime.ui.MouseEventManager.onMouseMove.listeners;
+		var repeat2 = lime.ui.MouseEventManager.onMouseMove.repeat;
+		var length2 = listeners2.length;
+		var i2 = 0;
+		while(i2 < length2) {
+			listeners2[i2](lime.ui.MouseEventManager.eventInfo.x,lime.ui.MouseEventManager.eventInfo.y,lime.ui.MouseEventManager.eventInfo.button);
+			if(!repeat2[i2]) {
+				lime.ui.MouseEventManager.onMouseMove.remove(listeners2[i2]);
+				length2--;
+			} else i2++;
+		}
+		break;
+	case 3:
+		var listeners3 = lime.ui.MouseEventManager.onMouseWheel.listeners;
+		var repeat3 = lime.ui.MouseEventManager.onMouseWheel.repeat;
+		var length3 = listeners3.length;
+		var i3 = 0;
+		while(i3 < length3) {
+			listeners3[i3](lime.ui.MouseEventManager.eventInfo.x,lime.ui.MouseEventManager.eventInfo.y);
+			if(!repeat3[i3]) {
+				lime.ui.MouseEventManager.onMouseWheel.remove(listeners3[i3]);
+				length3--;
+			} else i3++;
+		}
+		break;
+	}
+};
+lime.ui.MouseEventManager.registerWindow = function(_window) {
+	var events = ["mousedown","mousemove","mouseup","wheel"];
+	var _g = 0;
+	while(_g < events.length) {
+		var event = events[_g];
+		++_g;
+		_window.element.addEventListener(event,lime.ui.MouseEventManager.handleEvent,true);
+	}
+	lime.ui.MouseEventManager.window = _window;
+	window.document.addEventListener("dragstart",function(e) {
+		if(e.target.nodeName.toLowerCase() == "img") {
+			e.preventDefault();
+			return false;
+		}
+		return true;
+	},false);
+};
+lime.ui._MouseEventManager = {};
+lime.ui._MouseEventManager.MouseEventInfo = function(type,x,y,button) {
+	if(button == null) button = 0;
+	if(y == null) y = 0;
+	if(x == null) x = 0;
+	this.type = type;
+	this.x = x;
+	this.y = y;
+	this.button = button;
+};
+$hxClasses["lime.ui._MouseEventManager.MouseEventInfo"] = lime.ui._MouseEventManager.MouseEventInfo;
+lime.ui._MouseEventManager.MouseEventInfo.__name__ = ["lime","ui","_MouseEventManager","MouseEventInfo"];
+lime.ui._MouseEventManager.MouseEventInfo.prototype = {
+	clone: function() {
+		return new lime.ui._MouseEventManager.MouseEventInfo(this.type,this.x,this.y,this.button);
+	}
+	,__class__: lime.ui._MouseEventManager.MouseEventInfo
+};
+lime.ui._MouseEventManager.MouseEventType_Impl_ = function() { };
+$hxClasses["lime.ui._MouseEventManager.MouseEventType_Impl_"] = lime.ui._MouseEventManager.MouseEventType_Impl_;
+lime.ui._MouseEventManager.MouseEventType_Impl_.__name__ = ["lime","ui","_MouseEventManager","MouseEventType_Impl_"];
+lime.ui.TouchEventManager = function() { };
+$hxClasses["lime.ui.TouchEventManager"] = lime.ui.TouchEventManager;
+lime.ui.TouchEventManager.__name__ = ["lime","ui","TouchEventManager"];
+lime.ui.TouchEventManager.eventInfo = null;
+lime.ui.TouchEventManager.window = null;
+lime.ui.TouchEventManager.create = function() {
+	lime.ui.TouchEventManager.eventInfo = new lime.ui._TouchEventManager.TouchEventInfo();
+};
+lime.ui.TouchEventManager.handleEvent = function(event) {
+	event.preventDefault();
+	var _g = event.type;
+	switch(_g) {
+	case "touchstart":
+		lime.ui.TouchEventManager.eventInfo.type = 0;
+		break;
+	case "touchmove":
+		lime.ui.TouchEventManager.eventInfo.type = 2;
+		break;
+	case "touchend":
+		lime.ui.TouchEventManager.eventInfo.type = 1;
+		break;
+	default:
+		lime.ui.TouchEventManager.eventInfo.type = null;
+	}
+	var touch = event.changedTouches[0];
+	lime.ui.TouchEventManager.eventInfo.id = touch.identifier;
+	if(lime.ui.TouchEventManager.window != null && lime.ui.TouchEventManager.window.element != null) {
+		if(lime.ui.TouchEventManager.window.canvas != null) {
+			var rect = lime.ui.TouchEventManager.window.canvas.getBoundingClientRect();
+			lime.ui.TouchEventManager.eventInfo.x = (touch.clientX - rect.left) * (lime.ui.TouchEventManager.window.width / rect.width);
+			lime.ui.TouchEventManager.eventInfo.y = (touch.clientY - rect.top) * (lime.ui.TouchEventManager.window.height / rect.height);
+		} else if(lime.ui.TouchEventManager.window.div != null) {
+			var rect1 = lime.ui.TouchEventManager.window.div.getBoundingClientRect();
+			lime.ui.TouchEventManager.eventInfo.x = touch.clientX - rect1.left;
+			lime.ui.TouchEventManager.eventInfo.y = touch.clientY - rect1.top;
+		} else {
+			var rect2 = lime.ui.TouchEventManager.window.element.getBoundingClientRect();
+			lime.ui.TouchEventManager.eventInfo.x = (touch.clientX - rect2.left) * (lime.ui.TouchEventManager.window.width / rect2.width);
+			lime.ui.TouchEventManager.eventInfo.y = (touch.clientY - rect2.top) * (lime.ui.TouchEventManager.window.height / rect2.height);
+		}
+	} else {
+		lime.ui.TouchEventManager.eventInfo.x = touch.clientX;
+		lime.ui.TouchEventManager.eventInfo.y = touch.clientY;
+	}
+	var _g1 = lime.ui.TouchEventManager.eventInfo.type;
+	switch(_g1) {
+	case 0:
+		var listeners = lime.ui.TouchEventManager.onTouchStart.listeners;
+		var repeat = lime.ui.TouchEventManager.onTouchStart.repeat;
+		var length = listeners.length;
+		var i = 0;
+		while(i < length) {
+			listeners[i](lime.ui.TouchEventManager.eventInfo.x,lime.ui.TouchEventManager.eventInfo.y,lime.ui.TouchEventManager.eventInfo.id);
+			if(!repeat[i]) {
+				lime.ui.TouchEventManager.onTouchStart.remove(listeners[i]);
+				length--;
+			} else i++;
+		}
+		break;
+	case 1:
+		var listeners1 = lime.ui.TouchEventManager.onTouchEnd.listeners;
+		var repeat1 = lime.ui.TouchEventManager.onTouchEnd.repeat;
+		var length1 = listeners1.length;
+		var i1 = 0;
+		while(i1 < length1) {
+			listeners1[i1](lime.ui.TouchEventManager.eventInfo.x,lime.ui.TouchEventManager.eventInfo.y,lime.ui.TouchEventManager.eventInfo.id);
+			if(!repeat1[i1]) {
+				lime.ui.TouchEventManager.onTouchEnd.remove(listeners1[i1]);
+				length1--;
+			} else i1++;
+		}
+		break;
+	case 2:
+		var listeners2 = lime.ui.TouchEventManager.onTouchMove.listeners;
+		var repeat2 = lime.ui.TouchEventManager.onTouchMove.repeat;
+		var length2 = listeners2.length;
+		var i2 = 0;
+		while(i2 < length2) {
+			listeners2[i2](lime.ui.TouchEventManager.eventInfo.x,lime.ui.TouchEventManager.eventInfo.y,lime.ui.TouchEventManager.eventInfo.id);
+			if(!repeat2[i2]) {
+				lime.ui.TouchEventManager.onTouchMove.remove(listeners2[i2]);
+				length2--;
+			} else i2++;
+		}
+		break;
+	}
+};
+lime.ui.TouchEventManager.registerWindow = function(window) {
+	window.element.addEventListener("touchstart",lime.ui.TouchEventManager.handleEvent,true);
+	window.element.addEventListener("touchmove",lime.ui.TouchEventManager.handleEvent,true);
+	window.element.addEventListener("touchend",lime.ui.TouchEventManager.handleEvent,true);
+	lime.ui.TouchEventManager.window = window;
+};
+lime.ui._TouchEventManager = {};
+lime.ui._TouchEventManager.TouchEventInfo = function(type,x,y,id) {
+	if(id == null) id = 0;
+	if(y == null) y = 0;
+	if(x == null) x = 0;
+	this.type = type;
+	this.x = x;
+	this.y = y;
+	this.id = id;
+};
+$hxClasses["lime.ui._TouchEventManager.TouchEventInfo"] = lime.ui._TouchEventManager.TouchEventInfo;
+lime.ui._TouchEventManager.TouchEventInfo.__name__ = ["lime","ui","_TouchEventManager","TouchEventInfo"];
+lime.ui._TouchEventManager.TouchEventInfo.prototype = {
+	clone: function() {
+		return new lime.ui._TouchEventManager.TouchEventInfo(this.type,this.x,this.y,this.id);
+	}
+	,__class__: lime.ui._TouchEventManager.TouchEventInfo
+};
+lime.ui._TouchEventManager.TouchEventType_Impl_ = function() { };
+$hxClasses["lime.ui._TouchEventManager.TouchEventType_Impl_"] = lime.ui._TouchEventManager.TouchEventType_Impl_;
+lime.ui._TouchEventManager.TouchEventType_Impl_.__name__ = ["lime","ui","_TouchEventManager","TouchEventType_Impl_"];
+lime.ui._Window = {};
+lime.ui._Window.WindowEventInfo = function(type,width,height,x,y) {
+	if(y == null) y = 0;
+	if(x == null) x = 0;
+	if(height == null) height = 0;
+	if(width == null) width = 0;
+	this.type = type;
+	this.width = width;
+	this.height = height;
+	this.x = x;
+	this.y = y;
+};
+$hxClasses["lime.ui._Window.WindowEventInfo"] = lime.ui._Window.WindowEventInfo;
+lime.ui._Window.WindowEventInfo.__name__ = ["lime","ui","_Window","WindowEventInfo"];
+lime.ui._Window.WindowEventInfo.prototype = {
+	clone: function() {
+		return new lime.ui._Window.WindowEventInfo(this.type,this.width,this.height,this.x,this.y);
+	}
+	,__class__: lime.ui._Window.WindowEventInfo
+};
+lime.ui.Window = function(config) {
+	this.config = config;
+	if(!lime.ui.Window.registered) lime.ui.Window.registered = true;
+};
+$hxClasses["lime.ui.Window"] = lime.ui.Window;
+lime.ui.Window.__name__ = ["lime","ui","Window"];
+lime.ui.Window.registered = null;
+lime.ui.Window.prototype = {
+	create: function(application) {
+		this.setWidth = this.width;
+		this.setHeight = this.height;
+		if(js.Boot.__instanceof(this.element,HTMLCanvasElement)) this.canvas = this.element; else this.canvas = window.document.createElement("canvas");
+		if(this.canvas != null) {
+			var style = this.canvas.style;
+			style.setProperty("-webkit-transform","translateZ(0)",null);
+			style.setProperty("transform","translateZ(0)",null);
+		} else if(this.div != null) {
+			var style1 = this.div.style;
+			style1.setProperty("-webkit-transform","translate3D(0,0,0)",null);
+			style1.setProperty("transform","translate3D(0,0,0)",null);
+			style1.position = "relative";
+			style1.overflow = "hidden";
+			style1.setProperty("-webkit-user-select","none",null);
+			style1.setProperty("-moz-user-select","none",null);
+			style1.setProperty("-ms-user-select","none",null);
+			style1.setProperty("-o-user-select","none",null);
+		}
+		if(this.width == 0 && this.height == 0) {
+			if(this.element != null) {
+				this.width = this.element.clientWidth;
+				this.height = this.element.clientHeight;
+			} else {
+				this.width = window.innerWidth;
+				this.height = window.innerHeight;
+			}
+			this.fullscreen = true;
+		}
+		if(this.canvas != null) {
+			this.canvas.width = this.width;
+			this.canvas.height = this.height;
+		} else {
+			this.div.style.width = this.width + "px";
+			this.div.style.height = this.height + "px";
+		}
+		this.handleDOMResize();
+		if(this.element != null) {
+			if(this.canvas != null) {
+				if(this.element != this.canvas) this.element.appendChild(this.canvas);
+			} else this.element.appendChild(this.div);
+		}
+		lime.ui.MouseEventManager.registerWindow(this);
+		lime.ui.TouchEventManager.registerWindow(this);
+		window.addEventListener("focus",$bind(this,this.handleDOMEvent),false);
+		window.addEventListener("blur",$bind(this,this.handleDOMEvent),false);
+		window.addEventListener("resize",$bind(this,this.handleDOMEvent),false);
+		window.addEventListener("beforeunload",$bind(this,this.handleDOMEvent),false);
+		if(this.currentRenderer != null) this.currentRenderer.create();
+	}
+	,dispatch: function() {
+		var _g = lime.ui.Window.eventInfo.type;
+		switch(_g) {
+		case 0:
+			var listeners = lime.ui.Window.onWindowActivate.listeners;
+			var repeat = lime.ui.Window.onWindowActivate.repeat;
+			var length = listeners.length;
+			var i = 0;
+			while(i < length) {
+				listeners[i]();
+				if(!repeat[i]) {
+					lime.ui.Window.onWindowActivate.remove(listeners[i]);
+					length--;
+				} else i++;
+			}
+			break;
+		case 1:
+			var listeners1 = lime.ui.Window.onWindowClose.listeners;
+			var repeat1 = lime.ui.Window.onWindowClose.repeat;
+			var length1 = listeners1.length;
+			var i1 = 0;
+			while(i1 < length1) {
+				listeners1[i1]();
+				if(!repeat1[i1]) {
+					lime.ui.Window.onWindowClose.remove(listeners1[i1]);
+					length1--;
+				} else i1++;
+			}
+			break;
+		case 2:
+			var listeners2 = lime.ui.Window.onWindowDeactivate.listeners;
+			var repeat2 = lime.ui.Window.onWindowDeactivate.repeat;
+			var length2 = listeners2.length;
+			var i2 = 0;
+			while(i2 < length2) {
+				listeners2[i2]();
+				if(!repeat2[i2]) {
+					lime.ui.Window.onWindowDeactivate.remove(listeners2[i2]);
+					length2--;
+				} else i2++;
+			}
+			break;
+		case 3:
+			var listeners3 = lime.ui.Window.onWindowFocusIn.listeners;
+			var repeat3 = lime.ui.Window.onWindowFocusIn.repeat;
+			var length3 = listeners3.length;
+			var i3 = 0;
+			while(i3 < length3) {
+				listeners3[i3]();
+				if(!repeat3[i3]) {
+					lime.ui.Window.onWindowFocusIn.remove(listeners3[i3]);
+					length3--;
+				} else i3++;
+			}
+			break;
+		case 4:
+			var listeners4 = lime.ui.Window.onWindowFocusOut.listeners;
+			var repeat4 = lime.ui.Window.onWindowFocusOut.repeat;
+			var length4 = listeners4.length;
+			var i4 = 0;
+			while(i4 < length4) {
+				listeners4[i4]();
+				if(!repeat4[i4]) {
+					lime.ui.Window.onWindowFocusOut.remove(listeners4[i4]);
+					length4--;
+				} else i4++;
+			}
+			break;
+		case 5:
+			this.x = lime.ui.Window.eventInfo.x;
+			this.y = lime.ui.Window.eventInfo.y;
+			var listeners5 = lime.ui.Window.onWindowMove.listeners;
+			var repeat5 = lime.ui.Window.onWindowMove.repeat;
+			var length5 = listeners5.length;
+			var i5 = 0;
+			while(i5 < length5) {
+				listeners5[i5](lime.ui.Window.eventInfo.x,lime.ui.Window.eventInfo.y);
+				if(!repeat5[i5]) {
+					lime.ui.Window.onWindowMove.remove(listeners5[i5]);
+					length5--;
+				} else i5++;
+			}
+			break;
+		case 6:
+			this.width = lime.ui.Window.eventInfo.width;
+			this.height = lime.ui.Window.eventInfo.height;
+			var listeners6 = lime.ui.Window.onWindowResize.listeners;
+			var repeat6 = lime.ui.Window.onWindowResize.repeat;
+			var length6 = listeners6.length;
+			var i6 = 0;
+			while(i6 < length6) {
+				listeners6[i6](lime.ui.Window.eventInfo.width,lime.ui.Window.eventInfo.height);
+				if(!repeat6[i6]) {
+					lime.ui.Window.onWindowResize.remove(listeners6[i6]);
+					length6--;
+				} else i6++;
+			}
+			break;
+		}
+	}
+	,handleDOMEvent: function(event) {
+		var _g = event.type;
+		switch(_g) {
+		case "focus":
+			lime.ui.Window.eventInfo.type = 3;
+			this.dispatch();
+			lime.ui.Window.eventInfo.type = 0;
+			this.dispatch();
+			break;
+		case "blur":
+			lime.ui.Window.eventInfo.type = 4;
+			this.dispatch();
+			lime.ui.Window.eventInfo.type = 2;
+			this.dispatch();
+			break;
+		case "resize":
+			var cacheWidth = this.width;
+			var cacheHeight = this.height;
+			this.handleDOMResize();
+			if(this.width != cacheWidth || this.height != cacheHeight) {
+				lime.ui.Window.eventInfo.type = 6;
+				lime.ui.Window.eventInfo.width = this.width;
+				lime.ui.Window.eventInfo.height = this.height;
+				this.dispatch();
+			}
+			break;
+		case "beforeunload":
+			lime.ui.Window.eventInfo.type = 1;
+			this.dispatch();
+			break;
+		}
+	}
+	,handleDOMResize: function() {
+		var stretch = this.fullscreen || this.setWidth == 0 && this.setHeight == 0;
+		if(this.element != null && (this.div == null || this.div != null && stretch)) {
+			if(stretch) {
+				if(this.width != this.element.clientWidth || this.height != this.element.clientHeight) {
+					this.width = this.element.clientWidth;
+					this.height = this.element.clientHeight;
+					if(this.canvas != null) {
+						if(this.element != this.canvas) {
+							this.canvas.width = this.element.clientWidth;
+							this.canvas.height = this.element.clientHeight;
+						}
+					} else {
+						this.div.style.width = this.element.clientWidth + "px";
+						this.div.style.height = this.element.clientHeight + "px";
+					}
+				}
+			} else {
+				var scaleX = this.element.clientWidth / this.setWidth;
+				var scaleY = this.element.clientHeight / this.setHeight;
+				var currentRatio = scaleX / scaleY;
+				var targetRatio = Math.min(scaleX,scaleY);
+				if(this.canvas != null) {
+					if(this.element != this.canvas) {
+						this.canvas.style.width = this.setWidth * targetRatio + "px";
+						this.canvas.style.height = this.setHeight * targetRatio + "px";
+						this.canvas.style.marginLeft = (this.element.clientWidth - this.setWidth * targetRatio) / 2 + "px";
+						this.canvas.style.marginTop = (this.element.clientHeight - this.setHeight * targetRatio) / 2 + "px";
+					}
+				} else {
+					this.div.style.width = this.setWidth * targetRatio + "px";
+					this.div.style.height = this.setHeight * targetRatio + "px";
+					this.div.style.marginLeft = (this.element.clientWidth - this.setWidth * targetRatio) / 2 + "px";
+					this.div.style.marginTop = (this.element.clientHeight - this.setHeight * targetRatio) / 2 + "px";
+				}
+			}
+		}
+	}
+	,move: function(x,y) {
+	}
+	,resize: function(width,height) {
+		this.setWidth = width;
+		this.setHeight = height;
+	}
+	,__class__: lime.ui.Window
+};
+lime.ui._Window.WindowFlags_Impl_ = function() { };
+$hxClasses["lime.ui._Window.WindowFlags_Impl_"] = lime.ui._Window.WindowFlags_Impl_;
+lime.ui._Window.WindowFlags_Impl_.__name__ = ["lime","ui","_Window","WindowFlags_Impl_"];
+lime.ui._Window.WindowEventType_Impl_ = function() { };
+$hxClasses["lime.ui._Window.WindowEventType_Impl_"] = lime.ui._Window.WindowEventType_Impl_;
+lime.ui._Window.WindowEventType_Impl_.__name__ = ["lime","ui","_Window","WindowEventType_Impl_"];
+lime.utils = {};
+lime.utils.ByteArray = function(size) {
+	if(size == null) size = 0;
+	this.littleEndian = false;
+	this.allocated = 0;
+	this.position = 0;
+	this.length = 0;
+	if(size > 0) this.allocated = size;
+	this.___resizeBuffer(this.allocated);
+	this.set_length(this.allocated);
+};
+$hxClasses["lime.utils.ByteArray"] = lime.utils.ByteArray;
+lime.utils.ByteArray.__name__ = ["lime","utils","ByteArray"];
+lime.utils.ByteArray.fromBytes = function(bytes) {
+	var result = new lime.utils.ByteArray();
+	result.byteView = new Uint8Array(bytes.b);
+	result.set_length(result.byteView.length);
+	result.allocated = result.length;
+	return result;
+};
+lime.utils.ByteArray.readFile = function(path) {
+	return null;
+};
+lime.utils.ByteArray.__ofBuffer = function(buffer) {
+	var bytes = new lime.utils.ByteArray();
+	bytes.set_length(bytes.allocated = buffer.byteLength);
+	bytes.data = new DataView(buffer);
+	bytes.byteView = new Uint8Array(buffer);
+	return bytes;
+};
+lime.utils.ByteArray.prototype = {
+	clear: function() {
+		if(this.allocated < 0) this.___resizeBuffer(this.allocated = Std["int"](Math.max(0,this.allocated * 2))); else if(this.allocated > 0) this.___resizeBuffer(this.allocated = 0);
+		this.length = 0;
+		0;
+		this.position = 0;
+	}
+	,compress: function(algorithm) {
+	}
+	,deflate: function() {
+		this.compress(lime.utils.CompressionAlgorithm.DEFLATE);
+	}
+	,inflate: function() {
+		this.uncompress(lime.utils.CompressionAlgorithm.DEFLATE);
+	}
+	,readBoolean: function() {
+		return this.readByte() != 0;
+	}
+	,readByte: function() {
+		var data = this.data;
+		return data.getInt8(this.position++);
+	}
+	,readBytes: function(bytes,offset,length) {
+		if(length == null) length = 0;
+		if(offset == null) offset = 0;
+		if(offset < 0 || length < 0) throw "Read error - Out of bounds";
+		if(length == 0) length = this.length - this.position;
+		var lengthToEnsure = offset + length;
+		if(bytes.length < lengthToEnsure) {
+			if(bytes.allocated < lengthToEnsure) bytes.___resizeBuffer(bytes.allocated = Std["int"](Math.max(lengthToEnsure,bytes.allocated * 2))); else if(bytes.allocated > lengthToEnsure) bytes.___resizeBuffer(bytes.allocated = lengthToEnsure);
+			bytes.length = lengthToEnsure;
+			lengthToEnsure;
+		}
+		bytes.byteView.set(this.byteView.subarray(this.position,this.position + length),offset);
+		bytes.position = offset;
+		this.position += length;
+		if(bytes.position + length > bytes.length) bytes.set_length(bytes.position + length);
+	}
+	,readDouble: function() {
+		var $double = this.data.getFloat64(this.position,this.littleEndian);
+		this.position += 8;
+		return $double;
+	}
+	,readFloat: function() {
+		var $float = this.data.getFloat32(this.position,this.littleEndian);
+		this.position += 4;
+		return $float;
+	}
+	,readInt: function() {
+		var $int = this.data.getInt32(this.position,this.littleEndian);
+		this.position += 4;
+		return $int;
+	}
+	,readMultiByte: function(length,charSet) {
+		return this.readUTFBytes(length);
+	}
+	,readShort: function() {
+		var $short = this.data.getInt16(this.position,this.littleEndian);
+		this.position += 2;
+		return $short;
+	}
+	,readUnsignedByte: function() {
+		var data = this.data;
+		return data.getUint8(this.position++);
+	}
+	,readUnsignedInt: function() {
+		var uInt = this.data.getUint32(this.position,this.littleEndian);
+		this.position += 4;
+		return uInt;
+	}
+	,readUnsignedShort: function() {
+		var uShort = this.data.getUint16(this.position,this.littleEndian);
+		this.position += 2;
+		return uShort;
+	}
+	,readUTF: function() {
+		var bytesCount = this.readUnsignedShort();
+		return this.readUTFBytes(bytesCount);
+	}
+	,readUTFBytes: function(len) {
+		var value = "";
+		var max = this.position + len;
+		while(this.position < max) {
+			var data = this.data;
+			var c = data.getUint8(this.position++);
+			if(c < 128) {
+				if(c == 0) break;
+				value += String.fromCharCode(c);
+			} else if(c < 224) value += String.fromCharCode((c & 63) << 6 | data.getUint8(this.position++) & 127); else if(c < 240) {
+				var c2 = data.getUint8(this.position++);
+				value += String.fromCharCode((c & 31) << 12 | (c2 & 127) << 6 | data.getUint8(this.position++) & 127);
+			} else {
+				var c21 = data.getUint8(this.position++);
+				var c3 = data.getUint8(this.position++);
+				value += String.fromCharCode((c & 15) << 18 | (c21 & 127) << 12 | c3 << 6 & 127 | data.getUint8(this.position++) & 127);
+			}
+		}
+		return value;
+	}
+	,toString: function() {
+		var cachePosition = this.position;
+		this.position = 0;
+		var value = this.readUTFBytes(this.length);
+		this.position = cachePosition;
+		return value;
+	}
+	,uncompress: function(algorithm) {
+		haxe.Log.trace("Warning: ByteArray.uncompress on JS target requires the 'format' haxelib",{ fileName : "ByteArray.hx", lineNumber : 650, className : "lime.utils.ByteArray", methodName : "uncompress"});
+	}
+	,write_uncheck: function($byte) {
+		__dollar__sset(b,this.position++,$byte & 255);
+	}
+	,writeBoolean: function(value) {
+		this.writeByte(value?1:0);
+	}
+	,writeByte: function(value) {
+		var lengthToEnsure = this.position + 1;
+		if(this.length < lengthToEnsure) {
+			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
+			this.length = lengthToEnsure;
+			lengthToEnsure;
+		}
+		var data = this.data;
+		data.setInt8(this.position,value);
+		this.position += 1;
+	}
+	,writeBytes: function(bytes,offset,length) {
+		if(length == null) length = 0;
+		if(offset == null) offset = 0;
+		if(bytes.length == 0) return;
+		if((function($this) {
+			var $r;
+			var aNeg = 0 < 0;
+			var bNeg = offset < 0;
+			$r = aNeg != bNeg?aNeg:0 > offset;
+			return $r;
+		}(this)) || (function($this) {
+			var $r;
+			var aNeg1 = 0 < 0;
+			var bNeg1 = length < 0;
+			$r = aNeg1 != bNeg1?aNeg1:0 > length;
+			return $r;
+		}(this))) throw "Write error - Out of bounds";
+		if((function($this) {
+			var $r;
+			var $int = length;
+			$r = $int < 0?4294967296.0 + $int:$int + 0.0;
+			return $r;
+		}(this)) == 0) length = bytes.length;
+		var lengthToEnsure = this.position + length;
+		if(this.length < lengthToEnsure) {
+			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
+			this.length = lengthToEnsure;
+			lengthToEnsure;
+		}
+		this.byteView.set(bytes.byteView.subarray(offset,offset + length),this.position);
+		this.position = this.position + length;
+	}
+	,writeDouble: function(x) {
+		var lengthToEnsure = this.position + 8;
+		if(this.length < lengthToEnsure) {
+			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
+			this.length = lengthToEnsure;
+			lengthToEnsure;
+		}
+		this.data.setFloat64(this.position,x,this.littleEndian);
+		this.position += 8;
+	}
+	,writeFile: function(path) {
+	}
+	,writeFloat: function(x) {
+		var lengthToEnsure = this.position + 4;
+		if(this.length < lengthToEnsure) {
+			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
+			this.length = lengthToEnsure;
+			lengthToEnsure;
+		}
+		this.data.setFloat32(this.position,x,this.littleEndian);
+		this.position += 4;
+	}
+	,writeInt: function(value) {
+		var lengthToEnsure = this.position + 4;
+		if(this.length < lengthToEnsure) {
+			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
+			this.length = lengthToEnsure;
+			lengthToEnsure;
+		}
+		this.data.setInt32(this.position,value,this.littleEndian);
+		this.position += 4;
+	}
+	,writeShort: function(value) {
+		var lengthToEnsure = this.position + 2;
+		if(this.length < lengthToEnsure) {
+			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
+			this.length = lengthToEnsure;
+			lengthToEnsure;
+		}
+		this.data.setInt16(this.position,value,this.littleEndian);
+		this.position += 2;
+	}
+	,writeUnsignedInt: function(value) {
+		var lengthToEnsure = this.position + 4;
+		if(this.length < lengthToEnsure) {
+			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
+			this.length = lengthToEnsure;
+			lengthToEnsure;
+		}
+		this.data.setUint32(this.position,value,this.littleEndian);
+		this.position += 4;
+	}
+	,writeUnsignedShort: function(value) {
+		var lengthToEnsure = this.position + 2;
+		if(this.length < lengthToEnsure) {
+			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
+			this.length = lengthToEnsure;
+			lengthToEnsure;
+		}
+		this.data.setUint16(this.position,value,this.littleEndian);
+		this.position += 2;
+	}
+	,writeUTF: function(value) {
+		this.writeUnsignedShort(this.__getUTFBytesCount(value));
+		this.writeUTFBytes(value);
+	}
+	,writeUTFBytes: function(value) {
+		var _g1 = 0;
+		var _g = value.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var c = value.charCodeAt(i);
+			if(c <= 127) this.writeByte(c); else if(c <= 2047) {
+				this.writeByte(192 | c >> 6);
+				this.writeByte(128 | c & 63);
+			} else if(c <= 65535) {
+				this.writeByte(224 | c >> 12);
+				this.writeByte(128 | c >> 6 & 63);
+				this.writeByte(128 | c & 63);
+			} else {
+				this.writeByte(240 | c >> 18);
+				this.writeByte(128 | c >> 12 & 63);
+				this.writeByte(128 | c >> 6 & 63);
+				this.writeByte(128 | c & 63);
+			}
+		}
+	}
+	,__fromBytes: function(bytes) {
+		this.byteView = new Uint8Array(bytes.b);
+		this.set_length(this.byteView.length);
+		this.allocated = this.length;
+	}
+	,__get: function(pos) {
+		return this.data.getInt8(pos);
+	}
+	,__getBuffer: function() {
+		return this.data.buffer;
+	}
+	,__getUTFBytesCount: function(value) {
+		var count = 0;
+		var _g1 = 0;
+		var _g = value.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var c = value.charCodeAt(i);
+			if(c <= 127) count += 1; else if(c <= 2047) count += 2; else if(c <= 65535) count += 3; else count += 4;
+		}
+		return count;
+	}
+	,___resizeBuffer: function(len) {
+		var oldByteView = this.byteView;
+		var newByteView = new Uint8Array(len);
+		if(oldByteView != null) {
+			if(oldByteView.length <= len) newByteView.set(oldByteView); else newByteView.set(oldByteView.subarray(0,len));
+		}
+		this.byteView = newByteView;
+		this.data = new DataView(newByteView.buffer);
+	}
+	,__set: function(pos,v) {
+		this.data.setUint8(pos,v);
+	}
+	,get_bytesAvailable: function() {
+		return this.length - this.position;
+	}
+	,get_endian: function() {
+		if(this.littleEndian) return "littleEndian"; else return "bigEndian";
+	}
+	,set_endian: function(endian) {
+		this.littleEndian = endian == "littleEndian";
+		return endian;
+	}
+	,set_length: function(value) {
+		if(this.allocated < value) this.___resizeBuffer(this.allocated = Std["int"](Math.max(value,this.allocated * 2))); else if(this.allocated > value) this.___resizeBuffer(this.allocated = value);
+		this.length = value;
+		return value;
+	}
+	,__class__: lime.utils.ByteArray
+	,__properties__: {set_length:"set_length",set_endian:"set_endian",get_endian:"get_endian",get_bytesAvailable:"get_bytesAvailable"}
+};
+lime.utils.CompressionAlgorithm = $hxClasses["lime.utils.CompressionAlgorithm"] = { __ename__ : ["lime","utils","CompressionAlgorithm"], __constructs__ : ["DEFLATE","ZLIB","LZMA","GZIP"] };
+lime.utils.CompressionAlgorithm.DEFLATE = ["DEFLATE",0];
+lime.utils.CompressionAlgorithm.DEFLATE.toString = $estr;
+lime.utils.CompressionAlgorithm.DEFLATE.__enum__ = lime.utils.CompressionAlgorithm;
+lime.utils.CompressionAlgorithm.ZLIB = ["ZLIB",1];
+lime.utils.CompressionAlgorithm.ZLIB.toString = $estr;
+lime.utils.CompressionAlgorithm.ZLIB.__enum__ = lime.utils.CompressionAlgorithm;
+lime.utils.CompressionAlgorithm.LZMA = ["LZMA",2];
+lime.utils.CompressionAlgorithm.LZMA.toString = $estr;
+lime.utils.CompressionAlgorithm.LZMA.__enum__ = lime.utils.CompressionAlgorithm;
+lime.utils.CompressionAlgorithm.GZIP = ["GZIP",3];
+lime.utils.CompressionAlgorithm.GZIP.toString = $estr;
+lime.utils.CompressionAlgorithm.GZIP.__enum__ = lime.utils.CompressionAlgorithm;
+lime.utils.IDataInput = function() { };
+$hxClasses["lime.utils.IDataInput"] = lime.utils.IDataInput;
+lime.utils.IDataInput.__name__ = ["lime","utils","IDataInput"];
+lime.utils.IDataInput.prototype = {
+	__class__: lime.utils.IDataInput
+	,__properties__: {set_endian:"set_endian",get_endian:"get_endian",get_bytesAvailable:"get_bytesAvailable"}
+};
+lime.utils.IMemoryRange = function() { };
+$hxClasses["lime.utils.IMemoryRange"] = lime.utils.IMemoryRange;
+lime.utils.IMemoryRange.__name__ = ["lime","utils","IMemoryRange"];
+lime.utils.IMemoryRange.prototype = {
+	__class__: lime.utils.IMemoryRange
 };
 var motion = {};
 motion.actuators = {};
@@ -49205,14 +57022,21 @@ motion.easing.LinearEaseNone.prototype = {
 	}
 	,__class__: motion.easing.LinearEaseNone
 };
+openfl.IAssetCache = function() { };
+$hxClasses["openfl.IAssetCache"] = openfl.IAssetCache;
+openfl.IAssetCache.__name__ = ["openfl","IAssetCache"];
+openfl.IAssetCache.prototype = {
+	__class__: openfl.IAssetCache
+};
 openfl.AssetCache = function() {
-	this.enabled = true;
+	this.__enabled = true;
 	this.bitmapData = new haxe.ds.StringMap();
 	this.font = new haxe.ds.StringMap();
 	this.sound = new haxe.ds.StringMap();
 };
 $hxClasses["openfl.AssetCache"] = openfl.AssetCache;
 openfl.AssetCache.__name__ = ["openfl","AssetCache"];
+openfl.AssetCache.__interfaces__ = [openfl.IAssetCache];
 openfl.AssetCache.prototype = {
 	clear: function(prefix) {
 		if(prefix == null) {
@@ -49237,7 +57061,50 @@ openfl.AssetCache.prototype = {
 			}
 		}
 	}
+	,getBitmapData: function(id) {
+		return this.bitmapData.get(id);
+	}
+	,getFont: function(id) {
+		return this.font.get(id);
+	}
+	,getSound: function(id) {
+		return this.sound.get(id);
+	}
+	,hasBitmapData: function(id) {
+		return this.bitmapData.exists(id);
+	}
+	,hasFont: function(id) {
+		return this.font.exists(id);
+	}
+	,hasSound: function(id) {
+		return this.sound.exists(id);
+	}
+	,removeBitmapData: function(id) {
+		return this.bitmapData.remove(id);
+	}
+	,removeFont: function(id) {
+		return this.font.remove(id);
+	}
+	,removeSound: function(id) {
+		return this.sound.remove(id);
+	}
+	,setBitmapData: function(id,bitmapData) {
+		this.bitmapData.set(id,bitmapData);
+	}
+	,setFont: function(id,font) {
+		this.font.set(id,font);
+	}
+	,setSound: function(id,sound) {
+		this.sound.set(id,sound);
+	}
+	,get_enabled: function() {
+		return this.__enabled;
+	}
+	,set_enabled: function(value) {
+		return this.__enabled = value;
+	}
 	,__class__: openfl.AssetCache
+	,__properties__: {set_enabled:"set_enabled",get_enabled:"get_enabled"}
 };
 openfl.Assets = function() { };
 $hxClasses["openfl.Assets"] = openfl.Assets;
@@ -49246,193 +57113,91 @@ openfl.Assets.addEventListener = function(type,listener,useCapture,priority,useW
 	if(useWeakReference == null) useWeakReference = false;
 	if(priority == null) priority = 0;
 	if(useCapture == null) useCapture = false;
-	openfl.Assets.initialize();
 	openfl.Assets.dispatcher.addEventListener(type,listener,useCapture,priority,useWeakReference);
 };
 openfl.Assets.dispatchEvent = function(event) {
-	openfl.Assets.initialize();
 	return openfl.Assets.dispatcher.dispatchEvent(event);
 };
 openfl.Assets.exists = function(id,type) {
-	openfl.Assets.initialize();
-	if(type == null) type = openfl.AssetType.BINARY;
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) return library.exists(symbolName,type);
-	return false;
+	return lime.Assets.exists(id,type);
 };
 openfl.Assets.getBitmapData = function(id,useCache) {
 	if(useCache == null) useCache = true;
-	openfl.Assets.initialize();
-	if(useCache && openfl.Assets.cache.enabled && openfl.Assets.cache.bitmapData.exists(id)) {
-		var bitmapData = openfl.Assets.cache.bitmapData.get(id);
+	if(useCache && openfl.Assets.cache.get_enabled() && openfl.Assets.cache.hasBitmapData(id)) {
+		var bitmapData = openfl.Assets.cache.getBitmapData(id);
 		if(openfl.Assets.isValidBitmapData(bitmapData)) return bitmapData;
 	}
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.IMAGE)) {
-			if(library.isLocal(symbolName,openfl.AssetType.IMAGE)) {
-				var bitmapData1 = library.getBitmapData(symbolName);
-				if(useCache && openfl.Assets.cache.enabled) openfl.Assets.cache.bitmapData.set(id,bitmapData1);
-				return bitmapData1;
-			} else haxe.Log.trace("[openfl.Assets] BitmapData asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 139, className : "openfl.Assets", methodName : "getBitmapData"});
-		} else haxe.Log.trace("[openfl.Assets] There is no BitmapData asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 145, className : "openfl.Assets", methodName : "getBitmapData"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 151, className : "openfl.Assets", methodName : "getBitmapData"});
+	var image = lime.Assets.getImage(id,false);
+	if(image != null) {
+		var bitmapData1 = openfl.display.BitmapData.fromImage(image);
+		if(useCache && openfl.Assets.cache.get_enabled()) openfl.Assets.cache.setBitmapData(id,bitmapData1);
+		return bitmapData1;
+	}
 	return null;
 };
 openfl.Assets.getBytes = function(id) {
-	openfl.Assets.initialize();
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.BINARY)) {
-			if(library.isLocal(symbolName,openfl.AssetType.BINARY)) return library.getBytes(symbolName); else haxe.Log.trace("[openfl.Assets] String or ByteArray asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 188, className : "openfl.Assets", methodName : "getBytes"});
-		} else haxe.Log.trace("[openfl.Assets] There is no String or ByteArray asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 194, className : "openfl.Assets", methodName : "getBytes"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 200, className : "openfl.Assets", methodName : "getBytes"});
-	return null;
+	return lime.Assets.getBytes(id);
 };
 openfl.Assets.getFont = function(id,useCache) {
 	if(useCache == null) useCache = true;
-	openfl.Assets.initialize();
-	if(useCache && openfl.Assets.cache.enabled && openfl.Assets.cache.font.exists(id)) return openfl.Assets.cache.font.get(id);
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.FONT)) {
-			if(library.isLocal(symbolName,openfl.AssetType.FONT)) {
-				var font = library.getFont(symbolName);
-				if(useCache && openfl.Assets.cache.enabled) openfl.Assets.cache.font.set(id,font);
-				return font;
-			} else haxe.Log.trace("[openfl.Assets] Font asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 251, className : "openfl.Assets", methodName : "getFont"});
-		} else haxe.Log.trace("[openfl.Assets] There is no Font asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 257, className : "openfl.Assets", methodName : "getFont"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 263, className : "openfl.Assets", methodName : "getFont"});
-	return null;
+	if(useCache && openfl.Assets.cache.get_enabled() && openfl.Assets.cache.hasFont(id)) return openfl.Assets.cache.getFont(id);
+	var font = lime.Assets.getFont(id,false);
+	if(font != null) return font;
+	return new openfl.text.Font();
 };
 openfl.Assets.getLibrary = function(name) {
 	if(name == null || name == "") name = "default";
-	return openfl.Assets.libraries.get(name);
+	return lime.Assets.libraries.get(name);
 };
 openfl.Assets.getMovieClip = function(id) {
-	openfl.Assets.initialize();
 	var libraryName = id.substring(0,id.indexOf(":"));
 	var symbolName;
 	var pos = id.indexOf(":") + 1;
 	symbolName = HxOverrides.substr(id,pos,null);
 	var library = openfl.Assets.getLibrary(libraryName);
 	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.MOVIE_CLIP)) {
-			if(library.isLocal(symbolName,openfl.AssetType.MOVIE_CLIP)) return library.getMovieClip(symbolName); else haxe.Log.trace("[openfl.Assets] MovieClip asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 313, className : "openfl.Assets", methodName : "getMovieClip"});
-		} else haxe.Log.trace("[openfl.Assets] There is no MovieClip asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 319, className : "openfl.Assets", methodName : "getMovieClip"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 325, className : "openfl.Assets", methodName : "getMovieClip"});
+		if(library.exists(symbolName,"MOVIE_CLIP")) {
+			if(library.isLocal(symbolName,"MOVIE_CLIP")) return library.getMovieClip(symbolName); else haxe.Log.trace("[openfl.Assets] MovieClip asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 207, className : "openfl.Assets", methodName : "getMovieClip"});
+		} else haxe.Log.trace("[openfl.Assets] There is no MovieClip asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 213, className : "openfl.Assets", methodName : "getMovieClip"});
+	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 219, className : "openfl.Assets", methodName : "getMovieClip"});
 	return null;
 };
 openfl.Assets.getMusic = function(id,useCache) {
 	if(useCache == null) useCache = true;
-	openfl.Assets.initialize();
-	if(useCache && openfl.Assets.cache.enabled && openfl.Assets.cache.sound.exists(id)) {
-		var sound = openfl.Assets.cache.sound.get(id);
-		if(openfl.Assets.isValidSound(sound)) return sound;
-	}
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.MUSIC)) {
-			if(library.isLocal(symbolName,openfl.AssetType.MUSIC)) {
-				var sound1 = library.getMusic(symbolName);
-				if(useCache && openfl.Assets.cache.enabled) openfl.Assets.cache.sound.set(id,sound1);
-				return sound1;
-			} else haxe.Log.trace("[openfl.Assets] Sound asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 382, className : "openfl.Assets", methodName : "getMusic"});
-		} else haxe.Log.trace("[openfl.Assets] There is no Sound asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 388, className : "openfl.Assets", methodName : "getMusic"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 394, className : "openfl.Assets", methodName : "getMusic"});
+	var path = lime.Assets.getPath(id);
+	if(path != null) return new openfl.media.Sound(new openfl.net.URLRequest(path));
 	return null;
 };
 openfl.Assets.getPath = function(id) {
-	openfl.Assets.initialize();
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,null)) return library.getPath(symbolName); else haxe.Log.trace("[openfl.Assets] There is no asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 429, className : "openfl.Assets", methodName : "getPath"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 435, className : "openfl.Assets", methodName : "getPath"});
-	return null;
+	return lime.Assets.getPath(id);
 };
 openfl.Assets.getSound = function(id,useCache) {
 	if(useCache == null) useCache = true;
-	openfl.Assets.initialize();
-	if(useCache && openfl.Assets.cache.enabled && openfl.Assets.cache.sound.exists(id)) {
-		var sound = openfl.Assets.cache.sound.get(id);
+	if(useCache && openfl.Assets.cache.get_enabled() && openfl.Assets.cache.hasSound(id)) {
+		var sound = openfl.Assets.cache.getSound(id);
 		if(openfl.Assets.isValidSound(sound)) return sound;
 	}
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.SOUND)) {
-			if(library.isLocal(symbolName,openfl.AssetType.SOUND)) {
-				var sound1 = library.getSound(symbolName);
-				if(useCache && openfl.Assets.cache.enabled) openfl.Assets.cache.sound.set(id,sound1);
-				return sound1;
-			} else haxe.Log.trace("[openfl.Assets] Sound asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 492, className : "openfl.Assets", methodName : "getSound"});
-		} else haxe.Log.trace("[openfl.Assets] There is no Sound asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 498, className : "openfl.Assets", methodName : "getSound"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 504, className : "openfl.Assets", methodName : "getSound"});
+	var path = lime.Assets.getPath(id);
+	if(path != null) return new openfl.media.Sound(new openfl.net.URLRequest(path));
 	return null;
 };
 openfl.Assets.getText = function(id) {
-	openfl.Assets.initialize();
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.TEXT)) {
-			if(library.isLocal(symbolName,openfl.AssetType.TEXT)) return library.getText(symbolName); else haxe.Log.trace("[openfl.Assets] String asset \"" + id + "\" exists, but only asynchronously",{ fileName : "Assets.hx", lineNumber : 541, className : "openfl.Assets", methodName : "getText"});
-		} else haxe.Log.trace("[openfl.Assets] There is no String asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 547, className : "openfl.Assets", methodName : "getText"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 553, className : "openfl.Assets", methodName : "getText"});
-	return null;
+	return lime.Assets.getText(id);
 };
 openfl.Assets.hasEventListener = function(type) {
-	openfl.Assets.initialize();
 	return openfl.Assets.dispatcher.hasEventListener(type);
-};
-openfl.Assets.initialize = function() {
-	if(!openfl.Assets.initialized) {
-		openfl.Assets.registerLibrary("default",new DefaultAssetLibrary());
-		openfl.Assets.initialized = true;
-	}
 };
 openfl.Assets.isLocal = function(id,type,useCache) {
 	if(useCache == null) useCache = true;
-	openfl.Assets.initialize();
-	if(useCache && openfl.Assets.cache.enabled) {
-		if(type == openfl.AssetType.IMAGE || type == null) {
-			if(openfl.Assets.cache.bitmapData.exists(id)) return true;
+	if(useCache && openfl.Assets.cache.get_enabled()) {
+		if(type == "IMAGE" || type == null) {
+			if(openfl.Assets.cache.hasBitmapData(id)) return true;
 		}
-		if(type == openfl.AssetType.FONT || type == null) {
-			if(openfl.Assets.cache.font.exists(id)) return true;
+		if(type == "FONT" || type == null) {
+			if(openfl.Assets.cache.hasFont(id)) return true;
 		}
-		if(type == openfl.AssetType.SOUND || type == openfl.AssetType.MUSIC || type == null) {
-			if(openfl.Assets.cache.sound.exists(id)) return true;
+		if(type == "SOUND" || type == "MUSIC" || type == null) {
+			if(openfl.Assets.cache.hasSound(id)) return true;
 		}
 	}
 	var libraryName = id.substring(0,id.indexOf(":"));
@@ -49444,69 +57209,50 @@ openfl.Assets.isLocal = function(id,type,useCache) {
 	return false;
 };
 openfl.Assets.isValidBitmapData = function(bitmapData) {
-	return bitmapData.__sourceImage != null || bitmapData.__sourceCanvas != null;
+	return bitmapData != null;
 	return true;
 };
 openfl.Assets.isValidSound = function(sound) {
 	return true;
 };
 openfl.Assets.list = function(type) {
-	openfl.Assets.initialize();
-	var items = [];
-	var $it0 = openfl.Assets.libraries.iterator();
-	while( $it0.hasNext() ) {
-		var library = $it0.next();
-		var libraryItems = library.list(type);
-		if(libraryItems != null) items = items.concat(libraryItems);
-	}
-	return items;
+	return lime.Assets.list(type);
 };
 openfl.Assets.loadBitmapData = function(id,handler,useCache) {
 	if(useCache == null) useCache = true;
-	openfl.Assets.initialize();
-	if(useCache && openfl.Assets.cache.enabled && openfl.Assets.cache.bitmapData.exists(id)) {
-		var bitmapData = openfl.Assets.cache.bitmapData.get(id);
+	if(useCache && openfl.Assets.cache.get_enabled() && openfl.Assets.cache.hasBitmapData(id)) {
+		var bitmapData = openfl.Assets.cache.getBitmapData(id);
 		if(openfl.Assets.isValidBitmapData(bitmapData)) {
 			handler(bitmapData);
 			return;
 		}
 	}
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.IMAGE)) {
-			if(useCache && openfl.Assets.cache.enabled) library.loadBitmapData(symbolName,function(bitmapData1) {
-				openfl.Assets.cache.bitmapData.set(id,bitmapData1);
-				handler(bitmapData1);
-			}); else library.loadBitmapData(symbolName,handler);
-			return;
-		} else haxe.Log.trace("[openfl.Assets] There is no BitmapData asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 750, className : "openfl.Assets", methodName : "loadBitmapData"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 756, className : "openfl.Assets", methodName : "loadBitmapData"});
-	handler(null);
+	lime.Assets.loadImage(id,function(image) {
+		if(image != null) {
+			var bitmapData1 = openfl.display.BitmapData.fromImage(image);
+			if(useCache && openfl.Assets.cache.get_enabled()) openfl.Assets.cache.setBitmapData(id,bitmapData1);
+			handler(bitmapData1);
+		}
+	},false);
 };
 openfl.Assets.loadBytes = function(id,handler) {
-	openfl.Assets.initialize();
 	var libraryName = id.substring(0,id.indexOf(":"));
 	var symbolName;
 	var pos = id.indexOf(":") + 1;
 	symbolName = HxOverrides.substr(id,pos,null);
 	var library = openfl.Assets.getLibrary(libraryName);
 	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.BINARY)) {
+		if(library.exists(symbolName,"BINARY")) {
 			library.loadBytes(symbolName,handler);
 			return;
-		} else haxe.Log.trace("[openfl.Assets] There is no String or ByteArray asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 786, className : "openfl.Assets", methodName : "loadBytes"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 792, className : "openfl.Assets", methodName : "loadBytes"});
+		} else haxe.Log.trace("[openfl.Assets] There is no String or ByteArray asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 532, className : "openfl.Assets", methodName : "loadBytes"});
+	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 538, className : "openfl.Assets", methodName : "loadBytes"});
 	handler(null);
 };
 openfl.Assets.loadFont = function(id,handler,useCache) {
 	if(useCache == null) useCache = true;
-	openfl.Assets.initialize();
-	if(useCache && openfl.Assets.cache.enabled && openfl.Assets.cache.font.exists(id)) {
-		handler(openfl.Assets.cache.font.get(id));
+	if(useCache && openfl.Assets.cache.get_enabled() && openfl.Assets.cache.hasFont(id)) {
+		handler(openfl.Assets.cache.getFont(id));
 		return;
 	}
 	var libraryName = id.substring(0,id.indexOf(":"));
@@ -49515,118 +57261,49 @@ openfl.Assets.loadFont = function(id,handler,useCache) {
 	symbolName = HxOverrides.substr(id,pos,null);
 	var library = openfl.Assets.getLibrary(libraryName);
 	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.FONT)) {
-			if(useCache && openfl.Assets.cache.enabled) library.loadFont(symbolName,function(font) {
-				openfl.Assets.cache.font.set(id,font);
+		if(library.exists(symbolName,"FONT")) {
+			if(useCache && openfl.Assets.cache.get_enabled()) library.loadFont(symbolName,function(font) {
+				openfl.Assets.cache.setFont(id,font);
 				handler(font);
 			}); else library.loadFont(symbolName,handler);
 			return;
-		} else haxe.Log.trace("[openfl.Assets] There is no Font asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 843, className : "openfl.Assets", methodName : "loadFont"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 849, className : "openfl.Assets", methodName : "loadFont"});
+		} else haxe.Log.trace("[openfl.Assets] There is no Font asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 594, className : "openfl.Assets", methodName : "loadFont"});
+	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 600, className : "openfl.Assets", methodName : "loadFont"});
 	handler(null);
 };
 openfl.Assets.loadLibrary = function(name,handler) {
-	openfl.Assets.initialize();
-	var data = openfl.Assets.getText("libraries/" + name + ".dat");
-	if(data != null && data != "") {
-		var unserializer = new haxe.Unserializer(data);
-		unserializer.setResolver({ resolveEnum : openfl.Assets.resolveEnum, resolveClass : openfl.Assets.resolveClass});
-		var library = unserializer.unserialize();
-		openfl.Assets.libraries.set(name,library);
-		library.eventCallback = openfl.Assets.library_onEvent;
-		library.load(handler);
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + name + "\"",{ fileName : "Assets.hx", lineNumber : 880, className : "openfl.Assets", methodName : "loadLibrary"});
+	lime.Assets.loadLibrary(name,handler);
 };
 openfl.Assets.loadMusic = function(id,handler,useCache) {
 	if(useCache == null) useCache = true;
-	openfl.Assets.initialize();
-	if(useCache && openfl.Assets.cache.enabled && openfl.Assets.cache.sound.exists(id)) {
-		var sound = openfl.Assets.cache.sound.get(id);
-		if(openfl.Assets.isValidSound(sound)) {
-			handler(sound);
-			return;
-		}
-	}
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.MUSIC)) {
-			if(useCache && openfl.Assets.cache.enabled) library.loadMusic(symbolName,function(sound1) {
-				openfl.Assets.cache.sound.set(id,sound1);
-				handler(sound1);
-			}); else library.loadMusic(symbolName,handler);
-			return;
-		} else haxe.Log.trace("[openfl.Assets] There is no Sound asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 935, className : "openfl.Assets", methodName : "loadMusic"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 941, className : "openfl.Assets", methodName : "loadMusic"});
-	handler(null);
+	handler(openfl.Assets.getMusic(id,useCache));
 };
 openfl.Assets.loadMovieClip = function(id,handler) {
-	openfl.Assets.initialize();
 	var libraryName = id.substring(0,id.indexOf(":"));
 	var symbolName;
 	var pos = id.indexOf(":") + 1;
 	symbolName = HxOverrides.substr(id,pos,null);
 	var library = openfl.Assets.getLibrary(libraryName);
 	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.MOVIE_CLIP)) {
+		if(library.exists(symbolName,"MOVIE_CLIP")) {
 			library.loadMovieClip(symbolName,handler);
 			return;
-		} else haxe.Log.trace("[openfl.Assets] There is no MovieClip asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 971, className : "openfl.Assets", methodName : "loadMovieClip"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 977, className : "openfl.Assets", methodName : "loadMovieClip"});
+		} else haxe.Log.trace("[openfl.Assets] There is no MovieClip asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 678, className : "openfl.Assets", methodName : "loadMovieClip"});
+	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 684, className : "openfl.Assets", methodName : "loadMovieClip"});
 	handler(null);
 };
 openfl.Assets.loadSound = function(id,handler,useCache) {
 	if(useCache == null) useCache = true;
-	openfl.Assets.initialize();
-	if(useCache && openfl.Assets.cache.enabled && openfl.Assets.cache.sound.exists(id)) {
-		var sound = openfl.Assets.cache.sound.get(id);
-		if(openfl.Assets.isValidSound(sound)) {
-			handler(sound);
-			return;
-		}
-	}
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.SOUND)) {
-			if(useCache && openfl.Assets.cache.enabled) library.loadSound(symbolName,function(sound1) {
-				openfl.Assets.cache.sound.set(id,sound1);
-				handler(sound1);
-			}); else library.loadSound(symbolName,handler);
-			return;
-		} else haxe.Log.trace("[openfl.Assets] There is no Sound asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 1034, className : "openfl.Assets", methodName : "loadSound"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 1040, className : "openfl.Assets", methodName : "loadSound"});
-	handler(null);
+	handler(openfl.Assets.getSound(id,useCache));
 };
 openfl.Assets.loadText = function(id,handler) {
-	openfl.Assets.initialize();
-	var libraryName = id.substring(0,id.indexOf(":"));
-	var symbolName;
-	var pos = id.indexOf(":") + 1;
-	symbolName = HxOverrides.substr(id,pos,null);
-	var library = openfl.Assets.getLibrary(libraryName);
-	if(library != null) {
-		if(library.exists(symbolName,openfl.AssetType.TEXT)) {
-			library.loadText(symbolName,handler);
-			return;
-		} else haxe.Log.trace("[openfl.Assets] There is no String asset with an ID of \"" + id + "\"",{ fileName : "Assets.hx", lineNumber : 1070, className : "openfl.Assets", methodName : "loadText"});
-	} else haxe.Log.trace("[openfl.Assets] There is no asset library named \"" + libraryName + "\"",{ fileName : "Assets.hx", lineNumber : 1076, className : "openfl.Assets", methodName : "loadText"});
-	handler(null);
+	lime.Assets.loadText(id,handler);
 };
 openfl.Assets.registerLibrary = function(name,library) {
-	if(openfl.Assets.libraries.exists(name)) openfl.Assets.unloadLibrary(name);
-	if(library != null) library.eventCallback = openfl.Assets.library_onEvent;
-	openfl.Assets.libraries.set(name,library);
+	lime.Assets.registerLibrary(name,library);
 };
 openfl.Assets.removeEventListener = function(type,listener,capture) {
 	if(capture == null) capture = false;
-	openfl.Assets.initialize();
 	openfl.Assets.dispatcher.removeEventListener(type,listener,capture);
 };
 openfl.Assets.resolveClass = function(name) {
@@ -49637,13 +57314,7 @@ openfl.Assets.resolveEnum = function(name) {
 	return value;
 };
 openfl.Assets.unloadLibrary = function(name) {
-	openfl.Assets.initialize();
-	var library = openfl.Assets.libraries.get(name);
-	if(library != null) {
-		openfl.Assets.cache.clear(name + ":");
-		library.eventCallback = null;
-	}
-	openfl.Assets.libraries.remove(name);
+	lime.Assets.unloadLibrary(name);
 };
 openfl.Assets.library_onEvent = function(library,type) {
 	if(type == "change") {
@@ -49651,38 +57322,37 @@ openfl.Assets.library_onEvent = function(library,type) {
 		openfl.Assets.dispatchEvent(new openfl.events.Event(openfl.events.Event.CHANGE));
 	}
 };
-openfl.AssetData = function() {
+openfl.AssetLibrary = function() {
+	lime.AssetLibrary.call(this);
 };
-$hxClasses["openfl.AssetData"] = openfl.AssetData;
-openfl.AssetData.__name__ = ["openfl","AssetData"];
-openfl.AssetData.prototype = {
-	__class__: openfl.AssetData
-};
-openfl.AssetType = $hxClasses["openfl.AssetType"] = { __ename__ : ["openfl","AssetType"], __constructs__ : ["BINARY","FONT","IMAGE","MOVIE_CLIP","MUSIC","SOUND","TEMPLATE","TEXT"] };
-openfl.AssetType.BINARY = ["BINARY",0];
-openfl.AssetType.BINARY.toString = $estr;
-openfl.AssetType.BINARY.__enum__ = openfl.AssetType;
-openfl.AssetType.FONT = ["FONT",1];
-openfl.AssetType.FONT.toString = $estr;
-openfl.AssetType.FONT.__enum__ = openfl.AssetType;
-openfl.AssetType.IMAGE = ["IMAGE",2];
-openfl.AssetType.IMAGE.toString = $estr;
-openfl.AssetType.IMAGE.__enum__ = openfl.AssetType;
-openfl.AssetType.MOVIE_CLIP = ["MOVIE_CLIP",3];
-openfl.AssetType.MOVIE_CLIP.toString = $estr;
-openfl.AssetType.MOVIE_CLIP.__enum__ = openfl.AssetType;
-openfl.AssetType.MUSIC = ["MUSIC",4];
-openfl.AssetType.MUSIC.toString = $estr;
-openfl.AssetType.MUSIC.__enum__ = openfl.AssetType;
-openfl.AssetType.SOUND = ["SOUND",5];
-openfl.AssetType.SOUND.toString = $estr;
-openfl.AssetType.SOUND.__enum__ = openfl.AssetType;
-openfl.AssetType.TEMPLATE = ["TEMPLATE",6];
-openfl.AssetType.TEMPLATE.toString = $estr;
-openfl.AssetType.TEMPLATE.__enum__ = openfl.AssetType;
-openfl.AssetType.TEXT = ["TEXT",7];
-openfl.AssetType.TEXT.toString = $estr;
-openfl.AssetType.TEXT.__enum__ = openfl.AssetType;
+$hxClasses["openfl.AssetLibrary"] = openfl.AssetLibrary;
+openfl.AssetLibrary.__name__ = ["openfl","AssetLibrary"];
+openfl.AssetLibrary.__super__ = lime.AssetLibrary;
+openfl.AssetLibrary.prototype = $extend(lime.AssetLibrary.prototype,{
+	getMovieClip: function(id) {
+		return null;
+	}
+	,getMusic: function(id) {
+		return this.getSound(id);
+	}
+	,getSound: function(id) {
+		return null;
+	}
+	,loadMovieClip: function(id,handler) {
+		handler(this.getMovieClip(id));
+	}
+	,loadMusic: function(id,handler) {
+		handler(this.getMusic(id));
+	}
+	,loadSound: function(id,handler) {
+		handler(this.getSound(id));
+	}
+	,__class__: openfl.AssetLibrary
+});
+openfl._Assets = {};
+openfl._Assets.AssetType_Impl_ = function() { };
+$hxClasses["openfl._Assets.AssetType_Impl_"] = openfl._Assets.AssetType_Impl_;
+openfl._Assets.AssetType_Impl_.__name__ = ["openfl","_Assets","AssetType_Impl_"];
 openfl.Lib = function(rootElement,width,height) {
 	this.mKilled = false;
 	this.__scr = rootElement;
@@ -49694,6 +57364,18 @@ openfl.Lib = function(rootElement,width,height) {
 $hxClasses["openfl.Lib"] = openfl.Lib;
 openfl.Lib.__name__ = ["openfl","Lib"];
 openfl.Lib.__properties__ = {get_freeSnap:"get_freeSnap",get_stageSnap:"get_stageSnap",get_snap:"get_snap",get_current:"get_current"}
+openfl.Lib.current = null;
+openfl.Lib.mCurrent = null;
+openfl.Lib.mForce2DTransform = null;
+openfl.Lib.mMainClassRoot = null;
+openfl.Lib.mMe = null;
+openfl.Lib.mStage = null;
+openfl.Lib.mSnap = null;
+openfl.Lib.mStageSnap = null;
+openfl.Lib.mFreeSnap = null;
+openfl.Lib.snap = null;
+openfl.Lib.stageSnap = null;
+openfl.Lib.freeSnap = null;
 openfl.Lib.addCallback = function(functionName,closure) {
 	openfl.Lib.mMe.__scr[functionName] = closure;
 };
@@ -50144,6 +57826,9 @@ openfl.Lib.get_freeSnap = function() {
 	}
 	return openfl.Lib.mFreeSnap;
 };
+openfl.Lib.embed = $hx_exports.openfl.embed = function(elementName,width,height,background) {
+	lime.system.System.embed(elementName,width,height,background);
+};
 openfl.Lib.prototype = {
 	__class__: openfl.Lib
 };
@@ -50326,9 +58011,9 @@ openfl.display.Bitmap.prototype = $extend(openfl.display.DisplayObject.prototype
 			if(local.x < 0 || local.y < 0 || local.x > this.get_width() / this.get_scaleX() || local.y > this.get_height() / this.get_scaleY()) return null; else return this;
 		} else return openfl.display.DisplayObject.prototype.__getObjectUnderPoint.call(this,point);
 	}
-	,__render: function(inMask,clipRect) {
-		if(!this.__combinedVisible) return;
-		if(this.bitmapData == null) return;
+	,__render: function(inMask,clipRect,force) {
+		if(force == null) force = false;
+		if(!this.__combinedVisible && !force || this.bitmapData == null) return;
 		if((this.___renderFlags & 4) != 0 || (this.___renderFlags & 8) != 0) this.__validateMatrix();
 		var imageDataLease = this.bitmapData.__lease;
 		if(imageDataLease != null && (this.__currentLease == null || imageDataLease.seed != this.__currentLease.seed || imageDataLease.time != this.__currentLease.time)) {
@@ -50343,16 +58028,14 @@ openfl.display.Bitmap.prototype = $extend(openfl.display.DisplayObject.prototype
 			if(this.parent != null) this.parent.___renderFlags |= 64;
 			this.renderNextWake();
 		}
-		if(inMask != null) {
-		} else {
-			if((this.___renderFlags & 32) != 0) {
-				var m = this.transform.get_matrix();
-				this.__setTransform(m);
-				this.___renderFlags &= -33;
-			}
-			var el = this.snap.node;
-			el.setAttribute("opacity",Std.string(this.alpha));
+		if((this.___renderFlags & 32) != 0) {
+			var m = this.transform.get_matrix();
+			this.__setTransform(m);
+			this.___renderFlags &= -33;
 		}
+		var el = this.snap.node;
+		var alphaStr = Std.string(this.alpha);
+		if(el.getAttribute("opacity") != alphaStr) el.setAttribute("opacity",alphaStr);
 	}
 	,set_bitmapData: function(inBitmapData) {
 		if(inBitmapData != this.bitmapData) {
@@ -50477,6 +58160,13 @@ openfl.display.BitmapData.__isGIF = function(bytes) {
 		return (b == 7 || b == 9) && bytes.readByte() == 97;
 	}
 	return false;
+};
+openfl.display.BitmapData.fromImage = function(image,transparent) {
+	if(transparent == null) transparent = true;
+	var bitmapData = new openfl.display.BitmapData(0,0,transparent);
+	image.set_transparent(transparent);
+	bitmapData.__loadFromImage(image);
+	return bitmapData;
 };
 openfl.display.BitmapData.prototype = {
 	applyFilter: function(sourceBitmapData,sourceRect,destPoint,filter) {
@@ -50788,7 +58478,7 @@ openfl.display.BitmapData.prototype = {
 	}
 	,getPixels: function(rect) {
 		var len = Math.round(4 * rect.width * rect.height);
-		var byteArray = new openfl.utils.ByteArray();
+		var byteArray = new lime.utils.ByteArray();
 		if(byteArray.allocated < len) byteArray.___resizeBuffer(byteArray.allocated = Std["int"](Math.max(len,byteArray.allocated * 2))); else if(byteArray.allocated > len) byteArray.___resizeBuffer(byteArray.allocated = len);
 		byteArray.length = len;
 		len;
@@ -50975,7 +58665,7 @@ openfl.display.BitmapData.prototype = {
 		if(copySource == null) copySource = false;
 		if(mask == null) mask = -1;
 		if(color == null) color = 0;
-		haxe.Log.trace("BitmapData.threshold not implemented",{ fileName : "BitmapData.hx", lineNumber : 1178, className : "openfl.display.BitmapData", methodName : "threshold"});
+		haxe.Log.trace("BitmapData.threshold not implemented",{ fileName : "BitmapData.hx", lineNumber : 1179, className : "openfl.display.BitmapData", methodName : "threshold"});
 		return 0;
 	}
 	,unlock: function(changeRect) {
@@ -51048,18 +58738,10 @@ openfl.display.BitmapData.prototype = {
 	}
 	,__loadFromBase64: function(base64,type,onload) {
 		var _g = this;
-		var img = window.document.createElement("img");
-		var canvas = this.___textureBuffer;
-		var drawImage = function(_) {
-			canvas.width = img.width;
-			canvas.height = img.height;
-			var ctx = canvas.getContext("2d");
-			ctx.drawImage(img,0,0);
-			_g.rect = new openfl.geom.Rectangle(0,0,canvas.width,canvas.height);
+		lime.graphics.Image.fromBase64(base64,type,function(image) {
+			_g.__loadFromImage(image);
 			if(onload != null) onload(_g);
-		};
-		img.addEventListener("load",drawImage,false);
-		img.src = "data:" + type + ";base64," + base64;
+		});
 	}
 	,__loadFromBytes: function(bytes,inRawAlpha,onload) {
 		var _g = this;
@@ -51110,6 +58792,7 @@ openfl.display.BitmapData.prototype = {
 		canvas.height = height;
 		var ctx = canvas.getContext("2d");
 		ctx.drawImage(data.image,0,0,width,height);
+		this.__sourceImage = data.image;
 		data.bitmapData.width = width;
 		data.bitmapData.height = height;
 		data.bitmapData.rect = new openfl.geom.Rectangle(0,0,width,height);
@@ -51120,7 +58803,17 @@ openfl.display.BitmapData.prototype = {
 			var e1 = new openfl.events.Event(openfl.events.Event.COMPLETE);
 			e1.target = data.inLoader;
 			data.inLoader.dispatchEvent(e1);
-		} else haxe.Log.trace("Error: loader is null",{ fileName : "BitmapData.hx", lineNumber : 1567, className : "openfl.display.BitmapData", methodName : "__onLoad"});
+		} else haxe.Log.trace("Error: loader is null",{ fileName : "BitmapData.hx", lineNumber : 1568, className : "openfl.display.BitmapData", methodName : "__onLoad"});
+	}
+	,__loadFromImage: function(image) {
+		this.__image = image;
+		this.___textureBuffer.width = image.width;
+		this.___textureBuffer.height = image.height;
+		this.rect = new openfl.geom.Rectangle(0,0,image.width,image.height);
+		var ctx = this.___textureBuffer.getContext("2d");
+		ctx.drawImage(image.buffer.get_src(),0,0,this.___textureBuffer != null?this.___textureBuffer.width:0,this.___textureBuffer != null?this.___textureBuffer.height:0);
+		this.__sourceImage = image.buffer.get_src();
+		this.__lease.set(this.__leaseNum++,new Date().getTime());
 	}
 	,get_height: function() {
 		if(this.___textureBuffer != null) return this.___textureBuffer.height; else return 0;
@@ -51832,8 +59525,9 @@ openfl.display.Graphics.prototype = {
 		this.__clearNextCycle = true;
 	}
 	,__addStrokeAttribute: function(element,lineJob) {
+		var htmlElement = element.node;
 		if(lineJob != null) {
-			if(lineJob.grad == null) element.attr({ stroke : this.createCanvasColor(lineJob.colour,lineJob.alpha)}); else element.attr({ stroke : this.createCanvasGradient(lineJob.grad)});
+			if(lineJob.grad == null) htmlElement.setAttribute("stroke",this.createCanvasColor(lineJob.colour,lineJob.alpha)); else element.attr({ stroke : this.createCanvasGradient(lineJob.grad)});
 			element.attr({ 'stroke-width' : lineJob.thickness, 'stroke-linecap' : (function($this) {
 				var $r;
 				var _g = lineJob.caps;
@@ -51901,7 +59595,7 @@ openfl.display.Graphics.prototype = {
 				}($this));
 				return $r;
 			}(this))});
-		} else element.attr({ stroke : "none"});
+		} else htmlElement.setAttribute("stroke","none");
 	}
 	,__addFillAttribute: function(element,fillColour,fillAlpha,solidGradient,bitmap) {
 		if(solidGradient != null) element.attr({ fill : this.createCanvasGradient(solidGradient)}); else if(bitmap != null && (bitmap.flags & 16) > 0) {
@@ -51973,6 +59667,10 @@ openfl.display.Graphics.prototype = {
 						var width = _g11[4];
 						var y2 = _g11[3];
 						var x2 = _g11[2];
+						if(x2 < 0) x2 = 0;
+						if(y2 < 0) y2 = 0;
+						if(width < 0) width = 0;
+						if(height < 0) height = 0;
 						var rect = openfl.Lib.get_snap().rect(x2,y2,width,height,rx1,ry1);
 						this.__addStrokeAttribute(rect,d.lineJobs.length == 1?d.lineJobs[0]:null);
 						this.__addFillAttribute(rect,fillColour[0],fillAlpha[0],g[0],bitmap[0]);
@@ -52522,6 +60220,75 @@ openfl.display.PixelSnapping.AUTO.__enum__ = openfl.display.PixelSnapping;
 openfl.display.PixelSnapping.ALWAYS = ["ALWAYS",2];
 openfl.display.PixelSnapping.ALWAYS.toString = $estr;
 openfl.display.PixelSnapping.ALWAYS.__enum__ = openfl.display.PixelSnapping;
+openfl.display.Preloader = function(display) {
+	lime.app.Preloader.call(this);
+	if(display != null) {
+		this.display = display;
+		openfl.Lib.get_current().addChild(display);
+		if(js.Boot.__instanceof(display,NMEPreloader)) (js.Boot.__cast(display , NMEPreloader)).onInit();
+	}
+};
+$hxClasses["openfl.display.Preloader"] = openfl.display.Preloader;
+openfl.display.Preloader.__name__ = ["openfl","display","Preloader"];
+openfl.display.Preloader.__super__ = lime.app.Preloader;
+openfl.display.Preloader.prototype = $extend(lime.app.Preloader.prototype,{
+	load: function(urls,types) {
+		var sounds = [];
+		var url = null;
+		var _g1 = 0;
+		var _g = urls.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			url = urls[i];
+			var _g2 = types[i];
+			switch(_g2) {
+			case "MUSIC":case "SOUND":
+				var sound = haxe.io.Path.withoutExtension(url);
+				if(!HxOverrides.remove(sounds,sound)) this.total++;
+				sounds.push(sound);
+				break;
+			default:
+			}
+		}
+		var _g3 = 0;
+		while(_g3 < sounds.length) {
+			var soundName = sounds[_g3];
+			++_g3;
+			var sound1 = new openfl.media.Sound();
+			sound1.addEventListener(openfl.events.Event.COMPLETE,$bind(this,this.sound_onComplete));
+			sound1.addEventListener(openfl.events.IOErrorEvent.IO_ERROR,$bind(this,this.sound_onIOError));
+			sound1.load(new openfl.net.URLRequest(soundName + ".ogg"));
+		}
+		lime.app.Preloader.prototype.load.call(this,urls,types);
+	}
+	,start: function() {
+		if(this.display != null && js.Boot.__instanceof(this.display,NMEPreloader)) {
+			this.display.addEventListener(openfl.events.Event.COMPLETE,$bind(this,this.display_onComplete));
+			(js.Boot.__cast(this.display , NMEPreloader)).onLoaded();
+		} else lime.app.Preloader.prototype.start.call(this);
+	}
+	,update: function(loaded,total) {
+		if(this.display != null && js.Boot.__instanceof(this.display,NMEPreloader)) (js.Boot.__cast(this.display , NMEPreloader)).onUpdate(loaded,total);
+	}
+	,display_onComplete: function(event) {
+		this.display.removeEventListener(openfl.events.Event.COMPLETE,$bind(this,this.display_onComplete));
+		openfl.Lib.get_current().removeChild(this.display);
+		openfl.Lib.get_current().get_stage().set_focus(null);
+		this.display = null;
+		lime.app.Preloader.prototype.start.call(this);
+	}
+	,sound_onComplete: function(event) {
+		this.loaded++;
+		this.update(this.loaded,this.total);
+		if(this.loaded == this.total) this.start();
+	}
+	,sound_onIOError: function(event) {
+		this.loaded++;
+		this.update(this.loaded,this.total);
+		if(this.loaded == this.total) this.start();
+	}
+	,__class__: openfl.display.Preloader
+});
 openfl.display.Shape = function() {
 	openfl.display.DisplayObject.call(this);
 	this.__graphics = new openfl.display.Graphics(this.snap);
@@ -52826,7 +60593,7 @@ openfl.display.Stage.prototype = $extend(openfl.display.DisplayObjectContainer.p
 	,__queueStageEvent: function(evt) {
 		var _g = this;
 		var target = evt.target;
-		if(evt.type == "keydown") {
+		if(evt.type == "dragstart") evt.preventDefault(); else if(evt.type == "keydown") {
 			var e = evt;
 			if(e.keyCode == 86 && (e.ctrlKey || e.commandKey || e.controlKey || e.metaKey)) {
 				var document = window.document;
@@ -52948,7 +60715,7 @@ openfl.display.Stage.prototype = $extend(openfl.display.DisplayObjectContainer.p
 	,__onFocus: function(target) {
 		if(target != this.__focusObject) {
 			if(this.__focusObject != null) this.__focusObject.__fireEvent(new openfl.events.FocusEvent(openfl.events.FocusEvent.FOCUS_OUT,true,false,this.__focusObject,false,0));
-			target.__fireEvent(new openfl.events.FocusEvent(openfl.events.FocusEvent.FOCUS_IN,true,false,target,false,0));
+			if(null != target) target.__fireEvent(new openfl.events.FocusEvent(openfl.events.FocusEvent.FOCUS_IN,true,false,target,false,0));
 			this.__focusObject = target;
 		}
 	}
@@ -53499,6 +61266,9 @@ openfl.filters.BitmapFilter.prototype = {
 	}
 	,__class__: openfl.filters.BitmapFilter
 };
+openfl.filters.BitmapFilterQuality = function() { };
+$hxClasses["openfl.filters.BitmapFilterQuality"] = openfl.filters.BitmapFilterQuality;
+openfl.filters.BitmapFilterQuality.__name__ = ["openfl","filters","BitmapFilterQuality"];
 openfl.filters.BlurFilter = function(inBlurX,inBlurY,inQuality) {
 	if(inQuality == null) inQuality = 1;
 	if(inBlurY == null) inBlurY = 4;
@@ -54578,7 +62348,7 @@ openfl.net.URLLoader.prototype = $extend(openfl.events.EventDispatcher.prototype
 		var xmlHttpRequest = new XMLHttpRequest();
 		this.registerEvents(xmlHttpRequest);
 		var uri = "";
-		if(js.Boot.__instanceof(data,openfl.utils.ByteArray)) {
+		if(js.Boot.__instanceof(data,lime.utils.ByteArray)) {
 			var data1 = data;
 			var _g = this.dataFormat;
 			switch(_g[1]) {
@@ -54635,7 +62405,7 @@ openfl.net.URLLoader.prototype = $extend(openfl.events.EventDispatcher.prototype
 			var _g = this.dataFormat;
 			switch(_g[1]) {
 			case 0:
-				this.data = openfl.utils.ByteArray.__ofBuffer(content);
+				this.data = lime.utils.ByteArray.__ofBuffer(content);
 				break;
 			default:
 				this.data = Std.string(content);
@@ -54704,7 +62474,7 @@ openfl.net.URLRequest.prototype = {
 		var res = this.requestHeaders;
 		if(res == null) res = [];
 		if(this.method == openfl.net.URLRequestMethod.GET || this.data == null) return res;
-		if(typeof(this.data) == "string" || js.Boot.__instanceof(this.data,openfl.utils.ByteArray)) {
+		if(typeof(this.data) == "string" || js.Boot.__instanceof(this.data,lime.utils.ByteArray)) {
 			res = res.slice();
 			res.push(new openfl.net.URLRequestHeader("Content-Type",this.contentType != null?this.contentType:"application/x-www-form-urlencoded"));
 		}
@@ -54781,6 +62551,11 @@ openfl.system.Capabilities = function() { };
 $hxClasses["openfl.system.Capabilities"] = openfl.system.Capabilities;
 openfl.system.Capabilities.__name__ = ["openfl","system","Capabilities"];
 openfl.system.Capabilities.__properties__ = {get_language:"get_language",get_screenResolutionY:"get_screenResolutionY",get_screenResolutionX:"get_screenResolutionX",get_screenDPI:"get_screenDPI",get_pixelAspectRatio:"get_pixelAspectRatio"}
+openfl.system.Capabilities.pixelAspectRatio = null;
+openfl.system.Capabilities.screenDPI = null;
+openfl.system.Capabilities.screenResolutionX = null;
+openfl.system.Capabilities.screenResolutionY = null;
+openfl.system.Capabilities.language = null;
 openfl.system.Capabilities.get_pixelAspectRatio = function() {
 	return 1;
 };
@@ -54903,7 +62678,7 @@ openfl.text.TextField = function() {
 	this.gridFitType = openfl.text.GridFitType.PIXEL;
 	this.sharpness = 0;
 	this.__textFormats = [];
-	this.caretIndex = 0;
+	this.set_caretIndex(0);
 	this.shouldCaretShowed = true;
 	this.mTextSnap.attr({ style : this.__inputEnabled?"":"-webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;"});
 	this.addEventListener(openfl.events.MouseEvent.MOUSE_DOWN,$bind(this,this.onMouseDown));
@@ -55018,26 +62793,37 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 			++_g2;
 			char_idx = this.wrapParagraph(paragraph,wrap,char_idx,this.mSelStart,this.mSelEnd);
 		}
-		this.mTextSnap.selectAll("tspan").forEach(function(s) {
-			s.remove();
-		},this);
+		var textNode = this.mTextSnap.node;
+		var spans;
+		var _g3 = [];
+		var _g21 = 0;
+		var _g12 = textNode.childNodes.length;
+		while(_g21 < _g12) {
+			var i = _g21++;
+			_g3.push(textNode.childNodes.item(i));
+		}
+		spans = _g3;
+		var _g13 = 0;
+		while(_g13 < spans.length) {
+			var s = spans[_g13];
+			++_g13;
+			textNode.removeChild(s);
+		}
 		var svgBuf = new StringBuf();
 		var firstParagraph = true;
-		var _g3 = 0;
-		var _g12 = this.mParagraphs;
-		while(_g3 < _g12.length) {
-			var paragraph1 = _g12[_g3];
-			++_g3;
+		var _g14 = 0;
+		var _g22 = this.mParagraphs;
+		while(_g14 < _g22.length) {
+			var paragraph1 = _g22[_g14];
+			++_g14;
 			var firstSpan = true;
-			var _g21 = 0;
-			var _g31 = paragraph1.spans;
-			while(_g21 < _g31.length) {
-				var span = _g31[_g21];
-				++_g21;
+			var _g31 = 0;
+			var _g4 = paragraph1.spans;
+			while(_g31 < _g4.length) {
+				var span = _g4[_g31];
+				++_g31;
 				svgBuf.b += Std.string("<tspan xml:space=\"preserve\" height=\"" + span.rect.height + "px\" ");
-				if(null != span.rect) {
-					if(firstSpan) svgBuf.b += Std.string("x=\"" + span.startX + "\" dy=\"" + paragraph1.firstLineHeight + "px\" "); else if(span.startFromNewLine) svgBuf.b += Std.string("x=\"" + span.startX + "\" dy=\"" + span.rect.height + "px\" ");
-				}
+				if(firstSpan) svgBuf.b += Std.string("x=\"" + span.startX + "\" dy=\"" + paragraph1.firstLineHeight + "px\" "); else if(span.startFromNewLine) svgBuf.b += Std.string("x=\"" + span.startX + "\" dy=\"" + span.rect.height + "px\" ");
 				if(null != span.format) {
 					if(null != span.format.color) svgBuf.add("fill=\"#" + StringTools.hex(span.format.color,6) + "\" ");
 					if(null != span.format.font) svgBuf.b += Std.string("font-family=\"" + span.format.font + "\" ");
@@ -55048,9 +62834,9 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 					if(null != span.format.kerning) svgBuf.add("kerning=\"" + Std.string(span.format.kerning) + "px\" ");
 					if(null != span.format.letterSpacing) svgBuf.b += Std.string("letter-spacing=\"" + span.format.letterSpacing + "px\" ");
 				}
-				svgBuf.b += ">";
+				svgBuf.b += "><![CDATA[";
 				if(span.text == null) svgBuf.b += "null"; else svgBuf.b += "" + span.text;
-				svgBuf.b += "</tspan>";
+				svgBuf.b += "]]></tspan>";
 				firstSpan = false;
 			}
 			firstParagraph = false;
@@ -55075,6 +62861,13 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 		this.updateClipRect(new openfl.geom.Rectangle(this.get_x(),this.get_y(),this.get_width(),this.get_height()));
 		this.__graphics.clear();
 		this.drawBackgoundAndBorder();
+		var caretRect = this.getCaretRect();
+		var textX = Std.parseInt(textElement.getAttribute("x"));
+		var textY = Std.parseInt(textElement.getAttribute("y"));
+		if(caretRect.get_left() < textX) textElement.setAttribute("x",Std.string(caretRect.get_left()));
+		if(caretRect.get_top() < textY) textElement.setAttribute("y",Std.string(caretRect.get_top()));
+		if(caretRect.get_right() > textX + this.get_width()) textElement.setAttribute("x",Std.string(this.get_width() - caretRect.get_right()));
+		if(caretRect.get_bottom() > textY + this.get_height()) textElement.setAttribute("y",Std.string(this.get_height() - caretRect.get_bottom()));
 	}
 	,drawBackgoundAndBorder: function() {
 		if(this.background) {
@@ -55097,10 +62890,9 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 	,getCaretRect: function() {
 		var textElement = this.mTextSnap.node;
 		try {
-			if(this.get_text().length > 0 && this.caretIndex >= 0) {
-				var extent = textElement.getExtentOfChar(this.caretIndex < this.get_text().length?this.caretIndex:this.caretIndex - 1);
-				var x;
-				x = ((this.caretIndex < this.get_text().length?extent.x:extent.x + extent.width - 1) | 0) + 0.5;
+			if(this.get_text().length > 0 && this.get_caretIndex() >= 0) {
+				var extent = textElement.getExtentOfChar(this.get_caretIndex() < this.get_text().length?this.get_caretIndex():this.get_caretIndex() - 1);
+				var x = Std["int"](this.get_caretIndex() < this.get_text().length?extent.x:extent.x + extent.width - 1) + 0.5;
 				return new openfl.geom.Rectangle(x,extent.y,1,extent.height);
 			} else return new openfl.geom.Rectangle(0,0,1,this.mTextHeight * 1.4);
 		} catch( e ) {
@@ -55118,7 +62910,8 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 			while(_g < paras1.length) {
 				var paragraph = paras1[_g];
 				++_g;
-				this.mParagraphs.push({ align : this.mAlign, spans : [{ font : font, text : paragraph + (this.mText.length > 0?"\n":""), format : this.get_defaultTextFormat(), startFromNewLine : false}]});
+				if(this.displayAsPassword) paragraph = StringTools.rpad("","*",paragraph.length);
+				this.mParagraphs.push({ align : this.mAlign, spans : [{ font : font, text : paragraph + (this.mText.length > 0?"\n":""), format : this.get_defaultTextFormat(), startFromNewLine : true}]});
 			}
 		}
 		this.__textChanged = true;
@@ -55254,9 +63047,11 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 				prevG = g;
 			}
 			if(row.length > 0) {
+				var startFromNewLine;
+				if(row.length < text.length) startFromNewLine = true; else startFromNewLine = span.startFromNewLine;
 				newSpans.push({ font : font, text : Lambda.fold(row,function(o2,s3) {
 					return s3 + String.fromCharCode(o2.chr);
-				},""), format : span.format, startFromNewLine : true, rect : this.getRowDimension(row), startX : 0});
+				},""), format : span.format, startFromNewLine : startFromNewLine, rect : this.getRowDimension(row), startX : 0});
 				row = [];
 			}
 		}
@@ -55280,26 +63075,26 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 				lineWidth += s4.rect.width;
 			}
 		}
-		if(paragraph.align == openfl.text.TextFormatAlign.CENTER) startSpan.startX = Math.floor((this.mUserWidth - lineWidth) / 2);
+		if(paragraph.align == openfl.text.TextFormatAlign.CENTER && null != startSpan) startSpan.startX = Math.floor((this.mUserWidth - lineWidth) / 2);
 		paragraph.spans = newSpans;
 		return charIdx;
 	}
 	,moveCaretToPrevLine: function() {
-		this.moveCaretToLine(this.getLineByCaretIndex(this.caretIndex) - 1);
+		this.moveCaretToLine(this.getLineByCaretIndex(this.get_caretIndex()) - 1);
 	}
 	,moveCaretToNextLine: function() {
-		this.moveCaretToLine(this.getLineByCaretIndex(this.caretIndex) + 1);
+		this.moveCaretToLine(this.getLineByCaretIndex(this.get_caretIndex()) + 1);
 	}
 	,moveCaretToLine: function(lineIndex) {
 		if(lineIndex < 0 || lineIndex > this.getLineByCaretIndex(999999999)) return;
-		var pos = this.getPositionInLine(this.caretIndex);
+		var pos = this.getPositionInLine(this.get_caretIndex());
 		var begin = this.getCaretIndexOfFirstCharOfLine(lineIndex);
 		var dstCaretIndex = begin + pos;
 		var dstLineIndex = this.getLineByCaretIndex(dstCaretIndex);
 		var lastCaretIndex = this.getCaretIndexOfFirstCharOfLine(999999999);
 		if(dstLineIndex != lineIndex) dstCaretIndex = this.getCaretIndexOfFirstCharOfLine(lineIndex + 1);
 		if(dstCaretIndex < 0) dstCaretIndex = 0; else if(dstCaretIndex > lastCaretIndex) dstCaretIndex = lastCaretIndex;
-		this.caretIndex = dstCaretIndex;
+		this.set_caretIndex(dstCaretIndex);
 	}
 	,getCaretIndexOfFirstCharOfLine: function(lineIndex) {
 		var lengthBefore = 0;
@@ -55395,6 +63190,7 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 	}
 	,applyTextFormat: function(format,beginIndex,endIndex) {
 		var font = openfl.text.FontInstance.CreateSolid(format.font,format.size | 0,format.color,1.0);
+		endIndex -= 1;
 		var spanStartCharIndex = 0;
 		var _g = 0;
 		var _g1 = this.mParagraphs;
@@ -55435,8 +63231,9 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 			if(local.x < 0 || local.y < 0 || local.x > this.mMaxWidth || local.y > this.mMaxHeight) return null; else return this;
 		} else return openfl.display.InteractiveObject.prototype.__getObjectUnderPoint.call(this,point);
 	}
-	,__render: function(inMask,clipRect) {
-		if(!this.__combinedVisible) return;
+	,__render: function(inMask,clipRect,force) {
+		if(force == null) force = false;
+		if(!this.__combinedVisible && !force) return;
 		if((this.___renderFlags & 4) != 0 || (this.___renderFlags & 8) != 0) this.__validateMatrix();
 		if(this.__graphics.__render(inMask,this.__filters,1,1)) {
 			this.__applyFilters(this.snap);
@@ -55481,12 +63278,13 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 	,showCaret: function() {
 		if(this.__inputEnabled && this.get_stage().get_focus() == this && this.shouldCaretShowed) {
 			var rect = this.getCaretRect();
+			var offset = this.get_textElementOffset();
 			this.__graphics.clear();
 			this.drawBackgoundAndBorder();
-			if(rect.x <= this.mWidth) {
+			if(rect.x <= this.mWidth - offset.x) {
 				this.__graphics.lineStyle(0.5,0,1,true);
-				this.__graphics.moveTo(rect.x,rect.y);
-				this.__graphics.lineTo(rect.x,rect.get_bottom());
+				this.__graphics.moveTo(rect.x + offset.x,rect.y + offset.y);
+				this.__graphics.lineTo(rect.x + offset.x,rect.get_bottom() + offset.y);
 				this.__graphics.flush();
 			}
 			this.caretTimer.run = $bind(this,this.hideCaret);
@@ -55501,21 +63299,28 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 	}
 	,onKeyDown: function(e) {
 		var evt = e;
-		if((null == this.selectionInteractionStartIndex || this.selectionInteractionStartIndex < 0) && evt.shiftKey) this.selectionInteractionStartIndex = this.caretIndex;
-		if(evt.keyCode == 37 && this.caretIndex > 0) this.caretIndex -= 1; else if(evt.keyCode == 39 && this.caretIndex < this.get_text().length) this.caretIndex += 1; else if(evt.keyCode == 40) this.moveCaretToNextLine(); else if(evt.keyCode == 38) this.moveCaretToPrevLine(); else if(evt.keyCode == 8 && this.caretIndex > 0) {
-			if(this.isSelected()) this.removeSelectedText(); else this.removeText(this.caretIndex - 1,this.caretIndex - 1);
+		if((null == this.selectionInteractionStartIndex || this.selectionInteractionStartIndex < 0) && evt.shiftKey) this.selectionInteractionStartIndex = this.get_caretIndex();
+		if(evt.keyCode == 37 && this.get_caretIndex() > 0) {
+			var _g = this;
+			_g.set_caretIndex(_g.get_caretIndex() - 1);
+		} else if(evt.keyCode == 39 && this.get_caretIndex() < this.get_text().length) {
+			var _g1 = this;
+			_g1.set_caretIndex(_g1.get_caretIndex() + 1);
+		} else if(evt.keyCode == 40) this.moveCaretToNextLine(); else if(evt.keyCode == 38) this.moveCaretToPrevLine(); else if(evt.keyCode == 8 && this.get_caretIndex() > 0) {
+			if(this.isSelected()) this.removeSelectedText(); else this.removeText(this.get_caretIndex() - 1,this.get_caretIndex() - 1);
 			this.clearSelection();
-		} else if(evt.keyCode == 46 && this.caretIndex < this.get_text().length) {
-			if(this.isSelected()) this.removeSelectedText(); else this.removeText(this.caretIndex,this.caretIndex);
+		} else if(evt.keyCode == 46 && this.get_caretIndex() < this.get_text().length) {
+			if(this.isSelected()) this.removeSelectedText(); else this.removeText(this.get_caretIndex(),this.get_caretIndex());
 			this.clearSelection();
 		} else if(evt.keyCode == 13) {
-			this.insertText("\n",this.caretIndex);
-			this.caretIndex += 1;
+			this.insertText("\n",this.get_caretIndex());
+			var _g2 = this;
+			_g2.set_caretIndex(_g2.get_caretIndex() + 1);
 		}
 		if(!evt.shiftKey && !evt.ctrlKey && !evt.altKey) {
 			this.clearSelection();
 			this.selectionInteractionStartIndex = -1;
-		} else if(evt.shiftKey) this.adjustSelectionByCaret(this.caretIndex);
+		} else if(evt.shiftKey) this.adjustSelectionByCaret(this.get_caretIndex());
 		e.stopPropagation();
 	}
 	,adjustSelectionByCaret: function(caretIndex) {
@@ -55584,31 +63389,35 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 				$r = HxOverrides.substr(_this1,endIndex + 1,$this.get_text().length - endIndex);
 				return $r;
 			}(this)));
-			this.caretIndex = beginIndex;
+			this.set_caretIndex(beginIndex);
 		} else {
 			this.set_text("");
-			this.caretIndex = 0;
+			this.set_caretIndex(0);
 		}
 		this.dispatchEvent(new openfl.events.Event(openfl.events.Event.CHANGE,true));
 	}
 	,onKeyPress: function(e) {
 		if(null != e.charCode && 31 < e.charCode && !e.ctrlKey && !e.altKey && !e.controlKey && !e.commandKey) {
-			this.insertText(String.fromCharCode(e.charCode),this.caretIndex);
-			if(this.caretIndex < 0) this.caretIndex += 2; else this.caretIndex += 1;
+			this.insertText(String.fromCharCode(e.charCode),this.get_caretIndex());
+			var _g = this;
+			_g.set_caretIndex(_g.get_caretIndex() + (this.get_caretIndex() < 0?2:1));
 		}
 		e.stopPropagation();
 	}
 	,onMouseDown: function(e) {
 		if(this.__inputEnabled && this.get_stage().get_focus() == this) {
-			this.caretIndex = this.getCharIndexAtPoint(e.localX,e.localY);
+			this.set_caretIndex(this.getCharIndexAtPoint(e.localX,e.localY));
 			var textElement = this.mTextSnap.node;
-			if(this.get_text().length > 0 && this.get_text().length > this.caretIndex) try {
-				var extent = textElement.getExtentOfChar(this.caretIndex);
-				if(e.localX - extent.x > extent.width / 2) this.caretIndex += 1;
+			if(this.get_text().length > 0 && this.get_text().length > this.get_caretIndex()) try {
+				var extent = textElement.getExtentOfChar(this.get_caretIndex());
+				if(e.localX - extent.x > extent.width / 2) {
+					var _g = this;
+					_g.set_caretIndex(_g.get_caretIndex() + 1);
+				}
 			} catch( e1 ) {
 			}
-			this.selectionBeginIndex = this.caretIndex;
-			this.selectionEndIndex = this.caretIndex - 1;
+			this.selectionBeginIndex = this.get_caretIndex();
+			this.selectionEndIndex = this.get_caretIndex() - 1;
 			this.addEventListener(openfl.events.MouseEvent.MOUSE_MOVE,$bind(this,this.onMouseMove));
 		}
 		this.shouldCaretShowed = false;
@@ -55616,21 +63425,22 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 	,onMouseUp: function(e) {
 		this.removeEventListener(openfl.events.MouseEvent.MOUSE_MOVE,$bind(this,this.onMouseMove));
 		this.shouldCaretShowed = true;
-		this.caretIndex = this.getCharIndexAtPoint(e.localX,e.localY);
+		this.set_caretIndex(this.getCharIndexAtPoint(e.localX,e.localY));
 	}
 	,onMouseMove: function(e) {
 		var index = this.getCharIndexAtPoint(e.localX,e.localY);
-		if(index > this.caretIndex) {
-			this.svgSelectionBeginIndex = this.selectionBeginIndex = this.caretIndex;
+		if(index > this.get_caretIndex()) {
+			this.svgSelectionBeginIndex = this.selectionBeginIndex = this.get_caretIndex();
 			this.svgSelectionEndIndex = this.selectionEndIndex = index - 1;
 		} else if(index < this.selectionBeginIndex && index < this.selectionEndIndex) {
 			this.svgSelectionBeginIndex = this.selectionBeginIndex = index;
-			this.svgSelectionEndIndex = this.selectionEndIndex = this.caretIndex - 1;
+			this.svgSelectionEndIndex = this.selectionEndIndex = this.get_caretIndex() - 1;
 		}
 	}
 	,onPaste: function(e) {
-		this.insertText(e.text,this.caretIndex);
-		this.caretIndex += e.text.length + (this.caretIndex < 0?1:0);
+		this.insertText(e.text,this.get_caretIndex());
+		var _g = this;
+		_g.set_caretIndex(_g.get_caretIndex() + (e.text.length + (this.get_caretIndex() < 0?1:0)));
 	}
 	,get_autoSize: function() {
 		return this.autoSize;
@@ -55695,10 +63505,10 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 		return this.mHTMLText;
 	}
 	,get_maxScrollH: function() {
-		return 0;
+		return this.scrollH;
 	}
 	,get_maxScrollV: function() {
-		return 0;
+		return this.scrollV;
 	}
 	,get_multiline: function() {
 		return this.multiline;
@@ -55707,7 +63517,7 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 		return this.multiline = value;
 	}
 	,get_numLines: function() {
-		return 0;
+		if(null != this.mText) return 1; else return 0;
 	}
 	,get_scrollH: function() {
 		return this.scrollH;
@@ -55726,7 +63536,8 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 		return this.mText;
 	}
 	,set_text: function(inText) {
-		if(inText == null) this.mText = "null"; else this.mText = "" + inText;
+		if(this.mText == inText) return inText;
+		this.mText = inText;
 		if(!this.multiline) this.mText = StringTools.replace(this.mText,"\n","");
 		this.mHTMLMode = false;
 		this.RebuildText();
@@ -55795,8 +63606,41 @@ openfl.text.TextField.prototype = $extend(openfl.display.InteractiveObject.proto
 		this.RebuildText();
 		return this.get_wordWrap();
 	}
+	,get_caretIndex: function() {
+		return this._caretIndex;
+	}
+	,set_caretIndex: function(v) {
+		this._caretIndex = v;
+		var caretRect = this.getCaretRect();
+		var offset = this.get_textElementOffset();
+		var newOffset = this.get_textElementOffset();
+		if(caretRect.get_left() < -offset.x) newOffset.x = caretRect.get_left();
+		if(caretRect.get_top() < -offset.y) newOffset.y = caretRect.get_top();
+		if(caretRect.get_right() > -offset.x + this.get_width()) newOffset.x = this.get_width() - caretRect.get_right();
+		if(caretRect.get_bottom() > -offset.y + this.get_height()) newOffset.y = this.get_height() - caretRect.get_bottom();
+		this.set_textElementOffset(newOffset);
+		return v;
+	}
+	,get_textElementOffset: function() {
+		var textElement = this.mTextSnap.node;
+		var xStr = textElement.getAttribute("offset-x");
+		var yStr = textElement.getAttribute("offset-y");
+		return new openfl.geom.Point(null == xStr?0.0:Std.parseFloat(xStr),null == xStr?0.0:Std.parseFloat(yStr));
+	}
+	,set_textElementOffset: function(v) {
+		var textElement = this.mTextSnap.node;
+		textElement.setAttribute("offset-x",v.x == null?"null":"" + v.x);
+		textElement.setAttribute("offset-y",v.y == null?"null":"" + v.y);
+		textElement.setAttribute("transform","matrix(1,0,0,1," + v.x + "," + v.y + ")");
+		return v;
+	}
+	,set_displayAsPassword: function(v) {
+		this.displayAsPassword = v;
+		this.RebuildText();
+		return v;
+	}
 	,__class__: openfl.text.TextField
-	,__properties__: $extend(openfl.display.InteractiveObject.prototype.__properties__,{set_wordWrap:"set_wordWrap",get_wordWrap:"get_wordWrap",set_type:"set_type",get_type:"get_type",get_textWidth:"get_textWidth",get_textHeight:"get_textHeight",set_textColor:"set_textColor",get_textColor:"get_textColor",set_text:"set_text",get_text:"get_text",get_numLines:"get_numLines",get_maxScrollV:"get_maxScrollV",get_maxScrollH:"get_maxScrollH",set_htmlText:"set_htmlText",get_htmlText:"get_htmlText",set_defaultTextFormat:"set_defaultTextFormat",get_defaultTextFormat:"get_defaultTextFormat",get_caretPos:"get_caretPos",get_bottomScrollV:"get_bottomScrollV",set_borderColor:"set_borderColor",set_border:"set_border",set_backgroundColor:"set_backgroundColor",set_background:"set_background",set_autoSize:"set_autoSize"})
+	,__properties__: $extend(openfl.display.InteractiveObject.prototype.__properties__,{set_textElementOffset:"set_textElementOffset",get_textElementOffset:"get_textElementOffset",set_wordWrap:"set_wordWrap",get_wordWrap:"get_wordWrap",set_type:"set_type",get_type:"get_type",get_textWidth:"get_textWidth",get_textHeight:"get_textHeight",set_textColor:"set_textColor",get_textColor:"get_textColor",set_text:"set_text",get_text:"get_text",get_numLines:"get_numLines",get_maxScrollV:"get_maxScrollV",get_maxScrollH:"get_maxScrollH",set_htmlText:"set_htmlText",get_htmlText:"get_htmlText",set_displayAsPassword:"set_displayAsPassword",set_defaultTextFormat:"set_defaultTextFormat",get_defaultTextFormat:"get_defaultTextFormat",get_caretPos:"get_caretPos",set_caretIndex:"set_caretIndex",get_caretIndex:"get_caretIndex",get_bottomScrollV:"get_bottomScrollV",set_borderColor:"set_borderColor",set_border:"set_border",set_backgroundColor:"set_backgroundColor",set_background:"set_background",set_autoSize:"set_autoSize"})
 });
 openfl.text.FontInstanceMode = $hxClasses["openfl.text.FontInstanceMode"] = { __ename__ : ["openfl","text","FontInstanceMode"], __constructs__ : ["fimSolid"] };
 openfl.text.FontInstanceMode.fimSolid = ["fimSolid",0];
@@ -55885,6 +63729,7 @@ openfl.text.TextFormat = function(in_font,in_size,in_color,in_bold,in_italic,in_
 	this.rightMargin = in_rightMargin;
 	this.indent = in_indent;
 	this.leading = in_leading;
+	if(null == this.leading) this.leading = 0.0;
 };
 $hxClasses["openfl.text.TextFormat"] = openfl.text.TextFormat;
 openfl.text.TextFormat.__name__ = ["openfl","text","TextFormat"];
@@ -55923,6 +63768,11 @@ openfl.ui = {};
 openfl.ui.Keyboard = function() { };
 $hxClasses["openfl.ui.Keyboard"] = openfl.ui.Keyboard;
 openfl.ui.Keyboard.__name__ = ["openfl","ui","Keyboard"];
+openfl.ui.Keyboard.ALTERNATE = null;
+openfl.ui.Keyboard.COMMAND = null;
+openfl.ui.Keyboard.QUOTE = null;
+openfl.ui.Keyboard.capsLock = null;
+openfl.ui.Keyboard.numLock = null;
 openfl.ui.Keyboard.isAccessible = function() {
 	return false;
 };
@@ -56021,305 +63871,6 @@ openfl.ui.Keyboard.__convertWebkitCode = function(code) {
 	return 0;
 };
 openfl.utils = {};
-openfl.utils.ByteArray = function() {
-	this.littleEndian = false;
-	this.allocated = 0;
-	this.position = 0;
-	this.length = 0;
-	this.___resizeBuffer(this.allocated);
-};
-$hxClasses["openfl.utils.ByteArray"] = openfl.utils.ByteArray;
-openfl.utils.ByteArray.__name__ = ["openfl","utils","ByteArray"];
-openfl.utils.ByteArray.fromBytes = function(inBytes) {
-	var result = new openfl.utils.ByteArray();
-	result.byteView = new Uint8Array(inBytes.b);
-	result.set_length(result.byteView.length);
-	result.allocated = result.length;
-	return result;
-};
-openfl.utils.ByteArray.__ofBuffer = function(buffer) {
-	var bytes = new openfl.utils.ByteArray();
-	bytes.set_length(bytes.allocated = buffer.byteLength);
-	bytes.data = new DataView(buffer);
-	bytes.byteView = new Uint8Array(buffer);
-	return bytes;
-};
-openfl.utils.ByteArray.prototype = {
-	clear: function() {
-		if(this.allocated < 0) this.___resizeBuffer(this.allocated = Std["int"](Math.max(0,this.allocated * 2))); else if(this.allocated > 0) this.___resizeBuffer(this.allocated = 0);
-		this.length = 0;
-		0;
-	}
-	,readBoolean: function() {
-		return this.readByte() != 0;
-	}
-	,readByte: function() {
-		var data = this.data;
-		return data.getUint8(this.position++);
-	}
-	,readBytes: function(bytes,offset,length) {
-		if(length == null) length = 0;
-		if(offset == null) offset = 0;
-		if(offset < 0 || length < 0) throw new openfl.errors.IOError("Read error - Out of bounds");
-		if(length == 0) length = this.length;
-		var lengthToEnsure = offset + length;
-		if(bytes.length < lengthToEnsure) {
-			if(bytes.allocated < lengthToEnsure) bytes.___resizeBuffer(bytes.allocated = Std["int"](Math.max(lengthToEnsure,bytes.allocated * 2))); else if(bytes.allocated > lengthToEnsure) bytes.___resizeBuffer(bytes.allocated = lengthToEnsure);
-			bytes.length = lengthToEnsure;
-			lengthToEnsure;
-		}
-		bytes.byteView.set(this.byteView.subarray(this.position,this.position + length),offset);
-		bytes.position = offset;
-		this.position += length;
-		if(bytes.position + length > bytes.length) bytes.set_length(bytes.position + length);
-	}
-	,readDouble: function() {
-		var $double = this.data.getFloat64(this.position,this.littleEndian);
-		this.position += 8;
-		return $double;
-	}
-	,readFloat: function() {
-		var $float = this.data.getFloat32(this.position,this.littleEndian);
-		this.position += 4;
-		return $float;
-	}
-	,readFullBytes: function(bytes,pos,len) {
-		if(this.length < len) {
-			if(this.allocated < len) this.___resizeBuffer(this.allocated = Std["int"](Math.max(len,this.allocated * 2))); else if(this.allocated > len) this.___resizeBuffer(this.allocated = len);
-			this.length = len;
-			len;
-		}
-		var _g1 = pos;
-		var _g = pos + len;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var data = this.data;
-			data.setInt8(this.position++,bytes.b[i]);
-		}
-	}
-	,readInt: function() {
-		var $int = this.data.getInt32(this.position,this.littleEndian);
-		this.position += 4;
-		return $int;
-	}
-	,readShort: function() {
-		var $short = this.data.getInt16(this.position,this.littleEndian);
-		this.position += 2;
-		return $short;
-	}
-	,readUnsignedByte: function() {
-		var data = this.data;
-		return data.getUint8(this.position++);
-	}
-	,readUnsignedInt: function() {
-		var uInt = this.data.getUint32(this.position,this.littleEndian);
-		this.position += 4;
-		return uInt;
-	}
-	,readUnsignedShort: function() {
-		var uShort = this.data.getUint16(this.position,this.littleEndian);
-		this.position += 2;
-		return uShort;
-	}
-	,readUTF: function() {
-		var bytesCount = this.readUnsignedShort();
-		return this.readUTFBytes(bytesCount);
-	}
-	,readUTFBytes: function(len) {
-		var value = "";
-		var max = this.position + len;
-		while(this.position < max) {
-			var data = this.data;
-			var c = data.getUint8(this.position++);
-			if(c < 128) {
-				if(c == 0) break;
-				value += String.fromCharCode(c);
-			} else if(c < 224) value += String.fromCharCode((c & 63) << 6 | data.getUint8(this.position++) & 127); else if(c < 240) {
-				var c2 = data.getUint8(this.position++);
-				value += String.fromCharCode((c & 31) << 12 | (c2 & 127) << 6 | data.getUint8(this.position++) & 127);
-			} else {
-				var c21 = data.getUint8(this.position++);
-				var c3 = data.getUint8(this.position++);
-				value += String.fromCharCode((c & 15) << 18 | (c21 & 127) << 12 | c3 << 6 & 127 | data.getUint8(this.position++) & 127);
-			}
-		}
-		return value;
-	}
-	,toString: function() {
-		var cachePosition = this.position;
-		this.position = 0;
-		var value = this.readUTFBytes(this.length);
-		this.position = cachePosition;
-		return value;
-	}
-	,writeBoolean: function(value) {
-		this.writeByte(value?1:0);
-	}
-	,writeByte: function(value) {
-		var lengthToEnsure = this.position + 1;
-		if(this.length < lengthToEnsure) {
-			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
-			this.length = lengthToEnsure;
-			lengthToEnsure;
-		}
-		var data = this.data;
-		data.setInt8(this.position,value);
-		this.position += 1;
-	}
-	,writeBytes: function(bytes,offset,length) {
-		if(length == null) length = 0;
-		if(offset == null) offset = 0;
-		if(offset < 0 || length < 0) throw new openfl.errors.IOError("Write error - Out of bounds");
-		if(length == 0) length = bytes.length;
-		var lengthToEnsure = this.position + length;
-		if(this.length < lengthToEnsure) {
-			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
-			this.length = lengthToEnsure;
-			lengthToEnsure;
-		}
-		this.byteView.set(bytes.byteView.subarray(offset,offset + length),this.position);
-		this.position += length;
-	}
-	,writeDouble: function(x) {
-		var lengthToEnsure = this.position + 8;
-		if(this.length < lengthToEnsure) {
-			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
-			this.length = lengthToEnsure;
-			lengthToEnsure;
-		}
-		this.data.setFloat64(this.position,x,this.littleEndian);
-		this.position += 8;
-	}
-	,writeFloat: function(x) {
-		var lengthToEnsure = this.position + 4;
-		if(this.length < lengthToEnsure) {
-			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
-			this.length = lengthToEnsure;
-			lengthToEnsure;
-		}
-		this.data.setFloat32(this.position,x,this.littleEndian);
-		this.position += 4;
-	}
-	,writeInt: function(value) {
-		var lengthToEnsure = this.position + 4;
-		if(this.length < lengthToEnsure) {
-			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
-			this.length = lengthToEnsure;
-			lengthToEnsure;
-		}
-		this.data.setInt32(this.position,value,this.littleEndian);
-		this.position += 4;
-	}
-	,writeShort: function(value) {
-		var lengthToEnsure = this.position + 2;
-		if(this.length < lengthToEnsure) {
-			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
-			this.length = lengthToEnsure;
-			lengthToEnsure;
-		}
-		this.data.setInt16(this.position,value,this.littleEndian);
-		this.position += 2;
-	}
-	,writeUnsignedInt: function(value) {
-		var lengthToEnsure = this.position + 4;
-		if(this.length < lengthToEnsure) {
-			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
-			this.length = lengthToEnsure;
-			lengthToEnsure;
-		}
-		this.data.setUint32(this.position,value,this.littleEndian);
-		this.position += 4;
-	}
-	,writeUnsignedShort: function(value) {
-		var lengthToEnsure = this.position + 2;
-		if(this.length < lengthToEnsure) {
-			if(this.allocated < lengthToEnsure) this.___resizeBuffer(this.allocated = Std["int"](Math.max(lengthToEnsure,this.allocated * 2))); else if(this.allocated > lengthToEnsure) this.___resizeBuffer(this.allocated = lengthToEnsure);
-			this.length = lengthToEnsure;
-			lengthToEnsure;
-		}
-		this.data.setUint16(this.position,value,this.littleEndian);
-		this.position += 2;
-	}
-	,writeUTF: function(value) {
-		this.writeUnsignedShort(this._getUTFBytesCount(value));
-		this.writeUTFBytes(value);
-	}
-	,writeUTFBytes: function(value) {
-		var _g1 = 0;
-		var _g = value.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var c = value.charCodeAt(i);
-			if(c <= 127) this.writeByte(c); else if(c <= 2047) {
-				this.writeByte(192 | c >> 6);
-				this.writeByte(128 | c & 63);
-			} else if(c <= 65535) {
-				this.writeByte(224 | c >> 12);
-				this.writeByte(128 | c >> 6 & 63);
-				this.writeByte(128 | c & 63);
-			} else {
-				this.writeByte(240 | c >> 18);
-				this.writeByte(128 | c >> 12 & 63);
-				this.writeByte(128 | c >> 6 & 63);
-				this.writeByte(128 | c & 63);
-			}
-		}
-	}
-	,__fromBytes: function(inBytes) {
-		this.byteView = new Uint8Array(inBytes.b);
-		this.set_length(this.byteView.length);
-		this.allocated = this.length;
-	}
-	,__get: function(pos) {
-		return this.data.getUint8(pos);
-	}
-	,_getUTFBytesCount: function(value) {
-		var count = 0;
-		var _g1 = 0;
-		var _g = value.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			var c = value.charCodeAt(i);
-			if(c <= 127) count += 1; else if(c <= 2047) count += 2; else if(c <= 65535) count += 3; else count += 4;
-		}
-		return count;
-	}
-	,___resizeBuffer: function(len) {
-		var oldByteView = this.byteView;
-		var newByteView = new Uint8Array(len);
-		if(oldByteView != null) {
-			if(oldByteView.length <= len) newByteView.set(oldByteView); else newByteView.set(oldByteView.subarray(0,len));
-		}
-		this.byteView = newByteView;
-		this.data = new DataView(newByteView.buffer);
-	}
-	,__getBuffer: function() {
-		return this.data.buffer;
-	}
-	,__set: function(pos,v) {
-		this.data.setUint8(pos,v);
-	}
-	,get_bytesAvailable: function() {
-		return this.length - this.position;
-	}
-	,get_endian: function() {
-		if(this.littleEndian) return "littleEndian"; else return "bigEndian";
-	}
-	,set_endian: function(endian) {
-		this.littleEndian = endian == "littleEndian";
-		return endian;
-	}
-	,set_length: function(value) {
-		if(this.allocated < value) this.___resizeBuffer(this.allocated = Std["int"](Math.max(value,this.allocated * 2))); else if(this.allocated > value) this.___resizeBuffer(this.allocated = value);
-		this.length = value;
-		return value;
-	}
-	,__class__: openfl.utils.ByteArray
-	,__properties__: {set_length:"set_length",set_endian:"set_endian",get_endian:"get_endian",get_bytesAvailable:"get_bytesAvailable"}
-};
-openfl.utils.Endian = function() { };
-$hxClasses["openfl.utils.Endian"] = openfl.utils.Endian;
-openfl.utils.Endian.__name__ = ["openfl","utils","Endian"];
 openfl.utils.Timer = function(delay,repeatCount) {
 	if(repeatCount == null) repeatCount = 0;
 	openfl.events.EventDispatcher.call(this);
@@ -56646,6 +64197,7 @@ xpath.context.CoreEnvironment = function() {
 };
 $hxClasses["xpath.context.CoreEnvironment"] = xpath.context.CoreEnvironment;
 xpath.context.CoreEnvironment.__name__ = ["xpath","context","CoreEnvironment"];
+xpath.context.CoreEnvironment.instance = null;
 xpath.context.CoreEnvironment.getInstance = function() {
 	if(xpath.context.CoreEnvironment.instance == null) {
 		xpath.context.CoreEnvironment.instance = new xpath.context.CoreEnvironment();
@@ -57220,6 +64772,7 @@ xpath.parser.ExpressionParser = function() {
 $hxClasses["xpath.parser.ExpressionParser"] = xpath.parser.ExpressionParser;
 xpath.parser.ExpressionParser.__name__ = ["xpath","parser","ExpressionParser"];
 xpath.parser.ExpressionParser.__interfaces__ = [xpath.parser.Parser];
+xpath.parser.ExpressionParser.instance = null;
 xpath.parser.ExpressionParser.getInstance = function() {
 	if(xpath.parser.ExpressionParser.instance == null) xpath.parser.ExpressionParser.instance = new xpath.parser.ExpressionParser();
 	return xpath.parser.ExpressionParser.instance;
@@ -57280,6 +64833,7 @@ xpath.parser.FunctionCallParser = function() {
 $hxClasses["xpath.parser.FunctionCallParser"] = xpath.parser.FunctionCallParser;
 xpath.parser.FunctionCallParser.__name__ = ["xpath","parser","FunctionCallParser"];
 xpath.parser.FunctionCallParser.__interfaces__ = [xpath.parser.Parser];
+xpath.parser.FunctionCallParser.instance = null;
 xpath.parser.FunctionCallParser.getInstance = function() {
 	if(xpath.parser.FunctionCallParser.instance == null) xpath.parser.FunctionCallParser.instance = new xpath.parser.FunctionCallParser();
 	return xpath.parser.FunctionCallParser.instance;
@@ -57322,6 +64876,7 @@ xpath.parser.GroupParser = function() {
 $hxClasses["xpath.parser.GroupParser"] = xpath.parser.GroupParser;
 xpath.parser.GroupParser.__name__ = ["xpath","parser","GroupParser"];
 xpath.parser.GroupParser.__interfaces__ = [xpath.parser.Parser];
+xpath.parser.GroupParser.instance = null;
 xpath.parser.GroupParser.getInstance = function() {
 	if(xpath.parser.GroupParser.instance == null) xpath.parser.GroupParser.instance = new xpath.parser.GroupParser();
 	return xpath.parser.GroupParser.instance;
@@ -57346,6 +64901,7 @@ xpath.parser.NextStepParser = function() {
 $hxClasses["xpath.parser.NextStepParser"] = xpath.parser.NextStepParser;
 xpath.parser.NextStepParser.__name__ = ["xpath","parser","NextStepParser"];
 xpath.parser.NextStepParser.__interfaces__ = [xpath.parser.Parser];
+xpath.parser.NextStepParser.instance = null;
 xpath.parser.NextStepParser.getInstance = function() {
 	if(xpath.parser.NextStepParser.instance == null) xpath.parser.NextStepParser.instance = new xpath.parser.NextStepParser();
 	return xpath.parser.NextStepParser.instance;
@@ -57382,6 +64938,7 @@ xpath.parser.OperandParser = function() {
 $hxClasses["xpath.parser.OperandParser"] = xpath.parser.OperandParser;
 xpath.parser.OperandParser.__name__ = ["xpath","parser","OperandParser"];
 xpath.parser.OperandParser.__interfaces__ = [xpath.parser.Parser];
+xpath.parser.OperandParser.instance = null;
 xpath.parser.OperandParser.getInstance = function() {
 	if(xpath.parser.OperandParser.instance == null) xpath.parser.OperandParser.instance = new xpath.parser.OperandParser();
 	return xpath.parser.OperandParser.instance;
@@ -57479,6 +65036,7 @@ xpath.parser.PathParser = function() {
 $hxClasses["xpath.parser.PathParser"] = xpath.parser.PathParser;
 xpath.parser.PathParser.__name__ = ["xpath","parser","PathParser"];
 xpath.parser.PathParser.__interfaces__ = [xpath.parser.Parser];
+xpath.parser.PathParser.instance = null;
 xpath.parser.PathParser.getInstance = function() {
 	if(xpath.parser.PathParser.instance == null) xpath.parser.PathParser.instance = new xpath.parser.PathParser();
 	return xpath.parser.PathParser.instance;
@@ -57515,6 +65073,7 @@ xpath.parser.StepParser = function() {
 $hxClasses["xpath.parser.StepParser"] = xpath.parser.StepParser;
 xpath.parser.StepParser.__name__ = ["xpath","parser","StepParser"];
 xpath.parser.StepParser.__interfaces__ = [xpath.parser.Parser];
+xpath.parser.StepParser.instance = null;
 xpath.parser.StepParser.getInstance = function() {
 	if(xpath.parser.StepParser.instance == null) xpath.parser.StepParser.instance = new xpath.parser.StepParser();
 	return xpath.parser.StepParser.instance;
@@ -57572,6 +65131,7 @@ xpath.parser.XPathParser = function() {
 $hxClasses["xpath.parser.XPathParser"] = xpath.parser.XPathParser;
 xpath.parser.XPathParser.__name__ = ["xpath","parser","XPathParser"];
 xpath.parser.XPathParser.__interfaces__ = [xpath.parser.Parser];
+xpath.parser.XPathParser.instance = null;
 xpath.parser.XPathParser.getInstance = function() {
 	if(xpath.parser.XPathParser.instance == null) xpath.parser.XPathParser.instance = new xpath.parser.XPathParser();
 	return xpath.parser.XPathParser.instance;
@@ -57925,6 +65485,7 @@ xpath.tokenizer.container.ExpressionTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.ExpressionTokenizer"] = xpath.tokenizer.container.ExpressionTokenizer;
 xpath.tokenizer.container.ExpressionTokenizer.__name__ = ["xpath","tokenizer","container","ExpressionTokenizer"];
 xpath.tokenizer.container.ExpressionTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.ExpressionTokenizer.instance = null;
 xpath.tokenizer.container.ExpressionTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.ExpressionTokenizer.instance == null) {
 		xpath.tokenizer.container.ExpressionTokenizer.instance = new xpath.tokenizer.container.ExpressionTokenizer();
@@ -57946,6 +65507,7 @@ xpath.tokenizer.container.FilterExpressionTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.FilterExpressionTokenizer"] = xpath.tokenizer.container.FilterExpressionTokenizer;
 xpath.tokenizer.container.FilterExpressionTokenizer.__name__ = ["xpath","tokenizer","container","FilterExpressionTokenizer"];
 xpath.tokenizer.container.FilterExpressionTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.FilterExpressionTokenizer.instance = null;
 xpath.tokenizer.container.FilterExpressionTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.FilterExpressionTokenizer.instance == null) {
 		xpath.tokenizer.container.FilterExpressionTokenizer.instance = new xpath.tokenizer.container.FilterExpressionTokenizer();
@@ -57967,6 +65529,7 @@ xpath.tokenizer.container.FilterOperandTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.FilterOperandTokenizer"] = xpath.tokenizer.container.FilterOperandTokenizer;
 xpath.tokenizer.container.FilterOperandTokenizer.__name__ = ["xpath","tokenizer","container","FilterOperandTokenizer"];
 xpath.tokenizer.container.FilterOperandTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.FilterOperandTokenizer.instance = null;
 xpath.tokenizer.container.FilterOperandTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.FilterOperandTokenizer.instance == null) {
 		xpath.tokenizer.container.FilterOperandTokenizer.instance = new xpath.tokenizer.container.FilterOperandTokenizer();
@@ -57988,6 +65551,7 @@ xpath.tokenizer.container.FunctionArgumentsTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.FunctionArgumentsTokenizer"] = xpath.tokenizer.container.FunctionArgumentsTokenizer;
 xpath.tokenizer.container.FunctionArgumentsTokenizer.__name__ = ["xpath","tokenizer","container","FunctionArgumentsTokenizer"];
 xpath.tokenizer.container.FunctionArgumentsTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.FunctionArgumentsTokenizer.instance = null;
 xpath.tokenizer.container.FunctionArgumentsTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.FunctionArgumentsTokenizer.instance == null) {
 		xpath.tokenizer.container.FunctionArgumentsTokenizer.instance = new xpath.tokenizer.container.FunctionArgumentsTokenizer();
@@ -58009,6 +65573,7 @@ xpath.tokenizer.container.FunctionCallTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.FunctionCallTokenizer"] = xpath.tokenizer.container.FunctionCallTokenizer;
 xpath.tokenizer.container.FunctionCallTokenizer.__name__ = ["xpath","tokenizer","container","FunctionCallTokenizer"];
 xpath.tokenizer.container.FunctionCallTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.FunctionCallTokenizer.instance = null;
 xpath.tokenizer.container.FunctionCallTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.FunctionCallTokenizer.instance == null) {
 		xpath.tokenizer.container.FunctionCallTokenizer.instance = new xpath.tokenizer.container.FunctionCallTokenizer();
@@ -58030,6 +65595,7 @@ xpath.tokenizer.container.GroupTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.GroupTokenizer"] = xpath.tokenizer.container.GroupTokenizer;
 xpath.tokenizer.container.GroupTokenizer.__name__ = ["xpath","tokenizer","container","GroupTokenizer"];
 xpath.tokenizer.container.GroupTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.GroupTokenizer.instance = null;
 xpath.tokenizer.container.GroupTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.GroupTokenizer.instance == null) {
 		xpath.tokenizer.container.GroupTokenizer.instance = new xpath.tokenizer.container.GroupTokenizer();
@@ -58051,6 +65617,7 @@ xpath.tokenizer.container.NodeTestTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.NodeTestTokenizer"] = xpath.tokenizer.container.NodeTestTokenizer;
 xpath.tokenizer.container.NodeTestTokenizer.__name__ = ["xpath","tokenizer","container","NodeTestTokenizer"];
 xpath.tokenizer.container.NodeTestTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.NodeTestTokenizer.instance = null;
 xpath.tokenizer.container.NodeTestTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.NodeTestTokenizer.instance == null) {
 		xpath.tokenizer.container.NodeTestTokenizer.instance = new xpath.tokenizer.container.NodeTestTokenizer();
@@ -58072,6 +65639,7 @@ xpath.tokenizer.container.OperandTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.OperandTokenizer"] = xpath.tokenizer.container.OperandTokenizer;
 xpath.tokenizer.container.OperandTokenizer.__name__ = ["xpath","tokenizer","container","OperandTokenizer"];
 xpath.tokenizer.container.OperandTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.OperandTokenizer.instance = null;
 xpath.tokenizer.container.OperandTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.OperandTokenizer.instance == null) {
 		xpath.tokenizer.container.OperandTokenizer.instance = new xpath.tokenizer.container.OperandTokenizer();
@@ -58093,6 +65661,7 @@ xpath.tokenizer.container.PathTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.PathTokenizer"] = xpath.tokenizer.container.PathTokenizer;
 xpath.tokenizer.container.PathTokenizer.__name__ = ["xpath","tokenizer","container","PathTokenizer"];
 xpath.tokenizer.container.PathTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.PathTokenizer.instance = null;
 xpath.tokenizer.container.PathTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.PathTokenizer.instance == null) {
 		xpath.tokenizer.container.PathTokenizer.instance = new xpath.tokenizer.container.PathTokenizer();
@@ -58114,6 +65683,7 @@ xpath.tokenizer.container.PredicateTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.PredicateTokenizer"] = xpath.tokenizer.container.PredicateTokenizer;
 xpath.tokenizer.container.PredicateTokenizer.__name__ = ["xpath","tokenizer","container","PredicateTokenizer"];
 xpath.tokenizer.container.PredicateTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.PredicateTokenizer.instance = null;
 xpath.tokenizer.container.PredicateTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.PredicateTokenizer.instance == null) {
 		xpath.tokenizer.container.PredicateTokenizer.instance = new xpath.tokenizer.container.PredicateTokenizer();
@@ -58135,6 +65705,7 @@ xpath.tokenizer.container.StepDelimitersTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.StepDelimitersTokenizer"] = xpath.tokenizer.container.StepDelimitersTokenizer;
 xpath.tokenizer.container.StepDelimitersTokenizer.__name__ = ["xpath","tokenizer","container","StepDelimitersTokenizer"];
 xpath.tokenizer.container.StepDelimitersTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.StepDelimitersTokenizer.instance = null;
 xpath.tokenizer.container.StepDelimitersTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.StepDelimitersTokenizer.instance == null) {
 		xpath.tokenizer.container.StepDelimitersTokenizer.instance = new xpath.tokenizer.container.StepDelimitersTokenizer();
@@ -58156,6 +65727,7 @@ xpath.tokenizer.container.StepTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.StepTokenizer"] = xpath.tokenizer.container.StepTokenizer;
 xpath.tokenizer.container.StepTokenizer.__name__ = ["xpath","tokenizer","container","StepTokenizer"];
 xpath.tokenizer.container.StepTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.StepTokenizer.instance = null;
 xpath.tokenizer.container.StepTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.StepTokenizer.instance == null) {
 		xpath.tokenizer.container.StepTokenizer.instance = new xpath.tokenizer.container.StepTokenizer();
@@ -58177,6 +65749,7 @@ xpath.tokenizer.container.UnaryOperandTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.UnaryOperandTokenizer"] = xpath.tokenizer.container.UnaryOperandTokenizer;
 xpath.tokenizer.container.UnaryOperandTokenizer.__name__ = ["xpath","tokenizer","container","UnaryOperandTokenizer"];
 xpath.tokenizer.container.UnaryOperandTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.UnaryOperandTokenizer.instance = null;
 xpath.tokenizer.container.UnaryOperandTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.UnaryOperandTokenizer.instance == null) {
 		xpath.tokenizer.container.UnaryOperandTokenizer.instance = new xpath.tokenizer.container.UnaryOperandTokenizer();
@@ -58198,6 +65771,7 @@ xpath.tokenizer.container.UnaryPathTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.UnaryPathTokenizer"] = xpath.tokenizer.container.UnaryPathTokenizer;
 xpath.tokenizer.container.UnaryPathTokenizer.__name__ = ["xpath","tokenizer","container","UnaryPathTokenizer"];
 xpath.tokenizer.container.UnaryPathTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.UnaryPathTokenizer.instance = null;
 xpath.tokenizer.container.UnaryPathTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.UnaryPathTokenizer.instance == null) {
 		xpath.tokenizer.container.UnaryPathTokenizer.instance = new xpath.tokenizer.container.UnaryPathTokenizer();
@@ -58219,6 +65793,7 @@ xpath.tokenizer.container.UnaryStepTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.UnaryStepTokenizer"] = xpath.tokenizer.container.UnaryStepTokenizer;
 xpath.tokenizer.container.UnaryStepTokenizer.__name__ = ["xpath","tokenizer","container","UnaryStepTokenizer"];
 xpath.tokenizer.container.UnaryStepTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.UnaryStepTokenizer.instance = null;
 xpath.tokenizer.container.UnaryStepTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.UnaryStepTokenizer.instance == null) {
 		xpath.tokenizer.container.UnaryStepTokenizer.instance = new xpath.tokenizer.container.UnaryStepTokenizer();
@@ -58240,6 +65815,7 @@ xpath.tokenizer.container.XPathTokenizer = function() {
 $hxClasses["xpath.tokenizer.container.XPathTokenizer"] = xpath.tokenizer.container.XPathTokenizer;
 xpath.tokenizer.container.XPathTokenizer.__name__ = ["xpath","tokenizer","container","XPathTokenizer"];
 xpath.tokenizer.container.XPathTokenizer.__interfaces__ = [xpath.tokenizer.Tokenizer];
+xpath.tokenizer.container.XPathTokenizer.instance = null;
 xpath.tokenizer.container.XPathTokenizer.getInstance = function() {
 	if(xpath.tokenizer.container.XPathTokenizer.instance == null) {
 		xpath.tokenizer.container.XPathTokenizer.instance = new xpath.tokenizer.container.XPathTokenizer();
@@ -58278,6 +65854,7 @@ xpath.tokenizer.token.AbbreviatedStepTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.AbbreviatedStepTokenizer"] = xpath.tokenizer.token.AbbreviatedStepTokenizer;
 xpath.tokenizer.token.AbbreviatedStepTokenizer.__name__ = ["xpath","tokenizer","token","AbbreviatedStepTokenizer"];
+xpath.tokenizer.token.AbbreviatedStepTokenizer.instance = null;
 xpath.tokenizer.token.AbbreviatedStepTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.AbbreviatedStepTokenizer.instance == null) xpath.tokenizer.token.AbbreviatedStepTokenizer.instance = new xpath.tokenizer.token.AbbreviatedStepTokenizer();
 	return xpath.tokenizer.token.AbbreviatedStepTokenizer.instance;
@@ -58321,6 +65898,7 @@ xpath.tokenizer.token.ArgumentDelimiterTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.ArgumentDelimiterTokenizer"] = xpath.tokenizer.token.ArgumentDelimiterTokenizer;
 xpath.tokenizer.token.ArgumentDelimiterTokenizer.__name__ = ["xpath","tokenizer","token","ArgumentDelimiterTokenizer"];
+xpath.tokenizer.token.ArgumentDelimiterTokenizer.instance = null;
 xpath.tokenizer.token.ArgumentDelimiterTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.ArgumentDelimiterTokenizer.instance == null) xpath.tokenizer.token.ArgumentDelimiterTokenizer.instance = new xpath.tokenizer.token.ArgumentDelimiterTokenizer();
 	return xpath.tokenizer.token.ArgumentDelimiterTokenizer.instance;
@@ -58356,6 +65934,7 @@ xpath.tokenizer.token.AxisTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.AxisTokenizer"] = xpath.tokenizer.token.AxisTokenizer;
 xpath.tokenizer.token.AxisTokenizer.__name__ = ["xpath","tokenizer","token","AxisTokenizer"];
+xpath.tokenizer.token.AxisTokenizer.instance = null;
 xpath.tokenizer.token.AxisTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.AxisTokenizer.instance == null) xpath.tokenizer.token.AxisTokenizer.instance = new xpath.tokenizer.token.AxisTokenizer();
 	return xpath.tokenizer.token.AxisTokenizer.instance;
@@ -58401,6 +65980,7 @@ xpath.tokenizer.token.BeginExpressionTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.BeginExpressionTokenizer"] = xpath.tokenizer.token.BeginExpressionTokenizer;
 xpath.tokenizer.token.BeginExpressionTokenizer.__name__ = ["xpath","tokenizer","token","BeginExpressionTokenizer"];
+xpath.tokenizer.token.BeginExpressionTokenizer.instance = null;
 xpath.tokenizer.token.BeginExpressionTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.BeginExpressionTokenizer.instance == null) xpath.tokenizer.token.BeginExpressionTokenizer.instance = new xpath.tokenizer.token.BeginExpressionTokenizer();
 	return xpath.tokenizer.token.BeginExpressionTokenizer.instance;
@@ -58413,6 +65993,7 @@ xpath.tokenizer.token.BeginFunctionCallTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.BeginFunctionCallTokenizer"] = xpath.tokenizer.token.BeginFunctionCallTokenizer;
 xpath.tokenizer.token.BeginFunctionCallTokenizer.__name__ = ["xpath","tokenizer","token","BeginFunctionCallTokenizer"];
+xpath.tokenizer.token.BeginFunctionCallTokenizer.instance = null;
 xpath.tokenizer.token.BeginFunctionCallTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.BeginFunctionCallTokenizer.instance == null) xpath.tokenizer.token.BeginFunctionCallTokenizer.instance = new xpath.tokenizer.token.BeginFunctionCallTokenizer();
 	return xpath.tokenizer.token.BeginFunctionCallTokenizer.instance;
@@ -58458,6 +66039,7 @@ xpath.tokenizer.token.BeginGroupTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.BeginGroupTokenizer"] = xpath.tokenizer.token.BeginGroupTokenizer;
 xpath.tokenizer.token.BeginGroupTokenizer.__name__ = ["xpath","tokenizer","token","BeginGroupTokenizer"];
+xpath.tokenizer.token.BeginGroupTokenizer.instance = null;
 xpath.tokenizer.token.BeginGroupTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.BeginGroupTokenizer.instance == null) xpath.tokenizer.token.BeginGroupTokenizer.instance = new xpath.tokenizer.token.BeginGroupTokenizer();
 	return xpath.tokenizer.token.BeginGroupTokenizer.instance;
@@ -58471,6 +66053,7 @@ xpath.tokenizer.token.BeginPathTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.BeginPathTokenizer"] = xpath.tokenizer.token.BeginPathTokenizer;
 xpath.tokenizer.token.BeginPathTokenizer.__name__ = ["xpath","tokenizer","token","BeginPathTokenizer"];
+xpath.tokenizer.token.BeginPathTokenizer.instance = null;
 xpath.tokenizer.token.BeginPathTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.BeginPathTokenizer.instance == null) xpath.tokenizer.token.BeginPathTokenizer.instance = new xpath.tokenizer.token.BeginPathTokenizer();
 	return xpath.tokenizer.token.BeginPathTokenizer.instance;
@@ -58484,6 +66067,7 @@ xpath.tokenizer.token.BeginPredicateTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.BeginPredicateTokenizer"] = xpath.tokenizer.token.BeginPredicateTokenizer;
 xpath.tokenizer.token.BeginPredicateTokenizer.__name__ = ["xpath","tokenizer","token","BeginPredicateTokenizer"];
+xpath.tokenizer.token.BeginPredicateTokenizer.instance = null;
 xpath.tokenizer.token.BeginPredicateTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.BeginPredicateTokenizer.instance == null) xpath.tokenizer.token.BeginPredicateTokenizer.instance = new xpath.tokenizer.token.BeginPredicateTokenizer();
 	return xpath.tokenizer.token.BeginPredicateTokenizer.instance;
@@ -58496,6 +66080,7 @@ xpath.tokenizer.token.BeginXPathTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.BeginXPathTokenizer"] = xpath.tokenizer.token.BeginXPathTokenizer;
 xpath.tokenizer.token.BeginXPathTokenizer.__name__ = ["xpath","tokenizer","token","BeginXPathTokenizer"];
+xpath.tokenizer.token.BeginXPathTokenizer.instance = null;
 xpath.tokenizer.token.BeginXPathTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.BeginXPathTokenizer.instance == null) xpath.tokenizer.token.BeginXPathTokenizer.instance = new xpath.tokenizer.token.BeginXPathTokenizer();
 	return xpath.tokenizer.token.BeginXPathTokenizer.instance;
@@ -58515,6 +66100,7 @@ xpath.tokenizer.token.DeepStepDelimiterTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.DeepStepDelimiterTokenizer"] = xpath.tokenizer.token.DeepStepDelimiterTokenizer;
 xpath.tokenizer.token.DeepStepDelimiterTokenizer.__name__ = ["xpath","tokenizer","token","DeepStepDelimiterTokenizer"];
+xpath.tokenizer.token.DeepStepDelimiterTokenizer.instance = null;
 xpath.tokenizer.token.DeepStepDelimiterTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.DeepStepDelimiterTokenizer.instance == null) xpath.tokenizer.token.DeepStepDelimiterTokenizer.instance = new xpath.tokenizer.token.DeepStepDelimiterTokenizer();
 	return xpath.tokenizer.token.DeepStepDelimiterTokenizer.instance;
@@ -58535,6 +66121,7 @@ xpath.tokenizer.token.EndExpressionTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.EndExpressionTokenizer"] = xpath.tokenizer.token.EndExpressionTokenizer;
 xpath.tokenizer.token.EndExpressionTokenizer.__name__ = ["xpath","tokenizer","token","EndExpressionTokenizer"];
+xpath.tokenizer.token.EndExpressionTokenizer.instance = null;
 xpath.tokenizer.token.EndExpressionTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.EndExpressionTokenizer.instance == null) xpath.tokenizer.token.EndExpressionTokenizer.instance = new xpath.tokenizer.token.EndExpressionTokenizer();
 	return xpath.tokenizer.token.EndExpressionTokenizer.instance;
@@ -58548,6 +66135,7 @@ xpath.tokenizer.token.EndFunctionCallTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.EndFunctionCallTokenizer"] = xpath.tokenizer.token.EndFunctionCallTokenizer;
 xpath.tokenizer.token.EndFunctionCallTokenizer.__name__ = ["xpath","tokenizer","token","EndFunctionCallTokenizer"];
+xpath.tokenizer.token.EndFunctionCallTokenizer.instance = null;
 xpath.tokenizer.token.EndFunctionCallTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.EndFunctionCallTokenizer.instance == null) xpath.tokenizer.token.EndFunctionCallTokenizer.instance = new xpath.tokenizer.token.EndFunctionCallTokenizer();
 	return xpath.tokenizer.token.EndFunctionCallTokenizer.instance;
@@ -58561,6 +66149,7 @@ xpath.tokenizer.token.EndGroupTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.EndGroupTokenizer"] = xpath.tokenizer.token.EndGroupTokenizer;
 xpath.tokenizer.token.EndGroupTokenizer.__name__ = ["xpath","tokenizer","token","EndGroupTokenizer"];
+xpath.tokenizer.token.EndGroupTokenizer.instance = null;
 xpath.tokenizer.token.EndGroupTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.EndGroupTokenizer.instance == null) xpath.tokenizer.token.EndGroupTokenizer.instance = new xpath.tokenizer.token.EndGroupTokenizer();
 	return xpath.tokenizer.token.EndGroupTokenizer.instance;
@@ -58574,6 +66163,7 @@ xpath.tokenizer.token.EndPathTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.EndPathTokenizer"] = xpath.tokenizer.token.EndPathTokenizer;
 xpath.tokenizer.token.EndPathTokenizer.__name__ = ["xpath","tokenizer","token","EndPathTokenizer"];
+xpath.tokenizer.token.EndPathTokenizer.instance = null;
 xpath.tokenizer.token.EndPathTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.EndPathTokenizer.instance == null) xpath.tokenizer.token.EndPathTokenizer.instance = new xpath.tokenizer.token.EndPathTokenizer();
 	return xpath.tokenizer.token.EndPathTokenizer.instance;
@@ -58587,6 +66177,7 @@ xpath.tokenizer.token.EndPredicateTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.EndPredicateTokenizer"] = xpath.tokenizer.token.EndPredicateTokenizer;
 xpath.tokenizer.token.EndPredicateTokenizer.__name__ = ["xpath","tokenizer","token","EndPredicateTokenizer"];
+xpath.tokenizer.token.EndPredicateTokenizer.instance = null;
 xpath.tokenizer.token.EndPredicateTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.EndPredicateTokenizer.instance == null) xpath.tokenizer.token.EndPredicateTokenizer.instance = new xpath.tokenizer.token.EndPredicateTokenizer();
 	return xpath.tokenizer.token.EndPredicateTokenizer.instance;
@@ -58599,6 +66190,7 @@ xpath.tokenizer.token.EndXPathTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.EndXPathTokenizer"] = xpath.tokenizer.token.EndXPathTokenizer;
 xpath.tokenizer.token.EndXPathTokenizer.__name__ = ["xpath","tokenizer","token","EndXPathTokenizer"];
+xpath.tokenizer.token.EndXPathTokenizer.instance = null;
 xpath.tokenizer.token.EndXPathTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.EndXPathTokenizer.instance == null) xpath.tokenizer.token.EndXPathTokenizer.instance = new xpath.tokenizer.token.EndXPathTokenizer();
 	return xpath.tokenizer.token.EndXPathTokenizer.instance;
@@ -58617,6 +66209,7 @@ xpath.tokenizer.token.LiteralTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.LiteralTokenizer"] = xpath.tokenizer.token.LiteralTokenizer;
 xpath.tokenizer.token.LiteralTokenizer.__name__ = ["xpath","tokenizer","token","LiteralTokenizer"];
+xpath.tokenizer.token.LiteralTokenizer.instance = null;
 xpath.tokenizer.token.LiteralTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.LiteralTokenizer.instance == null) xpath.tokenizer.token.LiteralTokenizer.instance = new xpath.tokenizer.token.LiteralTokenizer();
 	return xpath.tokenizer.token.LiteralTokenizer.instance;
@@ -58645,6 +66238,7 @@ xpath.tokenizer.token.NameTestTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.NameTestTokenizer"] = xpath.tokenizer.token.NameTestTokenizer;
 xpath.tokenizer.token.NameTestTokenizer.__name__ = ["xpath","tokenizer","token","NameTestTokenizer"];
+xpath.tokenizer.token.NameTestTokenizer.instance = null;
 xpath.tokenizer.token.NameTestTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.NameTestTokenizer.instance == null) xpath.tokenizer.token.NameTestTokenizer.instance = new xpath.tokenizer.token.NameTestTokenizer();
 	return xpath.tokenizer.token.NameTestTokenizer.instance;
@@ -58697,6 +66291,7 @@ xpath.tokenizer.token.NegationOperatorTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.NegationOperatorTokenizer"] = xpath.tokenizer.token.NegationOperatorTokenizer;
 xpath.tokenizer.token.NegationOperatorTokenizer.__name__ = ["xpath","tokenizer","token","NegationOperatorTokenizer"];
+xpath.tokenizer.token.NegationOperatorTokenizer.instance = null;
 xpath.tokenizer.token.NegationOperatorTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.NegationOperatorTokenizer.instance == null) xpath.tokenizer.token.NegationOperatorTokenizer.instance = new xpath.tokenizer.token.NegationOperatorTokenizer();
 	return xpath.tokenizer.token.NegationOperatorTokenizer.instance;
@@ -58709,6 +66304,7 @@ xpath.tokenizer.token.NumberTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.NumberTokenizer"] = xpath.tokenizer.token.NumberTokenizer;
 xpath.tokenizer.token.NumberTokenizer.__name__ = ["xpath","tokenizer","token","NumberTokenizer"];
+xpath.tokenizer.token.NumberTokenizer.instance = null;
 xpath.tokenizer.token.NumberTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.NumberTokenizer.instance == null) xpath.tokenizer.token.NumberTokenizer.instance = new xpath.tokenizer.token.NumberTokenizer();
 	return xpath.tokenizer.token.NumberTokenizer.instance;
@@ -58773,6 +66369,7 @@ xpath.tokenizer.token.OperatorTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.OperatorTokenizer"] = xpath.tokenizer.token.OperatorTokenizer;
 xpath.tokenizer.token.OperatorTokenizer.__name__ = ["xpath","tokenizer","token","OperatorTokenizer"];
+xpath.tokenizer.token.OperatorTokenizer.instance = null;
 xpath.tokenizer.token.OperatorTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.OperatorTokenizer.instance == null) xpath.tokenizer.token.OperatorTokenizer.instance = new xpath.tokenizer.token.OperatorTokenizer();
 	return xpath.tokenizer.token.OperatorTokenizer.instance;
@@ -58803,6 +66400,7 @@ xpath.tokenizer.token.PINameTestTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.PINameTestTokenizer"] = xpath.tokenizer.token.PINameTestTokenizer;
 xpath.tokenizer.token.PINameTestTokenizer.__name__ = ["xpath","tokenizer","token","PINameTestTokenizer"];
+xpath.tokenizer.token.PINameTestTokenizer.instance = null;
 xpath.tokenizer.token.PINameTestTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.PINameTestTokenizer.instance == null) xpath.tokenizer.token.PINameTestTokenizer.instance = new xpath.tokenizer.token.PINameTestTokenizer();
 	return xpath.tokenizer.token.PINameTestTokenizer.instance;
@@ -58842,6 +66440,7 @@ xpath.tokenizer.token.StepDelimiterTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.StepDelimiterTokenizer"] = xpath.tokenizer.token.StepDelimiterTokenizer;
 xpath.tokenizer.token.StepDelimiterTokenizer.__name__ = ["xpath","tokenizer","token","StepDelimiterTokenizer"];
+xpath.tokenizer.token.StepDelimiterTokenizer.instance = null;
 xpath.tokenizer.token.StepDelimiterTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.StepDelimiterTokenizer.instance == null) xpath.tokenizer.token.StepDelimiterTokenizer.instance = new xpath.tokenizer.token.StepDelimiterTokenizer();
 	return xpath.tokenizer.token.StepDelimiterTokenizer.instance;
@@ -58867,6 +66466,7 @@ xpath.tokenizer.token.TypeTestTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.TypeTestTokenizer"] = xpath.tokenizer.token.TypeTestTokenizer;
 xpath.tokenizer.token.TypeTestTokenizer.__name__ = ["xpath","tokenizer","token","TypeTestTokenizer"];
+xpath.tokenizer.token.TypeTestTokenizer.instance = null;
 xpath.tokenizer.token.TypeTestTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.TypeTestTokenizer.instance == null) xpath.tokenizer.token.TypeTestTokenizer.instance = new xpath.tokenizer.token.TypeTestTokenizer();
 	return xpath.tokenizer.token.TypeTestTokenizer.instance;
@@ -58903,6 +66503,7 @@ xpath.tokenizer.token.VariableReferenceTokenizer = function() {
 };
 $hxClasses["xpath.tokenizer.token.VariableReferenceTokenizer"] = xpath.tokenizer.token.VariableReferenceTokenizer;
 xpath.tokenizer.token.VariableReferenceTokenizer.__name__ = ["xpath","tokenizer","token","VariableReferenceTokenizer"];
+xpath.tokenizer.token.VariableReferenceTokenizer.instance = null;
 xpath.tokenizer.token.VariableReferenceTokenizer.getInstance = function() {
 	if(xpath.tokenizer.token.VariableReferenceTokenizer.instance == null) xpath.tokenizer.token.VariableReferenceTokenizer.instance = new xpath.tokenizer.token.VariableReferenceTokenizer();
 	return xpath.tokenizer.token.VariableReferenceTokenizer.instance;
@@ -60096,9 +67697,28 @@ Xml.DocType = "doctype";
 Xml.ProcessingInstruction = "processingInstruction";
 Xml.Document = "document";
 haxe.Resource.content = [{ name : "ui/todo.xml", data : "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiID8+Cjx2Ym94PgoJPHRleHQgdGV4dD0iV29yayBpbiBwcm9ncmVzcyIgLz4KPC92Ym94Pg"},{ name : "data/views.xml", data : "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiID8+Cjx2aWV3cz4KCTwhLS0KCSoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqCgkqIEdFTkVSQUwgQ09NUE9ORU5UUwoJKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioKCS0tPgoJPHZpZXc+CgkJPGdyb3VwPkdlbmVyYWw8L2dyb3VwPgoJCTxuYW1lPkJ1dHRvbnM8L25hbWU+CgkJPGljb24+aWNvbnMvdWktYnV0dG9ucy5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5CdXR0b25zPC9jb250cm9sbGVyPgoJCTxyZXNvdXJjZXM+CgkJCTxyZXNvdXJjZSB0eXBlPSJoYXhlIj5yZXNvdXJjZXMvQnV0dG9ucy9CdXR0b25zLmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL0J1dHRvbnMvQnV0dG9ucy54bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3PgoKCTx2aWV3PgoJCTxncm91cD5HZW5lcmFsPC9ncm91cD4KCQk8bmFtZT5UZXh0IEZpZWxkczwvbmFtZT4KCQk8aWNvbj5pY29ucy91aS1sYWJlbHMucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuVGV4dEZpZWxkczwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL1RleHRGaWVsZHMvVGV4dEZpZWxkcy5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9UZXh0RmllbGRzL1RleHRGaWVsZHMueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCgk8dmlldz4KCQk8Z3JvdXA+R2VuZXJhbDwvZ3JvdXA+CgkJPG5hbWU+VGV4dCBJbnB1dHM8L25hbWU+CgkJPGljb24+aWNvbnMvdWktdGV4dC1maWVsZC5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5UZXh0SW5wdXRzPC9jb250cm9sbGVyPgoJCTxyZXNvdXJjZXM+CgkJCTxyZXNvdXJjZSB0eXBlPSJoYXhlIj5yZXNvdXJjZXMvVGV4dElucHV0cy9UZXh0SW5wdXRzLmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL1RleHRJbnB1dHMvVGV4dElucHV0cy54bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3PgoJCgk8dmlldz4KCQk8Z3JvdXA+R2VuZXJhbDwvZ3JvdXA+CgkJPG5hbWU+Q2hlY2sgQm94ZXM8L25hbWU+CgkJPGljb24+aWNvbnMvdWktY2hlY2stYm94ZXMucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuQ2hlY2tCb3hlczwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL0NoZWNrQm94ZXMvQ2hlY2tCb3hlcy5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9DaGVja0JveGVzL0NoZWNrQm94ZXMueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCgk8dmlldz4KCQk8Z3JvdXA+R2VuZXJhbDwvZ3JvdXA+CgkJPG5hbWU+T3B0aW9uIEJveGVzPC9uYW1lPgoJCTxpY29uPmljb25zL3VpLXJhZGlvLWJ1dHRvbnMucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuT3B0aW9uQm94ZXM8L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQkJPHJlc291cmNlIHR5cGU9ImhheGUiPnJlc291cmNlcy9PcHRpb25Cb3hlcy9PcHRpb25Cb3hlcy5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9PcHRpb25Cb3hlcy9PcHRpb25Cb3hlcy54bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3PgoJCgk8dmlldz4KCQk8Z3JvdXA+R2VuZXJhbDwvZ3JvdXA+CgkJPG5hbWU+SW1hZ2VzPC9uYW1lPgoJCTxpY29uPmljb25zL2ltYWdlcy5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5JbWFnZXM8L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQkJPHJlc291cmNlIHR5cGU9ImhheGUiPnJlc291cmNlcy9JbWFnZXMvSW1hZ2VzLmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL0ltYWdlcy9JbWFnZXMueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCQoJPHZpZXc+CgkJPGdyb3VwPkdlbmVyYWw8L2dyb3VwPgoJCTxuYW1lPlNwYWNlcnM8L25hbWU+CgkJPGljb24+aWNvbnMvdWktc3BhY2VyLnBuZzwvaWNvbj4KCQk8Y29udHJvbGxlcj5oYXhlLnVpLnNob3djYXNlLnZpZXdzLlRvZG88L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCgk8dmlldz4KCQk8Z3JvdXA+R2VuZXJhbDwvZ3JvdXA+CgkJPG5hbWU+VGFiIEJhcnM8L25hbWU+CgkJPGljb24+aWNvbnMvdWktdGFiLnBuZzwvaWNvbj4KCQk8Y29udHJvbGxlcj5oYXhlLnVpLnNob3djYXNlLnZpZXdzLlRvZG88L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCgk8dmlldz4KCQk8Z3JvdXA+R2VuZXJhbDwvZ3JvdXA+CgkJPG5hbWU+TWVudXM8L25hbWU+CgkJPGljb24+aWNvbnMvdWktbWVudS1ibHVlLnBuZzwvaWNvbj4KCQk8Y29udHJvbGxlcj5oYXhlLnVpLnNob3djYXNlLnZpZXdzLlRvZG88L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCQoJPCEtLQoJKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioKCSogQ09OVEFJTkVSUwoJKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioKCS0tPgoJPHZpZXc+CgkJPGdyb3VwPkNvbnRhaW5lcnM8L2dyb3VwPgoJCTxuYW1lPlNjcm9sbCB2aWV3PC9uYW1lPgoJCTxpY29uPmljb25zL3VpLWxpc3QtYm94LWJsdWUucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuU2Nyb2xsVmlld3M8L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQkJPHJlc291cmNlIHR5cGU9ImhheGUiPnJlc291cmNlcy9TY3JvbGxWaWV3cy9TY3JvbGxWaWV3cy5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9TY3JvbGxWaWV3cy9TY3JvbGxWaWV3cy54bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3PgoJCgk8dmlldz4KCQk8Z3JvdXA+Q29udGFpbmVyczwvZ3JvdXA+CgkJPG5hbWU+TGlzdCB2aWV3PC9uYW1lPgoJCTxpY29uPmljb25zL3VpLWxpc3QtYm94LWJsdWUucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuTGlzdFZpZXdzPC9jb250cm9sbGVyPgoJCTxyZXNvdXJjZXM+CgkJCTxyZXNvdXJjZSB0eXBlPSJoYXhlIj5yZXNvdXJjZXMvTGlzdFZpZXdzL0xpc3RWaWV3cy5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9MaXN0Vmlld3MvTGlzdFZpZXdzLnhtbDwvcmVzb3VyY2U+CgkJPC9yZXNvdXJjZXM+Cgk8L3ZpZXc+CgoJPHZpZXc+CgkJPGdyb3VwPkNvbnRhaW5lcnM8L2dyb3VwPgoJCTxuYW1lPkFjY29yZGlvbjwvbmFtZT4KCQk8aWNvbj5pY29ucy91aS1hY2NvcmRpb24ucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuQWNjb3JkaW9uczwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL0FjY29yZGlvbnMvQWNjb3JkaW9ucy5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9BY2NvcmRpb25zL0FjY29yZGlvbnMueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCQoJPCEtLQoJKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioKCSogU0VMRUNUSU9OCgkqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKgoJLS0+Cgk8dmlldz4KCQk8Z3JvdXA+U2VsZWN0aW9uPC9ncm91cD4KCQk8bmFtZT5MaXN0PC9uYW1lPgoJCTxpY29uPmljb25zL3VpLWxpc3QtYm94LWJsdWUucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuTGlzdFNlbGVjdG9yczwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL0xpc3RTZWxlY3RvcnMvTGlzdFNlbGVjdG9ycy5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9MaXN0U2VsZWN0b3JzL0xpc3RTZWxlY3RvcnMueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCgk8dmlldz4KCQk8Z3JvdXA+U2VsZWN0aW9uPC9ncm91cD4KCQk8bmFtZT5EYXRlPC9uYW1lPgoJCTxpY29uPmljb25zL3VpLWNvbWJvLWJveC1jYWxlbmRhci5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5EYXRlU2VsZWN0b3JzPC9jb250cm9sbGVyPgoJCTxyZXNvdXJjZXM+CgkJCTxyZXNvdXJjZSB0eXBlPSJoYXhlIj5yZXNvdXJjZXMvRGF0ZVNlbGVjdG9ycy9EYXRlU2VsZWN0b3JzLmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL0RhdGVTZWxlY3RvcnMvRGF0ZVNlbGVjdG9ycy54bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3PgoJCgk8IS0tCgkqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKgoJKiBTQ1JPTExTCgkqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKgoJLS0+Cgk8dmlldz4KCQk8Z3JvdXA+U2Nyb2xsczwvZ3JvdXA+CgkJPG5hbWU+SG9yaXpvbnRhbCBTY3JvbGxiYXJzPC9uYW1lPgoJCTxpY29uPmljb25zL3VpLXNjcm9sbC1iYXItaG9yaXpvbnRhbC5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5IU2Nyb2xsQmFyczwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL1Njcm9sbEJhcnMvSFNjcm9sbEJhcnMuaHg8L3Jlc291cmNlPgoJCQk8cmVzb3VyY2UgdHlwZT0ieG1sIj5yZXNvdXJjZXMvU2Nyb2xsQmFycy9IU2Nyb2xsQmFycy54bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3PgoKCTx2aWV3PgoJCTxncm91cD5TY3JvbGxzPC9ncm91cD4KCQk8bmFtZT5WZXJ0aWNhbCBTY3JvbGxiYXJzPC9uYW1lPgoJCTxpY29uPmljb25zL3VpLXNjcm9sbC1iYXIucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuVlNjcm9sbEJhcnM8L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQkJPHJlc291cmNlIHR5cGU9ImhheGUiPnJlc291cmNlcy9TY3JvbGxCYXJzL1ZTY3JvbGxCYXJzLmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL1Njcm9sbEJhcnMvVlNjcm9sbEJhcnMueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCQoJPHZpZXc+CgkJPGdyb3VwPlNjcm9sbHM8L2dyb3VwPgoJCTxuYW1lPkhvcml6b250YWwgU2xpZGVyczwvbmFtZT4KCQk8aWNvbj5pY29ucy91aS1zbGlkZXItMDUwLnBuZzwvaWNvbj4KCQk8Y29udHJvbGxlcj5oYXhlLnVpLnNob3djYXNlLnZpZXdzLkhTbGlkZXJzPC9jb250cm9sbGVyPgoJCTxyZXNvdXJjZXM+CgkJCTxyZXNvdXJjZSB0eXBlPSJoYXhlIj5yZXNvdXJjZXMvU2xpZGVycy9IU2xpZGVycy5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9TbGlkZXJzL0hTbGlkZXJzLnhtbDwvcmVzb3VyY2U+CgkJPC9yZXNvdXJjZXM+Cgk8L3ZpZXc+CgoJPHZpZXc+CgkJPGdyb3VwPlNjcm9sbHM8L2dyb3VwPgoJCTxuYW1lPlZlcnRpY2FsIFNsaWRlcnM8L25hbWU+CgkJPGljb24+aWNvbnMvdWktc2xpZGVyLXZlcnRpY2FsLTA1MC5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5WU2xpZGVyczwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL1NsaWRlcnMvVlNsaWRlcnMuaHg8L3Jlc291cmNlPgoJCQk8cmVzb3VyY2UgdHlwZT0ieG1sIj5yZXNvdXJjZXMvU2xpZGVycy9WU2xpZGVycy54bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3PgoJCgk8dmlldz4KCQk8Z3JvdXA+U2Nyb2xsczwvZ3JvdXA+CgkJPG5hbWU+SG9yaXpvbnRhbCBQcm9ncmVzcyBCYXJzPC9uYW1lPgoJCTxpY29uPmljb25zL3VpLXByb2dyZXNzLWJhci5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5IUHJvZ3Jlc3NCYXJzPC9jb250cm9sbGVyPgoJCTxyZXNvdXJjZXM+CgkJCTxyZXNvdXJjZSB0eXBlPSJoYXhlIj5yZXNvdXJjZXMvUHJvZ3Jlc3NCYXJzL0hQcm9ncmVzc0JhcnMuaHg8L3Jlc291cmNlPgoJCQk8cmVzb3VyY2UgdHlwZT0ieG1sIj5yZXNvdXJjZXMvUHJvZ3Jlc3NCYXJzL0hQcm9ncmVzc0JhcnMueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCgk8dmlldz4KCQk8Z3JvdXA+U2Nyb2xsczwvZ3JvdXA+CgkJPG5hbWU+VmVydGljYWwgUHJvZ3Jlc3MgQmFyczwvbmFtZT4KCQk8aWNvbj5pY29ucy91aS1wcm9ncmVzcy1iYXItdmVydGljYWwucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuVlByb2dyZXNzQmFyczwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL1Byb2dyZXNzQmFycy9WUHJvZ3Jlc3NCYXJzLmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL1Byb2dyZXNzQmFycy9WUHJvZ3Jlc3NCYXJzLnhtbDwvcmVzb3VyY2U+CgkJPC9yZXNvdXJjZXM+Cgk8L3ZpZXc+CgkKCTwhLS0KCSoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqCgkqIExBWU9VVFMKCSoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqCgktLT4KCTx2aWV3PgoJCTxncm91cD5MYXlvdXRzPC9ncm91cD4KCQk8bmFtZT5BYnNvbHV0ZTwvbmFtZT4KCQk8aWNvbj5pY29ucy91aS1sYXllcmVkLXBhbmUucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuQWJzb2x1dGVMYXlvdXQ8L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQkJPHJlc291cmNlIHR5cGU9ImhheGUiPnJlc291cmNlcy9BYnNvbHV0ZUxheW91dC9BYnNvbHV0ZUxheW91dC5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9BYnNvbHV0ZUxheW91dC9BYnNvbHV0ZUxheW91dC54bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3PgoKCTx2aWV3PgoJCTxncm91cD5MYXlvdXRzPC9ncm91cD4KCQk8bmFtZT5Cb3g8L25hbWU+CgkJPGljb24+aWNvbnMvdWktcGFuZWwucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuQm94TGF5b3V0PC9jb250cm9sbGVyPgoJCTxyZXNvdXJjZXM+CgkJCTxyZXNvdXJjZSB0eXBlPSJoYXhlIj5yZXNvdXJjZXMvQm94TGF5b3V0L0JveExheW91dC5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9Cb3hMYXlvdXQvQm94TGF5b3V0LnhtbDwvcmVzb3VyY2U+CgkJPC9yZXNvdXJjZXM+Cgk8L3ZpZXc+CgkKCTx2aWV3PgoJCTxncm91cD5MYXlvdXRzPC9ncm91cD4KCQk8bmFtZT5Ib3Jpem9udGFsPC9uYW1lPgoJCTxpY29uPmljb25zL3VpLXNwbGl0LXBhbmVsLnBuZzwvaWNvbj4KCQk8Y29udHJvbGxlcj5oYXhlLnVpLnNob3djYXNlLnZpZXdzLkhvcml6b250YWxMYXlvdXQ8L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQkJPHJlc291cmNlIHR5cGU9ImhheGUiPnJlc291cmNlcy9Ib3Jpem9udGFsTGF5b3V0L0hvcml6b250YWxMYXlvdXQuaHg8L3Jlc291cmNlPgoJCQk8cmVzb3VyY2UgdHlwZT0ieG1sIj5yZXNvdXJjZXMvSG9yaXpvbnRhbExheW91dC9Ib3Jpem9udGFsTGF5b3V0LnhtbDwvcmVzb3VyY2U+CgkJPC9yZXNvdXJjZXM+Cgk8L3ZpZXc+CgkKCTx2aWV3PgoJCTxncm91cD5MYXlvdXRzPC9ncm91cD4KCQk8bmFtZT5WZXJ0aWNhbDwvbmFtZT4KCQk8aWNvbj5pY29ucy91aS1zcGxpdC1wYW5lbC12ZXJ0aWNhbC5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5WZXJ0aWNhbExheW91dDwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL1ZlcnRpY2FsTGF5b3V0L1ZlcnRpY2FsTGF5b3V0Lmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL1ZlcnRpY2FsTGF5b3V0L1ZlcnRpY2FsTGF5b3V0LnhtbDwvcmVzb3VyY2U+CgkJPC9yZXNvdXJjZXM+Cgk8L3ZpZXc+CgkKCTx2aWV3PgoJCTxncm91cD5MYXlvdXRzPC9ncm91cD4KCQk8bmFtZT5HcmlkPC9uYW1lPgoJCTxpY29uPmljb25zL2dyaWQucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuR3JpZExheW91dDwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL0dyaWRMYXlvdXQvR3JpZExheW91dC5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9HcmlkTGF5b3V0L0dyaWRMYXlvdXQueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCQoJPHZpZXc+CgkJPGdyb3VwPkxheW91dHM8L2dyb3VwPgoJCTxuYW1lPkhvcml6b250YWwgQ29udGludW91czwvbmFtZT4KCQk8aWNvbj5pY29ucy91aS1mbG93LnBuZzwvaWNvbj4KCQk8Y29udHJvbGxlcj5oYXhlLnVpLnNob3djYXNlLnZpZXdzLkhDb250aW51b3VzTGF5b3V0PC9jb250cm9sbGVyPgoJCTxyZXNvdXJjZXM+CgkJCTxyZXNvdXJjZSB0eXBlPSJoYXhlIj5yZXNvdXJjZXMvQ29udGludW91c0xheW91dC9IQ29udGludW91c0xheW91dC5oeDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9Db250aW51b3VzTGF5b3V0L0hDb250aW51b3VzTGF5b3V0LnhtbDwvcmVzb3VyY2U+CgkJPC9yZXNvdXJjZXM+Cgk8L3ZpZXc+CgkKCTx2aWV3PgoJCTxncm91cD5MYXlvdXRzPC9ncm91cD4KCQk8bmFtZT5WZXJ0aWNhbCBDb250aW51b3VzPC9uYW1lPgoJCTxpY29uPmljb25zL3VpLWZsb3ctdmVydGljYWwucG5nPC9pY29uPgoJCTxjb250cm9sbGVyPmhheGUudWkuc2hvd2Nhc2Uudmlld3MuVkNvbnRpbnVvdXNMYXlvdXQ8L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQkJPHJlc291cmNlIHR5cGU9ImhheGUiPnJlc291cmNlcy9Db250aW51b3VzTGF5b3V0L1ZDb250aW51b3VzTGF5b3V0Lmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL0NvbnRpbnVvdXNMYXlvdXQvVkNvbnRpbnVvdXNMYXlvdXQueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCTwhLS0KCSoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqCgkqIFBPUFVQUwoJKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioKCS0tPgoJPHZpZXc+CgkJPGdyb3VwPlBvcHVwczwvZ3JvdXA+CgkJPG5hbWU+U2ltcGxlPC9uYW1lPgoJCTxpY29uPmljb25zL2FwcGxpY2F0aW9uLWRpYWxvZy5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5TaW1wbGVQb3B1cDwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL1NpbXBsZVBvcHVwL1NpbXBsZVBvcHVwLmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL1NpbXBsZVBvcHVwL1NpbXBsZVBvcHVwLnhtbDwvcmVzb3VyY2U+CgkJPC9yZXNvdXJjZXM+Cgk8L3ZpZXc+CgoJPHZpZXc+CgkJPGdyb3VwPlBvcHVwczwvZ3JvdXA+CgkJPG5hbWU+Q3VzdG9tPC9uYW1lPgoJCTxpY29uPmljb25zL2FwcGxpY2F0aW9uLWRpYWxvZy5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5DdXN0b21Qb3B1cDwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL0N1c3RvbVBvcHVwL0N1c3RvbVBvcHVwLmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL0N1c3RvbVBvcHVwL0N1c3RvbVBvcHVwLnhtbDwvcmVzb3VyY2U+CgkJCTxyZXNvdXJjZSB0eXBlPSJ4bWwiPnJlc291cmNlcy9DdXN0b21Qb3B1cC9DdXN0b21Qb3B1cENvbnRlbnQueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCgk8dmlldz4KCQk8Z3JvdXA+UG9wdXBzPC9ncm91cD4KCQk8bmFtZT5MaXN0PC9uYW1lPgoJCTxpY29uPmljb25zL2FwcGxpY2F0aW9uLWRpYWxvZy5wbmc8L2ljb24+CgkJPGNvbnRyb2xsZXI+aGF4ZS51aS5zaG93Y2FzZS52aWV3cy5MaXN0UG9wdXA8L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQkJPHJlc291cmNlIHR5cGU9ImhheGUiPnJlc291cmNlcy9MaXN0UG9wdXAvTGlzdFBvcHVwLmh4PC9yZXNvdXJjZT4KCQkJPHJlc291cmNlIHR5cGU9InhtbCI+cmVzb3VyY2VzL0xpc3RQb3B1cC9MaXN0UG9wdXAueG1sPC9yZXNvdXJjZT4KCQk8L3Jlc291cmNlcz4KCTwvdmlldz4KCQoJPHZpZXc+CgkJPGdyb3VwPlBvcHVwczwvZ3JvdXA+CgkJPG5hbWU+Q2FsZW5kYXI8L25hbWU+CgkJPGljb24+aWNvbnMvYXBwbGljYXRpb24tZGlhbG9nLnBuZzwvaWNvbj4KCQk8Y29udHJvbGxlcj5oYXhlLnVpLnNob3djYXNlLnZpZXdzLkNhbGVuZGFyUG9wdXA8L2NvbnRyb2xsZXI+CgkJPHJlc291cmNlcz4KCQkJPHJlc291cmNlIHR5cGU9ImhheGUiPnJlc291cmNlcy9DYWxlbmRhclBvcHVwL0NhbGVuZGFyUG9wdXAuaHg8L3Jlc291cmNlPgoJCQk8cmVzb3VyY2UgdHlwZT0ieG1sIj5yZXNvdXJjZXMvQ2FsZW5kYXJQb3B1cC9DYWxlbmRhclBvcHVwLnhtbDwvcmVzb3VyY2U+CgkJPC9yZXNvdXJjZXM+Cgk8L3ZpZXc+CgkKCTx2aWV3PgoJCTxncm91cD5Qb3B1cHM8L2dyb3VwPgoJCTxuYW1lPkJ1c3k8L25hbWU+CgkJPGljb24+aWNvbnMvYXBwbGljYXRpb24tZGlhbG9nLnBuZzwvaWNvbj4KCQk8Y29udHJvbGxlcj5oYXhlLnVpLnNob3djYXNlLnZpZXdzLkJ1c3lQb3B1cDwvY29udHJvbGxlcj4KCQk8cmVzb3VyY2VzPgoJCQk8cmVzb3VyY2UgdHlwZT0iaGF4ZSI+cmVzb3VyY2VzL0J1c3lQb3B1cC9CdXN5UG9wdXAuaHg8L3Jlc291cmNlPgoJCQk8cmVzb3VyY2UgdHlwZT0ieG1sIj5yZXNvdXJjZXMvQnVzeVBvcHVwL0J1c3lQb3B1cC54bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3PgoJCgk8IS0tCgkqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKgoJKiBFWFBFUklNRU5UQUwKCSoqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqCgktLT4KCTx2aWV3PgoJCTxncm91cD5FeHBlcmltZW50YWw8L2dyb3VwPgoJCTxuYW1lPldlYiBWaWV3PC9uYW1lPgoJCTxpY29uPmljb25zL3VpLXNjcm9sbC1wYW5lLWltYWdlLnBuZzwvaWNvbj4KCQk8Y29udHJvbGxlcj5oYXhlLnVpLnNob3djYXNlLnZpZXdzLldlYlZpZXdzPC9jb250cm9sbGVyPgoJCTxyZXNvdXJjZXM+CgkJCTxyZXNvdXJjZSB0eXBlPSJoYXhlIj5yZXNvdXJjZXMvV2ViVmlld3MvV2ViVmlld3MuaHg8L3Jlc291cmNlPgoJCQk8cmVzb3VyY2UgdHlwZT0ieG1sIj5yZXNvdXJjZXMvV2ViVmlld3MvV2ViVmlld3MueG1sPC9yZXNvdXJjZT4KCQkJPHJlc291cmNlPnJlc291cmNlcy9XZWJWaWV3cy9leGFtcGxlLmh0bWw8L3Jlc291cmNlPgoJCTwvcmVzb3VyY2VzPgoJPC92aWV3Pgo8L3ZpZXdzPg"},{ name : "ui/main.xml", data : "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiID8+Cjx2Ym94IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPgoJPHN0eWxlPgoJCSN2aWV3cyAucGFnZSB7CgkJCXBhZGRpbmc6IDA7CgkJfQoJCQoJCSN2aWV3cyBMaXN0VmlldyB7CgkJCWNvcm5lclJhZGl1czogMDsKCQl9CgkJCgkJI3ZpZXdzIEFjY29yZGlvbkJ1dHRvbiB7CgkJCWNvcm5lclJhZGl1czogMDsKCQl9CgkJCgkJTGlzdFZpZXcgI2NvbnRhaW5lciB7CgkJCXNwYWNpbmc6IDEwOwoJCX0KCTwvc3R5bGU+Cgk8bWVudWJhcj4KCQk8bWVudWJ1dHRvbiB0ZXh0PSJBcHBsaWNhdGlvbiIgaWQ9Im1lbnVBcHBsaWNhdGlvbiI+CgkJCTxtZW51PgoJCQkJPG1lbnVpdGVtIHRleHQ9IlNldHRpbmdzLi4uIiBpZD0ibWVudVNldHRpbmdzIiAvPgoJCQkJPG1lbnVpdGVtIHRleHQ9IkFib3V0Li4uIiBpZD0ibWVudUFib3V0IiAvPgoJCQk8L21lbnU+CgkJPC9tZW51YnV0dG9uPgoJCTxtZW51YnV0dG9uIHRleHQ9IlZpZXciIGlkPSJtZW51VmlldyI+CgkJPC9tZW51YnV0dG9uPgoJCQoJCTxzcGFjZXIgd2lkdGg9IjEwMCUiIC8+CgkJCgkJPGxpc3RTZWxlY3RvciB0ZXh0PSJEZWZhdWx0IFRoZW1lIiBpZD0idGhlbWUiIHdpZHRoPSIxNDAiIGF1dG9TaXplPSJmYWxzZSI+CgkJCTxqc29uPlt7InRleHQiOiJEZWZhdWx0IFRoZW1lIiwgImlkIjogImRlZmF1bHQifSx7InRleHQiOiJHcmFkaWVudCBUaGVtZSIsICJpZCI6ImdyYWRpZW50In1dPC9qc29uPgoJCTwvbGlzdFNlbGVjdG9yPgoJPC9tZW51YmFyPgoJPGhib3ggd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSI+CgkJPGFjY29yZGlvbiBpZD0idmlld3MiIHdpZHRoPSIyMDAiIGhlaWdodD0iMTAwJSIgLz4KCQk8dGFidmlldyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBpZD0idGFicyI+CgkJCTx2Ym94IHRleHQ9Ik1haW4iPgoJCQkJCgkJCTwvdmJveD4KCQk8L3RhYnZpZXc+Cgk8L2hib3g+CjwvdmJveD4K"}];
-DefaultAssetLibrary.className = new haxe.ds.StringMap();
-DefaultAssetLibrary.path = new haxe.ds.StringMap();
-DefaultAssetLibrary.type = new haxe.ds.StringMap();
+var this1;
+this1 = new Array(256);
+lime.graphics.utils.ImageDataUtil.__alpha16 = this1;
+var _g = 0;
+while(_g < 256) {
+	var i = _g++;
+	lime.graphics.utils.ImageDataUtil.__alpha16[i] = i * 65536 / 255 | 0;
+}
+var this2;
+this2 = new Array(510);
+lime.graphics.utils.ImageDataUtil.__clamp = this2;
+var _g1 = 0;
+while(_g1 < 255) {
+	var i1 = _g1++;
+	lime.graphics.utils.ImageDataUtil.__clamp[i1] = i1;
+}
+var _g11 = 255;
+var _g2 = 511;
+while(_g11 < _g2) {
+	var i2 = _g11++;
+	lime.graphics.utils.ImageDataUtil.__clamp[i2] = 255;
+}
 openfl.text.Font.DEFAULT_FONT_DATA = "q:55oy6:ascentd950.5y4:dataad84d277.5d564d277.5d564d320.5d293d1024d187.5d1024d442.5d362.5d84d362.5d84d277.5hy6:_widthd651.5y4:xMaxd564y4:xMind84y4:yMaxd746.5y4:yMind0y7:_heightd662.5y7:leadingd168y7:descentd241.5y8:charCodei55y15:leftsideBearingd84y12:advanceWidthd651.5y8:commandsai1i2i2i2i2i2i2i2hg:111oR0d950.5R1ad313.5d528.5d239.5d528.5d196.5d586.25d153.5d644d153.5d744.5d153.5d845d196.25d902.75d239d960.5d313.5d960.5d387d960.5d430d902.5d473d844.5d473d744.5d473d645d430d586.75d387d528.5d313.5d528.5d313.5d450.5d433.5d450.5d502d528.5d570.5d606.5d570.5d744.5d570.5d882d502d960.25d433.5d1038.5d313.5d1038.5d193d1038.5d124.75d960.25d56.5d882d56.5d744.5d56.5d606.5d124.75d528.5d193d450.5d313.5d450.5hR2d626.5R3d570.5R4d56.5R5d573.5R6d-14.5R7d517R8d168R9d241.5R10i111R11d56.5R12d626.5R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:54oR0d950.5R1ad338d610.5d270d610.5d230.25d657d190.5d703.5d190.5d784.5d190.5d865d230.25d911.75d270d958.5d338d958.5d406d958.5d445.75d911.75d485.5d865d485.5d784.5d485.5d703.5d445.75d657d406d610.5d338d610.5d538.5d294d538.5d386d500.5d368d461.75d358.5d423d349d385d349d285d349d232.25d416.5d179.5d484d172d620.5d201.5d577d246d553.75d290.5d530.5d344d530.5d456.5d530.5d521.75d598.75d587d667d587d784.5d587d899.5d519d969d451d1038.5d338d1038.5d208.5d1038.5d140d939.25d71.5d840d71.5d651.5d71.5d474.5d155.5d369.25d239.5d264d381d264d419d264d457.75d271.5d496.5d279d538.5d294hR2d651.5R3d587R4d71.5R5d760R6d-14.5R7d688.5R8d168R9d241.5R10i54R11d71.5R12d651.5R13ai1i3i3i3i3i3i3i3i3i1i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3hg:110oR0d950.5R1ad562d686d562d1024d470d1024d470d689d470d609.5d439d570d408d530.5d346d530.5d271.5d530.5d228.5d578d185.5d625.5d185.5d707.5d185.5d1024d93d1024d93d464d185.5d464d185.5d551d218.5d500.5d263.25d475.5d308d450.5d366.5d450.5d463d450.5d512.5d510.25d562d570d562d686hR2d649R3d562R4d93R5d573.5R6d0R7d480.5R8d168R9d241.5R10i110R11d93R12d649R13ai1i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:53oR0d950.5R1ad110.5d277.5d507d277.5d507d362.5d203d362.5d203d545.5d225d538d247d534.25d269d530.5d291d530.5d416d530.5d489d599d562d667.5d562d784.5d562d905d487d971.75d412d1038.5d275.5d1038.5d228.5d1038.5d179.75d1030.5d131d1022.5d79d1006.5d79d905d124d929.5d172d941.5d220d953.5d273.5d953.5d360d953.5d410.5d908d461d862.5d461d784.5d461d706.5d410.5d661d360d615.5d273.5d615.5d233d615.5d192.75d624.5d152.5d633.5d110.5d652.5d110.5d277.5hR2d651.5R3d562R4d79R5d746.5R6d-14.5R7d667.5R8d168R9d241.5R10i53R11d79R12d651.5R13ai1i2i2i2i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3i2hg:109oR0d950.5R1ad532.5d571.5d567d509.5d615d480d663d450.5d728d450.5d815.5d450.5d863d511.75d910.5d573d910.5d686d910.5d1024d818d1024d818d689d818d608.5d789.5d569.5d761d530.5d702.5d530.5d631d530.5d589.5d578d548d625.5d548d707.5d548d1024d455.5d1024d455.5d689d455.5d608d427d569.25d398.5d530.5d339d530.5d268.5d530.5d227d578.25d185.5d626d185.5d707.5d185.5d1024d93d1024d93d464d185.5d464d185.5d551d217d499.5d261d475d305d450.5d365.5d450.5d426.5d450.5d469.25d481.5d512d512.5d532.5d571.5hR2d997.5R3d910.5R4d93R5d573.5R6d0R7d480.5R8d168R9d241.5R10i109R11d93R12d997.5R13ai1i3i3i3i3i2i2i2i3i3i3i3i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:52oR0d950.5R1ad387d365.5d132d764d387d764d387d365.5d360.5d277.5d487.5d277.5d487.5d764d594d764d594d848d487.5d848d487.5d1024d387d1024d387d848d50d848d50d750.5d360.5d277.5hR2d651.5R3d594R4d50R5d746.5R6d0R7d696.5R8d168R9d241.5R10i52R11d50R12d651.5R13ai1i2i2i2i1i2i2i2i2i2i2i2i2i2i2i2hg:108oR0d950.5R1ad96.5d246d188.5d246d188.5d1024d96.5d1024d96.5d246hR2d284.5R3d188.5R4d96.5R5d778R6d0R7d681.5R8d168R9d241.5R10i108R11d96.5R12d284.5R13ai1i2i2i2i2hg:51oR0d950.5R1ad415.5d621.5d488d637d528.75d686d569.5d735d569.5d807d569.5d917.5d493.5d978d417.5d1038.5d277.5d1038.5d230.5d1038.5d180.75d1029.25d131d1020d78d1001.5d78d904d120d928.5d170d941d220d953.5d274.5d953.5d369.5d953.5d419.25d916d469d878.5d469d807d469d741d422.75d703.75d376.5d666.5d294d666.5d207d666.5d207d583.5d298d583.5d372.5d583.5d412d553.75d451.5d524d451.5d468d451.5d410.5d410.75d379.75d370d349d294d349d252.5d349d205d358d157.5d367d100.5d386d100.5d296d158d280d208.25d272d258.5d264d303d264d418d264d485d316.25d552d368.5d552d457.5d552d519.5d516.5d562.25d481d605d415.5d621.5hR2d651.5R3d569.5R4d78R5d760R6d-14.5R7d682R8d168R9d241.5R10i51R11d78R12d651.5R13ai1i3i3i3i3i3i3i2i3i3i3i3i3i3i2i2i2i3i3i3i3i3i3i2i3i3i3i3i3i3hg:107oR0d950.5R1ad93d246d185.5d246d185.5d705.5d460d464d577.5d464d280.5d726d590d1024d470d1024d185.5d750.5d185.5d1024d93d1024d93d246hR2d593R3d590R4d93R5d778R6d0R7d685R8d168R9d241.5R10i107R11d93R12d593R13ai1i2i2i2i2i2i2i2i2i2i2i2hg:50oR0d950.5R1ad196.5d939d549d939d549d1024d75d1024d75d939d132.5d879.5d231.75d779.25d331d679d356.5d650d405d595.5d424.25d557.75d443.5d520d443.5d483.5d443.5d424d401.75d386.5d360d349d293d349d245.5d349d192.75d365.5d140d382d80d415.5d80d313.5d141d289d194d276.5d247d264d291d264d407d264d476d322d545d380d545d477d545d523d527.75d564.25d510.5d605.5d465d661.5d452.5d676d385.5d745.25d318.5d814.5d196.5d939hR2d651.5R3d549R4d75R5d760R6d0R7d685R8d168R9d241.5R10i50R11d75R12d651.5R13ai1i2i2i2i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:106oR0d950.5R1ad96.5d464d188.5d464d188.5d1034d188.5d1141d147.75d1189d107d1237d16.5d1237d-18.5d1237d-18.5d1159d6d1159d58.5d1159d77.5d1134.75d96.5d1110.5d96.5d1034d96.5d464d96.5d246d188.5d246d188.5d362.5d96.5d362.5d96.5d246hR2d284.5R3d188.5R4d-18.5R5d778R6d-213R7d796.5R8d168R9d241.5R10i106R11d-18.5R12d284.5R13ai1i2i2i3i3i2i2i2i3i3i2i1i2i2i2i2hg:49oR0d950.5R1ad127d939d292d939d292d369.5d112.5d405.5d112.5d313.5d291d277.5d392d277.5d392d939d557d939d557d1024d127d1024d127d939hR2d651.5R3d557R4d112.5R5d746.5R6d0R7d634R8d168R9d241.5R10i49R11d112.5R12d651.5R13ai1i2i2i2i2i2i2i2i2i2i2i2hg:105oR0d950.5R1ad96.5d464d188.5d464d188.5d1024d96.5d1024d96.5d464d96.5d246d188.5d246d188.5d362.5d96.5d362.5d96.5d246hR2d284.5R3d188.5R4d96.5R5d778R6d0R7d681.5R8d168R9d241.5R10i105R11d96.5R12d284.5R13ai1i2i2i2i2i1i2i2i2i2hg:48oR0d950.5R1ad325.5d344d247.5d344d208.25d420.75d169d497.5d169d651.5d169d805d208.25d881.75d247.5d958.5d325.5d958.5d404d958.5d443.25d881.75d482.5d805d482.5d651.5d482.5d497.5d443.25d420.75d404d344d325.5d344d325.5d264d451d264d517.25d363.25d583.5d462.5d583.5d651.5d583.5d840d517.25d939.25d451d1038.5d325.5d1038.5d200d1038.5d133.75d939.25d67.5d840d67.5d651.5d67.5d462.5d133.75d363.25d200d264d325.5d264hR2d651.5R3d583.5R4d67.5R5d760R6d-14.5R7d692.5R8d168R9d241.5R10i48R11d67.5R12d651.5R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:104oR0d950.5R1ad562d686d562d1024d470d1024d470d689d470d609.5d439d570d408d530.5d346d530.5d271.5d530.5d228.5d578d185.5d625.5d185.5d707.5d185.5d1024d93d1024d93d246d185.5d246d185.5d551d218.5d500.5d263.25d475.5d308d450.5d366.5d450.5d463d450.5d512.5d510.25d562d570d562d686hR2d649R3d562R4d93R5d778R6d0R7d685R8d168R9d241.5R10i104R11d93R12d649R13ai1i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:47oR0d950.5R1ad260d277.5d345d277.5d85d1119d0d1119d260d277.5hR2d345R3d345R4d0R5d746.5R6d-95R7d746.5R8d168R9d241.5R10i47R11d0R12d345R13ai1i2i2i2i2hg:103oR0d950.5R1ad465d737.5d465d637.5d423.75d582.5d382.5d527.5d308d527.5d234d527.5d192.75d582.5d151.5d637.5d151.5d737.5d151.5d837d192.75d892d234d947d308d947d382.5d947d423.75d892d465d837d465d737.5d557d954.5d557d1097.5d493.5d1167.25d430d1237d299d1237d250.5d1237d207.5d1229.75d164.5d1222.5d124d1207.5d124d1118d164.5d1140d204d1150.5d243.5d1161d284.5d1161d375d1161d420d1113.75d465d1066.5d465d971d465d925.5d436.5d975d392d999.5d347.5d1024d285.5d1024d182.5d1024d119.5d945.5d56.5d867d56.5d737.5d56.5d607.5d119.5d529d182.5d450.5d285.5d450.5d347.5d450.5d392d475d436.5d499.5d465d549d465d464d557d464d557d954.5hR2d650R3d557R4d56.5R5d573.5R6d-213R7d517R8d168R9d241.5R10i103R11d56.5R12d650R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i2i3i3i3i3i2i3i3i3i3i3i3i3i3i2i2i2hg:46oR0d950.5R1ad109.5d897d215d897d215d1024d109.5d1024d109.5d897hR2d325.5R3d215R4d109.5R5d127R6d0R7d17.5R8d168R9d241.5R10i46R11d109.5R12d325.5R13ai1i2i2i2i2hg:102oR0d950.5R1ad380d246d380d322.5d292d322.5d242.5d322.5d223.25d342.5d204d362.5d204d414.5d204d464d355.5d464d355.5d535.5d204d535.5d204d1024d111.5d1024d111.5d535.5d23.5d535.5d23.5d464d111.5d464d111.5d425d111.5d331.5d155d288.75d198.5d246d293d246d380d246hR2d360.5R3d380R4d23.5R5d778R6d0R7d754.5R8d168R9d241.5R10i102R11d23.5R12d360.5R13ai1i2i2i3i3i2i2i2i2i2i2i2i2i2i2i2i3i3i2hg:45oR0d950.5R1ad50d702.5d319.5d702.5d319.5d784.5d50d784.5d50d702.5hR2d369.5R3d319.5R4d50R5d321.5R6d239.5R7d271.5R8d168R9d241.5R10i45R11d50R12d369.5R13ai1i2i2i2i2hg:101oR0d950.5R1ad575.5d721d575.5d766d152.5d766d158.5d861d209.75d910.75d261d960.5d352.5d960.5d405.5d960.5d455.25d947.5d505d934.5d554d908.5d554d995.5d504.5d1016.5d452.5d1027.5d400.5d1038.5d347d1038.5d213d1038.5d134.75d960.5d56.5d882.5d56.5d749.5d56.5d612d130.75d531.25d205d450.5d331d450.5d444d450.5d509.75d523.25d575.5d596d575.5d721d483.5d694d482.5d618.5d441.25d573.5d400d528.5d332d528.5d255d528.5d208.75d572d162.5d615.5d155.5d694.5d483.5d694hR2d630R3d575.5R4d56.5R5d573.5R6d-14.5R7d517R8d168R9d241.5R10i101R11d56.5R12d630R13ai1i2i2i3i3i3i3i2i3i3i3i3i3i3i3i3i1i3i3i3i3i2hg:44oR0d950.5R1ad120d897d225.5d897d225.5d983d143.5d1143d79d1143d120d983d120d897hR2d325.5R3d225.5R4d79R5d127R6d-119R7d48R8d168R9d241.5R10i44R11d79R12d325.5R13ai1i2i2i2i2i2i2hg:100oR0d950.5R1ad465d549d465d246d557d246d557d1024d465d1024d465d940d436d990d391.75d1014.25d347.5d1038.5d285.5d1038.5d184d1038.5d120.25d957.5d56.5d876.5d56.5d744.5d56.5d612.5d120.25d531.5d184d450.5d285.5d450.5d347.5d450.5d391.75d474.75d436d499d465d549d151.5d744.5d151.5d846d193.25d903.75d235d961.5d308d961.5d381d961.5d423d903.75d465d846d465d744.5d465d643d423d585.25d381d527.5d308d527.5d235d527.5d193.25d585.25d151.5d643d151.5d744.5hR2d650R3d557R4d56.5R5d778R6d-14.5R7d721.5R8d168R9d241.5R10i100R11d56.5R12d650R13ai1i2i2i2i2i2i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:43oR0d950.5R1ad471d382d471d660.5d749.5d660.5d749.5d745.5d471d745.5d471d1024d387d1024d387d745.5d108.5d745.5d108.5d660.5d387d660.5d387d382d471d382hR2d858R3d749.5R4d108.5R5d642R6d0R7d533.5R8d168R9d241.5R10i43R11d108.5R12d858R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:99oR0d950.5R1ad499.5d485.5d499.5d571.5d460.5d550d421.25d539.25d382d528.5d342d528.5d252.5d528.5d203d585.25d153.5d642d153.5d744.5d153.5d847d203d903.75d252.5d960.5d342d960.5d382d960.5d421.25d949.75d460.5d939d499.5d917.5d499.5d1002.5d461d1020.5d419.75d1029.5d378.5d1038.5d332d1038.5d205.5d1038.5d131d959d56.5d879.5d56.5d744.5d56.5d607.5d131.75d529d207d450.5d338d450.5d380.5d450.5d421d459.25d461.5d468d499.5d485.5hR2d563R3d499.5R4d56.5R5d573.5R6d-14.5R7d517R8d168R9d241.5R10i99R11d56.5R12d563R13ai1i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:42oR0d950.5R1ad481.5d400.5d302d497.5d481.5d595d452.5d644d284.5d542.5d284.5d731d227.5d731d227.5d542.5d59.5d644d30.5d595d210d497.5d30.5d400.5d59.5d351d227.5d452.5d227.5d264d284.5d264d284.5d452.5d452.5d351d481.5d400.5hR2d512R3d481.5R4d30.5R5d760R6d293R7d729.5R8d168R9d241.5R10i42R11d30.5R12d512R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2hg:98oR0d950.5R1ad498.5d744.5d498.5d643d456.75d585.25d415d527.5d342d527.5d269d527.5d227.25d585.25d185.5d643d185.5d744.5d185.5d846d227.25d903.75d269d961.5d342d961.5d415d961.5d456.75d903.75d498.5d846d498.5d744.5d185.5d549d214.5d499d258.75d474.75d303d450.5d364.5d450.5d466.5d450.5d530.25d531.5d594d612.5d594d744.5d594d876.5d530.25d957.5d466.5d1038.5d364.5d1038.5d303d1038.5d258.75d1014.25d214.5d990d185.5d940d185.5d1024d93d1024d93d246d185.5d246d185.5d549hR2d650R3d594R4d93R5d778R6d-14.5R7d685R8d168R9d241.5R10i98R11d93R12d650R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i2i2i2i2i2hg:41oR0d950.5R1ad82d247d162d247d237d365d274.25d478d311.5d591d311.5d702.5d311.5d814.5d274.25d928d237d1041.5d162d1159d82d1159d148.5d1044.5d181.25d931.25d214d818d214d702.5d214d587d181.25d474.5d148.5d362d82d247hR2d399.5R3d311.5R4d82R5d777R6d-135R7d695R8d168R9d241.5R10i41R11d82R12d399.5R13ai1i2i3i3i3i3i2i3i3i3i3hg:97oR0d950.5R1ad351d742.5d239.5d742.5d196.5d768d153.5d793.5d153.5d855d153.5d904d185.75d932.75d218d961.5d273.5d961.5d350d961.5d396.25d907.25d442.5d853d442.5d763d442.5d742.5d351d742.5d534.5d704.5d534.5d1024d442.5d1024d442.5d939d411d990d364d1014.25d317d1038.5d249d1038.5d163d1038.5d112.25d990.25d61.5d942d61.5d861d61.5d766.5d124.75d718.5d188d670.5d313.5d670.5d442.5d670.5d442.5d661.5d442.5d598d400.75d563.25d359d528.5d283.5d528.5d235.5d528.5d190d540d144.5d551.5d102.5d574.5d102.5d489.5d153d470d200.5d460.25d248d450.5d293d450.5d414.5d450.5d474.5d513.5d534.5d576.5d534.5d704.5hR2d627.5R3d534.5R4d61.5R5d573.5R6d-14.5R7d512R8d168R9d241.5R10i97R11d61.5R12d627.5R13ai1i3i3i3i3i3i3i2i2i1i2i2i2i3i3i3i3i3i3i2i2i3i3i3i3i2i3i3i3i3hg:40oR0d950.5R1ad317.5d247d250.5d362d218d474.5d185.5d587d185.5d702.5d185.5d818d218.25d931.25d251d1044.5d317.5d1159d237.5d1159d162.5d1041.5d125.25d928d88d814.5d88d702.5d88d591d125d478d162d365d237.5d247d317.5d247hR2d399.5R3d317.5R4d88R5d777R6d-135R7d689R8d168R9d241.5R10i40R11d88R12d399.5R13ai1i3i3i3i3i2i3i3i3i3i2hg:96oR0d950.5R1ad183.5d205d324.5d392d248d392d85d205d183.5d205hR2d512R3d324.5R4d85R5d819R6d632R7d734R8d168R9d241.5R10i96R11d85R12d512R13ai1i2i2i2i2hg:39oR0d950.5R1ad183.5d277.5d183.5d555d98.5d555d98.5d277.5d183.5d277.5hR2d281.5R3d183.5R4d98.5R5d746.5R6d469R7d648R8d168R9d241.5R10i39R11d98.5R12d281.5R13ai1i2i2i2i2hg:95oR0d950.5R1ad522d1194d522d1265.5d-10d1265.5d-10d1194d522d1194hR2d512R3d522R4d-10R5d-170R6d-241.5R7d-160R8d168R9d241.5R10i95R11d-10R12d512R13ai1i2i2i2i2hg:38oR0d950.5R1ad249d622.5d203.5d663d182.25d703.25d161d743.5d161d787.5d161d860.5d214d909d267d957.5d347d957.5d394.5d957.5d436d941.75d477.5d926d514d894d249d622.5d319.5d566.5d573.5d826.5d603d782d619.5d731.25d636d680.5d639d623.5d732d623.5d726d689.5d700d754d674d818.5d627.5d881.5d767d1024d641d1024d569.5d950.5d517.5d995d460.5d1016.75d403.5d1038.5d338d1038.5d217.5d1038.5d141d969.75d64.5d901d64.5d793.5d64.5d729.5d98d673.25d131.5d617d198.5d567.5d174.5d536d162d504.75d149.5d473.5d149.5d443.5d149.5d362.5d205d313.25d260.5d264d352.5d264d394d264d435.25d273d476.5d282d519d300d519d391d475.5d367.5d436d355.25d396.5d343d362.5d343d310d343d277.25d370.75d244.5d398.5d244.5d442.5d244.5d468d259.25d493.75d274d519.5d319.5d566.5hR2d798.5R3d767R4d64.5R5d760R6d-14.5R7d695.5R8d168R9d241.5R10i38R11d64.5R12d798.5R13ai1i3i3i3i3i3i3i2i1i2i3i3i2i3i3i2i2i2i3i3i3i3i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3hg:94oR0d950.5R1ad478d277.5d749.5d556d649d556d429d358.5d209d556d108.5d556d380d277.5d478d277.5hR2d858R3d749.5R4d108.5R5d746.5R6d468R7d638R8d168R9d241.5R10i94R11d108.5R12d858R13ai1i2i2i2i2i2i2i2hg:37oR0d950.5R1ad744.5d695.5d701d695.5d676.25d732.5d651.5d769.5d651.5d835.5d651.5d900.5d676.25d937.75d701d975d744.5d975d787d975d811.75d937.75d836.5d900.5d836.5d835.5d836.5d770d811.75d732.75d787d695.5d744.5d695.5d744.5d632d823.5d632d870d687d916.5d742d916.5d835.5d916.5d929d869.75d983.75d823d1038.5d744.5d1038.5d664.5d1038.5d618d983.75d571.5d929d571.5d835.5d571.5d741.5d618.25d686.75d665d632d744.5d632d228.5d327.5d185.5d327.5d160.75d364.75d136d402d136d467d136d533d160.5d570d185d607d228.5d607d272d607d296.75d570d321.5d533d321.5d467d321.5d402.5d296.5d365d271.5d327.5d228.5d327.5d680d264d760d264d293d1038.5d213d1038.5d680d264d228.5d264d307.5d264d354.5d318.75d401.5d373.5d401.5d467d401.5d561.5d354.75d616d308d670.5d228.5d670.5d149d670.5d102.75d615.75d56.5d561d56.5d467d56.5d374d103d319d149.5d264d228.5d264hR2d973R3d916.5R4d56.5R5d760R6d-14.5R7d703.5R8d168R9d241.5R10i37R11d56.5R12d973R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i1i2i2i2i2i1i3i3i3i3i3i3i3i3hg:93oR0d950.5R1ad311.5d246d311.5d1159d99.5d1159d99.5d1087.5d219d1087.5d219d317.5d99.5d317.5d99.5d246d311.5d246hR2d399.5R3d311.5R4d99.5R5d778R6d-135R7d678.5R8d168R9d241.5R10i93R11d99.5R12d399.5R13ai1i2i2i2i2i2i2i2i2hg:36oR0d950.5R1ad346d1174.5d296d1174.5d295.5d1024d243d1023d190.5d1011.75d138d1000.5d85d978d85d888d136d920d188.25d936.25d240.5d952.5d296d953d296d725d185.5d707d135.25d664d85d621d85d546d85d464.5d139.5d417.5d194d370.5d296d363.5d296d246d346d246d346d362d392.5d364d436d371.75d479.5d379.5d521d393d521d480.5d479.5d459.5d435.75d448d392d436.5d346d434.5d346d648d459.5d665.5d513d710.5d566.5d755.5d566.5d833.5d566.5d918d509.75d966.75d453d1015.5d346d1023d346d1174.5d296d639d296d434d238d440.5d207.5d467d177d493.5d177d537.5d177d580.5d205.25d604.5d233.5d628.5d296d639d346d735d346d951.5d409.5d943d441.75d915.5d474d888d474d843d474d799d443.25d773d412.5d747d346d735hR2d651.5R3d566.5R4d85R5d778R6d-150.5R7d693R8d168R9d241.5R10i36R11d85R12d651.5R13ai1i2i2i3i3i2i3i3i2i3i3i3i3i2i2i2i3i3i2i3i3i2i3i3i3i3i2i1i2i3i3i3i3i1i2i3i3i3i3hg:92oR0d950.5R1ad85d277.5d345d1119d260d1119d0d277.5d85d277.5hR2d345R3d345R4d0R5d746.5R6d-95R7d746.5R8d168R9d241.5R10i92R11d0R12d345R13ai1i2i2i2i2hg:35oR0d950.5R1ad523.5d573.5d378d573.5d336d740.5d482.5d740.5d523.5d573.5d448.5d289d396.5d496.5d542.5d496.5d595d289d675d289d623.5d496.5d779.5d496.5d779.5d573.5d604d573.5d563d740.5d722d740.5d722d817d543.5d817d491.5d1024d411.5d1024d463d817d316.5d817d265d1024d184.5d1024d236.5d817d79d817d79d740.5d255d740.5d297d573.5d136d573.5d136d496.5d316.5d496.5d367.5d289d448.5d289hR2d858R3d779.5R4d79R5d735R6d0R7d656R8d168R9d241.5R10i35R11d79R12d858R13ai1i2i2i2i2i1i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2i2hg:91oR0d950.5R1ad88d246d300d246d300d317.5d180d317.5d180d1087.5d300d1087.5d300d1159d88d1159d88d246hR2d399.5R3d300R4d88R5d778R6d-135R7d690R8d168R9d241.5R10i91R11d88R12d399.5R13ai1i2i2i2i2i2i2i2i2hg:34oR0d950.5R1ad183.5d277.5d183.5d555d98.5d555d98.5d277.5d183.5d277.5d372.5d277.5d372.5d555d287.5d555d287.5d277.5d372.5d277.5hR2d471R3d372.5R4d98.5R5d746.5R6d469R7d648R8d168R9d241.5R10i34R11d98.5R12d471R13ai1i2i2i2i2i1i2i2i2i2hg:90oR0d950.5R1ad57.5d277.5d644d277.5d644d354.5d172d939d655.5d939d655.5d1024d46d1024d46d947d518d362.5d57.5d362.5d57.5d277.5hR2d701.5R3d655.5R4d46R5d746.5R6d0R7d700.5R8d168R9d241.5R10i90R11d46R12d701.5R13ai1i2i2i2i2i2i2i2i2i2i2hg:33oR0d950.5R1ad154.5d897d256d897d256d1024d154.5d1024d154.5d897d154.5d277.5d256d277.5d256d605d246d783.5d165d783.5d154.5d605d154.5d277.5hR2d410.5R3d256R4d154.5R5d746.5R6d0R7d592R8d168R9d241.5R10i33R11d154.5R12d410.5R13ai1i2i2i2i2i1i2i2i2i2i2i2hg:89oR0d950.5R1ad-2d277.5d106.5d277.5d313.5d584.5d519d277.5d627.5d277.5d363.5d668.5d363.5d1024d262d1024d262d668.5d-2d277.5hR2d625.5R3d627.5R4d-2R5d746.5R6d0R7d748.5R8d168R9d241.5R10i89R11d-2R12d625.5R13ai1i2i2i2i2i2i2i2i2i2hg:32oR0d950.5R1ahR2d325.5R3d0R4d0R5d0R6d0R7d0R8d168R9d241.5R10i32R11d0R12d325.5R13ahg:88oR0d950.5R1ad64.5d277.5d173d277.5d358.5d555d545d277.5d653.5d277.5d413.5d636d669.5d1024d561d1024d351d706.5d139.5d1024d30.5d1024d297d625.5d64.5d277.5hR2d701.5R3d669.5R4d30.5R5d746.5R6d0R7d716R8d168R9d241.5R10i88R11d30.5R12d701.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:87oR0d950.5R1ad34d277.5d136d277.5d293d908.5d449.5d277.5d563d277.5d720d908.5d876.5d277.5d979d277.5d791.5d1024d664.5d1024d507d376d348d1024d221d1024d34d277.5hR2d1012.5R3d979R4d34R5d746.5R6d0R7d712.5R8d168R9d241.5R10i87R11d34R12d1012.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2hg:86oR0d950.5R1ad293d1024d8d277.5d113.5d277.5d350d906d587d277.5d692d277.5d407.5d1024d293d1024hR2d700.5R3d692R4d8R5d746.5R6d0R7d738.5R8d168R9d241.5R10i86R11d8R12d700.5R13ai1i2i2i2i2i2i2i2hg:85oR0d950.5R1ad89d277.5d190.5d277.5d190.5d731d190.5d851d234d903.75d277.5d956.5d375d956.5d472d956.5d515.5d903.75d559d851d559d731d559d277.5d660.5d277.5d660.5d743.5d660.5d889.5d588.25d964d516d1038.5d375d1038.5d233.5d1038.5d161.25d964d89d889.5d89d743.5d89d277.5hR2d749.5R3d660.5R4d89R5d746.5R6d-14.5R7d657.5R8d168R9d241.5R10i85R11d89R12d749.5R13ai1i2i2i3i3i3i3i2i2i2i3i3i3i3i2hg:84oR0d950.5R1ad-3d277.5d628.5d277.5d628.5d362.5d363.5d362.5d363.5d1024d262d1024d262d362.5d-3d362.5d-3d277.5hR2d625.5R3d628.5R4d-3R5d746.5R6d0R7d749.5R8d168R9d241.5R10i84R11d-3R12d625.5R13ai1i2i2i2i2i2i2i2i2hg:83oR0d950.5R1ad548d302d548d400.5d490.5d373d439.5d359.5d388.5d346d341d346d258.5d346d213.75d378d169d410d169d469d169d518.5d198.75d543.75d228.5d569d311.5d584.5d372.5d597d485.5d618.5d539.25d672.75d593d727d593d818d593d926.5d520.25d982.5d447.5d1038.5d307d1038.5d254d1038.5d194.25d1026.5d134.5d1014.5d70.5d991d70.5d887d132d921.5d191d939d250d956.5d307d956.5d393.5d956.5d440.5d922.5d487.5d888.5d487.5d825.5d487.5d770.5d453.75d739.5d420d708.5d343d693d281.5d681d168.5d658.5d118d610.5d67.5d562.5d67.5d477d67.5d378d137.25d321d207d264d329.5d264d382d264d436.5d273.5d491d283d548d302hR2d650R3d593R4d67.5R5d760R6d-14.5R7d692.5R8d168R9d241.5R10i83R11d67.5R12d650R13ai1i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3hg:82oR0d950.5R1ad454.5d674d487d685d517.75d721d548.5d757d579.5d820d682d1024d573.5d1024d478d832.5d441d757.5d406.25d733d371.5d708.5d311.5d708.5d201.5d708.5d201.5d1024d100.5d1024d100.5d277.5d328.5d277.5d456.5d277.5d519.5d331d582.5d384.5d582.5d492.5d582.5d563d549.75d609.5d517d656d454.5d674d201.5d360.5d201.5d625.5d328.5d625.5d401.5d625.5d438.75d591.75d476d558d476d492.5d476d427d438.75d393.75d401.5d360.5d328.5d360.5d201.5d360.5hR2d711.5R3d682R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i82R11d100.5R12d711.5R13ai1i3i3i2i2i2i3i3i2i2i2i2i2i3i3i3i3i1i2i2i3i3i3i3i2hg:81oR0d950.5R1ad403.5d346d293.5d346d228.75d428d164d510d164d651.5d164d792.5d228.75d874.5d293.5d956.5d403.5d956.5d513.5d956.5d577.75d874.5d642d792.5d642d651.5d642d510d577.75d428d513.5d346d403.5d346d545d1010.5d678d1156d556d1156d445.5d1036.5d429d1037.5d420.25d1038d411.5d1038.5d403.5d1038.5d246d1038.5d151.75d933.25d57.5d828d57.5d651.5d57.5d474.5d151.75d369.25d246d264d403.5d264d560.5d264d654.5d369.25d748.5d474.5d748.5d651.5d748.5d781.5d696.25d874d644d966.5d545d1010.5hR2d806R3d748.5R4d57.5R5d760R6d-132R7d702.5R8d168R9d241.5R10i81R11d57.5R12d806R13ai1i3i3i3i3i3i3i3i3i1i2i2i2i3i3i3i3i3i3i3i3i3i3hg:80oR0d950.5R1ad201.5d360.5d201.5d641d328.5d641d399d641d437.5d604.5d476d568d476d500.5d476d433.5d437.5d397d399d360.5d328.5d360.5d201.5d360.5d100.5d277.5d328.5d277.5d454d277.5d518.25d334.25d582.5d391d582.5d500.5d582.5d611d518.25d667.5d454d724d328.5d724d201.5d724d201.5d1024d100.5d1024d100.5d277.5hR2d617.5R3d582.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i80R11d100.5R12d617.5R13ai1i2i2i3i3i3i3i2i1i2i3i3i3i3i2i2i2i2hg:79oR0d950.5R1ad403.5d346d293.5d346d228.75d428d164d510d164d651.5d164d792.5d228.75d874.5d293.5d956.5d403.5d956.5d513.5d956.5d577.75d874.5d642d792.5d642d651.5d642d510d577.75d428d513.5d346d403.5d346d403.5d264d560.5d264d654.5d369.25d748.5d474.5d748.5d651.5d748.5d828d654.5d933.25d560.5d1038.5d403.5d1038.5d246d1038.5d151.75d933.5d57.5d828.5d57.5d651.5d57.5d474.5d151.75d369.25d246d264d403.5d264hR2d806R3d748.5R4d57.5R5d760R6d-14.5R7d702.5R8d168R9d241.5R10i79R11d57.5R12d806R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:78oR0d950.5R1ad100.5d277.5d236.5d277.5d567.5d902d567.5d277.5d665.5d277.5d665.5d1024d529.5d1024d198.5d399.5d198.5d1024d100.5d1024d100.5d277.5hR2d766R3d665.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i78R11d100.5R12d766R13ai1i2i2i2i2i2i2i2i2i2i2hg:77oR0d950.5R1ad100.5d277.5d251d277.5d441.5d785.5d633d277.5d783.5d277.5d783.5d1024d685d1024d685d368.5d492.5d880.5d391d880.5d198.5d368.5d198.5d1024d100.5d1024d100.5d277.5hR2d883.5R3d783.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i77R11d100.5R12d883.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2hg:76oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d939d565d939d565d1024d100.5d1024d100.5d277.5hR2d570.5R3d565R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i76R11d100.5R12d570.5R13ai1i2i2i2i2i2i2hg:75oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d593d536.5d277.5d666.5d277.5d296d625.5d693d1024d560d1024d201.5d664.5d201.5d1024d100.5d1024d100.5d277.5hR2d671.5R3d693R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i75R11d100.5R12d671.5R13ai1i2i2i2i2i2i2i2i2i2i2i2hg:74oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d972d201.5d1107d150.25d1168d99d1229d-14.5d1229d-53d1229d-53d1144d-21.5d1144d45.5d1144d73d1106.5d100.5d1069d100.5d972d100.5d277.5hR2d302R3d201.5R4d-53R5d746.5R6d-205R7d799.5R8d168R9d241.5R10i74R11d-53R12d302R13ai1i2i2i3i3i2i2i2i3i3i2hg:73oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d1024d100.5d1024d100.5d277.5hR2d302R3d201.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i73R11d100.5R12d302R13ai1i2i2i2i2hg:72oR0d950.5R1ad100.5d277.5d201.5d277.5d201.5d583.5d568.5d583.5d568.5d277.5d669.5d277.5d669.5d1024d568.5d1024d568.5d668.5d201.5d668.5d201.5d1024d100.5d1024d100.5d277.5hR2d770R3d669.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i72R11d100.5R12d770R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:71oR0d950.5R1ad609.5d917.5d609.5d717d444.5d717d444.5d634d709.5d634d709.5d954.5d651d996d580.5d1017.25d510d1038.5d430d1038.5d255d1038.5d156.25d936.25d57.5d834d57.5d651.5d57.5d468.5d156.25d366.25d255d264d430d264d503d264d568.75d282d634.5d300d690d335d690d442.5d634d395d571d371d508d347d438.5d347d301.5d347d232.75d423.5d164d500d164d651.5d164d802.5d232.75d879d301.5d955.5d438.5d955.5d492d955.5d534d946.25d576d937d609.5d917.5hR2d793.5R3d709.5R4d57.5R5d760R6d-14.5R7d702.5R8d168R9d241.5R10i71R11d57.5R12d793.5R13ai1i2i2i2i2i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:70oR0d950.5R1ad100.5d277.5d529.5d277.5d529.5d362.5d201.5d362.5d201.5d582.5d497.5d582.5d497.5d667.5d201.5d667.5d201.5d1024d100.5d1024d100.5d277.5hR2d589R3d529.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i70R11d100.5R12d589R13ai1i2i2i2i2i2i2i2i2i2i2hg:126oR0d950.5R1ad749.5d615.5d749.5d704.5d697d744d652.25d761d607.5d778d559d778d504d778d431d748.5d425.5d746.5d423d745.5d419.5d744d412d741.5d334.5d710.5d287.5d710.5d243.5d710.5d200.5d729.75d157.5d749d108.5d790.5d108.5d701.5d161d662d205.75d644.75d250.5d627.5d299d627.5d354d627.5d427.5d657.5d432.5d659.5d435d660.5d439d662d446d664.5d523.5d695.5d570.5d695.5d613.5d695.5d655.75d676.5d698d657.5d749.5d615.5hR2d858R3d749.5R4d108.5R5d408.5R6d233.5R7d300R8d168R9d241.5R10i126R11d108.5R12d858R13ai1i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:69oR0d950.5R1ad100.5d277.5d572.5d277.5d572.5d362.5d201.5d362.5d201.5d583.5d557d583.5d557d668.5d201.5d668.5d201.5d939d581.5d939d581.5d1024d100.5d1024d100.5d277.5hR2d647R3d581.5R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i69R11d100.5R12d647R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:125oR0d950.5R1ad128d1119d163d1119d233d1119d254.25d1097.5d275.5d1076d275.5d1004.5d275.5d880.5d275.5d802.5d298d767d320.5d731.5d376d718d320.5d705.5d298d670d275.5d634.5d275.5d556d275.5d432d275.5d361d254.25d339.25d233d317.5d163d317.5d128d317.5d128d246d159.5d246d284d246d325.75d282.75d367.5d319.5d367.5d430d367.5d550d367.5d624.5d394.5d653.25d421.5d682d492.5d682d523.5d682d523.5d753.5d492.5d753.5d421.5d753.5d394.5d782.5d367.5d811.5d367.5d887d367.5d1006.5d367.5d1117d325.75d1154d284d1191d159.5d1191d128d1191d128d1119hR2d651.5R3d523.5R4d128R5d778R6d-167R7d650R8d168R9d241.5R10i125R11d128R12d651.5R13ai1i2i3i3i2i3i3i3i3i2i3i3i2i2i2i3i3i2i3i3i2i2i2i3i3i2i3i3i2i2hg:68oR0d950.5R1ad201.5d360.5d201.5d941d323.5d941d478d941d549.75d871d621.5d801d621.5d650d621.5d500d549.75d430.25d478d360.5d323.5d360.5d201.5d360.5d100.5d277.5d308d277.5d525d277.5d626.5d367.75d728d458d728d650d728d843d626d933.5d524d1024d308d1024d100.5d1024d100.5d277.5hR2d788.5R3d728R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i68R11d100.5R12d788.5R13ai1i2i2i3i3i3i3i2i1i2i3i3i3i3i2i2hg:124oR0d950.5R1ad215d241.5d215d1265.5d130d1265.5d130d241.5d215d241.5hR2d345R3d215R4d130R5d782.5R6d-241.5R7d652.5R8d168R9d241.5R10i124R11d130R12d345R13ai1i2i2i2i2hg:67oR0d950.5R1ad659.5d335d659.5d441.5d608.5d394d550.75d370.5d493d347d428d347d300d347d232d425.25d164d503.5d164d651.5d164d799d232d877.25d300d955.5d428d955.5d493d955.5d550.75d932d608.5d908.5d659.5d861d659.5d966.5d606.5d1002.5d547.25d1020.5d488d1038.5d422d1038.5d252.5d1038.5d155d934.75d57.5d831d57.5d651.5d57.5d471.5d155d367.75d252.5d264d422d264d489d264d548.25d281.75d607.5d299.5d659.5d335hR2d715R3d659.5R4d57.5R5d760R6d-14.5R7d702.5R8d168R9d241.5R10i67R11d57.5R12d715R13ai1i2i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3hg:123oR0d950.5R1ad523.5d1119d523.5d1191d492.5d1191d368d1191d325.75d1154d283.5d1117d283.5d1006.5d283.5d887d283.5d811.5d256.5d782.5d229.5d753.5d158.5d753.5d128d753.5d128d682d158.5d682d230d682d256.75d653.25d283.5d624.5d283.5d550d283.5d430d283.5d319.5d325.75d282.75d368d246d492.5d246d523.5d246d523.5d317.5d489.5d317.5d419d317.5d397.5d339.5d376d361.5d376d432d376d556d376d634.5d353.25d670d330.5d705.5d275.5d718d331d731.5d353.5d767d376d802.5d376d880.5d376d1004.5d376d1075d397.5d1097d419d1119d489.5d1119d523.5d1119hR2d651.5R3d523.5R4d128R5d778R6d-167R7d650R8d168R9d241.5R10i123R11d128R12d651.5R13ai1i2i2i3i3i2i3i3i2i2i2i3i3i2i3i3i2i2i2i3i3i2i3i3i3i3i2i3i3i2hg:66oR0d950.5R1ad201.5d667.5d201.5d941d363.5d941d445d941d484.25d907.25d523.5d873.5d523.5d804d523.5d734d484.25d700.75d445d667.5d363.5d667.5d201.5d667.5d201.5d360.5d201.5d585.5d351d585.5d425d585.5d461.25d557.75d497.5d530d497.5d473d497.5d416.5d461.25d388.5d425d360.5d351d360.5d201.5d360.5d100.5d277.5d358.5d277.5d474d277.5d536.5d325.5d599d373.5d599d462d599d530.5d567d571d535d611.5d473d621.5d547.5d637.5d588.75d688.25d630d739d630d815d630d915d562d969.5d494d1024d368.5d1024d100.5d1024d100.5d277.5hR2d702.5R3d630R4d100.5R5d746.5R6d0R7d646R8d168R9d241.5R10i66R11d100.5R12d702.5R13ai1i2i2i3i3i3i3i2i1i2i2i3i3i3i3i2i1i2i3i3i3i3i3i3i3i3i2i2hg:122oR0d950.5R1ad56.5d464d493.5d464d493.5d548d147.5d950.5d493.5d950.5d493.5d1024d44d1024d44d940d390d537.5d56.5d537.5d56.5d464hR2d537.5R3d493.5R4d44R5d560R6d0R7d516R8d168R9d241.5R10i122R11d44R12d537.5R13ai1i2i2i2i2i2i2i2i2i2i2hg:65oR0d950.5R1ad350d377d213d748.5d487.5d748.5d350d377d293d277.5d407.5d277.5d692d1024d587d1024d519d832.5d182.5d832.5d114.5d1024d8d1024d293d277.5hR2d700.5R3d692R4d8R5d746.5R6d0R7d738.5R8d168R9d241.5R10i65R11d8R12d700.5R13ai1i2i2i2i1i2i2i2i2i2i2i2i2hg:121oR0d950.5R1ad329.5d1076d290.5d1176d253.5d1206.5d216.5d1237d154.5d1237d81d1237d81d1160d135d1160d173d1160d194d1142d215d1124d240.5d1057d257d1015d30.5d464d128d464d303d902d478d464d575.5d464d329.5d1076hR2d606R3d575.5R4d30.5R5d560R6d-213R7d529.5R8d168R9d241.5R10i121R11d30.5R12d606R13ai1i3i3i2i2i2i3i3i2i2i2i2i2i2i2hg:64oR0d950.5R1ad381d755.5d381d827d416.5d867.75d452d908.5d514d908.5d575.5d908.5d610.75d867.5d646d826.5d646d755.5d646d685.5d610d644.25d574d603d513d603d452.5d603d416.75d644d381d685d381d755.5d653.5d905d623.5d943.5d584.75d961.75d546d980d494.5d980d408.5d980d354.75d917.75d301d855.5d301d755.5d301d655.5d355d593d409d530.5d494.5d530.5d546d530.5d585d549.25d624d568d653.5d606d653.5d540.5d725d540.5d725d908.5d798d897.5d839.25d841.75d880.5d786d880.5d697.5d880.5d644d864.75d597d849d550d817d510d765d444.5d690.25d409.75d615.5d375d527.5d375d466d375d409.5d391.25d353d407.5d305d439.5d226.5d490.5d182.25d573.25d138d656d138d752.5d138d832d166.75d901.5d195.5d971d250d1024d302.5d1076d371.5d1103.25d440.5d1130.5d519d1130.5d583.5d1130.5d645.75d1108.75d708d1087d760d1046.5d805d1102d742.5d1150.5d668.75d1176.25d595d1202d519d1202d426.5d1202d344.5d1169.25d262.5d1136.5d198.5d1074d134.5d1011.5d101d929.25d67.5d847d67.5d752.5d67.5d661.5d101.5d579d135.5d496.5d198.5d434d263d370.5d347.5d336.75d432d303d526.5d303d632.5d303d723.25d346.5d814d390d875.5d470d913d519d932.75d576.5d952.5d634d952.5d695.5d952.5d827d873d903d793.5d979d653.5d982d653.5d905hR2d1024R3d952.5R4d67.5R5d721R6d-178R7d653.5R8d168R9d241.5R10i64R11d67.5R12d1024R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i2i2i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i2hg:120oR0d950.5R1ad562d464d359.5d736.5d572.5d1024d464d1024d301d804d138d1024d29.5d1024d247d731d48d464d156.5d464d305d663.5d453.5d464d562d464hR2d606R3d572.5R4d29.5R5d560R6d0R7d530.5R8d168R9d241.5R10i120R11d29.5R12d606R13ai1i2i2i2i2i2i2i2i2i2i2i2i2hg:63oR0d950.5R1ad195.5d897d297d897d297d1024d195.5d1024d195.5d897d294d823.5d198.5d823.5d198.5d746.5d198.5d696d212.5d663.5d226.5d631d271.5d588d316.5d543.5d345d517d357.75d493.5d370.5d470d370.5d445.5d370.5d401d337.75d373.5d305d346d251d346d211.5d346d166.75d363.5d122d381d73.5d414.5d73.5d320.5d120.5d292d168.75d278d217d264d268.5d264d360.5d264d416.25d312.5d472d361d472d440.5d472d478.5d454d512.75d436d547d391d590d347d633d323.5d656.5d313.75d669.75d304d683d300d695.5d297d706d295.5d721d294d736d294d762d294d823.5hR2d543.5R3d472R4d73.5R5d760R6d0R7d686.5R8d168R9d241.5R10i63R11d73.5R12d543.5R13ai1i2i2i2i2i1i2i2i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i2hg:119oR0d950.5R1ad43d464d135d464d250d901d364.5d464d473d464d588d901d702.5d464d794.5d464d648d1024d539.5d1024d419d565d298d1024d189.5d1024d43d464hR2d837.5R3d794.5R4d43R5d560R6d0R7d517R8d168R9d241.5R10i119R11d43R12d837.5R13ai1i2i2i2i2i2i2i2i2i2i2i2i2i2hg:62oR0d950.5R1ad108.5d520d108.5d429d749.5d661.5d749.5d744.5d108.5d977d108.5d886d623.5d703.5d108.5d520hR2d858R3d749.5R4d108.5R5d595R6d47R7d486.5R8d168R9d241.5R10i62R11d108.5R12d858R13ai1i2i2i2i2i2i2i2hg:118oR0d950.5R1ad30.5d464d128d464d303d934d478d464d575.5d464d365.5d1024d240.5d1024d30.5d464hR2d606R3d575.5R4d30.5R5d560R6d0R7d529.5R8d168R9d241.5R10i118R11d30.5R12d606R13ai1i2i2i2i2i2i2i2hg:61oR0d950.5R1ad108.5d559d749.5d559d749.5d643d108.5d643d108.5d559d108.5d763d749.5d763d749.5d848d108.5d848d108.5d763hR2d858R3d749.5R4d108.5R5d465R6d176R7d356.5R8d168R9d241.5R10i61R11d108.5R12d858R13ai1i2i2i2i2i1i2i2i2i2hg:117oR0d950.5R1ad87d803d87d464d179d464d179d799.5d179d879d210d918.75d241d958.5d303d958.5d377.5d958.5d420.75d911d464d863.5d464d781.5d464d464d556d464d556d1024d464d1024d464d938d430.5d989d386.25d1013.75d342d1038.5d283.5d1038.5d187d1038.5d137d978.5d87d918.5d87d803hR2d649R3d556R4d87R5d560R6d-14.5R7d473R8d168R9d241.5R10i117R11d87R12d649R13ai1i2i2i2i3i3i3i3i2i2i2i2i2i3i3i3i3hg:60oR0d950.5R1ad749.5d520d233.5d703.5d749.5d886d749.5d977d108.5d744.5d108.5d661.5d749.5d429d749.5d520hR2d858R3d749.5R4d108.5R5d595R6d47R7d486.5R8d168R9d241.5R10i60R11d108.5R12d858R13ai1i2i2i2i2i2i2i2hg:116oR0d950.5R1ad187.5d305d187.5d464d377d464d377d535.5d187.5d535.5d187.5d839.5d187.5d908d206.25d927.5d225d947d282.5d947d377d947d377d1024d282.5d1024d176d1024d135.5d984.25d95d944.5d95d839.5d95d535.5d27.5d535.5d27.5d464d95d464d95d305d187.5d305hR2d401.5R3d377R4d27.5R5d719R6d0R7d691.5R8d168R9d241.5R10i116R11d27.5R12d401.5R13ai1i2i2i2i2i2i3i3i2i2i2i3i3i2i2i2i2i2i2hg:59oR0d950.5R1ad120d494.5d225.5d494.5d225.5d621.5d120d621.5d120d494.5d120d897d225.5d897d225.5d983d143.5d1143d79d1143d120d983d120d897hR2d345R3d225.5R4d79R5d529.5R6d-119R7d450.5R8d168R9d241.5R10i59R11d79R12d345R13ai1i2i2i2i2i1i2i2i2i2i2i2hg:115oR0d950.5R1ad453.5d480.5d453.5d567.5d414.5d547.5d372.5d537.5d330.5d527.5d285.5d527.5d217d527.5d182.75d548.5d148.5d569.5d148.5d611.5d148.5d643.5d173d661.75d197.5d680d271.5d696.5d303d703.5d401d724.5d442.25d762.75d483.5d801d483.5d869.5d483.5d947.5d421.75d993d360d1038.5d252d1038.5d207d1038.5d158.25d1029.75d109.5d1021d55.5d1003.5d55.5d908.5d106.5d935d156d948.25d205.5d961.5d254d961.5d319d961.5d354d939.25d389d917d389d876.5d389d839d363.75d819d338.5d799d253d780.5d221d773d135.5d755d97.5d717.75d59.5d680.5d59.5d615.5d59.5d536.5d115.5d493.5d171.5d450.5d274.5d450.5d325.5d450.5d370.5d458d415.5d465.5d453.5d480.5hR2d533.5R3d483.5R4d55.5R5d573.5R6d-14.5R7d518R8d168R9d241.5R10i115R11d55.5R12d533.5R13ai1i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3i2i3i3i3i3i3i3hg:58oR0d950.5R1ad120d897d225.5d897d225.5d1024d120d1024d120d897d120d494.5d225.5d494.5d225.5d621.5d120d621.5d120d494.5hR2d345R3d225.5R4d120R5d529.5R6d0R7d409.5R8d168R9d241.5R10i58R11d120R12d345R13ai1i2i2i2i2i1i2i2i2i2hg:114oR0d950.5R1ad421d550d405.5d541d387.25d536.75d369d532.5d347d532.5d269d532.5d227.25d583.25d185.5d634d185.5d729d185.5d1024d93d1024d93d464d185.5d464d185.5d551d214.5d500d261d475.25d307.5d450.5d374d450.5d383.5d450.5d395d451.75d406.5d453d420.5d455.5d421d550hR2d421R3d421R4d93R5d573.5R6d0R7d480.5R8d168R9d241.5R10i114R11d93R12d421R13ai1i3i3i3i3i2i2i2i2i2i3i3i3i3i2hg:57oR0d950.5R1ad112.5d1008.5d112.5d916.5d150.5d934.5d189.5d944d228.5d953.5d266d953.5d366d953.5d418.75d886.25d471.5d819d479d682d450d725d405.5d748d361d771d307d771d195d771d129.75d703.25d64.5d635.5d64.5d518d64.5d403d132.5d333.5d200.5d264d313.5d264d443d264d511.25d363.25d579.5d462.5d579.5d651.5d579.5d828d495.75d933.25d412d1038.5d270.5d1038.5d232.5d1038.5d193.5d1031d154.5d1023.5d112.5d1008.5d313.5d692d381.5d692d421.25d645.5d461d599d461d518d461d437.5d421.25d390.75d381.5d344d313.5d344d245.5d344d205.75d390.75d166d437.5d166d518d166d599d205.75d645.5d245.5d692d313.5d692hR2d651.5R3d579.5R4d64.5R5d760R6d-14.5R7d695.5R8d168R9d241.5R10i57R11d64.5R12d651.5R13ai1i2i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:113oR0d950.5R1ad151.5d744.5d151.5d846d193.25d903.75d235d961.5d308d961.5d381d961.5d423d903.75d465d846d465d744.5d465d643d423d585.25d381d527.5d308d527.5d235d527.5d193.25d585.25d151.5d643d151.5d744.5d465d940d436d990d391.75d1014.25d347.5d1038.5d285.5d1038.5d184d1038.5d120.25d957.5d56.5d876.5d56.5d744.5d56.5d612.5d120.25d531.5d184d450.5d285.5d450.5d347.5d450.5d391.75d474.75d436d499d465d549d465d464d557d464d557d1237d465d1237d465d940hR2d650R3d557R4d56.5R5d573.5R6d-213R7d517R8d168R9d241.5R10i113R11d56.5R12d650R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i2i2i2i2i2hg:56oR0d950.5R1ad325.5d669.5d253.5d669.5d212.25d708d171d746.5d171d814d171d881.5d212.25d920d253.5d958.5d325.5d958.5d397.5d958.5d439d919.75d480.5d881d480.5d814d480.5d746.5d439.25d708d398d669.5d325.5d669.5d224.5d626.5d159.5d610.5d123.25d566d87d521.5d87d457.5d87d368d150.75d316d214.5d264d325.5d264d437d264d500.5d316d564d368d564d457.5d564d521.5d527.75d566d491.5d610.5d427d626.5d500d643.5d540.75d693d581.5d742.5d581.5d814d581.5d922.5d515.25d980.5d449d1038.5d325.5d1038.5d202d1038.5d135.75d980.5d69.5d922.5d69.5d814d69.5d742.5d110.5d693d151.5d643.5d224.5d626.5d187.5d467d187.5d525d223.75d557.5d260d590d325.5d590d390.5d590d427.25d557.5d464d525d464d467d464d409d427.25d376.5d390.5d344d325.5d344d260d344d223.75d376.5d187.5d409d187.5d467hR2d651.5R3d581.5R4d69.5R5d760R6d-14.5R7d690.5R8d168R9d241.5R10i56R11d69.5R12d651.5R13ai1i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hg:112oR0d950.5R1ad185.5d940d185.5d1237d93d1237d93d464d185.5d464d185.5d549d214.5d499d258.75d474.75d303d450.5d364.5d450.5d466.5d450.5d530.25d531.5d594d612.5d594d744.5d594d876.5d530.25d957.5d466.5d1038.5d364.5d1038.5d303d1038.5d258.75d1014.25d214.5d990d185.5d940d498.5d744.5d498.5d643d456.75d585.25d415d527.5d342d527.5d269d527.5d227.25d585.25d185.5d643d185.5d744.5d185.5d846d227.25d903.75d269d961.5d342d961.5d415d961.5d456.75d903.75d498.5d846d498.5d744.5hR2d650R3d594R4d93R5d573.5R6d-213R7d480.5R8d168R9d241.5R10i112R11d93R12d650R13ai1i2i2i2i2i2i3i3i3i3i3i3i3i3i1i3i3i3i3i3i3i3i3hgh";
 openfl.text.Font.DEFAULT_FONT_SCALE = 9.0;
 openfl.text.Font.DEFAULT_FONT_NAME = "Bitstream_Vera_Sans";
@@ -60686,10 +68306,11 @@ haxe.Template.expr_float = new EReg("^([+-]?)(?=\\d|,\\d)\\d*(,\\d*)?([Ee]([+-]?
 haxe.Template.globals = { };
 haxe.Unserializer.DEFAULT_RESOLVER = Type;
 haxe.Unserializer.BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%:";
+haxe.Unserializer.CODES = null;
 haxe.crypto.Base64.CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 haxe.crypto.Base64.BYTES = haxe.io.Bytes.ofString(haxe.crypto.Base64.CHARS);
 haxe.ds.ObjectMap.count = 0;
-haxe.ui.toolkit.core.DisplayObject.__meta__ = { fields : { onInit : { exclude : null}, set_onInit : { exclude : null}, onResize : { exclude : null}, set_onResize : { exclude : null}, onReady : { exclude : null}, set_onReady : { exclude : null}, onClick : { exclude : null}, set_onClick : { exclude : null}, onMouseDown : { exclude : null}, set_onMouseDown : { exclude : null}, onMouseUp : { exclude : null}, set_onMouseUp : { exclude : null}, onMouseOver : { exclude : null}, set_onMouseOver : { exclude : null}, onMouseOut : { exclude : null}, set_onMouseOut : { exclude : null}, onMouseMove : { exclude : null}, set_onMouseMove : { exclude : null}, onDoubleClick : { exclude : null}, set_onDoubleClick : { exclude : null}, onRollOver : { exclude : null}, set_onRollOver : { exclude : null}, onRollOut : { exclude : null}, set_onRollOut : { exclude : null}, onChange : { exclude : null}, set_onChange : { exclude : null}, onScroll : { exclude : null}, set_onScroll : { exclude : null}, onAdded : { exclude : null}, set_onAdded : { exclude : null}, onAddedToStage : { exclude : null}, set_onAddedToStage : { exclude : null}, onRemoved : { exclude : null}, set_onRemoved : { exclude : null}, onRemovedFromStage : { exclude : null}, set_onRemovedFromStage : { exclude : null}, onActivate : { exclude : null}, set_onActivate : { exclude : null}, onDeactivate : { exclude : null}, set_onDeactivate : { exclude : null}, onGlyphClick : { exclude : null}, set_onGlyphClick : { exclude : null}, onMenuSelect : { exclude : null}, set_onMenuSelect : { exclude : null}, onMenuOpen : { exclude : null}, set_onMenuOpen : { exclude : null}}};
+haxe.ui.toolkit.core.StyleableDisplayObject.__meta__ = { fields : { baseStyle : { clonable : null}, style : { clonable : null}}};
 haxe.ui.toolkit.controls.Button.STATE_NORMAL = "normal";
 haxe.ui.toolkit.controls.Button.STATE_OVER = "over";
 haxe.ui.toolkit.controls.Button.STATE_DOWN = "down";
@@ -60704,24 +68325,13 @@ haxe.ui.showcase.views.HContinuousLayout.VALIGNS = ["top","center","bottom"];
 haxe.ui.showcase.views.HorizontalLayout.VALIGNS = ["top","center","bottom"];
 haxe.ui.showcase.views.VContinuousLayout.HALIGNS = ["left","center","right"];
 haxe.ui.showcase.views.VerticalLayout.HALIGNS = ["left","center","right"];
-haxe.ui.toolkit.containers.AccordionButton.__meta__ = { obj : { exclude : null}};
 haxe.ui.toolkit.containers.CalendarView.MONTH_NAMES = ["January","Febuary","March","April","May","June","July","August","September","October","November","December"];
-haxe.ui.toolkit.containers.ExpandableButton.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.containers.ListView.__meta__ = { fields : { onComponentEvent : { exclude : null}, set_onComponentEvent : { exclude : null}}};
-haxe.ui.toolkit.containers.ScrollViewLayout.__meta__ = { obj : { exclude : null}};
 haxe.ui.toolkit.containers.TableViewRow.STATE_NORMAL = "normal";
 haxe.ui.toolkit.containers.TableViewRow.STATE_OVER = "over";
 haxe.ui.toolkit.containers.TableViewRow.STATE_SELECTED = "selected";
-haxe.ui.toolkit.controls.CalendarDay.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.controls.CalendarLayout.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.controls.CheckBoxValue.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.controls.HScrollLayout.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.controls.OptionBoxValue.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.controls.HProgressLayout.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.controls.VProgressLayout.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.controls.TextInputLayout.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.controls.VScrollLayout.__meta__ = { obj : { exclude : null}};
-haxe.ui.toolkit.controls.popups.Popup.__meta__ = { fields : { clickButton : { exclude : null}}};
+haxe.ui.toolkit.controls.Link.STATE_NORMAL = "normal";
+haxe.ui.toolkit.controls.Link.STATE_OVER = "over";
+haxe.ui.toolkit.controls.Link.STATE_DOWN = "down";
 haxe.ui.toolkit.core.Macros.componentClasses = new haxe.ds.StringMap();
 haxe.ui.toolkit.core.Macros.dataSourceClasses = new haxe.ds.StringMap();
 haxe.ui.toolkit.core.Macros.themeResources = new haxe.ds.StringMap();
@@ -60732,8 +68342,12 @@ haxe.ui.toolkit.core.PopupButton.CANCEL = 4096;
 haxe.ui.toolkit.core.PopupButton.CONFIRM = 65536;
 haxe.ui.toolkit.core.PopupButton.CLOSE = 1048576;
 haxe.ui.toolkit.core.PopupButton.CUSTOM = 16777216;
+haxe.ui.toolkit.core.Toolkit.DPI_THRESHOLD = 120;
+haxe.ui.toolkit.core.Toolkit._versionInfo = new haxe.ds.StringMap();
 haxe.ui.toolkit.core.Toolkit.useDefaultTheme = true;
+haxe.ui.toolkit.core.Toolkit.autoScale = true;
 haxe.ui.toolkit.core.Toolkit._defaultTransition = "slide";
+haxe.ui.toolkit.core.Toolkit._scaleFactor = 0;
 haxe.ui.toolkit.core.base.HorizontalAlign.LEFT = "left";
 haxe.ui.toolkit.core.base.HorizontalAlign.RIGHT = "right";
 haxe.ui.toolkit.core.base.HorizontalAlign.CENTER = "center";
@@ -60814,7 +68428,6 @@ haxe.ui.toolkit.events.UIEvent.GLYPH_CLICK = "haxeui_" + "glyphClick";
 haxe.ui.toolkit.events.UIEvent.COMPONENT_EVENT = "haxeui_" + "componentEvent";
 haxe.ui.toolkit.events.UIEvent.MENU_SELECT = "haxeui_" + "menuSelect";
 haxe.ui.toolkit.events.UIEvent.MENU_OPEN = "haxeui_" + "menuOpen";
-haxe.ui.toolkit.style.Style.NONE = -2;
 haxe.ui.toolkit.text.TextDisplay.X_PADDING = 0;
 haxe.ui.toolkit.text.TextDisplay.Y_PADDING = 2;
 haxe.ui.toolkit.themes.Theme.assets = new haxe.ds.StringMap();
@@ -60836,6 +68449,1044 @@ hscript.Parser.p1 = 0;
 hscript.Parser.readPos = 0;
 hscript.Parser.tokenMin = 0;
 hscript.Parser.tokenMax = 0;
+js.Boot.__toStr = {}.toString;
+lime.Assets.cache = new lime.AssetCache();
+lime.Assets.libraries = new haxe.ds.StringMap();
+lime.Assets.initialized = false;
+lime._Assets.AssetType_Impl_.BINARY = "BINARY";
+lime._Assets.AssetType_Impl_.FONT = "FONT";
+lime._Assets.AssetType_Impl_.IMAGE = "IMAGE";
+lime._Assets.AssetType_Impl_.MUSIC = "MUSIC";
+lime._Assets.AssetType_Impl_.SOUND = "SOUND";
+lime._Assets.AssetType_Impl_.TEMPLATE = "TEMPLATE";
+lime._Assets.AssetType_Impl_.TEXT = "TEXT";
+lime.app.Application.onUpdate = new lime.app.Event();
+lime.app.Application.__eventInfo = new lime.app._Application.UpdateEventInfo();
+lime.app._Application.UpdateEventType_Impl_.UPDATE = 0;
+lime.app.Preloader.images = new haxe.ds.StringMap();
+lime.app.Preloader.loaders = new haxe.ds.StringMap();
+lime.audio.openal.AL.NONE = 0;
+lime.audio.openal.AL.FALSE = 0;
+lime.audio.openal.AL.TRUE = 1;
+lime.audio.openal.AL.SOURCE_RELATIVE = 514;
+lime.audio.openal.AL.CONE_INNER_ANGLE = 4097;
+lime.audio.openal.AL.CONE_OUTER_ANGLE = 4098;
+lime.audio.openal.AL.PITCH = 4099;
+lime.audio.openal.AL.POSITION = 4100;
+lime.audio.openal.AL.DIRECTION = 4101;
+lime.audio.openal.AL.VELOCITY = 4102;
+lime.audio.openal.AL.LOOPING = 4103;
+lime.audio.openal.AL.BUFFER = 4105;
+lime.audio.openal.AL.GAIN = 4106;
+lime.audio.openal.AL.MIN_GAIN = 4109;
+lime.audio.openal.AL.MAX_GAIN = 4110;
+lime.audio.openal.AL.ORIENTATION = 4111;
+lime.audio.openal.AL.SOURCE_STATE = 4112;
+lime.audio.openal.AL.INITIAL = 4113;
+lime.audio.openal.AL.PLAYING = 4114;
+lime.audio.openal.AL.PAUSED = 4115;
+lime.audio.openal.AL.STOPPED = 4116;
+lime.audio.openal.AL.BUFFERS_QUEUED = 4117;
+lime.audio.openal.AL.BUFFERS_PROCESSED = 4118;
+lime.audio.openal.AL.REFERENCE_DISTANCE = 4128;
+lime.audio.openal.AL.ROLLOFF_FACTOR = 4129;
+lime.audio.openal.AL.CONE_OUTER_GAIN = 4130;
+lime.audio.openal.AL.MAX_DISTANCE = 4131;
+lime.audio.openal.AL.SEC_OFFSET = 4132;
+lime.audio.openal.AL.SAMPLE_OFFSET = 4133;
+lime.audio.openal.AL.BYTE_OFFSET = 4134;
+lime.audio.openal.AL.SOURCE_TYPE = 4135;
+lime.audio.openal.AL.STATIC = 4136;
+lime.audio.openal.AL.STREAMING = 4137;
+lime.audio.openal.AL.UNDETERMINED = 4144;
+lime.audio.openal.AL.FORMAT_MONO8 = 4352;
+lime.audio.openal.AL.FORMAT_MONO16 = 4353;
+lime.audio.openal.AL.FORMAT_STEREO8 = 4354;
+lime.audio.openal.AL.FORMAT_STEREO16 = 4355;
+lime.audio.openal.AL.FREQUENCY = 8193;
+lime.audio.openal.AL.BITS = 8194;
+lime.audio.openal.AL.CHANNELS = 8195;
+lime.audio.openal.AL.SIZE = 8196;
+lime.audio.openal.AL.NO_ERROR = 0;
+lime.audio.openal.AL.INVALID_NAME = 40961;
+lime.audio.openal.AL.INVALID_ENUM = 40962;
+lime.audio.openal.AL.INVALID_VALUE = 40963;
+lime.audio.openal.AL.INVALID_OPERATION = 40964;
+lime.audio.openal.AL.OUT_OF_MEMORY = 40965;
+lime.audio.openal.AL.VENDOR = 45057;
+lime.audio.openal.AL.VERSION = 45058;
+lime.audio.openal.AL.RENDERER = 45059;
+lime.audio.openal.AL.EXTENSIONS = 45060;
+lime.audio.openal.AL.DOPPLER_FACTOR = 49152;
+lime.audio.openal.AL.SPEED_OF_SOUND = 49155;
+lime.audio.openal.AL.DOPPLER_VELOCITY = 49153;
+lime.audio.openal.AL.DISTANCE_MODEL = 53248;
+lime.audio.openal.AL.INVERSE_DISTANCE = 53249;
+lime.audio.openal.AL.INVERSE_DISTANCE_CLAMPED = 53250;
+lime.audio.openal.AL.LINEAR_DISTANCE = 53251;
+lime.audio.openal.AL.LINEAR_DISTANCE_CLAMPED = 53252;
+lime.audio.openal.AL.EXPONENT_DISTANCE = 53253;
+lime.audio.openal.AL.EXPONENT_DISTANCE_CLAMPED = 53254;
+lime.audio.openal.ALC.FALSE = 0;
+lime.audio.openal.ALC.TRUE = 1;
+lime.audio.openal.ALC.FREQUENCY = 4103;
+lime.audio.openal.ALC.REFRESH = 4104;
+lime.audio.openal.ALC.SYNC = 4105;
+lime.audio.openal.ALC.MONO_SOURCES = 4112;
+lime.audio.openal.ALC.STEREO_SOURCES = 4113;
+lime.audio.openal.ALC.NO_ERROR = 0;
+lime.audio.openal.ALC.INVALID_DEVICE = 40961;
+lime.audio.openal.ALC.INVALID_CONTEXT = 40962;
+lime.audio.openal.ALC.INVALID_ENUM = 40963;
+lime.audio.openal.ALC.INVALID_VALUE = 40964;
+lime.audio.openal.ALC.OUT_OF_MEMORY = 40965;
+lime.audio.openal.ALC.ATTRIBUTES_SIZE = 4098;
+lime.audio.openal.ALC.ALL_ATTRIBUTES = 4099;
+lime.audio.openal.ALC.DEFAULT_DEVICE_SPECIFIER = 4100;
+lime.audio.openal.ALC.DEVICE_SPECIFIER = 4101;
+lime.audio.openal.ALC.EXTENSIONS = 4102;
+lime.audio.openal.ALC.ENUMERATE_ALL_EXT = 1;
+lime.audio.openal.ALC.DEFAULT_ALL_DEVICES_SPECIFIER = 4114;
+lime.audio.openal.ALC.ALL_DEVICES_SPECIFIER = 4115;
+lime.graphics.Image.__base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+lime.graphics.Renderer.onRenderContextLost = new lime.app.Event();
+lime.graphics.Renderer.onRenderContextRestored = new lime.app.Event();
+lime.graphics.Renderer.onRender = new lime.app.Event();
+lime.graphics.Renderer.eventInfo = new lime.graphics._Renderer.RenderEventInfo(0);
+lime.graphics._Renderer.RenderEventType_Impl_.RENDER = 0;
+lime.graphics._Renderer.RenderEventType_Impl_.RENDER_CONTEXT_LOST = 1;
+lime.graphics._Renderer.RenderEventType_Impl_.RENDER_CONTEXT_RESTORED = 2;
+lime.graphics.opengl.GL.DEPTH_BUFFER_BIT = 256;
+lime.graphics.opengl.GL.STENCIL_BUFFER_BIT = 1024;
+lime.graphics.opengl.GL.COLOR_BUFFER_BIT = 16384;
+lime.graphics.opengl.GL.POINTS = 0;
+lime.graphics.opengl.GL.LINES = 1;
+lime.graphics.opengl.GL.LINE_LOOP = 2;
+lime.graphics.opengl.GL.LINE_STRIP = 3;
+lime.graphics.opengl.GL.TRIANGLES = 4;
+lime.graphics.opengl.GL.TRIANGLE_STRIP = 5;
+lime.graphics.opengl.GL.TRIANGLE_FAN = 6;
+lime.graphics.opengl.GL.ZERO = 0;
+lime.graphics.opengl.GL.ONE = 1;
+lime.graphics.opengl.GL.SRC_COLOR = 768;
+lime.graphics.opengl.GL.ONE_MINUS_SRC_COLOR = 769;
+lime.graphics.opengl.GL.SRC_ALPHA = 770;
+lime.graphics.opengl.GL.ONE_MINUS_SRC_ALPHA = 771;
+lime.graphics.opengl.GL.DST_ALPHA = 772;
+lime.graphics.opengl.GL.ONE_MINUS_DST_ALPHA = 773;
+lime.graphics.opengl.GL.DST_COLOR = 774;
+lime.graphics.opengl.GL.ONE_MINUS_DST_COLOR = 775;
+lime.graphics.opengl.GL.SRC_ALPHA_SATURATE = 776;
+lime.graphics.opengl.GL.FUNC_ADD = 32774;
+lime.graphics.opengl.GL.BLEND_EQUATION = 32777;
+lime.graphics.opengl.GL.BLEND_EQUATION_RGB = 32777;
+lime.graphics.opengl.GL.BLEND_EQUATION_ALPHA = 34877;
+lime.graphics.opengl.GL.FUNC_SUBTRACT = 32778;
+lime.graphics.opengl.GL.FUNC_REVERSE_SUBTRACT = 32779;
+lime.graphics.opengl.GL.BLEND_DST_RGB = 32968;
+lime.graphics.opengl.GL.BLEND_SRC_RGB = 32969;
+lime.graphics.opengl.GL.BLEND_DST_ALPHA = 32970;
+lime.graphics.opengl.GL.BLEND_SRC_ALPHA = 32971;
+lime.graphics.opengl.GL.CONSTANT_COLOR = 32769;
+lime.graphics.opengl.GL.ONE_MINUS_CONSTANT_COLOR = 32770;
+lime.graphics.opengl.GL.CONSTANT_ALPHA = 32771;
+lime.graphics.opengl.GL.ONE_MINUS_CONSTANT_ALPHA = 32772;
+lime.graphics.opengl.GL.BLEND_COLOR = 32773;
+lime.graphics.opengl.GL.ARRAY_BUFFER = 34962;
+lime.graphics.opengl.GL.ELEMENT_ARRAY_BUFFER = 34963;
+lime.graphics.opengl.GL.ARRAY_BUFFER_BINDING = 34964;
+lime.graphics.opengl.GL.ELEMENT_ARRAY_BUFFER_BINDING = 34965;
+lime.graphics.opengl.GL.STREAM_DRAW = 35040;
+lime.graphics.opengl.GL.STATIC_DRAW = 35044;
+lime.graphics.opengl.GL.DYNAMIC_DRAW = 35048;
+lime.graphics.opengl.GL.BUFFER_SIZE = 34660;
+lime.graphics.opengl.GL.BUFFER_USAGE = 34661;
+lime.graphics.opengl.GL.CURRENT_VERTEX_ATTRIB = 34342;
+lime.graphics.opengl.GL.FRONT = 1028;
+lime.graphics.opengl.GL.BACK = 1029;
+lime.graphics.opengl.GL.FRONT_AND_BACK = 1032;
+lime.graphics.opengl.GL.CULL_FACE = 2884;
+lime.graphics.opengl.GL.BLEND = 3042;
+lime.graphics.opengl.GL.DITHER = 3024;
+lime.graphics.opengl.GL.STENCIL_TEST = 2960;
+lime.graphics.opengl.GL.DEPTH_TEST = 2929;
+lime.graphics.opengl.GL.SCISSOR_TEST = 3089;
+lime.graphics.opengl.GL.POLYGON_OFFSET_FILL = 32823;
+lime.graphics.opengl.GL.SAMPLE_ALPHA_TO_COVERAGE = 32926;
+lime.graphics.opengl.GL.SAMPLE_COVERAGE = 32928;
+lime.graphics.opengl.GL.NO_ERROR = 0;
+lime.graphics.opengl.GL.INVALID_ENUM = 1280;
+lime.graphics.opengl.GL.INVALID_VALUE = 1281;
+lime.graphics.opengl.GL.INVALID_OPERATION = 1282;
+lime.graphics.opengl.GL.OUT_OF_MEMORY = 1285;
+lime.graphics.opengl.GL.CW = 2304;
+lime.graphics.opengl.GL.CCW = 2305;
+lime.graphics.opengl.GL.LINE_WIDTH = 2849;
+lime.graphics.opengl.GL.ALIASED_POINT_SIZE_RANGE = 33901;
+lime.graphics.opengl.GL.ALIASED_LINE_WIDTH_RANGE = 33902;
+lime.graphics.opengl.GL.CULL_FACE_MODE = 2885;
+lime.graphics.opengl.GL.FRONT_FACE = 2886;
+lime.graphics.opengl.GL.DEPTH_RANGE = 2928;
+lime.graphics.opengl.GL.DEPTH_WRITEMASK = 2930;
+lime.graphics.opengl.GL.DEPTH_CLEAR_VALUE = 2931;
+lime.graphics.opengl.GL.DEPTH_FUNC = 2932;
+lime.graphics.opengl.GL.STENCIL_CLEAR_VALUE = 2961;
+lime.graphics.opengl.GL.STENCIL_FUNC = 2962;
+lime.graphics.opengl.GL.STENCIL_FAIL = 2964;
+lime.graphics.opengl.GL.STENCIL_PASS_DEPTH_FAIL = 2965;
+lime.graphics.opengl.GL.STENCIL_PASS_DEPTH_PASS = 2966;
+lime.graphics.opengl.GL.STENCIL_REF = 2967;
+lime.graphics.opengl.GL.STENCIL_VALUE_MASK = 2963;
+lime.graphics.opengl.GL.STENCIL_WRITEMASK = 2968;
+lime.graphics.opengl.GL.STENCIL_BACK_FUNC = 34816;
+lime.graphics.opengl.GL.STENCIL_BACK_FAIL = 34817;
+lime.graphics.opengl.GL.STENCIL_BACK_PASS_DEPTH_FAIL = 34818;
+lime.graphics.opengl.GL.STENCIL_BACK_PASS_DEPTH_PASS = 34819;
+lime.graphics.opengl.GL.STENCIL_BACK_REF = 36003;
+lime.graphics.opengl.GL.STENCIL_BACK_VALUE_MASK = 36004;
+lime.graphics.opengl.GL.STENCIL_BACK_WRITEMASK = 36005;
+lime.graphics.opengl.GL.VIEWPORT = 2978;
+lime.graphics.opengl.GL.SCISSOR_BOX = 3088;
+lime.graphics.opengl.GL.COLOR_CLEAR_VALUE = 3106;
+lime.graphics.opengl.GL.COLOR_WRITEMASK = 3107;
+lime.graphics.opengl.GL.UNPACK_ALIGNMENT = 3317;
+lime.graphics.opengl.GL.PACK_ALIGNMENT = 3333;
+lime.graphics.opengl.GL.MAX_TEXTURE_SIZE = 3379;
+lime.graphics.opengl.GL.MAX_VIEWPORT_DIMS = 3386;
+lime.graphics.opengl.GL.SUBPIXEL_BITS = 3408;
+lime.graphics.opengl.GL.RED_BITS = 3410;
+lime.graphics.opengl.GL.GREEN_BITS = 3411;
+lime.graphics.opengl.GL.BLUE_BITS = 3412;
+lime.graphics.opengl.GL.ALPHA_BITS = 3413;
+lime.graphics.opengl.GL.DEPTH_BITS = 3414;
+lime.graphics.opengl.GL.STENCIL_BITS = 3415;
+lime.graphics.opengl.GL.POLYGON_OFFSET_UNITS = 10752;
+lime.graphics.opengl.GL.POLYGON_OFFSET_FACTOR = 32824;
+lime.graphics.opengl.GL.TEXTURE_BINDING_2D = 32873;
+lime.graphics.opengl.GL.SAMPLE_BUFFERS = 32936;
+lime.graphics.opengl.GL.SAMPLES = 32937;
+lime.graphics.opengl.GL.SAMPLE_COVERAGE_VALUE = 32938;
+lime.graphics.opengl.GL.SAMPLE_COVERAGE_INVERT = 32939;
+lime.graphics.opengl.GL.COMPRESSED_TEXTURE_FORMATS = 34467;
+lime.graphics.opengl.GL.DONT_CARE = 4352;
+lime.graphics.opengl.GL.FASTEST = 4353;
+lime.graphics.opengl.GL.NICEST = 4354;
+lime.graphics.opengl.GL.GENERATE_MIPMAP_HINT = 33170;
+lime.graphics.opengl.GL.BYTE = 5120;
+lime.graphics.opengl.GL.UNSIGNED_BYTE = 5121;
+lime.graphics.opengl.GL.SHORT = 5122;
+lime.graphics.opengl.GL.UNSIGNED_SHORT = 5123;
+lime.graphics.opengl.GL.INT = 5124;
+lime.graphics.opengl.GL.UNSIGNED_INT = 5125;
+lime.graphics.opengl.GL.FLOAT = 5126;
+lime.graphics.opengl.GL.DEPTH_COMPONENT = 6402;
+lime.graphics.opengl.GL.ALPHA = 6406;
+lime.graphics.opengl.GL.RGB = 6407;
+lime.graphics.opengl.GL.RGBA = 6408;
+lime.graphics.opengl.GL.LUMINANCE = 6409;
+lime.graphics.opengl.GL.LUMINANCE_ALPHA = 6410;
+lime.graphics.opengl.GL.UNSIGNED_SHORT_4_4_4_4 = 32819;
+lime.graphics.opengl.GL.UNSIGNED_SHORT_5_5_5_1 = 32820;
+lime.graphics.opengl.GL.UNSIGNED_SHORT_5_6_5 = 33635;
+lime.graphics.opengl.GL.FRAGMENT_SHADER = 35632;
+lime.graphics.opengl.GL.VERTEX_SHADER = 35633;
+lime.graphics.opengl.GL.MAX_VERTEX_ATTRIBS = 34921;
+lime.graphics.opengl.GL.MAX_VERTEX_UNIFORM_VECTORS = 36347;
+lime.graphics.opengl.GL.MAX_VARYING_VECTORS = 36348;
+lime.graphics.opengl.GL.MAX_COMBINED_TEXTURE_IMAGE_UNITS = 35661;
+lime.graphics.opengl.GL.MAX_VERTEX_TEXTURE_IMAGE_UNITS = 35660;
+lime.graphics.opengl.GL.MAX_TEXTURE_IMAGE_UNITS = 34930;
+lime.graphics.opengl.GL.MAX_FRAGMENT_UNIFORM_VECTORS = 36349;
+lime.graphics.opengl.GL.SHADER_TYPE = 35663;
+lime.graphics.opengl.GL.DELETE_STATUS = 35712;
+lime.graphics.opengl.GL.LINK_STATUS = 35714;
+lime.graphics.opengl.GL.VALIDATE_STATUS = 35715;
+lime.graphics.opengl.GL.ATTACHED_SHADERS = 35717;
+lime.graphics.opengl.GL.ACTIVE_UNIFORMS = 35718;
+lime.graphics.opengl.GL.ACTIVE_ATTRIBUTES = 35721;
+lime.graphics.opengl.GL.SHADING_LANGUAGE_VERSION = 35724;
+lime.graphics.opengl.GL.CURRENT_PROGRAM = 35725;
+lime.graphics.opengl.GL.NEVER = 512;
+lime.graphics.opengl.GL.LESS = 513;
+lime.graphics.opengl.GL.EQUAL = 514;
+lime.graphics.opengl.GL.LEQUAL = 515;
+lime.graphics.opengl.GL.GREATER = 516;
+lime.graphics.opengl.GL.NOTEQUAL = 517;
+lime.graphics.opengl.GL.GEQUAL = 518;
+lime.graphics.opengl.GL.ALWAYS = 519;
+lime.graphics.opengl.GL.KEEP = 7680;
+lime.graphics.opengl.GL.REPLACE = 7681;
+lime.graphics.opengl.GL.INCR = 7682;
+lime.graphics.opengl.GL.DECR = 7683;
+lime.graphics.opengl.GL.INVERT = 5386;
+lime.graphics.opengl.GL.INCR_WRAP = 34055;
+lime.graphics.opengl.GL.DECR_WRAP = 34056;
+lime.graphics.opengl.GL.VENDOR = 7936;
+lime.graphics.opengl.GL.RENDERER = 7937;
+lime.graphics.opengl.GL.VERSION = 7938;
+lime.graphics.opengl.GL.NEAREST = 9728;
+lime.graphics.opengl.GL.LINEAR = 9729;
+lime.graphics.opengl.GL.NEAREST_MIPMAP_NEAREST = 9984;
+lime.graphics.opengl.GL.LINEAR_MIPMAP_NEAREST = 9985;
+lime.graphics.opengl.GL.NEAREST_MIPMAP_LINEAR = 9986;
+lime.graphics.opengl.GL.LINEAR_MIPMAP_LINEAR = 9987;
+lime.graphics.opengl.GL.TEXTURE_MAG_FILTER = 10240;
+lime.graphics.opengl.GL.TEXTURE_MIN_FILTER = 10241;
+lime.graphics.opengl.GL.TEXTURE_WRAP_S = 10242;
+lime.graphics.opengl.GL.TEXTURE_WRAP_T = 10243;
+lime.graphics.opengl.GL.TEXTURE_2D = 3553;
+lime.graphics.opengl.GL.TEXTURE = 5890;
+lime.graphics.opengl.GL.TEXTURE_CUBE_MAP = 34067;
+lime.graphics.opengl.GL.TEXTURE_BINDING_CUBE_MAP = 34068;
+lime.graphics.opengl.GL.TEXTURE_CUBE_MAP_POSITIVE_X = 34069;
+lime.graphics.opengl.GL.TEXTURE_CUBE_MAP_NEGATIVE_X = 34070;
+lime.graphics.opengl.GL.TEXTURE_CUBE_MAP_POSITIVE_Y = 34071;
+lime.graphics.opengl.GL.TEXTURE_CUBE_MAP_NEGATIVE_Y = 34072;
+lime.graphics.opengl.GL.TEXTURE_CUBE_MAP_POSITIVE_Z = 34073;
+lime.graphics.opengl.GL.TEXTURE_CUBE_MAP_NEGATIVE_Z = 34074;
+lime.graphics.opengl.GL.MAX_CUBE_MAP_TEXTURE_SIZE = 34076;
+lime.graphics.opengl.GL.TEXTURE0 = 33984;
+lime.graphics.opengl.GL.TEXTURE1 = 33985;
+lime.graphics.opengl.GL.TEXTURE2 = 33986;
+lime.graphics.opengl.GL.TEXTURE3 = 33987;
+lime.graphics.opengl.GL.TEXTURE4 = 33988;
+lime.graphics.opengl.GL.TEXTURE5 = 33989;
+lime.graphics.opengl.GL.TEXTURE6 = 33990;
+lime.graphics.opengl.GL.TEXTURE7 = 33991;
+lime.graphics.opengl.GL.TEXTURE8 = 33992;
+lime.graphics.opengl.GL.TEXTURE9 = 33993;
+lime.graphics.opengl.GL.TEXTURE10 = 33994;
+lime.graphics.opengl.GL.TEXTURE11 = 33995;
+lime.graphics.opengl.GL.TEXTURE12 = 33996;
+lime.graphics.opengl.GL.TEXTURE13 = 33997;
+lime.graphics.opengl.GL.TEXTURE14 = 33998;
+lime.graphics.opengl.GL.TEXTURE15 = 33999;
+lime.graphics.opengl.GL.TEXTURE16 = 34000;
+lime.graphics.opengl.GL.TEXTURE17 = 34001;
+lime.graphics.opengl.GL.TEXTURE18 = 34002;
+lime.graphics.opengl.GL.TEXTURE19 = 34003;
+lime.graphics.opengl.GL.TEXTURE20 = 34004;
+lime.graphics.opengl.GL.TEXTURE21 = 34005;
+lime.graphics.opengl.GL.TEXTURE22 = 34006;
+lime.graphics.opengl.GL.TEXTURE23 = 34007;
+lime.graphics.opengl.GL.TEXTURE24 = 34008;
+lime.graphics.opengl.GL.TEXTURE25 = 34009;
+lime.graphics.opengl.GL.TEXTURE26 = 34010;
+lime.graphics.opengl.GL.TEXTURE27 = 34011;
+lime.graphics.opengl.GL.TEXTURE28 = 34012;
+lime.graphics.opengl.GL.TEXTURE29 = 34013;
+lime.graphics.opengl.GL.TEXTURE30 = 34014;
+lime.graphics.opengl.GL.TEXTURE31 = 34015;
+lime.graphics.opengl.GL.ACTIVE_TEXTURE = 34016;
+lime.graphics.opengl.GL.REPEAT = 10497;
+lime.graphics.opengl.GL.CLAMP_TO_EDGE = 33071;
+lime.graphics.opengl.GL.MIRRORED_REPEAT = 33648;
+lime.graphics.opengl.GL.FLOAT_VEC2 = 35664;
+lime.graphics.opengl.GL.FLOAT_VEC3 = 35665;
+lime.graphics.opengl.GL.FLOAT_VEC4 = 35666;
+lime.graphics.opengl.GL.INT_VEC2 = 35667;
+lime.graphics.opengl.GL.INT_VEC3 = 35668;
+lime.graphics.opengl.GL.INT_VEC4 = 35669;
+lime.graphics.opengl.GL.BOOL = 35670;
+lime.graphics.opengl.GL.BOOL_VEC2 = 35671;
+lime.graphics.opengl.GL.BOOL_VEC3 = 35672;
+lime.graphics.opengl.GL.BOOL_VEC4 = 35673;
+lime.graphics.opengl.GL.FLOAT_MAT2 = 35674;
+lime.graphics.opengl.GL.FLOAT_MAT3 = 35675;
+lime.graphics.opengl.GL.FLOAT_MAT4 = 35676;
+lime.graphics.opengl.GL.SAMPLER_2D = 35678;
+lime.graphics.opengl.GL.SAMPLER_CUBE = 35680;
+lime.graphics.opengl.GL.VERTEX_ATTRIB_ARRAY_ENABLED = 34338;
+lime.graphics.opengl.GL.VERTEX_ATTRIB_ARRAY_SIZE = 34339;
+lime.graphics.opengl.GL.VERTEX_ATTRIB_ARRAY_STRIDE = 34340;
+lime.graphics.opengl.GL.VERTEX_ATTRIB_ARRAY_TYPE = 34341;
+lime.graphics.opengl.GL.VERTEX_ATTRIB_ARRAY_NORMALIZED = 34922;
+lime.graphics.opengl.GL.VERTEX_ATTRIB_ARRAY_POINTER = 34373;
+lime.graphics.opengl.GL.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING = 34975;
+lime.graphics.opengl.GL.VERTEX_PROGRAM_POINT_SIZE = 34370;
+lime.graphics.opengl.GL.POINT_SPRITE = 34913;
+lime.graphics.opengl.GL.COMPILE_STATUS = 35713;
+lime.graphics.opengl.GL.LOW_FLOAT = 36336;
+lime.graphics.opengl.GL.MEDIUM_FLOAT = 36337;
+lime.graphics.opengl.GL.HIGH_FLOAT = 36338;
+lime.graphics.opengl.GL.LOW_INT = 36339;
+lime.graphics.opengl.GL.MEDIUM_INT = 36340;
+lime.graphics.opengl.GL.HIGH_INT = 36341;
+lime.graphics.opengl.GL.FRAMEBUFFER = 36160;
+lime.graphics.opengl.GL.RENDERBUFFER = 36161;
+lime.graphics.opengl.GL.RGBA4 = 32854;
+lime.graphics.opengl.GL.RGB5_A1 = 32855;
+lime.graphics.opengl.GL.RGB565 = 36194;
+lime.graphics.opengl.GL.DEPTH_COMPONENT16 = 33189;
+lime.graphics.opengl.GL.STENCIL_INDEX = 6401;
+lime.graphics.opengl.GL.STENCIL_INDEX8 = 36168;
+lime.graphics.opengl.GL.DEPTH_STENCIL = 34041;
+lime.graphics.opengl.GL.RENDERBUFFER_WIDTH = 36162;
+lime.graphics.opengl.GL.RENDERBUFFER_HEIGHT = 36163;
+lime.graphics.opengl.GL.RENDERBUFFER_INTERNAL_FORMAT = 36164;
+lime.graphics.opengl.GL.RENDERBUFFER_RED_SIZE = 36176;
+lime.graphics.opengl.GL.RENDERBUFFER_GREEN_SIZE = 36177;
+lime.graphics.opengl.GL.RENDERBUFFER_BLUE_SIZE = 36178;
+lime.graphics.opengl.GL.RENDERBUFFER_ALPHA_SIZE = 36179;
+lime.graphics.opengl.GL.RENDERBUFFER_DEPTH_SIZE = 36180;
+lime.graphics.opengl.GL.RENDERBUFFER_STENCIL_SIZE = 36181;
+lime.graphics.opengl.GL.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE = 36048;
+lime.graphics.opengl.GL.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME = 36049;
+lime.graphics.opengl.GL.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL = 36050;
+lime.graphics.opengl.GL.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE = 36051;
+lime.graphics.opengl.GL.COLOR_ATTACHMENT0 = 36064;
+lime.graphics.opengl.GL.DEPTH_ATTACHMENT = 36096;
+lime.graphics.opengl.GL.STENCIL_ATTACHMENT = 36128;
+lime.graphics.opengl.GL.DEPTH_STENCIL_ATTACHMENT = 33306;
+lime.graphics.opengl.GL.NONE = 0;
+lime.graphics.opengl.GL.FRAMEBUFFER_COMPLETE = 36053;
+lime.graphics.opengl.GL.FRAMEBUFFER_INCOMPLETE_ATTACHMENT = 36054;
+lime.graphics.opengl.GL.FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT = 36055;
+lime.graphics.opengl.GL.FRAMEBUFFER_INCOMPLETE_DIMENSIONS = 36057;
+lime.graphics.opengl.GL.FRAMEBUFFER_UNSUPPORTED = 36061;
+lime.graphics.opengl.GL.FRAMEBUFFER_BINDING = 36006;
+lime.graphics.opengl.GL.RENDERBUFFER_BINDING = 36007;
+lime.graphics.opengl.GL.MAX_RENDERBUFFER_SIZE = 34024;
+lime.graphics.opengl.GL.INVALID_FRAMEBUFFER_OPERATION = 1286;
+lime.graphics.opengl.GL.UNPACK_FLIP_Y_WEBGL = 37440;
+lime.graphics.opengl.GL.UNPACK_PREMULTIPLY_ALPHA_WEBGL = 37441;
+lime.graphics.opengl.GL.CONTEXT_LOST_WEBGL = 37442;
+lime.graphics.opengl.GL.UNPACK_COLORSPACE_CONVERSION_WEBGL = 37443;
+lime.graphics.opengl.GL.BROWSER_DEFAULT_WEBGL = 37444;
+lime.math._ColorMatrix.ColorMatrix_Impl_.__identity = [1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0];
+lime.math.Matrix3.__identity = new lime.math.Matrix3();
+lime.net._URLRequestMethod.URLRequestMethod_Impl_.DELETE = "DELETE";
+lime.net._URLRequestMethod.URLRequestMethod_Impl_.GET = "GET";
+lime.net._URLRequestMethod.URLRequestMethod_Impl_.HEAD = "HEAD";
+lime.net._URLRequestMethod.URLRequestMethod_Impl_.OPTIONS = "OPTIONS";
+lime.net._URLRequestMethod.URLRequestMethod_Impl_.POST = "POST";
+lime.net._URLRequestMethod.URLRequestMethod_Impl_.PUT = "PUT";
+lime.net.curl._CURL.CURL_Impl_.GLOBAL_SSL = 1;
+lime.net.curl._CURL.CURL_Impl_.GLOBAL_WIN32 = 2;
+lime.net.curl._CURL.CURL_Impl_.GLOBAL_ALL = 3;
+lime.net.curl._CURL.CURL_Impl_.GLOBAL_NOTHING = 0;
+lime.net.curl._CURL.CURL_Impl_.GLOBAL_DEFAULT = 3;
+lime.net.curl._CURL.CURL_Impl_.GLOBAL_ACK_EINTR = 4;
+lime.net.curl._CURLCode.CURLCode_Impl_.OK = 0;
+lime.net.curl._CURLCode.CURLCode_Impl_.UNSUPPORTED_PROTOCOL = 1;
+lime.net.curl._CURLCode.CURLCode_Impl_.FAILED_INIT = 2;
+lime.net.curl._CURLCode.CURLCode_Impl_.URL_MALFORMAT = 3;
+lime.net.curl._CURLCode.CURLCode_Impl_.NOT_BUILT_IN = 4;
+lime.net.curl._CURLCode.CURLCode_Impl_.COULDNT_RESOLVE_PROXY = 5;
+lime.net.curl._CURLCode.CURLCode_Impl_.COULDNT_RESOLVE_HOST = 6;
+lime.net.curl._CURLCode.CURLCode_Impl_.COULDNT_CONNECT = 7;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_WEIRD_SERVER_REPLY = 8;
+lime.net.curl._CURLCode.CURLCode_Impl_.REMOTE_ACCESS_DENIED = 9;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_ACCEPT_FAILED = 10;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_WEIRD_PASS_REPLY = 11;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_ACCEPT_TIMEOUT = 12;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_WEIRD_PASV_REPLY = 13;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_WEIRD_227_FORMAT = 14;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_CANT_GET_HOST = 15;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_COULDNT_SET_TYPE = 17;
+lime.net.curl._CURLCode.CURLCode_Impl_.PARTIAL_FILE = 18;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_COULDNT_RETR_FILE = 19;
+lime.net.curl._CURLCode.CURLCode_Impl_.QUOTE_ERROR = 21;
+lime.net.curl._CURLCode.CURLCode_Impl_.HTTP_RETURNED_ERROR = 22;
+lime.net.curl._CURLCode.CURLCode_Impl_.WRITE_ERROR = 23;
+lime.net.curl._CURLCode.CURLCode_Impl_.UPLOAD_FAILED = 25;
+lime.net.curl._CURLCode.CURLCode_Impl_.READ_ERROR = 26;
+lime.net.curl._CURLCode.CURLCode_Impl_.OUT_OF_MEMORY = 27;
+lime.net.curl._CURLCode.CURLCode_Impl_.OPERATION_TIMEDOUT = 28;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_PORT_FAILED = 30;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_COULDNT_USE_REST = 31;
+lime.net.curl._CURLCode.CURLCode_Impl_.RANGE_ERROR = 33;
+lime.net.curl._CURLCode.CURLCode_Impl_.HTTP_POST_ERROR = 34;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_CONNECT_ERROR = 35;
+lime.net.curl._CURLCode.CURLCode_Impl_.BAD_DOWNLOAD_RESUME = 36;
+lime.net.curl._CURLCode.CURLCode_Impl_.FILE_COULDNT_READ_FILE = 37;
+lime.net.curl._CURLCode.CURLCode_Impl_.LDAP_CANNOT_BIND = 38;
+lime.net.curl._CURLCode.CURLCode_Impl_.LDAP_SEARCH_FAILED = 39;
+lime.net.curl._CURLCode.CURLCode_Impl_.FUNCTION_NOT_FOUND = 41;
+lime.net.curl._CURLCode.CURLCode_Impl_.ABORTED_BY_CALLBACK = 42;
+lime.net.curl._CURLCode.CURLCode_Impl_.BAD_FUNCTION_ARGUMENT = 43;
+lime.net.curl._CURLCode.CURLCode_Impl_.INTERFACE_FAILED = 45;
+lime.net.curl._CURLCode.CURLCode_Impl_.TOO_MANY_REDIRECTS = 47;
+lime.net.curl._CURLCode.CURLCode_Impl_.UNKNOWN_OPTION = 48;
+lime.net.curl._CURLCode.CURLCode_Impl_.TELNET_OPTION_SYNTAX = 49;
+lime.net.curl._CURLCode.CURLCode_Impl_.PEER_FAILED_VERIFICATION = 51;
+lime.net.curl._CURLCode.CURLCode_Impl_.GOT_NOTHING = 52;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_ENGINE_NOTFOUND = 53;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_ENGINE_SETFAILED = 54;
+lime.net.curl._CURLCode.CURLCode_Impl_.SEND_ERROR = 55;
+lime.net.curl._CURLCode.CURLCode_Impl_.RECV_ERROR = 56;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_CERTPROBLEM = 58;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_CIPHER = 59;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_CACERT = 60;
+lime.net.curl._CURLCode.CURLCode_Impl_.BAD_CONTENT_ENCODING = 61;
+lime.net.curl._CURLCode.CURLCode_Impl_.LDAP_INVALID_URL = 62;
+lime.net.curl._CURLCode.CURLCode_Impl_.FILESIZE_EXCEEDED = 63;
+lime.net.curl._CURLCode.CURLCode_Impl_.USE_SSL_FAILED = 64;
+lime.net.curl._CURLCode.CURLCode_Impl_.SEND_FAIL_REWIND = 65;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_ENGINE_INITFAILED = 66;
+lime.net.curl._CURLCode.CURLCode_Impl_.LOGIN_DENIED = 67;
+lime.net.curl._CURLCode.CURLCode_Impl_.TFTP_NOTFOUND = 68;
+lime.net.curl._CURLCode.CURLCode_Impl_.TFTP_PERM = 69;
+lime.net.curl._CURLCode.CURLCode_Impl_.REMOTE_DISK_FULL = 70;
+lime.net.curl._CURLCode.CURLCode_Impl_.TFTP_ILLEGAL = 71;
+lime.net.curl._CURLCode.CURLCode_Impl_.TFTP_UNKNOWNID = 72;
+lime.net.curl._CURLCode.CURLCode_Impl_.REMOTE_FILE_EXISTS = 73;
+lime.net.curl._CURLCode.CURLCode_Impl_.TFTP_NOSUCHUSER = 74;
+lime.net.curl._CURLCode.CURLCode_Impl_.CONV_FAILED = 75;
+lime.net.curl._CURLCode.CURLCode_Impl_.CONV_REQD = 76;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_CACERT_BADFILE = 77;
+lime.net.curl._CURLCode.CURLCode_Impl_.REMOTE_FILE_NOT_FOUND = 78;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSH = 79;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_SHUTDOWN_FAILED = 80;
+lime.net.curl._CURLCode.CURLCode_Impl_.AGAIN = 81;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_CRL_BADFILE = 82;
+lime.net.curl._CURLCode.CURLCode_Impl_.SSL_ISSUER_ERROR = 83;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_PRET_FAILED = 84;
+lime.net.curl._CURLCode.CURLCode_Impl_.RTSP_CSEQ_ERROR = 85;
+lime.net.curl._CURLCode.CURLCode_Impl_.RTSP_SESSION_ERROR = 86;
+lime.net.curl._CURLCode.CURLCode_Impl_.FTP_BAD_FILE_LIST = 87;
+lime.net.curl._CURLCode.CURLCode_Impl_.CHUNK_FAILED = 88;
+lime.net.curl._CURLCode.CURLCode_Impl_.NO_CONNECTION_AVAILABLE = 89;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.NONE = 0;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.EFFECTIVE_URL = 1048577;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.RESPONSE_CODE = 2097154;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.TOTAL_TIME = 3145731;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.NAMELOOKUP_TIME = 3145732;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.CONNECT_TIME = 3145733;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.PRETRANSFER_TIME = 3145734;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.SIZE_UPLOAD = 3145735;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.SIZE_DOWNLOAD = 3145736;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.SPEED_DOWNLOAD = 3145737;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.SPEED_UPLOAD = 3145738;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.HEADER_SIZE = 2097163;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.REQUEST_SIZE = 2097164;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.SSL_VERIFYRESULT = 2097165;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.FILETIME = 2097166;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.CONTENT_LENGTH_DOWNLOAD = 3145743;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.CONTENT_LENGTH_UPLOAD = 3145744;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.STARTTRANSFER_TIME = 3145745;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.CONTENT_TYPE = 1048594;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.REDIRECT_TIME = 3145747;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.REDIRECT_COUNT = 2097172;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.PRIVATE = 1048597;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.HTTP_CONNECTCODE = 2097174;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.HTTPAUTH_AVAIL = 2097175;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.PROXYAUTH_AVAIL = 2097176;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.OS_ERRNO = 2097177;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.NUM_CONNECTS = 2097178;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.SSL_ENGINES = 4194331;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.COOKIELIST = 4194332;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.LASTSOCKET = 2097181;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.FTP_ENTRY_PATH = 1048606;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.REDIRECT_URL = 1048607;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.PRIMARY_IP = 1048608;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.APPCONNECT_TIME = 3145761;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.CERTINFO = 4194338;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.CONDITION_UNMET = 2097187;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.RTSP_SESSION_ID = 1048612;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.RTSP_CLIENT_CSEQ = 2097189;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.RTSP_SERVER_CSEQ = 2097190;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.RTSP_CSEQ_RECV = 2097191;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.PRIMARY_PORT = 2097192;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.LOCAL_IP = 1048617;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.LOCAL_PORT = 2097194;
+lime.net.curl._CURLInfo.CURLInfo_Impl_.TLS_SESSION = 4194347;
+lime.net.curl._CURLOption.CURLOption_Impl_.URL = 10002;
+lime.net.curl._CURLOption.CURLOption_Impl_.PORT = 3;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROXY = 10004;
+lime.net.curl._CURLOption.CURLOption_Impl_.USERPWD = 10005;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROXYUSERPWD = 10006;
+lime.net.curl._CURLOption.CURLOption_Impl_.RANGE = 10007;
+lime.net.curl._CURLOption.CURLOption_Impl_.ERRORBUFFER = 10010;
+lime.net.curl._CURLOption.CURLOption_Impl_.WRITEFUNCTION = 20011;
+lime.net.curl._CURLOption.CURLOption_Impl_.READFUNCTION = 20012;
+lime.net.curl._CURLOption.CURLOption_Impl_.TIMEOUT = 13;
+lime.net.curl._CURLOption.CURLOption_Impl_.INFILESIZE = 14;
+lime.net.curl._CURLOption.CURLOption_Impl_.POSTFIELDS = 10015;
+lime.net.curl._CURLOption.CURLOption_Impl_.REFERER = 10016;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTPPORT = 10017;
+lime.net.curl._CURLOption.CURLOption_Impl_.USERAGENT = 10018;
+lime.net.curl._CURLOption.CURLOption_Impl_.LOW_SPEED_LIMIT = 19;
+lime.net.curl._CURLOption.CURLOption_Impl_.LOW_SPEED_TIME = 20;
+lime.net.curl._CURLOption.CURLOption_Impl_.RESUME_FROM = 21;
+lime.net.curl._CURLOption.CURLOption_Impl_.COOKIE = 22;
+lime.net.curl._CURLOption.CURLOption_Impl_.HTTPHEADER = 10023;
+lime.net.curl._CURLOption.CURLOption_Impl_.RTSPHEADER = 10023;
+lime.net.curl._CURLOption.CURLOption_Impl_.HTTPPOST = 10024;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSLCERT = 10025;
+lime.net.curl._CURLOption.CURLOption_Impl_.KEYPASSWD = 10026;
+lime.net.curl._CURLOption.CURLOption_Impl_.CRLF = 27;
+lime.net.curl._CURLOption.CURLOption_Impl_.QUOTE = 10028;
+lime.net.curl._CURLOption.CURLOption_Impl_.WRITEHEADER = 10029;
+lime.net.curl._CURLOption.CURLOption_Impl_.HEADERDATA = 10029;
+lime.net.curl._CURLOption.CURLOption_Impl_.COOKIEFILE = 10031;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSLVERSION = 32;
+lime.net.curl._CURLOption.CURLOption_Impl_.TIMECONDITION = 33;
+lime.net.curl._CURLOption.CURLOption_Impl_.TIMEVALUE = 34;
+lime.net.curl._CURLOption.CURLOption_Impl_.CUSTOMREQUEST = 10036;
+lime.net.curl._CURLOption.CURLOption_Impl_.STDERR = 10037;
+lime.net.curl._CURLOption.CURLOption_Impl_.POSTQUOTE = 10039;
+lime.net.curl._CURLOption.CURLOption_Impl_.WRITEINFO = 10040;
+lime.net.curl._CURLOption.CURLOption_Impl_.VERBOSE = 41;
+lime.net.curl._CURLOption.CURLOption_Impl_.HEADER = 42;
+lime.net.curl._CURLOption.CURLOption_Impl_.NOPROGRESS = 43;
+lime.net.curl._CURLOption.CURLOption_Impl_.NOBODY = 44;
+lime.net.curl._CURLOption.CURLOption_Impl_.FAILONERROR = 45;
+lime.net.curl._CURLOption.CURLOption_Impl_.UPLOAD = 46;
+lime.net.curl._CURLOption.CURLOption_Impl_.POST = 47;
+lime.net.curl._CURLOption.CURLOption_Impl_.DIRLISTONLY = 48;
+lime.net.curl._CURLOption.CURLOption_Impl_.APPEND = 50;
+lime.net.curl._CURLOption.CURLOption_Impl_.NETRC = 51;
+lime.net.curl._CURLOption.CURLOption_Impl_.FOLLOWLOCATION = 52;
+lime.net.curl._CURLOption.CURLOption_Impl_.TRANSFERTEXT = 53;
+lime.net.curl._CURLOption.CURLOption_Impl_.PUT = 54;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROGRESSFUNCTION = 20056;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROGRESSDATA = 10057;
+lime.net.curl._CURLOption.CURLOption_Impl_.XFERINFODATA = 10057;
+lime.net.curl._CURLOption.CURLOption_Impl_.AUTOREFERER = 58;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROXYPORT = 59;
+lime.net.curl._CURLOption.CURLOption_Impl_.POSTFIELDSIZE = 60;
+lime.net.curl._CURLOption.CURLOption_Impl_.HTTPPROXYTUNNEL = 61;
+lime.net.curl._CURLOption.CURLOption_Impl_.INTERFACE = 10062;
+lime.net.curl._CURLOption.CURLOption_Impl_.KRBLEVEL = 10063;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSL_VERIFYPEER = 64;
+lime.net.curl._CURLOption.CURLOption_Impl_.CAINFO = 10065;
+lime.net.curl._CURLOption.CURLOption_Impl_.MAXREDIRS = 68;
+lime.net.curl._CURLOption.CURLOption_Impl_.FILETIME = 69;
+lime.net.curl._CURLOption.CURLOption_Impl_.TELNETOPTIONS = 10070;
+lime.net.curl._CURLOption.CURLOption_Impl_.MAXCONNECTS = 71;
+lime.net.curl._CURLOption.CURLOption_Impl_.CLOSEPOLICY = 72;
+lime.net.curl._CURLOption.CURLOption_Impl_.FRESH_CONNECT = 74;
+lime.net.curl._CURLOption.CURLOption_Impl_.FORBID_REUSE = 75;
+lime.net.curl._CURLOption.CURLOption_Impl_.RANDOM_FILE = 10076;
+lime.net.curl._CURLOption.CURLOption_Impl_.EGDSOCKET = 10077;
+lime.net.curl._CURLOption.CURLOption_Impl_.CONNECTTIMEOUT = 78;
+lime.net.curl._CURLOption.CURLOption_Impl_.HEADERFUNCTION = 20079;
+lime.net.curl._CURLOption.CURLOption_Impl_.HTTPGET = 80;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSL_VERIFYHOST = 81;
+lime.net.curl._CURLOption.CURLOption_Impl_.COOKIEJAR = 10082;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSL_CIPHER_LIST = 10083;
+lime.net.curl._CURLOption.CURLOption_Impl_.HTTP_VERSION = 84;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_USE_EPSV = 85;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSLCERTTYPE = 10086;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSLKEY = 10087;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSLKEYTYPE = 10088;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSLENGINE = 10089;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSLENGINE_DEFAULT = 90;
+lime.net.curl._CURLOption.CURLOption_Impl_.DNS_USE_GLOBAL_CACHE = 91;
+lime.net.curl._CURLOption.CURLOption_Impl_.DNS_CACHE_TIMEOUT = 92;
+lime.net.curl._CURLOption.CURLOption_Impl_.PREQUOTE = 10093;
+lime.net.curl._CURLOption.CURLOption_Impl_.DEBUGFUNCTION = 20094;
+lime.net.curl._CURLOption.CURLOption_Impl_.DEBUGDATA = 10095;
+lime.net.curl._CURLOption.CURLOption_Impl_.COOKIESESSION = 96;
+lime.net.curl._CURLOption.CURLOption_Impl_.CAPATH = 10097;
+lime.net.curl._CURLOption.CURLOption_Impl_.BUFFERSIZE = 98;
+lime.net.curl._CURLOption.CURLOption_Impl_.NOSIGNAL = 99;
+lime.net.curl._CURLOption.CURLOption_Impl_.SHARE = 10100;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROXYTYPE = 101;
+lime.net.curl._CURLOption.CURLOption_Impl_.ACCEPT_ENCODING = 10102;
+lime.net.curl._CURLOption.CURLOption_Impl_.PRIVATE = 10103;
+lime.net.curl._CURLOption.CURLOption_Impl_.HTTP200ALIASES = 10104;
+lime.net.curl._CURLOption.CURLOption_Impl_.UNRESTRICTED_AUTH = 105;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_USE_EPRT = 106;
+lime.net.curl._CURLOption.CURLOption_Impl_.HTTPAUTH = 107;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSL_CTX_FUNCTION = 20108;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSL_CTX_DATA = 10109;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_CREATE_MISSING_DIRS = 110;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROXYAUTH = 111;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_RESPONSE_TIMEOUT = 112;
+lime.net.curl._CURLOption.CURLOption_Impl_.SERVER_RESPONSE_TIMEOUT = 112;
+lime.net.curl._CURLOption.CURLOption_Impl_.IPRESOLVE = 113;
+lime.net.curl._CURLOption.CURLOption_Impl_.MAXFILESIZE = 114;
+lime.net.curl._CURLOption.CURLOption_Impl_.INFILESIZE_LARGE = 30115;
+lime.net.curl._CURLOption.CURLOption_Impl_.RESUME_FROM_LARGE = 30116;
+lime.net.curl._CURLOption.CURLOption_Impl_.MAXFILESIZE_LARGE = 30117;
+lime.net.curl._CURLOption.CURLOption_Impl_.NETRC_FILE = 10118;
+lime.net.curl._CURLOption.CURLOption_Impl_.USE_SSL = 119;
+lime.net.curl._CURLOption.CURLOption_Impl_.POSTFIELDSIZE_LARGE = 30120;
+lime.net.curl._CURLOption.CURLOption_Impl_.TCP_NODELAY = 121;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTPSSLAUTH = 129;
+lime.net.curl._CURLOption.CURLOption_Impl_.IOCTLFUNCTION = 20130;
+lime.net.curl._CURLOption.CURLOption_Impl_.IOCTLDATA = 10131;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_ACCOUNT = 10134;
+lime.net.curl._CURLOption.CURLOption_Impl_.COOKIELIST = 10135;
+lime.net.curl._CURLOption.CURLOption_Impl_.IGNORE_CONTENT_LENGTH = 10136;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_SKIP_PASV_IP = 137;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_FILEMETHOD = 138;
+lime.net.curl._CURLOption.CURLOption_Impl_.LOCALPORT = 139;
+lime.net.curl._CURLOption.CURLOption_Impl_.LOCALPORTRANGE = 140;
+lime.net.curl._CURLOption.CURLOption_Impl_.CONNECT_ONLY = 141;
+lime.net.curl._CURLOption.CURLOption_Impl_.CONV_FROM_NETWORK_FUNCTION = 20142;
+lime.net.curl._CURLOption.CURLOption_Impl_.CONV_TO_NETWORK_FUNCTION = 20143;
+lime.net.curl._CURLOption.CURLOption_Impl_.CONV_FROM_UTF8_FUNCTION = 20144;
+lime.net.curl._CURLOption.CURLOption_Impl_.MAX_SEND_SPEED_LARGE = 30145;
+lime.net.curl._CURLOption.CURLOption_Impl_.MAX_RECV_SPEED_LARGE = 30146;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_ALTERNATIVE_TO_USER = 10147;
+lime.net.curl._CURLOption.CURLOption_Impl_.SOCKOPTFUNCTION = 20148;
+lime.net.curl._CURLOption.CURLOption_Impl_.SOCKOPTDATA = 10149;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSL_SESSIONID_CACHE = 150;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSH_AUTH_TYPES = 151;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSH_PUBLIC_KEYFILE = 10152;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSH_PRIVATE_KEYFILE = 10153;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_SSL_CCC = 154;
+lime.net.curl._CURLOption.CURLOption_Impl_.TIMEOUT_MS = 155;
+lime.net.curl._CURLOption.CURLOption_Impl_.CONNECTTIMEOUT_MS = 156;
+lime.net.curl._CURLOption.CURLOption_Impl_.HTTP_TRANSFER_DECODING = 157;
+lime.net.curl._CURLOption.CURLOption_Impl_.HTTP_CONTENT_DECODING = 158;
+lime.net.curl._CURLOption.CURLOption_Impl_.NEW_FILE_PERMS = 159;
+lime.net.curl._CURLOption.CURLOption_Impl_.NEW_DIRECTORY_PERMS = 160;
+lime.net.curl._CURLOption.CURLOption_Impl_.POSTREDIR = 161;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSH_HOST_PUBLIC_KEY_MD5 = 10162;
+lime.net.curl._CURLOption.CURLOption_Impl_.OPENSOCKETFUNCTION = 20163;
+lime.net.curl._CURLOption.CURLOption_Impl_.OPENSOCKETDATA = 10164;
+lime.net.curl._CURLOption.CURLOption_Impl_.COPYPOSTFIELDS = 10165;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROXY_TRANSFER_MODE = 166;
+lime.net.curl._CURLOption.CURLOption_Impl_.SEEKFUNCTION = 20167;
+lime.net.curl._CURLOption.CURLOption_Impl_.SEEKDATA = 10168;
+lime.net.curl._CURLOption.CURLOption_Impl_.CRLFILE = 10169;
+lime.net.curl._CURLOption.CURLOption_Impl_.ISSUERCERT = 10170;
+lime.net.curl._CURLOption.CURLOption_Impl_.ADDRESS_SCOPE = 171;
+lime.net.curl._CURLOption.CURLOption_Impl_.CERTINFO = 172;
+lime.net.curl._CURLOption.CURLOption_Impl_.USERNAME = 10173;
+lime.net.curl._CURLOption.CURLOption_Impl_.PASSWORD = 10174;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROXYUSERNAME = 10175;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROXYPASSWORD = 10176;
+lime.net.curl._CURLOption.CURLOption_Impl_.NOPROXY = 10177;
+lime.net.curl._CURLOption.CURLOption_Impl_.TFTP_BLKSIZE = 178;
+lime.net.curl._CURLOption.CURLOption_Impl_.SOCKS5_GSSAPI_SERVICE = 10179;
+lime.net.curl._CURLOption.CURLOption_Impl_.SOCKS5_GSSAPI_NEC = 180;
+lime.net.curl._CURLOption.CURLOption_Impl_.PROTOCOLS = 181;
+lime.net.curl._CURLOption.CURLOption_Impl_.REDIR_PROTOCOLS = 182;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSH_KNOWNHOSTS = 10183;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSH_KEYFUNCTION = 20184;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSH_KEYDATA = 10185;
+lime.net.curl._CURLOption.CURLOption_Impl_.MAIL_FROM = 10186;
+lime.net.curl._CURLOption.CURLOption_Impl_.MAIL_RCPT = 10187;
+lime.net.curl._CURLOption.CURLOption_Impl_.FTP_USE_PRET = 188;
+lime.net.curl._CURLOption.CURLOption_Impl_.RTSP_REQUEST = 189;
+lime.net.curl._CURLOption.CURLOption_Impl_.RTSP_SESSION_ID = 10190;
+lime.net.curl._CURLOption.CURLOption_Impl_.RTSP_STREAM_URI = 10191;
+lime.net.curl._CURLOption.CURLOption_Impl_.RTSP_TRANSPORT = 10192;
+lime.net.curl._CURLOption.CURLOption_Impl_.RTSP_CLIENT_CSEQ = 193;
+lime.net.curl._CURLOption.CURLOption_Impl_.RTSP_SERVER_CSEQ = 194;
+lime.net.curl._CURLOption.CURLOption_Impl_.INTERLEAVEDATA = 10195;
+lime.net.curl._CURLOption.CURLOption_Impl_.INTERLEAVEFUNCTION = 20196;
+lime.net.curl._CURLOption.CURLOption_Impl_.WILDCARDMATCH = 197;
+lime.net.curl._CURLOption.CURLOption_Impl_.CHUNK_BGN_FUNCTION = 20198;
+lime.net.curl._CURLOption.CURLOption_Impl_.CHUNK_END_FUNCTION = 20199;
+lime.net.curl._CURLOption.CURLOption_Impl_.FNMATCH_FUNCTION = 20200;
+lime.net.curl._CURLOption.CURLOption_Impl_.CHUNK_DATA = 10201;
+lime.net.curl._CURLOption.CURLOption_Impl_.FNMATCH_DATA = 10202;
+lime.net.curl._CURLOption.CURLOption_Impl_.RESOLVE = 10203;
+lime.net.curl._CURLOption.CURLOption_Impl_.TLSAUTH_USERNAME = 10204;
+lime.net.curl._CURLOption.CURLOption_Impl_.TLSAUTH_PASSWORD = 10205;
+lime.net.curl._CURLOption.CURLOption_Impl_.TLSAUTH_TYPE = 10206;
+lime.net.curl._CURLOption.CURLOption_Impl_.TRANSFER_ENCODING = 207;
+lime.net.curl._CURLOption.CURLOption_Impl_.CLOSESOCKETFUNCTION = 20208;
+lime.net.curl._CURLOption.CURLOption_Impl_.CLOSESOCKETDATA = 10209;
+lime.net.curl._CURLOption.CURLOption_Impl_.GSSAPI_DELEGATION = 210;
+lime.net.curl._CURLOption.CURLOption_Impl_.DNS_SERVERS = 10211;
+lime.net.curl._CURLOption.CURLOption_Impl_.ACCEPTTIMEOUT_MS = 212;
+lime.net.curl._CURLOption.CURLOption_Impl_.TCP_KEEPALIVE = 213;
+lime.net.curl._CURLOption.CURLOption_Impl_.TCP_KEEPIDLE = 214;
+lime.net.curl._CURLOption.CURLOption_Impl_.TCP_KEEPINTVL = 215;
+lime.net.curl._CURLOption.CURLOption_Impl_.SSL_OPTIONS = 216;
+lime.net.curl._CURLOption.CURLOption_Impl_.MAIL_AUTH = 10217;
+lime.net.curl._CURLOption.CURLOption_Impl_.SASL_IR = 218;
+lime.net.curl._CURLOption.CURLOption_Impl_.XFERINFOFUNCTION = 20219;
+lime.net.curl._CURLOption.CURLOption_Impl_.XOAUTH2_BEARER = 10220;
+lime.net.curl._CURLOption.CURLOption_Impl_.DNS_INTERFACE = 10221;
+lime.net.curl._CURLOption.CURLOption_Impl_.DNS_LOCAL_IP4 = 10222;
+lime.net.curl._CURLOption.CURLOption_Impl_.DNS_LOCAL_IP6 = 10223;
+lime.net.curl._CURLOption.CURLOption_Impl_.LOGIN_OPTIONS = 10224;
+lime.net.curl._CURLVersion.CURLVersion_Impl_.FIRST = 0;
+lime.net.curl._CURLVersion.CURLVersion_Impl_.SECOND = 1;
+lime.net.curl._CURLVersion.CURLVersion_Impl_.THIRD = 2;
+lime.net.curl._CURLVersion.CURLVersion_Impl_.FOURTH = 3;
+lime.system.System.__moduleNames = null;
+lime.ui._KeyCode.KeyCode_Impl_.UNKNOWN = 0;
+lime.ui._KeyCode.KeyCode_Impl_.BACKSPACE = 8;
+lime.ui._KeyCode.KeyCode_Impl_.TAB = 9;
+lime.ui._KeyCode.KeyCode_Impl_.RETURN = 13;
+lime.ui._KeyCode.KeyCode_Impl_.ESCAPE = 27;
+lime.ui._KeyCode.KeyCode_Impl_.SPACE = 32;
+lime.ui._KeyCode.KeyCode_Impl_.EXCLAMATION = 33;
+lime.ui._KeyCode.KeyCode_Impl_.QUOTE = 34;
+lime.ui._KeyCode.KeyCode_Impl_.HASH = 35;
+lime.ui._KeyCode.KeyCode_Impl_.DOLLAR = 36;
+lime.ui._KeyCode.KeyCode_Impl_.PERCENT = 37;
+lime.ui._KeyCode.KeyCode_Impl_.AMPERSAND = 38;
+lime.ui._KeyCode.KeyCode_Impl_.SINGLE_QUOTE = 39;
+lime.ui._KeyCode.KeyCode_Impl_.LEFT_PARENTHESIS = 40;
+lime.ui._KeyCode.KeyCode_Impl_.RIGHT_PARENTHESIS = 41;
+lime.ui._KeyCode.KeyCode_Impl_.ASTERISK = 42;
+lime.ui._KeyCode.KeyCode_Impl_.PLUS = 43;
+lime.ui._KeyCode.KeyCode_Impl_.COMMA = 44;
+lime.ui._KeyCode.KeyCode_Impl_.MINUS = 45;
+lime.ui._KeyCode.KeyCode_Impl_.PERIOD = 46;
+lime.ui._KeyCode.KeyCode_Impl_.SLASH = 47;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_0 = 48;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_1 = 49;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_2 = 50;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_3 = 51;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_4 = 52;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_5 = 53;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_6 = 54;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_7 = 55;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_8 = 56;
+lime.ui._KeyCode.KeyCode_Impl_.NUMBER_9 = 57;
+lime.ui._KeyCode.KeyCode_Impl_.COLON = 58;
+lime.ui._KeyCode.KeyCode_Impl_.SEMICOLON = 59;
+lime.ui._KeyCode.KeyCode_Impl_.LESS_THAN = 60;
+lime.ui._KeyCode.KeyCode_Impl_.EQUALS = 61;
+lime.ui._KeyCode.KeyCode_Impl_.GREATER_THAN = 62;
+lime.ui._KeyCode.KeyCode_Impl_.QUESTION = 63;
+lime.ui._KeyCode.KeyCode_Impl_.AT = 64;
+lime.ui._KeyCode.KeyCode_Impl_.LEFT_BRACKET = 91;
+lime.ui._KeyCode.KeyCode_Impl_.BACKSLASH = 92;
+lime.ui._KeyCode.KeyCode_Impl_.RIGHT_BRACKET = 93;
+lime.ui._KeyCode.KeyCode_Impl_.CARET = 94;
+lime.ui._KeyCode.KeyCode_Impl_.UNDERSCORE = 95;
+lime.ui._KeyCode.KeyCode_Impl_.GRAVE = 96;
+lime.ui._KeyCode.KeyCode_Impl_.A = 97;
+lime.ui._KeyCode.KeyCode_Impl_.B = 98;
+lime.ui._KeyCode.KeyCode_Impl_.C = 99;
+lime.ui._KeyCode.KeyCode_Impl_.D = 100;
+lime.ui._KeyCode.KeyCode_Impl_.E = 101;
+lime.ui._KeyCode.KeyCode_Impl_.F = 102;
+lime.ui._KeyCode.KeyCode_Impl_.G = 103;
+lime.ui._KeyCode.KeyCode_Impl_.H = 104;
+lime.ui._KeyCode.KeyCode_Impl_.I = 105;
+lime.ui._KeyCode.KeyCode_Impl_.J = 106;
+lime.ui._KeyCode.KeyCode_Impl_.K = 107;
+lime.ui._KeyCode.KeyCode_Impl_.L = 108;
+lime.ui._KeyCode.KeyCode_Impl_.M = 109;
+lime.ui._KeyCode.KeyCode_Impl_.N = 110;
+lime.ui._KeyCode.KeyCode_Impl_.O = 111;
+lime.ui._KeyCode.KeyCode_Impl_.P = 112;
+lime.ui._KeyCode.KeyCode_Impl_.Q = 113;
+lime.ui._KeyCode.KeyCode_Impl_.R = 114;
+lime.ui._KeyCode.KeyCode_Impl_.S = 115;
+lime.ui._KeyCode.KeyCode_Impl_.T = 116;
+lime.ui._KeyCode.KeyCode_Impl_.U = 117;
+lime.ui._KeyCode.KeyCode_Impl_.V = 118;
+lime.ui._KeyCode.KeyCode_Impl_.W = 119;
+lime.ui._KeyCode.KeyCode_Impl_.X = 120;
+lime.ui._KeyCode.KeyCode_Impl_.Y = 121;
+lime.ui._KeyCode.KeyCode_Impl_.Z = 122;
+lime.ui._KeyCode.KeyCode_Impl_.DELETE = 127;
+lime.ui._KeyCode.KeyCode_Impl_.CAPS_LOCK = 1073741881;
+lime.ui._KeyCode.KeyCode_Impl_.F1 = 1073741882;
+lime.ui._KeyCode.KeyCode_Impl_.F2 = 1073741883;
+lime.ui._KeyCode.KeyCode_Impl_.F3 = 1073741884;
+lime.ui._KeyCode.KeyCode_Impl_.F4 = 1073741885;
+lime.ui._KeyCode.KeyCode_Impl_.F5 = 1073741886;
+lime.ui._KeyCode.KeyCode_Impl_.F6 = 1073741887;
+lime.ui._KeyCode.KeyCode_Impl_.F7 = 1073741888;
+lime.ui._KeyCode.KeyCode_Impl_.F8 = 1073741889;
+lime.ui._KeyCode.KeyCode_Impl_.F9 = 1073741890;
+lime.ui._KeyCode.KeyCode_Impl_.F10 = 1073741891;
+lime.ui._KeyCode.KeyCode_Impl_.F11 = 1073741892;
+lime.ui._KeyCode.KeyCode_Impl_.F12 = 1073741893;
+lime.ui._KeyCode.KeyCode_Impl_.PRINT_SCREEN = 1073741894;
+lime.ui._KeyCode.KeyCode_Impl_.SCROLL_LOCK = 1073741895;
+lime.ui._KeyCode.KeyCode_Impl_.PAUSE = 1073741896;
+lime.ui._KeyCode.KeyCode_Impl_.INSERT = 1073741897;
+lime.ui._KeyCode.KeyCode_Impl_.HOME = 1073741898;
+lime.ui._KeyCode.KeyCode_Impl_.PAGE_UP = 1073741899;
+lime.ui._KeyCode.KeyCode_Impl_.END = 1073741901;
+lime.ui._KeyCode.KeyCode_Impl_.PAGE_DOWN = 1073741902;
+lime.ui._KeyCode.KeyCode_Impl_.RIGHT = 1073741903;
+lime.ui._KeyCode.KeyCode_Impl_.LEFT = 1073741904;
+lime.ui._KeyCode.KeyCode_Impl_.DOWN = 1073741905;
+lime.ui._KeyCode.KeyCode_Impl_.UP = 1073741906;
+lime.ui._KeyCode.KeyCode_Impl_.NUM_LOCK = 1073741907;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_DIVIDE = 1073741908;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_MULTIPLY = 1073741909;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_MINUS = 1073741910;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_PLUS = 1073741911;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_ENTER = 1073741912;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_1 = 1073741913;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_2 = 1073741914;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_3 = 1073741915;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_4 = 1073741916;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_5 = 1073741917;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_6 = 1073741918;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_7 = 1073741919;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_8 = 1073741920;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_9 = 1073741921;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_0 = 1073741922;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_PERIOD = 1073741923;
+lime.ui._KeyCode.KeyCode_Impl_.APPLICATION = 1073741925;
+lime.ui._KeyCode.KeyCode_Impl_.POWER = 1073741926;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_EQUALS = 1073741927;
+lime.ui._KeyCode.KeyCode_Impl_.F13 = 1073741928;
+lime.ui._KeyCode.KeyCode_Impl_.F14 = 1073741929;
+lime.ui._KeyCode.KeyCode_Impl_.F15 = 1073741930;
+lime.ui._KeyCode.KeyCode_Impl_.F16 = 1073741931;
+lime.ui._KeyCode.KeyCode_Impl_.F17 = 1073741932;
+lime.ui._KeyCode.KeyCode_Impl_.F18 = 1073741933;
+lime.ui._KeyCode.KeyCode_Impl_.F19 = 1073741934;
+lime.ui._KeyCode.KeyCode_Impl_.F20 = 1073741935;
+lime.ui._KeyCode.KeyCode_Impl_.F21 = 1073741936;
+lime.ui._KeyCode.KeyCode_Impl_.F22 = 1073741937;
+lime.ui._KeyCode.KeyCode_Impl_.F23 = 1073741938;
+lime.ui._KeyCode.KeyCode_Impl_.F24 = 1073741939;
+lime.ui._KeyCode.KeyCode_Impl_.EXECUTE = 1073741940;
+lime.ui._KeyCode.KeyCode_Impl_.HELP = 1073741941;
+lime.ui._KeyCode.KeyCode_Impl_.MENU = 1073741942;
+lime.ui._KeyCode.KeyCode_Impl_.SELECT = 1073741943;
+lime.ui._KeyCode.KeyCode_Impl_.STOP = 1073741944;
+lime.ui._KeyCode.KeyCode_Impl_.AGAIN = 1073741945;
+lime.ui._KeyCode.KeyCode_Impl_.UNDO = 1073741946;
+lime.ui._KeyCode.KeyCode_Impl_.CUT = 1073741947;
+lime.ui._KeyCode.KeyCode_Impl_.COPY = 1073741948;
+lime.ui._KeyCode.KeyCode_Impl_.PASTE = 1073741949;
+lime.ui._KeyCode.KeyCode_Impl_.FIND = 1073741950;
+lime.ui._KeyCode.KeyCode_Impl_.MUTE = 1073741951;
+lime.ui._KeyCode.KeyCode_Impl_.VOLUME_UP = 1073741952;
+lime.ui._KeyCode.KeyCode_Impl_.VOLUME_DOWN = 1073741953;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_COMMA = 1073741957;
+lime.ui._KeyCode.KeyCode_Impl_.ALT_ERASE = 1073741977;
+lime.ui._KeyCode.KeyCode_Impl_.SYSTEM_REQUEST = 1073741978;
+lime.ui._KeyCode.KeyCode_Impl_.CANCEL = 1073741979;
+lime.ui._KeyCode.KeyCode_Impl_.CLEAR = 1073741980;
+lime.ui._KeyCode.KeyCode_Impl_.PRIOR = 1073741981;
+lime.ui._KeyCode.KeyCode_Impl_.RETURN2 = 1073741982;
+lime.ui._KeyCode.KeyCode_Impl_.SEPARATOR = 1073741983;
+lime.ui._KeyCode.KeyCode_Impl_.OUT = 1073741984;
+lime.ui._KeyCode.KeyCode_Impl_.OPER = 1073741985;
+lime.ui._KeyCode.KeyCode_Impl_.CLEAR_AGAIN = 1073741986;
+lime.ui._KeyCode.KeyCode_Impl_.CRSEL = 1073741987;
+lime.ui._KeyCode.KeyCode_Impl_.EXSEL = 1073741988;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_00 = 1073742000;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_000 = 1073742001;
+lime.ui._KeyCode.KeyCode_Impl_.THOUSAND_SEPARATOR = 1073742002;
+lime.ui._KeyCode.KeyCode_Impl_.DECIMAL_SEPARATOR = 1073742003;
+lime.ui._KeyCode.KeyCode_Impl_.CURRENCY_UNIT = 1073742004;
+lime.ui._KeyCode.KeyCode_Impl_.CURRENCY_SUBUNIT = 1073742005;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_LEFT_PARENTHESIS = 1073742006;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_RIGHT_PARENTHESIS = 1073742007;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_LEFT_BRACE = 1073742008;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_RIGHT_BRACE = 1073742009;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_TAB = 1073742010;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_BACKSPACE = 1073742011;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_A = 1073742012;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_B = 1073742013;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_C = 1073742014;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_D = 1073742015;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_E = 1073742016;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_F = 1073742017;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_XOR = 1073742018;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_POWER = 1073742019;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_PERCENT = 1073742020;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_LESS_THAN = 1073742021;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_GREATER_THAN = 1073742022;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_AMPERSAND = 1073742023;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_DOUBLE_AMPERSAND = 1073742024;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_VERTICAL_BAR = 1073742025;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_DOUBLE_VERTICAL_BAR = 1073742026;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_COLON = 1073742027;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_HASH = 1073742028;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_SPACE = 1073742029;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_AT = 1073742030;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_EXCLAMATION = 1073742031;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_MEM_STORE = 1073742032;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_MEM_RECALL = 1073742033;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_MEM_CLEAR = 1073742034;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_MEM_ADD = 1073742035;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_MEM_SUBTRACT = 1073742036;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_MEM_MULTIPLY = 1073742037;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_MEM_DIVIDE = 1073742038;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_PLUS_MINUS = 1073742039;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_CLEAR = 1073742040;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_CLEAR_ENTRY = 1073742041;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_BINARY = 1073742042;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_OCTAL = 1073742043;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_DECIMAL = 1073742044;
+lime.ui._KeyCode.KeyCode_Impl_.NUMPAD_HEXADECIMAL = 1073742045;
+lime.ui._KeyCode.KeyCode_Impl_.LEFT_CTRL = 1073742048;
+lime.ui._KeyCode.KeyCode_Impl_.LEFT_SHIFT = 1073742049;
+lime.ui._KeyCode.KeyCode_Impl_.LEFT_ALT = 1073742050;
+lime.ui._KeyCode.KeyCode_Impl_.LEFT_META = 1073742051;
+lime.ui._KeyCode.KeyCode_Impl_.RIGHT_CTRL = 1073742052;
+lime.ui._KeyCode.KeyCode_Impl_.RIGHT_SHIFT = 1073742053;
+lime.ui._KeyCode.KeyCode_Impl_.RIGHT_ALT = 1073742054;
+lime.ui._KeyCode.KeyCode_Impl_.RIGHT_META = 1073742055;
+lime.ui._KeyCode.KeyCode_Impl_.MODE = 1073742081;
+lime.ui._KeyCode.KeyCode_Impl_.AUDIO_NEXT = 1073742082;
+lime.ui._KeyCode.KeyCode_Impl_.AUDIO_PREVIOUS = 1073742083;
+lime.ui._KeyCode.KeyCode_Impl_.AUDIO_STOP = 1073742084;
+lime.ui._KeyCode.KeyCode_Impl_.AUDIO_PLAY = 1073742085;
+lime.ui._KeyCode.KeyCode_Impl_.AUDIO_MUTE = 1073742086;
+lime.ui._KeyCode.KeyCode_Impl_.MEDIA_SELECT = 1073742087;
+lime.ui._KeyCode.KeyCode_Impl_.WWW = 1073742088;
+lime.ui._KeyCode.KeyCode_Impl_.MAIL = 1073742089;
+lime.ui._KeyCode.KeyCode_Impl_.CALCULATOR = 1073742090;
+lime.ui._KeyCode.KeyCode_Impl_.COMPUTER = 1073742091;
+lime.ui._KeyCode.KeyCode_Impl_.APP_CONTROL_SEARCH = 1073742092;
+lime.ui._KeyCode.KeyCode_Impl_.APP_CONTROL_HOME = 1073742093;
+lime.ui._KeyCode.KeyCode_Impl_.APP_CONTROL_BACK = 1073742094;
+lime.ui._KeyCode.KeyCode_Impl_.APP_CONTROL_FORWARD = 1073742095;
+lime.ui._KeyCode.KeyCode_Impl_.APP_CONTROL_STOP = 1073742096;
+lime.ui._KeyCode.KeyCode_Impl_.APP_CONTROL_REFRESH = 1073742097;
+lime.ui._KeyCode.KeyCode_Impl_.APP_CONTROL_BOOKMARKS = 1073742098;
+lime.ui._KeyCode.KeyCode_Impl_.BRIGHTNESS_DOWN = 1073742099;
+lime.ui._KeyCode.KeyCode_Impl_.BRIGHTNESS_UP = 1073742100;
+lime.ui._KeyCode.KeyCode_Impl_.DISPLAY_SWITCH = 1073742101;
+lime.ui._KeyCode.KeyCode_Impl_.BACKLIGHT_TOGGLE = 1073742102;
+lime.ui._KeyCode.KeyCode_Impl_.BACKLIGHT_DOWN = 1073742103;
+lime.ui._KeyCode.KeyCode_Impl_.BACKLIGHT_UP = 1073742104;
+lime.ui._KeyCode.KeyCode_Impl_.EJECT = 1073742105;
+lime.ui._KeyCode.KeyCode_Impl_.SLEEP = 1073742106;
+lime.ui.KeyEventManager.onKeyDown = new lime.app.Event();
+lime.ui.KeyEventManager.onKeyUp = new lime.app.Event();
+lime.ui._KeyEventManager.KeyEventType_Impl_.KEY_DOWN = 0;
+lime.ui._KeyEventManager.KeyEventType_Impl_.KEY_UP = 1;
+lime.ui.MouseEventManager.onMouseDown = new lime.app.Event();
+lime.ui.MouseEventManager.onMouseMove = new lime.app.Event();
+lime.ui.MouseEventManager.onMouseUp = new lime.app.Event();
+lime.ui.MouseEventManager.onMouseWheel = new lime.app.Event();
+lime.ui._MouseEventManager.MouseEventType_Impl_.MOUSE_DOWN = 0;
+lime.ui._MouseEventManager.MouseEventType_Impl_.MOUSE_UP = 1;
+lime.ui._MouseEventManager.MouseEventType_Impl_.MOUSE_MOVE = 2;
+lime.ui._MouseEventManager.MouseEventType_Impl_.MOUSE_WHEEL = 3;
+lime.ui.TouchEventManager.onTouchEnd = new lime.app.Event();
+lime.ui.TouchEventManager.onTouchMove = new lime.app.Event();
+lime.ui.TouchEventManager.onTouchStart = new lime.app.Event();
+lime.ui._TouchEventManager.TouchEventType_Impl_.TOUCH_START = 0;
+lime.ui._TouchEventManager.TouchEventType_Impl_.TOUCH_END = 1;
+lime.ui._TouchEventManager.TouchEventType_Impl_.TOUCH_MOVE = 2;
+lime.ui.Window.onWindowActivate = new lime.app.Event();
+lime.ui.Window.onWindowClose = new lime.app.Event();
+lime.ui.Window.onWindowDeactivate = new lime.app.Event();
+lime.ui.Window.onWindowFocusIn = new lime.app.Event();
+lime.ui.Window.onWindowFocusOut = new lime.app.Event();
+lime.ui.Window.onWindowMove = new lime.app.Event();
+lime.ui.Window.onWindowResize = new lime.app.Event();
+lime.ui.Window.eventInfo = new lime.ui._Window.WindowEventInfo();
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_FULLSCREEN = 1;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_BORDERLESS = 2;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_RESIZABLE = 4;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_HARDWARE = 8;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_VSYNC = 16;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_HW_AA = 32;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_HW_AA_HIRES = 96;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_ALLOW_SHADERS = 128;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_REQUIRE_SHADERS = 256;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_DEPTH_BUFFER = 512;
+lime.ui._Window.WindowFlags_Impl_.WINDOW_FLAG_STENCIL_BUFFER = 1024;
+lime.ui._Window.WindowEventType_Impl_.WINDOW_ACTIVATE = 0;
+lime.ui._Window.WindowEventType_Impl_.WINDOW_CLOSE = 1;
+lime.ui._Window.WindowEventType_Impl_.WINDOW_DEACTIVATE = 2;
+lime.ui._Window.WindowEventType_Impl_.WINDOW_FOCUS_IN = 3;
+lime.ui._Window.WindowEventType_Impl_.WINDOW_FOCUS_OUT = 4;
+lime.ui._Window.WindowEventType_Impl_.WINDOW_MOVE = 5;
+lime.ui._Window.WindowEventType_Impl_.WINDOW_RESIZE = 6;
+lime.utils.ByteArray.lime_byte_array_overwrite_file = lime.system.System.load("lime","lime_byte_array_overwrite_file",2);
+lime.utils.ByteArray.lime_byte_array_read_file = lime.system.System.load("lime","lime_byte_array_read_file",1);
+lime.utils.ByteArray.lime_lzma_decode = lime.system.System.load("lime","lime_lzma_decode",1);
+lime.utils.ByteArray.lime_lzma_encode = lime.system.System.load("lime","lime_lzma_encode",1);
 motion.actuators.SimpleActuator.actuators = new Array();
 motion.actuators.SimpleActuator.actuatorsLength = 0;
 motion.actuators.SimpleActuator.addedEvent = false;
@@ -60843,14 +69494,20 @@ motion.Actuate.defaultActuator = motion.actuators.SimpleActuator;
 motion.Actuate.defaultEase = motion.easing.Expo.get_easeOut();
 motion.Actuate.targetLibraries = new haxe.ds.ObjectMap();
 openfl.Assets.cache = new openfl.AssetCache();
-openfl.Assets.libraries = new haxe.ds.StringMap();
 openfl.Assets.dispatcher = new openfl.events.EventDispatcher();
-openfl.Assets.initialized = false;
+openfl._Assets.AssetType_Impl_.BINARY = "BINARY";
+openfl._Assets.AssetType_Impl_.FONT = "FONT";
+openfl._Assets.AssetType_Impl_.IMAGE = "IMAGE";
+openfl._Assets.AssetType_Impl_.MOVIE_CLIP = "MOVIE_CLIP";
+openfl._Assets.AssetType_Impl_.MUSIC = "MUSIC";
+openfl._Assets.AssetType_Impl_.SOUND = "SOUND";
+openfl._Assets.AssetType_Impl_.TEMPLATE = "TEMPLATE";
+openfl._Assets.AssetType_Impl_.TEXT = "TEXT";
 openfl.Lib.HTML_ACCELEROMETER_EVENT_TYPE = "devicemotion";
 openfl.Lib.HTML_ORIENTATION_EVENT_TYPE = "orientationchange";
 openfl.Lib.DEFAULT_HEIGHT = 500;
 openfl.Lib.DEFAULT_WIDTH = 500;
-openfl.Lib.HTML_DIV_EVENT_TYPES = ["resize","mouseover","mouseout","mousewheel"];
+openfl.Lib.HTML_DIV_EVENT_TYPES = ["dragstart","resize","mouseover","mouseout","mousewheel"];
 openfl.Lib.HTML_TOUCH_EVENT_TYPES = ["touchstart","touchmove","touchend"];
 openfl.Lib.HTML_TOUCH_ALT_EVENT_TYPES = ["mousedown","mousemove","mouseup"];
 openfl.Lib.HTML_WINDOW_EVENT_TYPES = ["keyup","keypress","keydown","resize","blur","focus","paste"];
@@ -60965,6 +69622,9 @@ openfl.events.TouchEvent.TOUCH_OVER = "touchOver";
 openfl.events.TouchEvent.TOUCH_ROLL_OUT = "touchRollOut";
 openfl.events.TouchEvent.TOUCH_ROLL_OVER = "touchRollOver";
 openfl.events.TouchEvent.TOUCH_TAP = "touchTap";
+openfl.filters.BitmapFilterQuality.HIGH = 3;
+openfl.filters.BitmapFilterQuality.MEDIUM = 2;
+openfl.filters.BitmapFilterQuality.LOW = 1;
 openfl.filters.DropShadowFilter.DEGREES_FULL_RADIUS = 360.0;
 openfl.geom.Transform.DEG_TO_RAD = Math.PI / 180.0;
 openfl.media.Sound.EXTENSION_MP3 = "mp3";
@@ -60985,6 +69645,7 @@ openfl.system.ApplicationDomain.currentDomain = new openfl.system.ApplicationDom
 openfl.system.Capabilities.hasAccessibility = false;
 openfl.system.SecurityDomain.currentDomain = new openfl.system.SecurityDomain();
 openfl.text.TextField.mDefaultFont = "Bitstream_Vera_Sans";
+openfl.text.TextField.sSelectionOwner = null;
 openfl.text.FontInstance.mSolidFonts = new haxe.ds.StringMap();
 openfl.text.TextFieldType.DYNAMIC = "DYNAMIC";
 openfl.text.TextFieldType.INPUT = "INPUT";
@@ -61214,8 +69875,6 @@ openfl.ui.Keyboard.DOM_VK_SELECT = 41;
 openfl.ui.Keyboard.DOM_VK_PRINT = 42;
 openfl.ui.Keyboard.DOM_VK_EXECUTE = 43;
 openfl.ui.Keyboard.DOM_VK_SLEEP = 95;
-openfl.utils.Endian.BIG_ENDIAN = "bigEndian";
-openfl.utils.Endian.LITTLE_ENDIAN = "littleEndian";
 openfl.utils.Uuid.UID_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 ApplicationMain.main();
-})();
+})(typeof window != "undefined" ? window : exports);
