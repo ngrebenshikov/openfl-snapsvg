@@ -308,30 +308,35 @@ class TextField extends InteractiveObject {
 					svgBuf.add('x="' + span.startX + '" dy="' + span.rect.height+ 'px" ');
 				}
 
+                var styleBuf: StringBuf = new StringBuf();
                 if (null != span.format) {
                     if (null != span.format.color) {
                         svgBuf.add('fill="#' + StringTools.hex(span.format.color,6) + '" ');
-                    }
-                    if (null != span.format.font) {
-                        svgBuf.add('font-family="' + span.format.font + '" ');
-                    }
-                    if (null != span.format.size) {
-                        svgBuf.add('font-size="' + span.format.size + 'px" ');
-                    }
-                    if (null != span.format.bold && span.format.bold) {
-                        svgBuf.add('font-weight="bold" ');
-                    }
-                    if (null != span.format.bold && span.format.italic) {
-                        svgBuf.add('font-style="italic" ');
-                    }
-                    if (null != span.format.underline && span.format.underline) {
-                        svgBuf.add('text-decoration="underline" ');
                     }
                     if (null != span.format.kerning) {
                         svgBuf.add('kerning="' + span.format.kerning + 'px" ');
                     }
                     if (null != span.format.letterSpacing) {
                         svgBuf.add('letter-spacing="' + span.format.letterSpacing + 'px" ');
+                    }
+
+                    if (null != span.format.font) {
+                        styleBuf.add('font-family:\'${span.format.font}\';');
+                    }
+                    if (null != span.format.size) {
+                        styleBuf.add('font-size:' + span.format.size + 'px;');
+                    }
+                    if (null != span.format.bold && span.format.bold) {
+                        styleBuf.add('font-weight:bold;');
+                    }
+                    if (null != span.format.bold && span.format.italic) {
+                        styleBuf.add('font-style:italic;');
+                    }
+                    if (null != span.format.underline && span.format.underline) {
+                        styleBuf.add('text-decoration:underline;');
+                    }
+                    if (styleBuf.length > 0) {
+                        svgBuf.add("style=\"" + styleBuf.toString() + "\"");
                     }
                 }
                 svgBuf.add('><![CDATA[');
