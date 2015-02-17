@@ -741,7 +741,7 @@ class Stage extends DisplayObjectContainer {
 			// MOUSE_DOWN brings focus to the clicked object, and takes it
 			// away from any currently focused object
 			if (type == MouseEvent.MOUSE_DOWN) {
-				__onFocus (stack[stack.length - 1]);
+                __onFocus (obj);
 			}
 			
 			obj.__fireEvent (evt);

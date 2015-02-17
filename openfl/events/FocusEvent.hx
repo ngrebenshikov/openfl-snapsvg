@@ -24,7 +24,7 @@ class FocusEvent extends Event {
 		keyCode = inKeyCode;
 		shiftKey = (inShiftKey == null ? false : inShiftKey);
 		relatedObject = inObject;
-		
+		target = inObject;
 	}
 	
 	
