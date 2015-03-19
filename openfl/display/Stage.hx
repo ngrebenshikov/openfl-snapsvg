@@ -822,7 +822,9 @@ class Stage extends DisplayObjectContainer {
 				
 			}
 			
-			obj.__fireEvent (MouseEvent.__create (mouseType, cast evt, local, cast obj));
+			#if (!html5)
+            obj.__fireEvent (MouseEvent.__create (mouseType, cast evt, local, cast obj));
+            #end
 			
 		} else {
 			

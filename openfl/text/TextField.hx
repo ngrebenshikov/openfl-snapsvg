@@ -1100,7 +1100,7 @@ class TextField extends InteractiveObject {
         if (__inputEnabled && stage.focus == this) {
             caretIndex = getCharIndexAtPoint(e.localX, e.localY);
             var textElement: TextElement = cast(mTextSnap.node);
-            if (text.length > 0 && text.length > caretIndex) {
+            if (null != text && text.length > 0 && text.length > caretIndex) {
                 try {
                     var extent = textElement.getExtentOfChar(caretIndex);
                     if (e.localX - extent.x > extent.width/2) {
@@ -1371,6 +1371,8 @@ class TextField extends InteractiveObject {
         if (mText == inText) return inText;
 
 		mText = inText;
+        if (null == mText) mText = '';
+
         if (!multiline) {
             mText = StringTools.replace(mText, '\n', '');
         }
