@@ -54,8 +54,8 @@ class Svg extends Shape {
 
     }
 
-    override private function __render (inMask:SnapElement = null, clipRect:Rectangle = null) {
-        if (!__combinedVisible) return;
+    override private function __render (inMask:SnapElement = null, clipRect:Rectangle = null, force: Bool = false) {
+        if (!__combinedVisible && !force) return;
 
         if (_matrixInvalid || _matrixChainInvalid) __validateMatrix();
 

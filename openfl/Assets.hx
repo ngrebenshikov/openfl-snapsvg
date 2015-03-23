@@ -1,4 +1,5 @@
-package openfl; #if (flash || openfl_next || js || display || html5)
+package openfl;
+#if (flash || openfl_next || js || display || html5)
 #if !macro
 
 
@@ -71,7 +72,18 @@ class Assets {
 	}
 	
 	
-	/**
+	public static function getSvg(id: String): openfl.display.Svg {
+        var doc: Xml = haxe.xml.Parser.parse(Assets.getText(id).toString());
+        var buf: StringBuf = new StringBuf();
+        for(el in doc.firstElement().elements()) {
+            if (el.nodeName == 'metadata') continue;
+            buf.add(el.toString());
+        }
+        return new openfl.display.Svg(Lib.snap.group().append(snap.Snap.parse(buf.toString())));
+    }
+
+
+    /**
 	 * Gets an instance of an embedded bitmap
 	 * @usage		var bitmap = new Bitmap(Assets.getBitmapData("image.jpg"));
 	 * @param	id		The ID or asset path for the bitmap
@@ -863,8 +875,7 @@ class Assets {
 		handler (getSound (id));
 		
 	}
-	
-	
+
 }
 
 
