@@ -29,7 +29,9 @@
 <body style="width:100%; height:100%; padding: 0; margin: 0; background-color: #FFFFFF;">
 	
 	<!-- <div id="haxe:trace" style="position: absolute; z-index: 2147483647;::if !debug:: display: none;::end::"></div> -->
-	
+
+    <div type="text" id="openfl-snapsvg-input" contentEditable="true" style="position:absolute; top:-9999px; left:-9999px; width: 10px; height: 10px; overflow: hidden;" ></div>
+
 	::if (LIB_OPENFL)::
     <div id="haxe:openfl" style="background-color: #::WIN_FLASHBACKGROUND::; width: ::if (WIN_WIDTH == 0)::100%::else::::WIN_WIDTH::px::end::; height: ::if (WIN_HEIGHT == 0)::100%::else::::WIN_HEIGHT::px::end::" data-framerate="::WIN_FPS::">
         <svg id="haxe-openfl-svg"
@@ -67,7 +69,5 @@
 
 	::end::
 
-    <div type="text" id="openfl-snapsvg-input" contentEditable="true" style="position:absolute; top:-9999px; left:-9999px; width: 10px; height: 10px; overflow: hidden; " />
-	
 </body>
 </html>

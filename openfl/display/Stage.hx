@@ -1,6 +1,7 @@
 package openfl.display;
 
 
+import StringTools;
 import openfl.geom.Point;
 import openfl.display.InteractiveObject;
 import StringTools;
@@ -377,7 +378,7 @@ class Stage extends DisplayObjectContainer {
                 var windowClipboardData = untyped window.clipboardData;
                 var eventClipboardData = untyped evt.clipboardData;
                 var clipboardData: Dynamic = if (null != windowClipboardData) windowClipboardData else eventClipboardData;
-                __onPaste(if (null != clipboardData && clipboardData.types.length > 0) clipboardData.getData('text/plain') else getTextFromPasteElement());
+                __onPaste(if (null != clipboardData && null != clipboardData.types && clipboardData.types.length > 0) clipboardData.getData('text/plain') else getTextFromPasteElement());
 
 			case "touchstart":
 				
@@ -421,39 +422,20 @@ class Stage extends DisplayObjectContainer {
     }
 
 	public function __queueStageEvent (evt:js.html.Event):Void {
+        trace(evt.type);
         var target: Element = cast evt.target;
         if (evt.type == "dragstart") {
 			evt.preventDefault();
-		} else if (evt.type == "keydown") {
-            var e: KeyboardEvent = cast evt;
-            if (e.keyCode == Keyboard.V && (e.ctrlKey || e.commandKey || e.controlKey || cast(e).metaKey)) {
-                var document: Document = untyped window.document;
-                var curFocus = document.activeElement;
-                var input = document.getElementById('openfl-snapsvg-input');
-                input.innerText = "";
-                e.stopImmediatePropagation();
-
-                input.addEventListener('focusin', stopPropagationOfEvent);
-                input.addEventListener('focusout', stopPropagationOfEvent);
-                input.addEventListener('beforedeactivate', stopPropagationOfEvent);
-
-                curFocus.blur();
+		} else if(evt.type == "mouseup") {
+            var document: Document = untyped window.document;
+            var input = document.getElementById('openfl-snapsvg-input');
+            var obj = __getObjectByElement(cast(evt.target));
+            if (Type.getClassName(Type.getClass(obj)).indexOf("TextField") >= 0) {
                 input.focus();
-                var t = new Timer(30);
-                t.run = function() {
-                    input.blur();
-                    curFocus.focus();
-
-                    input.addEventListener('focusin', stopPropagationOfEvent);
-                    input.addEventListener('focusout', stopPropagationOfEvent);
-                    input.addEventListener('beforedeactivate', stopPropagationOfEvent);
-
-                    t.stop();
-                }
             }
         }
 
-        if (target.id == 'openfl-snapsvg-input' && evt.type != 'paste') return;
+        if (target.id == 'openfl-snapsvg-input' && evt.type != 'paste' && evt.type != "keydown" && evt.type != "keyup" && evt.type != "keypress") return;
 
 		__uIEventsQueue[__uIEventsQueueIndex++] = evt;
 	}
