@@ -39,7 +39,7 @@ class TextField extends InteractiveObject {
 	public var backgroundColor (default, set_backgroundColor):Int;
 	public var border (default, set_border):Bool;
 	public var borderColor (default, set_borderColor):Int;
-	public var bottomScrollV (get_bottomScrollV, null):Int;
+	public var bottomScrollV (default, null):Int;
 	private var _caretIndex: Int;
 	public var caretIndex(get, set):Int;
 	public var caretPos (get_caretPos, null):Int;
@@ -50,18 +50,39 @@ class TextField extends InteractiveObject {
 	public var htmlText (get_htmlText, set_htmlText):String;
 	public var length (default, null):Int;
 	public var maxChars:Int;
-	public var maxScrollH (get_maxScrollH, null):Int;
-	public var maxScrollV (get_maxScrollV, null):Int;
+	public var maxScrollH (default, null):Int;
+	public var maxScrollV (default, null):Int;
 	public var mDownChar:Int;
 	public var mFace:String;
 	public var mParagraphs:Paragraphs;
 	public var mTextHeight:Int;
 	public var mTryFreeType:Bool;
 	@:isVar public var multiline (default, default):Bool;
-	public var numLines (get_numLines, null):Int;
+	public var numLines (default, null):Int;
 	public var restrict:String;
-	public var scrollH:Int;
-	public var scrollV:Int;
+
+    public var scrollH(get, set):Int;
+    private var _scrollH: Int;
+    private function get_scrollH ():Int { return _scrollH; }
+    private function set_scrollH (value:Int):Int {
+        _scrollH = value;
+        textElementOffset = getOffsetByScrollValues();
+        return value; }
+
+	public var scrollV(get, set):Int;
+    private var _scrollV: Int;
+    private function get_scrollV ():Int { return _scrollV; }
+    private function set_scrollV (value:Int):Int {
+        _scrollV = value;
+        textElementOffset = getOffsetByScrollValues();
+        bottomScrollV = calculateBottomScrollV();
+        return value;
+    }
+
+    private function get_multiline ():Bool { return multiline; }
+    private function set_multiline (value:Bool):Bool { return multiline = value; }
+
+
 
 	public var selectable:Bool;
 	public var selectionBeginIndex:Int;
@@ -128,9 +149,9 @@ class TextField extends InteractiveObject {
 		mParagraphs = new Paragraphs ();
 		svgSelectionBeginIndex = selectionBeginIndex = -1;
 		svgSelectionEndIndex = selectionEndIndex = -1;
+        numLines = 0;
 		scrollH = 0;
 		scrollV = 1;
-
 		mType = TextFieldType.DYNAMIC;
 		autoSize = TextFieldAutoSize.NONE;
 		mTextHeight = 12;
@@ -267,8 +288,7 @@ class TextField extends InteractiveObject {
         }
 		return format;
 	}
-	
-	
+
 	private function Rebuild () {
 		
 		if (mHTMLMode) return;
@@ -295,6 +315,7 @@ class TextField extends InteractiveObject {
 
         var svgBuf: StringBuf = new StringBuf();
         var firstParagraph = true;
+        numLines = 0;
         for (paragraph in mParagraphs) {
             var firstSpan = true;
             for (span in paragraph.spans) {
@@ -304,8 +325,10 @@ class TextField extends InteractiveObject {
 				//svgBuf.add('textLength="' + span.rect.width+ 'px" ');
 				if (firstSpan) {
 					svgBuf.add('x="' + span.startX + '" dy="' + paragraph.firstLineHeight+ 'px" ');
+                    numLines += 1;
 				} else if (span.startFromNewLine) {
 					svgBuf.add('x="' + span.startX + '" dy="' + span.rect.height+ 'px" ');
+                    numLines += 1;
 				}
 
                 var styleBuf: StringBuf = new StringBuf();
@@ -376,19 +399,36 @@ class TextField extends InteractiveObject {
         mMaxWidth = rect.width;
         mMaxHeight = rect.height;
 
+        updateMaxScrollValues();
+
         updateClipRect(new Rectangle(x, y, width, height));
 
         __graphics.clear ();
         drawBackgoundAndBorder();
 
-		var caretRect: Rectangle = getCaretRect();
-		var textX = Std.parseInt(textElement.getAttribute("x"));
-		var textY = Std.parseInt(textElement.getAttribute("y"));
-		if (caretRect.left < textX) { textElement.setAttribute("x", Std.string(caretRect.left)); }
-		if (caretRect.top < textY) { textElement.setAttribute("y", Std.string(caretRect.top)); }
-		if (caretRect.right > textX + width) { textElement.setAttribute("x", Std.string(width - caretRect.right)); }
-		if (caretRect.bottom > textY + height) { textElement.setAttribute("y", Std.string(height - caretRect.bottom)); }
+        ensureCaretVisible();
 	}
+
+    private function updateMaxScrollValues() {
+        //calculate maxScrollV
+        maxScrollV = 1;
+        if (height < textHeight) {
+            var rest = textHeight;
+            for (paragraph in mParagraphs) {
+                var first = true;
+                for (s in paragraph.spans) {
+                    if (rest > height && (first || s.startFromNewLine)) {
+                        rest -= s.rect.height;
+                        maxScrollV += 1;
+                        first = false;
+                    }
+                }
+            }
+        }
+
+        //calculate maxScrollH
+        maxScrollH = if (width < textWidth) Std.int(textWidth-width) else 0;
+    }
 
     private function drawBackgoundAndBorder() {
         if (background) {
@@ -425,6 +465,12 @@ class TextField extends InteractiveObject {
         }
     }
 
+    private function getCaretScrollPosition(): Point {
+        var caretRect = getCaretRect();
+        var v = getLineByCaretIndex(caretIndex);
+        return new Point(caretRect.x, if (v < 0) 1 else v + 1);
+    }
+
 	public function RebuildText () {
         if (null == mText) return;
 
@@ -447,8 +493,7 @@ class TextField extends InteractiveObject {
         Rebuild();
         __textChanged = false;
 	}
-	
-	
+
 	private function RenderRow (inRow:Array<RowChar>, inY:Int, inCharIdx:Int, inAlign:TextFormatAlign, inInsert:Int = 0):Int {
 		var h = 0;
 		var w = 0;
@@ -1194,9 +1239,6 @@ class TextField extends InteractiveObject {
 	}
 	
 	
-	private function get_bottomScrollV ():Int { return 0; }
-	
-	
 	private function get_caretPos ():Int {
 		
 		return mInsertPos;
@@ -1341,19 +1383,7 @@ class TextField extends InteractiveObject {
 		return mHTMLText;
 		
 	}
-	
-	
-	private function get_maxScrollH ():Int { return scrollH; }
-	private function get_maxScrollV ():Int { return scrollV; }
-	private function get_multiline ():Bool { return multiline; }
-	private function set_multiline (value:Bool):Bool { return multiline = value; }
-	private function get_numLines ():Int { return if (null != mText) 1 else 0; }
-	private function get_scrollH ():Int { return scrollH; }
-	private function set_scrollH (value:Int):Int { return scrollH = value; }
-	private function get_scrollV ():Int { return scrollV; }
-	private function set_scrollV (value:Int):Int { return scrollV = value; }
-	
-	
+
 	public function get_text ():String {
 		
 		if (mHTMLMode) {
@@ -1500,20 +1530,62 @@ class TextField extends InteractiveObject {
 	public function get_caretIndex(): Int { return _caretIndex;	}
 	public function set_caretIndex(v: Int): Int {
 		_caretIndex = v;
-
-		var caretRect: Rectangle = getCaretRect();
-		var offset = textElementOffset;
-		var newOffset = textElementOffset;
-
-		if (caretRect.left < -offset.x) { newOffset.x = caretRect.left; }
-		if (caretRect.top < -offset.y) { newOffset.y = caretRect.top; }
-		if (caretRect.right > -offset.x + width) { newOffset.x = width - caretRect.right; }
-		if (caretRect.bottom > -offset.y + height) { newOffset.y = height - caretRect.bottom; }
-
-		textElementOffset = newOffset;
-
+        ensureCaretVisible();
 		return v;
 	}
+
+    private function getOffsetByScrollValues(): Point {
+        return new Point(-scrollH, -getOffsetByLineIndex(scrollV));
+    }
+
+    private function ensureCaretVisible() {
+        var curPos = getCaretScrollPosition();
+        var y = 0;
+        if (curPos.x < scrollH) scrollH = Std.int(curPos.x);
+        else if (curPos.y < scrollV) scrollV = Std.int(curPos.y);
+        else if (curPos.x > scrollH + width) scrollH = Std.int(width - curPos.x);
+        else if (curPos.y >= bottomScrollV) scrollV += Std.int(curPos.y - bottomScrollV);
+    }
+
+    private function getOffsetByLineIndex(index: Int): Int {
+        var offset = 0.0;
+        for (paragraph in mParagraphs) {
+            var first = true;
+            for (s in paragraph.spans) {
+                if (first || s.startFromNewLine) {
+                    index -= 1;
+                    if (index <= 0) {
+                        return Std.int(offset);
+                    }
+                    offset += s.rect.height;
+                    first = false;
+                }
+            }
+        }
+        return Std.int(offset);
+    }
+
+    private function calculateBottomScrollV(): Int {
+        if (scrollV <= 0) return numLines;
+        var skipLines = scrollV - 1;
+        var index = 0;
+        var h = height;
+        for (paragraph in mParagraphs) {
+            var first = true;
+            for (s in paragraph.spans) {
+                if (first || s.startFromNewLine) {
+                    index += 1;
+                    if (skipLines <= 0) {
+                        h -= s.rect.height;
+                    } else {
+                        skipLines -= 1;
+                    }
+                    if (h <= 0) return index;
+                }
+            }
+        }
+        return index;
+    }
 
 	private function get_textElementOffset(): Point {
 		var textElement: js.html.svg.TextElement = cast(mTextSnap.node);
