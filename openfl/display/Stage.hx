@@ -422,7 +422,6 @@ class Stage extends DisplayObjectContainer {
     }
 
 	public function __queueStageEvent (evt:js.html.Event):Void {
-        trace(evt.type);
         var target: Element = cast evt.target;
         if (evt.type == "dragstart") {
 			evt.preventDefault();
