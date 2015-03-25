@@ -799,7 +799,7 @@ class TextField extends InteractiveObject {
 	
 	
 	public function setTextFormat (inFmt:TextFormat, beginIndex:Int = 0, endIndex:Int = 0) {
-        if (beginIndex == 0 || endIndex == 0) {
+        if (beginIndex < 0 || endIndex <= 0 ) {
             if (inFmt.font != null) {
                 mFace = inFmt.font;
             }
