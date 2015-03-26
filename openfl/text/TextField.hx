@@ -1143,12 +1143,12 @@ class TextField extends InteractiveObject {
 
     private function onMouseDown(e: Dynamic) {
         if (__inputEnabled && stage.focus == this) {
-            caretIndex = getCharIndexAtPoint(e.localX, e.localY);
+            caretIndex = getCharIndexAtPoint(e.localX - textElementOffset.x, e.localY - textElementOffset.y);
             var textElement: TextElement = cast(mTextSnap.node);
             if (null != text && text.length > 0 && text.length > caretIndex) {
                 try {
                     var extent = textElement.getExtentOfChar(caretIndex);
-                    if (e.localX - extent.x > extent.width/2) {
+                    if (e.localX - textElementOffset.x - extent.x > extent.width/2) {
                         caretIndex += 1;
                     }
                 } catch(e: Dynamic) {}
@@ -1165,8 +1165,19 @@ class TextField extends InteractiveObject {
 
     private function onMouseUp(e: Dynamic) {
         removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-        shouldCaretShowed = true;
-        caretIndex = getCharIndexAtPoint(e.localX, e.localY);
+        if (e.target == this) {
+            shouldCaretShowed = true;
+            caretIndex = getCharIndexAtPoint(e.localX - textElementOffset.x, e.localY - textElementOffset.y);
+            try {
+                var textElement: TextElement = cast(mTextSnap.node);
+                var extent = textElement.getExtentOfChar(caretIndex);
+                if (e.localX - textElementOffset.x - extent.x > extent.width/2) {
+                    caretIndex += 1;
+                }
+            } catch(e: Dynamic) {}
+        } else {
+            shouldCaretShowed = false;
+        }
     }
 
     private function onMouseMove(e: Dynamic) {

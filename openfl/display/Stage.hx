@@ -429,7 +429,7 @@ class Stage extends DisplayObjectContainer {
             var document: Document = untyped window.document;
             var input = document.getElementById('openfl-snapsvg-input');
             var obj = __getObjectByElement(cast(evt.target));
-            if (Type.getClassName(Type.getClass(obj)).indexOf("TextField") >= 0) {
+            if (focus != obj && Type.getClassName(Type.getClass(obj)).indexOf("TextField") >= 0) {
                 input.focus();
             }
         }
