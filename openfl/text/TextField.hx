@@ -168,7 +168,8 @@ class TextField extends InteractiveObject {
 		mSelectDrag = -1;
 		
 		mLineInfo = [];
-		defaultTextFormat = new TextFormat ();
+        __textFormats = [];
+        defaultTextFormat = new TextFormat ();
 
 		borderColor = 0x000000;
 		border = false;
@@ -176,7 +177,6 @@ class TextField extends InteractiveObject {
 		background = false;
 		gridFitType = GridFitType.PIXEL;
 		sharpness = 0;
-        __textFormats = [];
 
         caretIndex = 0;
         shouldCaretShowed = true;
@@ -844,7 +844,7 @@ class TextField extends InteractiveObject {
 	
 	
 	public function setTextFormat (inFmt:TextFormat, beginIndex:Int = 0, endIndex:Int = 0) {
-        if (beginIndex < 0 || endIndex <= 0 ) {
+        if (beginIndex < 0 || endIndex < 0 ) {
             if (inFmt.font != null) {
                 mFace = inFmt.font;
             }
@@ -860,11 +860,12 @@ class TextField extends InteractiveObject {
             if (inFmt.color != null) {
                 mTextColour = inFmt.color;
             }
+            __textFormats = [];
+            RebuildText ();
         } else {
             __textFormats.push({format:inFmt, begin:beginIndex, end:endIndex});
         }
 
-		RebuildText ();
 		__invalidateBounds ();
 		
 		return getTextFormat ();
