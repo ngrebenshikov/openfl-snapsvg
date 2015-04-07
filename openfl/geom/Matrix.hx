@@ -287,8 +287,13 @@ class Matrix {
 		return "matrix3d(" + a + ", " + b + ", " + "0, 0, " + c + ", " + d + ", " + "0, 0, 0, 0, 1, 0, " + tx + ", " + ty + ", " + "0, 1" + ")";
 		
 	}
-	
-	
+
+    public inline function toShort3DString ():String {
+        return if (1 == a && 0 == b && 0 == c && 1 == d)
+            'translate3d($tx $ty 0)'
+            else to3DString();
+    }
+
 	public inline function toMozString () {
 		
 		return "matrix(" + a + ", " + b + ", " + c + ", " + d + ", " + tx + "px, " + ty + "px)";

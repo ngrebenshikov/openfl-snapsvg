@@ -33,7 +33,7 @@
     <div type="text" id="openfl-snapsvg-input" contentEditable="true" style="position:absolute; top:-9999px; left:-9999px; width: 10px; height: 10px; overflow: hidden;" ></div>
 
 	::if (LIB_OPENFL)::
-    <div id="haxe:openfl" style="background-color: #::WIN_FLASHBACKGROUND::; width: ::if (WIN_WIDTH == 0)::100%::else::::WIN_WIDTH::px::end::; height: ::if (WIN_HEIGHT == 0)::100%::else::::WIN_HEIGHT::px::end::" data-framerate="::WIN_FPS::">
+    <div id="haxe:openfl" style="transform:translatez(0); background-color: #::WIN_FLASHBACKGROUND::; width: ::if (WIN_WIDTH == 0)::100%::else::::WIN_WIDTH::px::end::; height: ::if (WIN_HEIGHT == 0)::100%::else::::WIN_HEIGHT::px::end::" data-framerate="::WIN_FPS::">
         <svg id="haxe-openfl-svg"
              version="1.1"
              xmlns="http://www.w3.org/2000/svg"

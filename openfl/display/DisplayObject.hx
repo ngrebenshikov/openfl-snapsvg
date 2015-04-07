@@ -320,13 +320,15 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         var el: Element = cast(snap.node);
         if (matrix.a == 1 && matrix.b == 0 && matrix.c == 0 && matrix.d == 1 && matrix.tx == 0 && matrix.ty == 0) {
             if (null != __cacheTransformString) {
-                el.removeAttribute('transform');
+                el.removeAttribute("transform");
+//                untyped el.style.webkitTransform = "";
                 __cacheTransformString = null;
             }
         } else {
             var transformString = matrix.toString();
             if (__cacheTransformString != transformString) {
-                el.setAttribute('transform', transformString);
+                el.setAttribute("transform", transformString);
+//                untyped el.style.webkitTransform = transformString;
                 __cacheTransformString = transformString;
             }
         }
@@ -585,7 +587,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         renderNextWake();
 	}
 
-	public function __invalidateMatrix (local:Bool = false):Void {
+	public function __invalidateMatrix (local:Bool = false, rerender:Bool = true):Void {
 		
 		/**
 		 * Matrices are invalidated when:
@@ -603,7 +605,9 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__setFlag (MATRIX_CHAIN_INVALID); // a parent has an invalid matrix
 			
 		}
-        renderNextWake();
+        if (rerender) {
+            renderNextWake();
+        }
 	}
 
 	public function __isOnStage ():Bool {
@@ -1153,16 +1157,12 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private function set_x (inValue:Float):Float {
 		
 		if (__x != inValue) {
-			
 			__x = inValue;
 			__invalidateMatrix (true);
 			
 			if (parent != null) {
-				
 				parent.__invalidateBounds ();
-				
 			}
-			
 		}
 		
 		return inValue;

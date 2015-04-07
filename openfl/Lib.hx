@@ -1058,7 +1058,7 @@ class Lib {
     private static function get_freeSnap ():SnapElement {
         if (mFreeSnap == null) {
             mFreeSnap = snap.group();
-            mFreeSnap.attr({id : SNAP_IDENTIFIER + "-free", visibility: "hidden"});
+            mFreeSnap.attr({id : SNAP_IDENTIFIER + "-free", opacity: "0"});
         }
         return mFreeSnap;
     }

@@ -429,9 +429,11 @@ class Stage extends DisplayObjectContainer {
             var document: Document = untyped window.document;
             var input = document.getElementById('openfl-snapsvg-input');
             var obj = __getObjectByElement(cast(evt.target));
-            if (focus != obj && Type.getClassName(Type.getClass(obj)).indexOf("TextField") >= 0) {
-                input.focus();
-            }
+            try {
+                if (focus != obj && Type.getClassName(Type.getClass(obj)).indexOf("TextField") >= 0) {
+                    input.focus();
+                }
+            } catch (e: Dynamic) {}
         }
 
         if (target.id == 'openfl-snapsvg-input' && evt.type != 'paste' && evt.type != "keydown" && evt.type != "keyup" && evt.type != "keypress") return;
@@ -727,7 +729,9 @@ class Stage extends DisplayObjectContainer {
 			
 			obj.__fireEvent (evt);
 
-            emulateClickEvent(type, event, local, obj);
+            try {
+                emulateClickEvent(type, event, local, obj);
+            } catch(e: Dynamic) {}
 			
 		} else {
 			var evt = MouseEvent.__create (type, event, point, null);

@@ -470,23 +470,13 @@ class DisplayObjectContainer extends InteractiveObject {
 		
 	}
 	
-	
-	override public function __invalidateMatrix (local:Bool = false):Void {
-		
-		//** FINAL **//	
-		
-		if (!_matrixChainInvalid && !_matrixInvalid) {	
-			
+	override public function __invalidateMatrix (local:Bool = false, rerender:Bool = true):Void {
+		if (!_matrixChainInvalid && !_matrixInvalid) {
 			for (child in __children) {
-				
 				child.__invalidateMatrix ();
-				
 			}
-			
 		}
-		
 		super.__invalidateMatrix (local);
-		
 	}
 	
 	
@@ -525,6 +515,8 @@ class DisplayObjectContainer extends InteractiveObject {
 	override private function __render (inMask:SnapElement = null, clipRect:Rectangle = null, force:Bool = false):Void {
 		
 		if (!__visible && !force) return;
+
+        //trace("Render: " + name);
 
 		super.__render(inMask, clipRect);
 		
