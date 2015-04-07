@@ -36,4 +36,4 @@ Dependencies
 ------------
 
 * openfl 2.1.7
-* lime 2.1.7
+* lime 2.0.1
