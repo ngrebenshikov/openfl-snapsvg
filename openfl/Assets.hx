@@ -71,9 +71,24 @@ class Assets {
 		
 	}
 	
-	
+	private static var svgIndex = 0;
 	public static function getSvg(id: String): openfl.display.Svg {
-        var doc: Xml = haxe.xml.Parser.parse(Assets.getText(id).toString());
+
+        var str = Assets.getText(id).toString();
+
+        //Make ids of each SVG unique
+        var r = new EReg("id=\"([^\"]+)\"", "g");
+        str = r.replace(str, "id=\"openfl-" + svgIndex + "-$1\"");
+
+        r = new EReg("xlink:href=\"#([^\"]+)\"", "g");
+        str = r.replace(str, "xlink:href=\"#openfl-" + svgIndex + "-$1\"");
+
+        r = new EReg("url\\(#([^)]+)\\)", "g");
+        str = r.replace(str, "url(#openfl-" + svgIndex + "-$1)");
+
+        svgIndex += 1;
+
+        var doc: Xml = haxe.xml.Parser.parse(str);
         var buf: StringBuf = new StringBuf();
         for(el in doc.firstElement().elements()) {
             if (el.nodeName == 'metadata') continue;

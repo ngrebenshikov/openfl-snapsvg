@@ -77,7 +77,6 @@ class Svg extends Shape {
             if (null != mask && (null == snapMask || "none" == snapMask) ) {
                 if (null != mask.snap) {
                     if (!mask.__isOnStage()) {
-                        trace('add child');
                         Lib.current.addChild(mask);
                     }
                     snap.attr({mask:mask.snap});
