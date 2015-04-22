@@ -649,7 +649,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         }
 
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix();
-		
+
 		if (gfx.__render (inMask, __filters, 1, 1)) {
 			handleGraphicsUpdated (gfx);
 		}
@@ -1200,9 +1200,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 	private function get_width ():Float {
 		
 		if (_boundsInvalid) {
-			
 			validateBounds ();
-			
 		}
 		
 		return __width;
@@ -1232,7 +1230,7 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
 			__scaleX = inValue / w;
 			__invalidateMatrix (true);
 			__invalidateBounds ();
-			
+
 		}
 		renderNextWake();
 		return inValue;

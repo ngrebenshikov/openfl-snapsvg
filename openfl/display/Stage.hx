@@ -438,7 +438,11 @@ class Stage extends DisplayObjectContainer {
 
         if (target.id == 'openfl-snapsvg-input' && evt.type != 'paste' && evt.type != "keydown" && evt.type != "keyup" && evt.type != "keypress") return;
 
-		__uIEventsQueue[__uIEventsQueueIndex++] = evt;
+        __uIEventsQueue[__uIEventsQueueIndex++] = evt;
+
+        if (evt.type == "mousedown" || evt.type == "click" || evt.type == "mouseup") {
+            dispatchQueuedEvents();
+        }
 	}
 	
 	
@@ -454,8 +458,17 @@ class Stage extends DisplayObjectContainer {
 		
 	}
 	
-	
-	private function __stageRender (?_) {
+
+    private inline function dispatchQueuedEvents() {
+        for (i in 0...__uIEventsQueueIndex) {
+            if (__uIEventsQueue[i] != null) {
+                __processStageEvent (__uIEventsQueue[i]);
+            }
+        }
+        __uIEventsQueueIndex = 0;
+    }
+
+    private function __stageRender (?_) {
 		
 		if (!__stageActive) {
 			__onResize (__windowWidth, __windowHeight);
@@ -467,12 +480,7 @@ class Stage extends DisplayObjectContainer {
 		}
 
 		// Dispatch all queued UI events before the main render loop.
-		for (i in 0...__uIEventsQueueIndex) {
-			if (__uIEventsQueue[i] != null) {
-				__processStageEvent (__uIEventsQueue[i]);
-			}
-		}
-		__uIEventsQueueIndex = 0;
+        dispatchQueuedEvents();
 
 		#if openfl_snapsvg_without_massive_broadcasting
 		this.dispatchEvent(new Event(Event.ENTER_FRAME));
@@ -687,7 +695,7 @@ class Stage extends DisplayObjectContainer {
                 }
                 return null;
             }
-            element = element.parentElement;
+            element = if (element.parentElement != null) element.parentElement else cast(element.parentNode);
         }
         return null;
     }
@@ -709,7 +717,7 @@ class Stage extends DisplayObjectContainer {
 
 		var stack = new Array<InteractiveObject> ();
 		if (obj != null) obj.__getInteractiveObjectStack (stack);
-		
+
 		if (stack.length > 0) {
 			
 			//var global = obj.localToGlobal(point);

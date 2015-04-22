@@ -16,6 +16,7 @@ import js.html.CanvasElement;
 
 
 class Svg extends Shape {
+
 	public function new (svg: SnapElement):Void {
 		super ();
         snap.append(svg);
@@ -28,30 +29,19 @@ class Svg extends Shape {
     override function validateBounds ():Void {
 
         if (_boundsInvalid) {
-
             super.validateBounds ();
-
             var rect = snap.getBBox();
             var r = new Rectangle (0, 0, rect.width, rect.height);
 
             if (r.width != 0 || r.height != 0) {
-
                 if (__boundsRect.width == 0 && __boundsRect.height == 0) {
-
                     __boundsRect = r.clone ();
-
                 } else {
-
                     __boundsRect.extendBounds (r);
-
                 }
-
             }
-
             __setDimensions ();
-
         }
-
     }
 
     override private function __render (inMask:SnapElement = null, clipRect:Rectangle = null, force: Bool = false) {
