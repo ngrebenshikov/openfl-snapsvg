@@ -390,10 +390,7 @@ class TextField extends InteractiveObject {
 
         if (autoSize != TextFieldAutoSize.NONE) {
             mWidth = rect.width;
-            mHeight = rect.height+mTextHeight*0.4;
-        }
-        if (mHeight < mTextHeight*1.4) {
-            mHeight = mTextHeight*1.4;
+            mHeight = rect.height;
         }
 
         mMaxWidth = rect.width;
@@ -509,7 +506,7 @@ class TextField extends InteractiveObject {
 			mMaxWidth = w;
 		}
 		
-		var full_height = Std.int (h * 1.2);
+		var full_height = Std.int (h);
 		var align_x = 0;
 		var insert_x = 0;
 		
@@ -633,7 +630,7 @@ class TextField extends InteractiveObject {
             mMaxWidth = w;
         }
 
-        var full_height = Std.int (h * 1.2);
+        var full_height = Std.int (h);
 
         return new Rectangle(0,0,w,full_height);
     }
