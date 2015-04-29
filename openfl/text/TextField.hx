@@ -61,6 +61,8 @@ class TextField extends InteractiveObject {
 	public var numLines (default, null):Int;
 	public var restrict:String;
 
+    private var isValid: Bool;
+
     public var scrollH(get, set):Int;
     private var _scrollH: Int;
     private function get_scrollH ():Int { return _scrollH; }
@@ -132,7 +134,9 @@ class TextField extends InteractiveObject {
 	public function new () {
 		
 		super ();
-		
+
+        isValid = false;
+
 		mWidth = 100;
 		mHeight = 20;
 		mHTMLMode = false;
@@ -214,7 +218,7 @@ class TextField extends InteractiveObject {
 		if (inUnSetHTML) {
 			
 			mHTMLMode = false;
-			RebuildText ();
+			invalidateAndRenderNextWake();
 			
 		}
 		
@@ -471,7 +475,7 @@ class TextField extends InteractiveObject {
 	public function RebuildText () {
         if (null == mText) return;
 
-        //trace("Adding text through snap.text: '" + mText + "' font-family:" + mFace + "; font-size: " + mTextHeight + "; color: " + "#" + StringTools.hex(mTextColour, 6));
+        trace("Adding text through snap.text: '" + mText + "' font-family:" + mFace + "; font-size: " + mTextHeight + "; color: " + "#" + StringTools.hex(mTextColour, 6));
 
         var paras = mText.split ("\n");
 
@@ -836,7 +840,7 @@ class TextField extends InteractiveObject {
 	public function setSelection (beginIndex:Int, endIndex:Int) {
         selectionBeginIndex = beginIndex;
         selectionEndIndex = endIndex;
-        renderNextWake();
+        invalidateAndRenderNextWake();
 	}
 	
 	
@@ -858,7 +862,7 @@ class TextField extends InteractiveObject {
                 mTextColour = inFmt.color;
             }
             __textFormats = [];
-            RebuildText ();
+            invalidateAndRenderNextWake();
         } else {
             __textFormats.push({format:inFmt, begin:beginIndex, end:endIndex});
         }
@@ -938,7 +942,10 @@ class TextField extends InteractiveObject {
 	
 	override public function __render (inMask:SnapElement = null, clipRect:Rectangle = null, force:Bool = false):Void {
 		
-		if (!__combinedVisible && !force) return;
+        if (!__combinedVisible && !force) return;
+
+        if (!isValid) validate();
+
 		if (_matrixInvalid || _matrixChainInvalid) __validateMatrix ();
 
         if (__graphics.__render (inMask, __filters, 1, 1)) {
@@ -1003,7 +1010,7 @@ class TextField extends InteractiveObject {
                 __graphics.flush();
             }
             caretTimer.run = hideCaret;
-            renderNextWake();
+            invalidateAndRenderNextWake();
         }
     }
 
@@ -1011,7 +1018,7 @@ class TextField extends InteractiveObject {
         __graphics.clear();
         drawBackgoundAndBorder();
         caretTimer.run = showCaret;
-        renderNextWake();
+        invalidateAndRenderNextWake();
     }
 
 
@@ -1207,63 +1214,51 @@ class TextField extends InteractiveObject {
 	
 	private function set_autoSize (inAutoSize:TextFieldAutoSize):TextFieldAutoSize {
 		autoSize = inAutoSize;
-		Rebuild ();
+		invalidateAndRenderNextWake();
 		return inAutoSize;
 	}
 	
 	
 	private function set_background (inBack:Bool):Bool {
-		
 		background = inBack;
-		Rebuild ();
+		invalidateAndRenderNextWake();
 		return inBack;
-		
 	}
 	
 	
 	private function set_backgroundColor (inCol:Int):Int {
-		
 		backgroundColor = inCol;
-		Rebuild ();
+		invalidateAndRenderNextWake();
 		return inCol;
 		
 	}
 	
 	
 	private function set_border (inBorder:Bool):Bool {
-		
 		border = inBorder;
-		Rebuild ();
+		invalidateAndRenderNextWake();
 		return inBorder;
-		
 	}
 	
 	
 	private function set_borderColor (inBorderCol:Int):Int {
-		
 		borderColor = inBorderCol;
-		Rebuild ();
+        invalidateAndRenderNextWake();
 		return inBorderCol;
-		
 	}
 	
 	
 	private function get_caretPos ():Int {
-		
 		return mInsertPos;
-		
 	}
 	
 	
 	private function get_defaultTextFormat ():TextFormat {
-		
 		return _defaultTextFormat;
-		
 	}
 	
 	
 	private function set_defaultTextFormat (inFmt:TextFormat):TextFormat {
-		
 		setTextFormat (inFmt);
 		_defaultTextFormat = inFmt;
 		return inFmt;
@@ -1281,22 +1276,16 @@ class TextField extends InteractiveObject {
 	override private function set_height (inValue:Float):Float {
 		
 		if (parent != null) {
-			
 			parent.__invalidateBounds ();
-			
 		}
 		
 		if (_boundsInvalid) {
-			
 			validateBounds ();
-			
 		}
 		
 		if (inValue != mHeight) {
-			
 			mHeight = inValue;
-			Rebuild ();
-			
+			invalidateAndRenderNextWake();
 		}
 		
 		return mHeight;
@@ -1407,6 +1396,8 @@ class TextField extends InteractiveObject {
 	
 	
 	public function set_text (inText:String):String {
+        trace("set_text:" + inText);
+
         if (mText == inText) return inText;
 
 		mText = inText;
@@ -1418,7 +1409,7 @@ class TextField extends InteractiveObject {
 
 		//mHTMLText = inText;
 		mHTMLMode = false;
-		RebuildText ();
+		invalidateAndRenderNextWake();
 		__invalidateBounds ();
 		dispatchEvent(new Event(Event.CHANGE));
 
@@ -1430,14 +1421,20 @@ class TextField extends InteractiveObject {
 	public function set_textColor (inCol:Int):Int {
 		
 		mTextColour = inCol;
-		RebuildText ();
+		invalidateAndRenderNextWake();
 		return inCol;
 		
 	}
 	
 	
-	public function get_textWidth ():Float { return mMaxWidth; }
-	public function get_textHeight ():Float { return mMaxHeight; }
+	public function get_textWidth ():Float {
+        if (!isValid) validate();
+        return mMaxWidth;
+    }
+	public function get_textHeight ():Float {
+        if (!isValid) validate();
+        return mMaxHeight;
+    }
 	
 	
     private inline function updateSelectability() {
@@ -1485,7 +1482,7 @@ class TextField extends InteractiveObject {
             removeEventListener(KeyboardEvent.KEY_PRESS, onKeyPress);
         }
 		
-		Rebuild ();
+		invalidateAndRenderNextWake();
 		
 		return inType;
 		
@@ -1493,8 +1490,8 @@ class TextField extends InteractiveObject {
 	
 	
 	override public function get_width ():Float {
-		
-		return Math.max (mWidth, getBounds (this.stage).width);
+		if (!isValid) validate();
+        return Math.max (mWidth, getBounds (this.stage).width);
 		
 	}
 	
@@ -1514,10 +1511,8 @@ class TextField extends InteractiveObject {
 		}
 		
 		if (inValue != mWidth) {
-			
 			mUserWidth = mWidth = inValue;
-			RebuildText ();
-			
+            invalidateAndRenderNextWake();
 		}
 		
 		return mWidth;
@@ -1531,7 +1526,7 @@ class TextField extends InteractiveObject {
 
 	public function set_wordWrap (inWordWrap:Bool):Bool {
 		wordWrap = inWordWrap;
-		RebuildText();
+		invalidateAndRenderNextWake();
 		return wordWrap;
 		
 	}
@@ -1613,9 +1608,24 @@ class TextField extends InteractiveObject {
 
 	private function set_displayAsPassword(v: Bool): Bool {
 		displayAsPassword = v;
-		RebuildText();
+		invalidateAndRenderNextWake();
 		return v;
 	}
+
+    public function invalidate() {
+        isValid = false;
+    }
+
+    public inline function validate() {
+        if (isValid) return;
+        isValid = true;
+        RebuildText();
+    }
+
+    private inline function invalidateAndRenderNextWake() {
+        invalidate();
+        renderNextWake();
+    }
 }
 
 
@@ -1725,7 +1735,7 @@ class FontInstance {
 
 	// Getters & Setters
 	private function get_height ():Int {
-		return mHeight;
+        return mHeight;
 	}
 
     private function get_color ():Int {
