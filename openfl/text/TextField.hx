@@ -404,7 +404,7 @@ class TextField extends InteractiveObject {
 
         updateClipRect(new Rectangle(x, y, width, height));
 
-        __graphics.clear ();
+        __graphics.clear();
         drawBackgoundAndBorder();
 
         ensureCaretVisible();
@@ -993,7 +993,6 @@ class TextField extends InteractiveObject {
                 caretTimer.stop();
                 caretTimer = null;
             }
-
         }
     }
 
@@ -1010,7 +1009,6 @@ class TextField extends InteractiveObject {
                 __graphics.flush();
             }
             caretTimer.run = hideCaret;
-            invalidateAndRenderNextWake();
         }
     }
 
@@ -1018,7 +1016,6 @@ class TextField extends InteractiveObject {
         __graphics.clear();
         drawBackgoundAndBorder();
         caretTimer.run = showCaret;
-        invalidateAndRenderNextWake();
     }
 
 
@@ -1148,8 +1145,8 @@ class TextField extends InteractiveObject {
 
     private function onMouseDown(e: Dynamic) {
         if (__inputEnabled && stage.focus == this) {
-            caretIndex = getCharIndexAtPoint(e.localX - textElementOffset.x, e.localY - textElementOffset.y);
             var textElement: TextElement = cast(mTextSnap.node);
+            caretIndex = getCharIndexAtPoint(e.localX - textElementOffset.x, e.localY - textElementOffset.y);
             if (null != text && text.length > 0 && text.length > caretIndex) {
                 try {
                     var extent = textElement.getExtentOfChar(caretIndex);
@@ -1157,6 +1154,10 @@ class TextField extends InteractiveObject {
                         caretIndex += 1;
                     }
                 } catch(e: Dynamic) {}
+            }
+
+            if (e.localX > textElement.clientWidth) {
+                caretIndex = text.length;
             }
 
             selectionBeginIndex = caretIndex;
@@ -1173,13 +1174,17 @@ class TextField extends InteractiveObject {
         if (e.target == this) {
             shouldCaretShowed = true;
             caretIndex = getCharIndexAtPoint(e.localX - textElementOffset.x, e.localY - textElementOffset.y);
+            var textElement: TextElement = cast(mTextSnap.node);
             try {
-                var textElement: TextElement = cast(mTextSnap.node);
                 var extent = textElement.getExtentOfChar(caretIndex);
                 if (e.localX - textElementOffset.x - extent.x > extent.width/2) {
                     caretIndex += 1;
                 }
             } catch(e: Dynamic) {}
+
+            if (e.localX > textElement.clientWidth) {
+                caretIndex = text.length;
+            }
         } else {
             shouldCaretShowed = false;
         }
@@ -1499,15 +1504,11 @@ class TextField extends InteractiveObject {
 	override public function set_width (inValue:Float):Float {
 		
 		if (parent != null) {
-			
 			parent.__invalidateBounds ();
-			
 		}
 		
 		if (_boundsInvalid) {
-			
 			validateBounds ();
-			
 		}
 		
 		if (inValue != mWidth) {
