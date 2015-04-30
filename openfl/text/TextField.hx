@@ -475,7 +475,7 @@ class TextField extends InteractiveObject {
 	public function RebuildText () {
         if (null == mText) return;
 
-        trace("Adding text through snap.text: '" + mText + "' font-family:" + mFace + "; font-size: " + mTextHeight + "; color: " + "#" + StringTools.hex(mTextColour, 6));
+        //trace("Adding text through snap.text: '" + mText + "' font-family:" + mFace + "; font-size: " + mTextHeight + "; color: " + "#" + StringTools.hex(mTextColour, 6));
 
         var paras = mText.split ("\n");
 
@@ -1401,8 +1401,6 @@ class TextField extends InteractiveObject {
 	
 	
 	public function set_text (inText:String):String {
-        trace("set_text:" + inText);
-
         if (mText == inText) return inText;
 
 		mText = inText;
