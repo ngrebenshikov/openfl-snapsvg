@@ -1140,8 +1140,8 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable {
         __combinedVisible = parent != null ? parent.__combinedVisible && inValue : inValue;
         if (__visible != inValue) {
 			__visible = inValue;
-			setSurfaceVisible (inValue);
 		}
+        setSurfaceVisible(__combinedVisible);
         renderNextWake();
         return __visible;
 	}

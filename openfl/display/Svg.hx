@@ -17,8 +17,12 @@ import js.html.CanvasElement;
 
 class Svg extends Shape {
 
+    var svg: SnapElement;
+
 	public function new (svg: SnapElement):Void {
 		super ();
+        __combinedVisible = false;
+        this.svg = svg;
         snap.append(svg);
 	}
 
@@ -76,6 +80,13 @@ class Svg extends Shape {
                     el.setAttribute('mask', 'none');
                 }
             }
+        }
+    }
+
+    override private function setSurfaceVisible(inValue: Bool) {
+        super.setSurfaceVisible(inValue);
+        if (null != svg) {
+            Lib.__setSurfaceVisible(svg, inValue);
         }
     }
 }

@@ -16,20 +16,21 @@ import js.html.CanvasElement;
 
 class Bitmap extends DisplayObject {
 	
-	
-	public var bitmapData (default, set_bitmapData):BitmapData;
+    public var bitmapData (default, set_bitmapData):BitmapData;
 	public var pixelSnapping:PixelSnapping;
 	public var smoothing:Bool;
 
 	public var __graphics (default, null):Graphics;
 	private var __currentLease:ImageDataLease;
 	private var __init:Bool;
+
+    private var image: SnapElement;
 	
 	
 	public function new (inBitmapData:BitmapData = null, inPixelSnapping:PixelSnapping = null, inSmoothing:Bool = false):Void {
 		
 		super ();
-		
+		__combinedVisible = false;
 		pixelSnapping = inPixelSnapping;
 		smoothing = inSmoothing;
 		
@@ -156,12 +157,16 @@ class Bitmap extends DisplayObject {
             if (null != child) {
                 child.remove();
             }
-            snap.append(Lib.snap.image(
-                        srcCanvas.toDataURL("image/png"),
-                        0, 0,
-                        srcCanvas.width,
-                        srcCanvas.height
-                    ));
+
+            image = Lib.snap.image(
+                srcCanvas.toDataURL("image/png"),
+                0, 0,
+                srcCanvas.width,
+                srcCanvas.height
+            );
+
+            snap.append(image);
+
             __currentLease = imageDataLease.clone();
 
             handleGraphicsUpdated (null);
@@ -186,7 +191,7 @@ class Bitmap extends DisplayObject {
             }
 //        }
        //updateClipRect();
-    }
+   }
 
 	// Getters & Setters
 
@@ -205,6 +210,12 @@ class Bitmap extends DisplayObject {
 		bitmapData = inBitmapData;
 		return inBitmapData;
 	}
-	
+
+    override private function setSurfaceVisible(inValue: Bool) {
+        super.setSurfaceVisible(inValue);
+        if (null != image) {
+            Lib.__setSurfaceVisible(image, inValue);
+        }
+    }
 	
 }
