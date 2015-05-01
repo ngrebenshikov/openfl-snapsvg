@@ -86,7 +86,15 @@ class TextField extends InteractiveObject {
 
 
 
-	public var selectable:Bool;
+	public var selectable(get, set): Bool;
+	private var _selectable: Bool;
+	private function get_selectable(): Bool { return _selectable; }
+	private function set_selectable(v: Bool): Bool {
+	    _selectable = v;
+        updateSelectability();
+	    return v;
+	}
+
 	public var selectionBeginIndex:Int;
 	public var selectionEndIndex:Int;
     private var svgSelectionBeginIndex: Int;
@@ -1144,7 +1152,7 @@ class TextField extends InteractiveObject {
     }
 
     private function onMouseDown(e: Dynamic) {
-        if (__inputEnabled && stage.focus == this) {
+        if (selectable || stage.focus == this) {
             var textElement: TextElement = cast(mTextSnap.node);
             caretIndex = getCharIndexAtPoint(e.localX - textElementOffset.x, e.localY - textElementOffset.y);
             if (null != text && text.length > 0 && text.length > caretIndex) {
@@ -1159,11 +1167,14 @@ class TextField extends InteractiveObject {
             if (e.localX > textElement.clientWidth) {
                 caretIndex = text.length;
             }
+        }
 
+        if (selectable) {
             selectionBeginIndex = caretIndex;
             selectionEndIndex = caretIndex-1;
             addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
         }
+
         shouldCaretShowed = false;
     }
 
@@ -1171,7 +1182,7 @@ class TextField extends InteractiveObject {
 
     private function onMouseUp(e: Dynamic) {
         removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-        if (e.target == this) {
+        if (e.target == this && stage.focus == this) {
             shouldCaretShowed = true;
             caretIndex = getCharIndexAtPoint(e.localX - textElementOffset.x, e.localY - textElementOffset.y);
             var textElement: TextElement = cast(mTextSnap.node);
@@ -1441,7 +1452,7 @@ class TextField extends InteractiveObject {
 	
 	
     private inline function updateSelectability() {
-        mTextSnap.attr({ style: if (__inputEnabled) '' else '-webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;' });
+        mTextSnap.attr({ style: if (selectable) '' else '-webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;' });
     }
 
 	public function get_type ():String { return mType; }
