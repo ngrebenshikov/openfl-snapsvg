@@ -654,16 +654,22 @@ class Stage extends DisplayObjectContainer {
 			// If there was a previously focused object, fire the FOCUS_OUT
 			// event for it using the Flash event propogation semantics
 			// implemented in __fireEvent
-			
-			if (__focusObject != null) {
-				__focusObject.__fireEvent (new FocusEvent (FocusEvent.FOCUS_OUT, true, false, target, false, 0));
+
+            var e: FocusEvent;
+
+            if (__focusObject != null) {
+                e = new FocusEvent (FocusEvent.FOCUS_OUT, true, false, target, false, 0);
+                e.target = __focusObject;
+				__focusObject.__fireEvent(e);
 				
 			}
 			
 			// Now dispatch a focus in event similarly using Flash event
 			// propogation semantics
 			if (null != target) {
-				target.__fireEvent (new FocusEvent (FocusEvent.FOCUS_IN, true, false, __focusObject, false, 0));
+                e = new FocusEvent (FocusEvent.FOCUS_IN, true, false, __focusObject, false, 0);
+                e.target = target;
+				target.__fireEvent(e);
 			}
 			
 			// Finally, store the updated focus object
