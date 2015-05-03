@@ -425,7 +425,12 @@ class Stage extends DisplayObjectContainer {
         var target: Element = cast evt.target;
         if (evt.type == "dragstart") {
 			evt.preventDefault();
-		} else if(evt.type == "mouseup") {
+		} else if (evt.type == "keydown") {
+            var keyboardEvt: KeyboardEvent = cast(evt);
+            if (keyboardEvt.keyCode == Keyboard.BACKSPACE) {
+                evt.preventDefault();
+            }
+        } else if(evt.type == "mouseup") {
             var document: Document = untyped window.document;
             var input = document.getElementById('openfl-snapsvg-input');
             var obj = __getObjectByElement(cast(evt.target));
