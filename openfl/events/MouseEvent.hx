@@ -1,6 +1,7 @@
 package openfl.events;
 
 
+import js.Browser;
 import openfl.display.InteractiveObject;
 import openfl.geom.Point;
 
@@ -58,26 +59,13 @@ class MouseEvent extends Event {
 	public static function __create (type:String, event:js.html.MouseEvent, local:Point, target:InteractiveObject):MouseEvent {
 		
 		var __mouseDown = false;
-		var delta = 2;
-		
-		if (type == MouseEvent.MOUSE_WHEEL) {
-			
-			var mouseEvent:Dynamic = event;
-			if (mouseEvent.wheelDelta) { /* IE/Opera. */
-				#if (!haxe_210 && !haxe3)
-				if (js.Lib.isOpera)
-					delta = Std.int (mouseEvent.wheelDelta / 40);
-				else
-				#end
-					delta = Std.int (mouseEvent.wheelDelta / 120);
-			} else if (mouseEvent.detail) { /** Mozilla case. */
-				
-				Std.int (-mouseEvent.detail);
-				
-			}
-			
-		}
-		
+
+
+        var mode = untyped event.deltaMode;
+        var deltaY = untyped event.deltaY;
+
+        var delta = Math.ceil(deltaY / (if(mode == 0) 40 else 1));
+
 		// source: http://unixpapa.com/js/mouse.html
 		if (type == MouseEvent.MOUSE_DOWN) {
 			

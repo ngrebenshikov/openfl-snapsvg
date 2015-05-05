@@ -341,11 +341,11 @@ class Stage extends DisplayObjectContainer {
 			case "click":
 				
 				__onMouse (cast evt, MouseEvent.CLICK);
-			
-			case "mousewheel":
-				
-				__onMouse (cast evt, MouseEvent.MOUSE_WHEEL);
-			
+
+            case "wheel":
+
+                __onMouse (cast evt, MouseEvent.MOUSE_WHEEL);
+
 			case "dblclick":
 				
 				__onMouse (cast evt, MouseEvent.DOUBLE_CLICK);
